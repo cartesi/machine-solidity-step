@@ -1,0 +1,7 @@
+coverage
+node_modules
+.node*
+*.bin
+*.abi
+/out
+build
