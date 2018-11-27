@@ -62,8 +62,17 @@ contract MonolithicRiscV {
     //if pma is memory:
       //read_memory
     //end fetch
-
   }
+
+  function raise_interrupt_if_any(){
+    uint32 mask = get_pending_irq_mask();
+    if(mask != 0) {
+      uint64 irq_num = ilog2(mask);
+      //TO-DO: Raise_exception
+     // raise_exception()
+    }
+  }
+
   function get_pending_irq_mask() returns (uint32){
     uint64 mip = uint64(mm.read(mmIndex, ShadowAddresses.get_mip()));
     uint64 mie = uint64(mm.read(mmIndex, ShadowAddresses.get_mie()));
