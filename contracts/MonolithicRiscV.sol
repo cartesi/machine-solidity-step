@@ -1,6 +1,11 @@
 /// @title Monolithic RiscV
 pragma solidity 0.4.24;
 
+//Libraries
+import "./ShadowAddresses.sol";
+import "./PRVLevelsConstants.sol";
+import "./MstatusConstants.sol";
+
 contract mmInterface {
   function read(uint256 _index, uint64 _address) public view returns (bytes8);
   function write(uint256 _index, uint64 _address, bytes8 _value) public;
