@@ -132,7 +132,7 @@ contract MonolithicRiscV {
       v = v >> 1;
       leading--;
     }
-    return 31 - leading;
+    return uint64(31 - leading);
   }
   //enums
   enum fetch_status {
