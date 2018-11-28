@@ -54,9 +54,11 @@ contract MonolithicRiscV {
   function fetch_insn() returns (fetch_status){
     emit Print("fetch");
     //read_pc
-    uint64 pc = uint64(mm.read(mmIndex, ShadowAddresses.get_pc()));
+    uint64 vaddr = uint64(mm.read(mmIndex, ShadowAddresses.get_pc()));
+    if(vaddr == 0){ revert();}
 
-     translate_virtual_address();
+    uint64 paddr;
+    translate_virtual_address();
 
     //how to find paddr?? Some cases paddr == pc?
     //find_pma_entry
@@ -67,7 +69,7 @@ contract MonolithicRiscV {
   }
 
   //TO-DO: continue translate_virtual_address implementation
-  function translate_virtual_address(){
+  function translate_virtual_address(uint64 vaddr){
     //TO-DO: check shift + mask
     //TO-DO: use bitmanipulation right shift
     int priv = (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) >> 2) & 3;
@@ -120,7 +122,8 @@ contract MonolithicRiscV {
     }
     return pending_ints & enabled_ints;
   }
-  function ilog2(uint32 v){
+
+  function ilog2(uint32 v) returns(uint64){
     //cpp emulator code:
     //return 31 - __builtin_clz(v)
 
