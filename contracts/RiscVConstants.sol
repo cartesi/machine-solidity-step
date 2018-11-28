@@ -3,8 +3,8 @@ pragma solidity 0.4.24;
 
 library RiscVConstants {
   //General purpose
-  function XLEN() public returns(uint64) {return 64;};
-  function MXL()  public returns(uint64) {return 2;};
+  function XLEN() public returns(uint64) {return 64;}
+  function MXL()  public returns(uint64) {return 2;}
 
   //Privilege Levels
   function PRV_U() public returns(uint64) {return 0;}
