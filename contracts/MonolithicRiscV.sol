@@ -3,8 +3,7 @@ pragma solidity 0.4.24;
 
 //Libraries
 import "./ShadowAddresses.sol";
-import "./PRVLevelsConstants.sol";
-import "./MstatusConstants.sol";
+import "./RiscVConstants.sol";
 
 contract mmInterface {
   function read(uint256 _index, uint64 _address) public view returns (bytes8);
@@ -102,16 +101,16 @@ contract MonolithicRiscV {
     //TO-DO: check shift + mask
     //TO-DO: Use bitmanipulation library for arithmetic shift
     int priv = (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) >> 2) & 3;
-    if(priv == PRVLevelsConstants.get_PRV_M()) {
+    if(priv == RiscVConstants.PRV_M()) {
       mstatus = uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()));
-      if((mstatus & MstatusConstants.get_MSTATUS_MIE()) != 0){
+      if((mstatus & RiscVConstants.MSTATUS_MIE()) != 0){
         enabled_ints = uint32(~uint64(mm.read(mmIndex, ShadowAddresses.get_mideleg())));
       }
-    }else if(priv == PRVLevelsConstants.get_PRV_S()){
+    }else if(priv == RiscVConstants.PRV_S()){
       mstatus = uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()));
       uint64 mideleg = uint64(mm.read(mmIndex, ShadowAddresses.get_mideleg()));
       enabled_ints = uint32(~mideleg);
-      if((mstatus & MstatusConstants.get_MSTATUS_SIE()) != 0){
+      if((mstatus & RiscVConstants.MSTATUS_SIE()) != 0){
         //TO-DO: make sure this is the correct cast
         enabled_ints = enabled_ints | uint32(mideleg);
       }
