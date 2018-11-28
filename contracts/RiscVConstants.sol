@@ -15,6 +15,21 @@ library RiscVConstants {
   function MSTATUS_SIE()  public returns(uint64)  {return (1 << 1);}
   function MSTATUS_MPRV() public returns(uint64)  {return (1 << 17);}
 
+  //mstatus shifts
+  function MSTATUS_UIE_SHIFT()  public returns(uint64) {return 0 ;}
+  function MSTATUS_SIE_SHIFT()  public returns(uint64) {return 1 ;}
+  function MSTATUS_HIE_SHIFT()  public returns(uint64) {return 2 ;}
+  function MSTATUS_MIE_SHIFT()  public returns(uint64) {return 3 ;}
+  function MSTATUS_UPIE_SHIFT() public returns(uint64) {return 4 ;}
+  function MSTATUS_SPIE_SHIFT() public returns(uint64) {return 5 ;}
+  function MSTATUS_MPIE_SHIFT() public returns(uint64) {return 7 ;}
+  function MSTATUS_SPP_SHIFT()  public returns(uint64) {return 8 ;}
+  function MSTATUS_MPP_SHIFT()  public returns(uint64) {return 11;}
+  function MSTATUS_FS_SHIFT()   public returns(uint64) {return 13;}
+  function MSTATUS_SD_SHIFT()   public returns(uint64) {return 31;}
+  function MSTATUS_UXL_SHIFT()  public returns(uint64) {return 32;}
+  function MSTATUS_SXL_SHIFT()  public returns(uint64) {return 34;}
+
   //Paging constants
   function PG_SHIFT() public returns(uint64) {return 12;}
   function PG_MASK()  public returns(uint64) {((1 << PG_SHIFT()) - 1);}
