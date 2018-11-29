@@ -14,6 +14,7 @@ contract mmInterface {
 //TO-DO: use instantiator pattern so we can always use same instance of mm/pc etc
 contract MonolithicRiscV {
   event Print(string message);
+
   mmInterface mm;
   uint256 mmIndex;
 
@@ -67,14 +68,106 @@ contract MonolithicRiscV {
 
   }
 
-  //TO-DO: continue translate_virtual_address implementation
-  function translate_virtual_address(uint64 vaddr){
+  //TO-DO: Understand this code properly
+  function translate_virtual_address(uint64 vaddr, int xwr_shift) returns(bool, uint64){
     //TO-DO: check shift + mask
     //TO-DO: use bitmanipulation right shift
     int priv = (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) >> 2) & 3;
     //read_mstatus
     uint64 mstatus = uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()));
+
+    // When MPRV is set, data loads and stores use privilege in MPP
+    // instead of the current privilege level (code access is unaffected)
+    //TO-DO: Check this &/&& and shifts
+    if((mstatus & RiscVConstants.MSTATUS_MPRV() != 0) && (xwr_shift != RiscVConstants.PTE_XWR_CODE_SHIFT())){
+      priv = (mstatus >> RiscVConstants.MSTATUS_MPP_SHIFT()) & 3;
+    }
+    if(priv == RiscVConstants.PRV_M()){
+      return(true, vaddr);
+    }
+
+    uint64 satp = uint64(mm.read(mmIndex, ShadowAddresses.get_satp()));
+    // In RV64, mode can be
+    //   0: Bare: No translation or protection
+    //   8: sv39: Page-based 39-bit virtual addressing
+    //   9: sv48: Page-based 48-bit virtual addressing
+    int mode = (satp >> 60) & 0xf;
+    if(mode == 0){
+      return(true, vaddr);
+    } else if(mode < 8 || mode > 9){
+      return(false, 0);
+    }
+    // Here we know we are in sv39 or sv48 modes
+
+    // Page table hierarchy of sv39 has 3 levels, and sv48 has 4 levels
+    int levels = mode - 8 + 3;
+    // The least significant 12 bits of vaddr are the page offset
+    // Then come levels virtual page numbers (VPN)
+    // The rest of vaddr must be filled with copies of the
+    // most significant bit in VPN[levels]
+    // Hence, the use of arithmetic shifts here
+
+    //TO-DO: Use bitmanipulation library for arithmetic shift
+    int vaddr_shift = RiscVConstants.XLEN() - (RiscVConstants.PG_SHIFT() + levels * 9);
+    if(((int64(vaddr) << vaddr_shift) >> vaddr_shift) != int64(vaddr)){
+      return(false, 0);
+    }
+    // The least significant 44 bits of satp contain the physical page number for the root page table
+    int constant satp_ppn_bits = 44;
+    // Initialize pte_addr with the base address for the root page table
+    uint64 pte_addr = (satp & ((uint64(1) << satp_ppn_bits) -1)) << RiscVConstants.PG_SHIFT();
+    // All page table entries have 8 bytes
+    int constant pte_size_log2 = 3;
+    // Each page table has 4k/pte_size entries
+    // To index all entries, we need vpn_bits
+    int constant vpn_bits = 12 - pte_size_log2;
+    uint64 vpn_mask = (1 << vpn_bits) - 1;
+
+    for(uint i = 0; i < levels; i++) {
+      // Mask out VPN[levels -i-1]
+      vaddr_shift = RiscVConstants.PG_SHIFT() + vpn_bits * (levels -1 -i);
+      uint64 vpn = (vaddr >> vaddr_shift) & vpn_mask;
+      // Add offset to find physical address of page table entry
+      pte_addr += vpn << pte_size_log2;
+      //Read page table entry from physical memory
+      uint64 pte = 0;
+      //TO-DO: Implement read_ram_uint64(a, pte_addr, &pte)
+      if(!read_ram_uint64(pte_addr)){
+        return(false, 0);
+      }
+      // The OS can mark page table entries as invalid,
+      // but these entries shouldn't be reached during page lookups
+      //TO-DO: check if condition
+      if((pte & RiscVConstants.PTE_V_MASK()) == 0){
+        return(false, 0);
+      }
+      // Clear all flags in least significant bits, then shift back to multiple of page size to form physical address
+      uint64 ppn = (pte >> 10) << RiscVConstants.PG_SHIFT();
+      // Obtain X, W, R protection bits
+      int xwr = (pte >> 1) & 7;
+      // xwr !=0 means we are done walking the page tables
+      if(xwr !=0){
+        // These protection bit combinations are reserved for future use
+        if(xwr == 2 || xwr == 6){
+          return (false, 0);
+        }
+        // (We know we are not PRV_M if we reached here)
+        if(priv == RiscVConstants.PRV_S(){
+          // If SUM is set, forbid S-mode code from accessing U-mode memory
+          //TO-DO: check if condition
+          if((pte & RiscVConstants.PTE_U_MASK()) && ((mstatus & RiscVConstants.MSTATUS_SUM)) == 0){
+            return (false, 0);
+          }else{
+            // Forbid U-mode code from accessing S-mode memory
+            //TO-DO: continue here --- ~~~ 
+          }
+        
+        }
+      }
+
+    }
   }
+
   //TO-DO: Implement find_pma
   function find_pma(uint64 paddr){
   }
