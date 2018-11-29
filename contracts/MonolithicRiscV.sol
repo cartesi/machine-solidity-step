@@ -22,7 +22,6 @@ contract MonolithicRiscV {
     uint64 pc = 0;
     uint32 insn = 0;
 
-    //TO-DO: set mmInterface to correct address
     mm = mmInterface(_memoryManagerAddress);
     //TO-DO: Check byte order -> riscv is little endian/ solidity is big endian
 
