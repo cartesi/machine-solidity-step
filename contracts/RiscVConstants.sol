@@ -17,6 +17,8 @@ library RiscVConstants {
   function MSTATUS_MIE()  public returns(uint64)  {return (1 << 3);}
   function MSTATUS_SIE()  public returns(uint64)  {return (1 << 1);}
   function MSTATUS_MPRV() public returns(uint64)  {return (1 << 17);}
+  function MSTATUS_SUM()  public returns(uint64)  {return (1 << 18);}
+  function MSTATUS_MXR()  public returns(uint64)  {return (1 << 19);}
 
   //mstatus shifts
   function MSTATUS_UIE_SHIFT()  public returns(uint64) {return 0 ;}
