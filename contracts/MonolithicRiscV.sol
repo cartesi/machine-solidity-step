@@ -82,6 +82,7 @@ contract MonolithicRiscV {
     if((mstatus & RiscVConstants.MSTATUS_MPRV() != 0) && (xwr_shift != RiscVConstants.PTE_XWR_CODE_SHIFT())){
       priv = (mstatus >> RiscVConstants.MSTATUS_MPP_SHIFT()) & 3;
     }
+
     if(priv == RiscVConstants.PRV_M()){
       return(true, vaddr);
     }
@@ -113,17 +114,17 @@ contract MonolithicRiscV {
       return(false, 0);
     }
     // The least significant 44 bits of satp contain the physical page number for the root page table
-    int constant satp_ppn_bits = 44;
+    int satp_ppn_bits = 44;
     // Initialize pte_addr with the base address for the root page table
     uint64 pte_addr = (satp & ((uint64(1) << satp_ppn_bits) -1)) << RiscVConstants.PG_SHIFT();
     // All page table entries have 8 bytes
-    int constant pte_size_log2 = 3;
+    int pte_size_log2 = 3;
     // Each page table has 4k/pte_size entries
     // To index all entries, we need vpn_bits
-    int constant vpn_bits = 12 - pte_size_log2;
-    uint64 vpn_mask = (1 << vpn_bits) - 1;
+    int vpn_bits = 12 - pte_size_log2;
+    uint64 vpn_mask = uint64((1 << vpn_bits) - 1);
 
-    for(uint i = 0; i < levels; i++) {
+    for(int i = 0; i < levels; i++) {
       // Mask out VPN[levels -i-1]
       vaddr_shift = RiscVConstants.PG_SHIFT() + vpn_bits * (levels -1 -i);
       uint64 vpn = (vaddr >> vaddr_shift) & vpn_mask;
@@ -131,10 +132,10 @@ contract MonolithicRiscV {
       pte_addr += vpn << pte_size_log2;
       //Read page table entry from physical memory
       uint64 pte = 0;
-      //TO-DO: Implement read_ram_uint64(a, pte_addr, &pte)
-      if(!read_ram_uint64(pte_addr)){
-        return(false, 0);
-      }
+//===//TO-DO: Implement read_ram_uint64(a, pte_addr, &pte)
+     // if(!read_ram_uint64(pte_addr)){
+     //   return(false, 0);
+//===// }
       // The OS can mark page table entries as invalid,
       // but these entries shouldn't be reached during page lookups
       //TO-DO: check if condition
@@ -152,21 +153,52 @@ contract MonolithicRiscV {
           return (false, 0);
         }
         // (We know we are not PRV_M if we reached here)
-        if(priv == RiscVConstants.PRV_S(){
+        if(priv == RiscVConstants.PRV_S()){
           // If SUM is set, forbid S-mode code from accessing U-mode memory
           //TO-DO: check if condition
-          if((pte & RiscVConstants.PTE_U_MASK()) && ((mstatus & RiscVConstants.MSTATUS_SUM)) == 0){
+          if((pte & RiscVConstants.PTE_U_MASK() != 0) && ((mstatus & RiscVConstants.MSTATUS_SUM())) == 0){
             return (false, 0);
-          }else{
-            // Forbid U-mode code from accessing S-mode memory
-            //TO-DO: continue here --- ~~~ 
           }
-        
+        }else{
+          // Forbid U-mode code from accessing S-mode memory
+          if((pte & RiscVConstants.PTE_U_MASK()) == 0){
+            return (false, 0);
+          }
         }
-      }
+        // MXR allows to read access to execute-only pages
+        if(mstatus & RiscVConstants.MSTATUS_MXR() != 0){
+          //Set R bit if X bit is set
+          xwr = xwr | (xwr >> 2);
+        }
+        // Check protection bits against request access
+        if(((xwr >> xwr_shift) & 1) == 0){
+          return (false, 0);
+        }
+        // Check page, megapage, and gigapage alignment
+        uint64 vaddr_mask = (uint64(1) << vaddr_shift) - 1;
+        if(ppn & vaddr_mask != 0){
+          return (false, 0);
+        }
+        // Decide if we need to update access bits in pte
+        bool update_pte = (pte & RiscVConstants.PTE_A_MASK() == 0) || ((pte & RiscVConstants.PTE_D_MASK() == 0) && xwr_shift == RiscVConstants.PTE_XWR_WRITE_SHIFT());
 
+        if(xwr_shift == RiscVConstants.PTE_XWR_WRITE_SHIFT()){
+          pte = pte | RiscVConstants.PTE_D_MASK();
+        }
+        // If so, update pte
+        if(update_pte){
+          //TO-DO: write_ram_uint64
+          //write_ram_uint64(a, pte_addr,pte);
+        }
+        // Add page offset in vaddr to ppn to form physical address
+        return(true, (vaddr * vaddr_mask) | (ppn & ~vaddr_mask));
+      }else {
+        pte_addr = ppn;
+      }
     }
+    return(false, 0);
   }
+ 
 
   //TO-DO: Implement find_pma
   function find_pma(uint64 paddr){
