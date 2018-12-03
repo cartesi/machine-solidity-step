@@ -18,6 +18,21 @@ contract MonolithicRiscV {
   mmInterface mm;
   uint256 mmIndex;
 
+  //structs
+  //pma
+  struct PMAEntry{
+    uint64 start;
+    uint64 length;
+    bool R;
+    bool W;
+    bool X;
+    bool IR;
+    bool IW;
+  }
+  //has to be on storage, cannot return struct without experimental pragma
+  PMAEntry pma_entry;
+
+
   function step(address _memoryManagerAddress) returns (interpreter_status){
     uint64 pc = 0;
     uint32 insn = 0;
@@ -60,7 +75,6 @@ contract MonolithicRiscV {
     uint64 paddr;
     translate_virtual_address();
 
-    //how to find paddr?? Some cases paddr == pc?
     //find_pma_entry
     //if pma is memory:
       //read_memory
@@ -198,10 +212,27 @@ contract MonolithicRiscV {
     }
     return(false, 0);
   }
- 
 
-  //TO-DO: Implement find_pma
-  function find_pma(uint64 paddr){
+  //Populate storage pma_entry
+  //TO-DO: there is probably gonna be a pma_entry array on storage, so we will have
+  // to adjust this code.
+  function find_pma_entry(uint64 paddr){
+    //Hard coded ram address starts at 0x800
+    uint64 pmaAddress = 0x800;
+    bool foundPma;
+    uint64 lastPma = 23;
+
+    for(uint64 i = 0; i < lastPma; i+=2){
+      uint64 start = uint64(mm.read(mmIndex, pmaAddress + (i*8)));
+      uint64 length = uint64(mm.read(mmIndex, pmaAddress + ((i * 8 + 8))));
+      if(paddr >= start && paddr < (start + length)){
+        pma_entry.start = start;
+        pma_entry.length = length;
+      }
+      if(length == 0){
+        break;
+      }
+    }
   }
 
   function raise_interrupt_if_any(){
