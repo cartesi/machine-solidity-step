@@ -37,7 +37,6 @@ contract MonolithicRiscV {
     uint64 pc = 0;
     uint32 insn = 0;
 
-    //TO-DO: set mmInterface to correct address
     mm = mmInterface(_memoryManagerAddress);
     //TO-DO: Check byte order -> riscv is little endian/ solidity is big endian
 
@@ -75,11 +74,15 @@ contract MonolithicRiscV {
     uint64 paddr;
     translate_virtual_address();
 
-    //find_pma_entry
-    //if pma is memory:
-      //read_memory
-    //end fetch
+    find_pma_entry(paddr);
 
+    if(pma_get_istart_M() || !pma_get_istart_X()){
+      //raise_exception(CAUSE_FETCH_FAULT)
+      return fetch_status.exception;
+    }
+    //read memory
+
+    return fetch_status.success;
   }
 
   //TO-DO: Understand this code properly
@@ -289,6 +292,17 @@ contract MonolithicRiscV {
       leading--;
     }
     return uint64(31 - leading);
+  }
+
+  //pma functions
+  function pma_get_istart_M() returns(bool){
+    //M is pma_entry fisrt bit
+    return pma_entry.start & 1 == 1;
+  }
+
+  function pma_get_istart_X() returns(bool){
+    //X is pma_entry sixth bit (index 5)
+    return (pma_entry.start >> 5) & 1 == 1;
   }
   //enums
   enum fetch_status {
