@@ -15,9 +15,27 @@ contract mmInterface {
 contract MonolithicRiscV {
   event Print(string message);
 
+  //Real Storage variables
+  PMAEntry pma_entry; //cannot return struct without experimental pragma
   mmInterface mm;
   uint256 mmIndex;
 
+  //Should not be Storage - but stack too deep
+  //this will probably be ok when we split it into a bunch of different calls
+  uint64 pc = 0;
+  uint32 insn = 0;
+  int priv;
+  uint64 mstatus;
+  uint64 satp;
+  int mode;
+  int levels;
+  uint64 vaddr;
+  uint64 vaddr_mask;
+  uint64 paddr;
+  int vaddr_shift;
+  uint64 pte_addr;
+  int pte_size_log2;
+   int vpn_bits;
   //structs
   //pma
   struct PMAEntry{
@@ -29,13 +47,8 @@ contract MonolithicRiscV {
     bool IR;
     bool IW;
   }
-  //has to be on storage, cannot return struct without experimental pragma
-  PMAEntry pma_entry;
-
 
   function step(address _memoryManagerAddress) returns (interpreter_status){
-    uint64 pc = 0;
-    uint32 insn = 0;
 
     mm = mmInterface(_memoryManagerAddress);
     //TO-DO: Check byte order -> riscv is little endian/ solidity is big endian
@@ -68,10 +81,9 @@ contract MonolithicRiscV {
   function fetch_insn() returns (fetch_status){
     emit Print("fetch");
     //read_pc
-    uint64 vaddr = uint64(mm.read(mmIndex, ShadowAddresses.get_pc()));
+    vaddr = uint64(mm.read(mmIndex, ShadowAddresses.get_pc()));
 
-    uint64 paddr;
-    translate_virtual_address();
+    translate_virtual_address(paddr, RiscVConstants.PTE_XWR_CODE_SHIFT());
 
     find_pma_entry(paddr);
 
@@ -90,9 +102,9 @@ contract MonolithicRiscV {
   function translate_virtual_address(uint64 vaddr, int xwr_shift) returns(bool, uint64){
     //TO-DO: check shift + mask
     //TO-DO: use bitmanipulation right shift
-    int priv = (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) >> 2) & 3;
+    priv = (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) >> 2) & 3;
     //read_mstatus
-    uint64 mstatus = uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()));
+    mstatus = uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()));
 
     // When MPRV is set, data loads and stores use privilege in MPP
     // instead of the current privilege level (code access is unaffected)
@@ -105,12 +117,12 @@ contract MonolithicRiscV {
       return(true, vaddr);
     }
 
-    uint64 satp = uint64(mm.read(mmIndex, ShadowAddresses.get_satp()));
+    satp = uint64(mm.read(mmIndex, ShadowAddresses.get_satp()));
     // In RV64, mode can be
     //   0: Bare: No translation or protection
     //   8: sv39: Page-based 39-bit virtual addressing
     //   9: sv48: Page-based 48-bit virtual addressing
-    int mode = (satp >> 60) & 0xf;
+    mode = (satp >> 60) & 0xf;
     if(mode == 0){
       return(true, vaddr);
     } else if(mode < 8 || mode > 9){
@@ -119,7 +131,7 @@ contract MonolithicRiscV {
     // Here we know we are in sv39 or sv48 modes
 
     // Page table hierarchy of sv39 has 3 levels, and sv48 has 4 levels
-    int levels = mode - 8 + 3;
+    levels = mode - 8 + 3;
     // The least significant 12 bits of vaddr are the page offset
     // Then come levels virtual page numbers (VPN)
     // The rest of vaddr must be filled with copies of the
@@ -127,19 +139,19 @@ contract MonolithicRiscV {
     // Hence, the use of arithmetic shifts here
 
     //TO-DO: Use bitmanipulation library for arithmetic shift
-    int vaddr_shift = RiscVConstants.XLEN() - (RiscVConstants.PG_SHIFT() + levels * 9);
+    vaddr_shift = RiscVConstants.XLEN() - (RiscVConstants.PG_SHIFT() + levels * 9);
     if(((int64(vaddr) << vaddr_shift) >> vaddr_shift) != int64(vaddr)){
       return(false, 0);
     }
     // The least significant 44 bits of satp contain the physical page number for the root page table
     int satp_ppn_bits = 44;
     // Initialize pte_addr with the base address for the root page table
-    uint64 pte_addr = (satp & ((uint64(1) << satp_ppn_bits) -1)) << RiscVConstants.PG_SHIFT();
+    pte_addr = (satp & ((uint64(1) << satp_ppn_bits) -1)) << RiscVConstants.PG_SHIFT();
     // All page table entries have 8 bytes
-    int pte_size_log2 = 3;
+    pte_size_log2 = 3;
     // Each page table has 4k/pte_size entries
     // To index all entries, we need vpn_bits
-    int vpn_bits = 12 - pte_size_log2;
+    vpn_bits = 12 - pte_size_log2;
     uint64 vpn_mask = uint64((1 << vpn_bits) - 1);
 
     for(int i = 0; i < levels; i++) {
@@ -260,7 +272,7 @@ contract MonolithicRiscV {
     uint32 enabled_ints = 0;
     //TO-DO: check shift + mask
     //TO-DO: Use bitmanipulation library for arithmetic shift
-    int priv = (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) >> 2) & 3;
+    priv = (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) >> 2) & 3;
     if(priv == RiscVConstants.PRV_M()) {
       mstatus = uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()));
       if((mstatus & RiscVConstants.MSTATUS_MIE()) != 0){
