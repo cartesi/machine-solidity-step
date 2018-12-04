@@ -69,7 +69,6 @@ contract MonolithicRiscV {
     emit Print("fetch");
     //read_pc
     uint64 vaddr = uint64(mm.read(mmIndex, ShadowAddresses.get_pc()));
-    if(vaddr == 0){ revert();}
 
     uint64 paddr;
     translate_virtual_address();
@@ -80,7 +79,9 @@ contract MonolithicRiscV {
       //raise_exception(CAUSE_FETCH_FAULT)
       return fetch_status.exception;
     }
-    //read memory
+    //TO-DO: make sure that this is the correct way to read memory
+    //will this actually return the instruction?
+    uint64 insn = uint64(mm.read(mmIndex, paddr)); //read memory
 
     return fetch_status.success;
   }
