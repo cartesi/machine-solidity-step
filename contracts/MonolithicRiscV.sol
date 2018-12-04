@@ -80,10 +80,18 @@ contract MonolithicRiscV {
   }
   function fetch_insn() returns (fetch_status){
     emit Print("fetch");
+    bool translateBool;
+
     //read_pc
     vaddr = uint64(mm.read(mmIndex, ShadowAddresses.get_pc()));
 
-    translate_virtual_address(paddr, RiscVConstants.PTE_XWR_CODE_SHIFT());
+    (translateBool, paddr) = translate_virtual_address(vaddr, RiscVConstants.PTE_XWR_CODE_SHIFT());
+
+    //translate_virtual_address failed
+    if(!translateBool){
+      //raise_exception(CAUSE_FETCH_PAGE_FAULT)
+      return fetch_status.success;
+    }
 
     find_pma_entry(paddr);
 
@@ -92,8 +100,8 @@ contract MonolithicRiscV {
       return fetch_status.exception;
     }
     //TO-DO: make sure that this is the correct way to read memory
-    //will this actually return the instruction?
-    uint64 insn = uint64(mm.read(mmIndex, paddr)); //read memory
+    //will this actually return the instruction? Should it be 32bits?
+    insn = uint32(mm.read(mmIndex, paddr)); //read memory
 
     return fetch_status.success;
   }
