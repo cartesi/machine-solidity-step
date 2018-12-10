@@ -90,7 +90,7 @@ contract MonolithicRiscV {
     //translate_virtual_address failed
     if(!translateBool){
       //raise_exception(CAUSE_FETCH_PAGE_FAULT)
-      return fetch_status.success;
+      return fetch_status.exception;
     }
 
     find_pma_entry(paddr);
