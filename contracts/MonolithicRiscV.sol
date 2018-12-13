@@ -4,7 +4,7 @@ pragma solidity 0.4.24;
 //Libraries
 import "./ShadowAddresses.sol";
 import "./RiscVConstants.sol";
-
+import "./RiscVDecoder.sol";
 contract mmInterface {
   function read(uint256 _index, uint64 _address) public view returns (bytes8);
   function write(uint256 _index, uint64 _address, bytes8 _value) public;
