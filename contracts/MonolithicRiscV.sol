@@ -83,15 +83,24 @@ contract MonolithicRiscV {
   function execute_insn() returns (execute_status) {
     // Find opcode
     uint32 opcode = RiscVDecoder.inst_opcode(insn);
-    // Find instruction associated with that opcode 
+    // Find instruction associated with that opcode
     bytes32 insn_or_group = RiscVDecoder.opinsn(opcode);
 
     // TO-DO: We have to find a way to do this - insn_or_group should return a
     // pointer to a function - that can be either a direct instrunction or a branch
     if(insn_or_group == bytes32("AUIPC")){
-      //execute_auipc();
+      execute_auipc();
     }
 
+  }
+
+  function execute_auipc(){
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+    if(rd != 0){
+      //TO-DO: Check if casts are not having undesired effects
+      mm.write(mmIndex, rd, bytes8(pc + uint64(RiscVDecoder.insn_U_imm(insn))));
+    }
+    //advance_to_next_insn
   }
 
   function fetch_insn() returns (fetch_status){
