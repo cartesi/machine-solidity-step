@@ -91,18 +91,21 @@ contract MonolithicRiscV {
     if(insn_or_group == bytes32("AUIPC")){
       execute_auipc();
     }
-
   }
 
-  function execute_auipc(){
+  function execute_auipc() returns (execute_status){
     uint32 rd = RiscVDecoder.insn_rd(insn);
     if(rd != 0){
       //TO-DO: Check if casts are not having undesired effects
       mm.write(mmIndex, rd, bytes8(pc + uint64(RiscVDecoder.insn_U_imm(insn))));
     }
-    //advance_to_next_insn
+    return advance_to_next_insn();
   }
 
+  function advance_to_next_insn() returns (execute_status){
+    mm.write(mmIndex, ShadowAddresses.get_pc(), bytes8(pc + 4));
+    return execute_status.retired;
+  }
   function fetch_insn() returns (fetch_status){
     emit Print("fetch");
     bool translateBool;
