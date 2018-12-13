@@ -75,9 +75,9 @@ contract MonolithicRiscV {
         mm.write(mmIndex, ShadowAddresses.get_minstret(), bytes8(minstret + 1));
       }
     }
-    //read_mcycle
-    //write_mcycle + 1
-//  //end step
+    //update cycle counter
+    uint64 mcycle = uint64(mm.read(mmIndex, ShadowAddresses.get_mcycle()));
+    mm.write(mmIndex, ShadowAddresses.get_mcycle(), bytes8(mcycle + 1));
   }
 
   function execute_insn() returns (execute_status) {
