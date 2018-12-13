@@ -70,11 +70,11 @@ contract MonolithicRiscV {
     if(fetch_insn() == fetch_status.success){
       // If fetch was successfull, tries to execute instruction
       if(execute_insn() == execute_status.retired){
+        //update minstreet
+        uint64 minstret = uint64(mm.read(mmIndex, ShadowAddresses.get_minstret()));
+        mm.write(mmIndex, ShadowAddresses.get_minstret(), bytes8(minstret + 1));
       }
     }
-    //read_minstret
-    //write_minsret + 1
-
     //read_mcycle
     //write_mcycle + 1
 //  //end step
