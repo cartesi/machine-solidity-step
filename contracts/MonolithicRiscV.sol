@@ -68,13 +68,8 @@ contract MonolithicRiscV {
     raise_interrupt_if_any();
 
     if(fetch_insn() == fetch_status.success){
-      if(true/*execute_insn == execute_status.retired*/){
-        //decodes instruction until it finds the definitive one
-        //begin auipc
-          //write_register(rd, pc + insn_U_get_imm
-          //advance_to_next_insn
-            //write_pc = pc + 4
-          //end auipc
+      // If fetch was successfull, tries to execute instruction
+      if(execute_insn() == execute_status.retired){
       }
     }
     //read_minstret
@@ -85,8 +80,20 @@ contract MonolithicRiscV {
 //  //end step
   }
 
-  function execute_insn() returns (bool) {
+  function execute_insn() returns (execute_status) {
+    // Find opcode
+    uint32 opcode = RiscVDecoder.inst_opcode(insn);
+    // Find instruction associated with that opcode 
+    bytes32 insn_or_group = RiscVDecoder.opinsn(opcode);
+
+    // TO-DO: We have to find a way to do this - insn_or_group should return a
+    // pointer to a function - that can be either a direct instrunction or a branch
+    if(insn_or_group == bytes32("AUIPC")){
+      //execute_auipc();
+    }
+
   }
+
   function fetch_insn() returns (fetch_status){
     emit Print("fetch");
     bool translateBool;
