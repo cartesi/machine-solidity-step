@@ -84,6 +84,9 @@ contract MonolithicRiscV {
     //write_mcycle + 1
 //  //end step
   }
+
+  function execute_insn() returns (bool) {
+  }
   function fetch_insn() returns (fetch_status){
     emit Print("fetch");
     bool translateBool;
@@ -407,5 +410,9 @@ contract MonolithicRiscV {
   enum interpreter_status {
     brk, // brk is set, tigh loop was broken
     success // mcycle reached target value
+  }
+  enum execute_status {
+    illegal, // Exception was raised
+    retired // Instruction retired - having raised or not an exception
   }
 }
