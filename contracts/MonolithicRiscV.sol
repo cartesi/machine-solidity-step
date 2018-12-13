@@ -70,20 +70,32 @@ contract MonolithicRiscV {
     if(fetch_insn() == fetch_status.success){
       // If fetch was successfull, tries to execute instruction
       if(execute_insn() == execute_status.retired){
-        //update minstreet
+        // If execute_insn finishes successfully we need to update the number of
+        // retired instructions. This number is stored on minstret CSR.
+        // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
         uint64 minstret = uint64(mm.read(mmIndex, ShadowAddresses.get_minstret()));
         mm.write(mmIndex, ShadowAddresses.get_minstret(), bytes8(minstret + 1));
       }
     }
-    //update cycle counter
+    // Last thing that has to be done in a step is to update the cycle counter.
+    // The cycle counter is stored on mcycle CSR.
+    // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
     uint64 mcycle = uint64(mm.read(mmIndex, ShadowAddresses.get_mcycle()));
     mm.write(mmIndex, ShadowAddresses.get_mcycle(), bytes8(mcycle + 1));
   }
 
   function execute_insn() returns (execute_status) {
-    // Find opcode
+    // OPCODE is located on bit 0 - 6 of the following types of 32bits instructions:
+    // R-Type, I-Type, S-Trype and U-Type
+    // Reference: riscv-spec-v2.2.pdf - Figure 2.2 - Page 11
     uint32 opcode = RiscVDecoder.inst_opcode(insn);
+
     // Find instruction associated with that opcode
+    // Sometimes the opcode fully defines the associated instructions, but most
+    // of the times it only specifies which group it belongs to.
+    // For example, an opcode of: 01100111 is always a LUI instruction but an
+    // opcode of 1100011 might be BEQ, BNE, BLT etc
+    // Reference: riscv-spec-v2.2.pdf - Table 19.2 - Page 104
     bytes32 insn_or_group = RiscVDecoder.opinsn(opcode);
 
     // TO-DO: We have to find a way to do this - insn_or_group should return a
@@ -92,7 +104,9 @@ contract MonolithicRiscV {
       execute_auipc();
     }
   }
-
+    //AUIPC forms a 32-bit offset from the 20-bit U-immediate, filling in the 
+    // lowest 12 bits with zeros, adds this offset to pc and store the result on rd.
+    // Reference: riscv-spec-v2.2.pdf -  Page 14
   function execute_auipc() returns (execute_status){
     uint32 rd = RiscVDecoder.insn_rd(insn);
     if(rd != 0){
