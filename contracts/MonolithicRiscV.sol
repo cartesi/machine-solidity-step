@@ -38,7 +38,7 @@ contract MonolithicRiscV {
    int vpn_bits;
   //structs
 
-   // PMA stands for Physical Memory Attributes - it is defined as two 64 bit words
+  // PMA stands for Physical Memory Attributes - it is defined as two 64 bit words
   // The first word defines start and flags and the second defines length.
   // Reference: The Core of Cartesi, v1.02 - figure 2.
   struct PMAEntry{
@@ -57,8 +57,8 @@ contract MonolithicRiscV {
     //TO-DO: Check byte order -> riscv is little endian/ solidity is big endian
 
     // Read iflags register and check its H flag, to see if machine is halted.
-    // If machine if it is halted - nothing else to do. H flag is stored on the
-    // least signficant bit on iflags register.
+    // If machine is halted - nothing else to do. H flag is stored on the least
+    // signficant bit on iflags register.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
     if( (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) & 1) != 0){
       //machine is halted
@@ -100,7 +100,8 @@ contract MonolithicRiscV {
     }
 
     // Finds the range in memory in which the physical address is located
-    find_pma_entry(paddr);
+    // Returns start and length words from pma
+    (pma_entry.start, pma_entry.length) = find_pma_entry(paddr);
 
     // M flag defines if the pma range is in memory 
     // X flag defines if the pma is executable
@@ -277,7 +278,10 @@ contract MonolithicRiscV {
   //Populate storage pma_entry
   //TO-DO: there is probably gonna be a pma_entry array on storage, so we will have
   // to adjust this code.
-  function find_pma_entry(uint64 paddr){
+
+  // @param physical address to look for
+  // @return returns the two words that define a PMA - start and length
+  function find_pma_entry(uint64 paddr) returns (uint64, uint64){
 
     //Hard coded ram address starts at 0x800
     // In total there are 32 PMAs from processor shadow to Flash disk 7.
@@ -295,8 +299,7 @@ contract MonolithicRiscV {
       uint64 start = uint64(mm.read(mmIndex, pmaAddress + (i*8)));
       uint64 length = uint64(mm.read(mmIndex, pmaAddress + ((i * 8 + 8))));
       if(paddr >= start && paddr < (start + length)){
-        pma_entry.start = start;
-        pma_entry.length = length;
+        return (start, length);
       }
       if(length == 0){
         break;
