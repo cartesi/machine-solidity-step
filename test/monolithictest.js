@@ -56,7 +56,7 @@ contract('MonolithicRiscV', function(accounts){
       response = await mm.proveWrite(index, 0x130, 0, 42949672960, [], {
         from: accounts[0],
         gas: 2000000
-      }); 
+      });
       //Write to pma@800
       response = await mm.proveWrite(index, 0x800, 0, 2147483649, [], {
         from: accounts[0],
@@ -83,7 +83,11 @@ contract('MonolithicRiscV', function(accounts){
         gas: 2000000
       });
     })
-    it('', async function() {
+    it('Deploying Monolithic contract', async function() {
+      let riscV = await MonolithicRiscV.new({
+        from: accounts[0], gas: 4600000
+      });
+
     });
   });
 });
