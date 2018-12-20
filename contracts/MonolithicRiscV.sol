@@ -4,7 +4,7 @@ pragma solidity 0.4.24;
 //Libraries
 import "./ShadowAddresses.sol";
 import "./RiscVConstants.sol";
-
+import "./RiscVDecoder.sol";
 contract mmInterface {
   function read(uint256 _index, uint64 _address) public view returns (bytes8);
   function write(uint256 _index, uint64 _address, bytes8 _value) public;
@@ -23,7 +23,6 @@ contract MonolithicRiscV {
   //Should not be Storage - but stack too deep
   //this will probably be ok when we split it into a bunch of different calls
   uint64 pc = 0;
-  uint32 insn = 0;
   int priv;
   uint64 mstatus;
   uint64 satp;
@@ -35,7 +34,7 @@ contract MonolithicRiscV {
   int vaddr_shift;
   uint64 pte_addr;
   int pte_size_log2;
-   int vpn_bits;
+  int vpn_bits;
   //structs
 
   // PMA stands for Physical Memory Attributes - it is defined as two 64 bit words
@@ -51,8 +50,8 @@ contract MonolithicRiscV {
     bool IW;
   }
 
-  function step(address _memoryManagerAddress) returns (interpreter_status){
-
+  function step(uint _mmIndex, address _memoryManagerAddress) returns (interpreter_status){
+    mmIndex = _mmIndex;
     mm = mmInterface(_memoryManagerAddress);
     //TO-DO: Check byte order -> riscv is little endian/ solidity is big endian
 
@@ -67,24 +66,68 @@ contract MonolithicRiscV {
     //Raise the highest priority interrupt
     raise_interrupt_if_any();
 
-    if(fetch_insn() == fetch_status.success){
-      if(true/*execute_insn == execute_status.retired*/){
-        //decodes instruction until it finds the definitive one
-        //begin auipc
-          //write_register(rd, pc + insn_U_get_imm
-          //advance_to_next_insn
-            //write_pc = pc + 4
-          //end auipc
+    fetch_status f_status;
+    uint32 insn;
+    // If fetch_insn() fails, insn == 0. Else f_status == success and the correct
+    // instruction will be returned.
+    (insn, f_status) = fetch_insn();
+
+    if(f_status == fetch_status.success){
+      // If fetch was successfull, tries to execute instruction
+      if(execute_insn(insn) == execute_status.retired){
+        // If execute_insn finishes successfully we need to update the number of
+        // retired instructions. This number is stored on minstret CSR.
+        // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
+        uint64 minstret = uint64(mm.read(mmIndex, ShadowAddresses.get_minstret()));
+        mm.write(mmIndex, ShadowAddresses.get_minstret(), bytes8(minstret + 1));
       }
     }
-    //read_minstret
-    //write_minsret + 1
-
-    //read_mcycle
-    //write_mcycle + 1
-//  //end step
+    // Last thing that has to be done in a step is to update the cycle counter.
+    // The cycle counter is stored on mcycle CSR.
+    // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
+    uint64 mcycle = uint64(mm.read(mmIndex, ShadowAddresses.get_mcycle()));
+    mm.write(mmIndex, ShadowAddresses.get_mcycle(), bytes8(mcycle + 1));
   }
-  function fetch_insn() returns (fetch_status){
+
+  function execute_insn(uint32 insn) returns (execute_status) {
+    // OPCODE is located on bit 0 - 6 of the following types of 32bits instructions:
+    // R-Type, I-Type, S-Trype and U-Type
+    // Reference: riscv-spec-v2.2.pdf - Figure 2.2 - Page 11
+    uint32 opcode = RiscVDecoder.inst_opcode(insn);
+
+    // Find instruction associated with that opcode
+    // Sometimes the opcode fully defines the associated instructions, but most
+    // of the times it only specifies which group it belongs to.
+    // For example, an opcode of: 01100111 is always a LUI instruction but an
+    // opcode of 1100011 might be BEQ, BNE, BLT etc
+    // Reference: riscv-spec-v2.2.pdf - Table 19.2 - Page 104
+    bytes32 insn_or_group = RiscVDecoder.opinsn(opcode);
+
+    // TO-DO: We have to find a way to do this - insn_or_group should return a
+    // pointer to a function - that can be either a direct instrunction or a branch
+    if(insn_or_group == bytes32("AUIPC")){
+      execute_auipc(insn);
+    }
+  }
+    //AUIPC forms a 32-bit offset from the 20-bit U-immediate, filling in the 
+    // lowest 12 bits with zeros, adds this offset to pc and store the result on rd.
+    // Reference: riscv-spec-v2.2.pdf -  Page 14
+  function execute_auipc(uint32 insn) returns (execute_status){
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+    if(rd != 0){
+      //TO-DO: Check if casts are not having undesired effects
+      mm.write(mmIndex, rd, bytes8(pc + uint64(RiscVDecoder.insn_U_imm(insn))));
+    }
+    return advance_to_next_insn();
+  }
+
+  function advance_to_next_insn() returns (execute_status){
+    mm.write(mmIndex, ShadowAddresses.get_pc(), bytes8(pc + 4));
+    return execute_status.retired;
+  }
+
+  // returns fetch status and instruction - if fetch was successfull
+  function fetch_insn() returns (uint32, fetch_status){
     emit Print("fetch");
     bool translateBool;
 
@@ -96,7 +139,7 @@ contract MonolithicRiscV {
     //translate_virtual_address failed
     if(!translateBool){
       //raise_exception(CAUSE_FETCH_PAGE_FAULT)
-      return fetch_status.exception;
+      return (0, fetch_status.exception);
     }
 
     // Finds the range in memory in which the physical address is located
@@ -109,13 +152,11 @@ contract MonolithicRiscV {
     // Reference: The Core of Cartesi, v1.02 - section 3.2 the board - page 5.
     if(!pma_get_istart_M() || !pma_get_istart_X()){
       //raise_exception(CAUSE_FETCH_FAULT)
-      return fetch_status.exception;
+      return (0, fetch_status.exception);
     }
     //TO-DO: make sure that this is the correct way to read memory
     //will this actually return the instruction? Should it be 32bits?
-    insn = uint32(mm.read(mmIndex, paddr)); //read memory
-
-    return fetch_status.success;
+    return (uint32(mm.read(mmIndex, paddr)), fetch_status.success);
   }
 
   // Finds the physical address associated to the virtual address (vaddr).
@@ -407,5 +448,9 @@ contract MonolithicRiscV {
   enum interpreter_status {
     brk, // brk is set, tigh loop was broken
     success // mcycle reached target value
+  }
+  enum execute_status {
+    illegal, // Exception was raised
+    retired // Instruction retired - having raised or not an exception
   }
 }
