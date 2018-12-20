@@ -23,7 +23,6 @@ contract MonolithicRiscV {
   //Should not be Storage - but stack too deep
   //this will probably be ok when we split it into a bunch of different calls
   uint64 pc = 0;
-  uint32 insn = 0;
   int priv;
   uint64 mstatus;
   uint64 satp;
@@ -35,7 +34,7 @@ contract MonolithicRiscV {
   int vaddr_shift;
   uint64 pte_addr;
   int pte_size_log2;
-   int vpn_bits;
+  int vpn_bits;
   //structs
 
   // PMA stands for Physical Memory Attributes - it is defined as two 64 bit words
@@ -51,8 +50,8 @@ contract MonolithicRiscV {
     bool IW;
   }
 
-  function step(address _memoryManagerAddress) returns (interpreter_status){
-
+  function step(uint _mmIndex, address _memoryManagerAddress) returns (interpreter_status){
+    mmIndex = _mmIndex;
     mm = mmInterface(_memoryManagerAddress);
     //TO-DO: Check byte order -> riscv is little endian/ solidity is big endian
 
@@ -67,9 +66,15 @@ contract MonolithicRiscV {
     //Raise the highest priority interrupt
     raise_interrupt_if_any();
 
-    if(fetch_insn() == fetch_status.success){
+    fetch_status f_status;
+    uint32 insn;
+    // If fetch_insn() fails, insn == 0. Else f_status == success and the correct
+    // instruction will be returned.
+    (insn, f_status) = fetch_insn();
+
+    if(f_status == fetch_status.success){
       // If fetch was successfull, tries to execute instruction
-      if(execute_insn() == execute_status.retired){
+      if(execute_insn(insn) == execute_status.retired){
         // If execute_insn finishes successfully we need to update the number of
         // retired instructions. This number is stored on minstret CSR.
         // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
@@ -84,7 +89,7 @@ contract MonolithicRiscV {
     mm.write(mmIndex, ShadowAddresses.get_mcycle(), bytes8(mcycle + 1));
   }
 
-  function execute_insn() returns (execute_status) {
+  function execute_insn(uint32 insn) returns (execute_status) {
     // OPCODE is located on bit 0 - 6 of the following types of 32bits instructions:
     // R-Type, I-Type, S-Trype and U-Type
     // Reference: riscv-spec-v2.2.pdf - Figure 2.2 - Page 11
@@ -101,13 +106,13 @@ contract MonolithicRiscV {
     // TO-DO: We have to find a way to do this - insn_or_group should return a
     // pointer to a function - that can be either a direct instrunction or a branch
     if(insn_or_group == bytes32("AUIPC")){
-      execute_auipc();
+      execute_auipc(insn);
     }
   }
     //AUIPC forms a 32-bit offset from the 20-bit U-immediate, filling in the 
     // lowest 12 bits with zeros, adds this offset to pc and store the result on rd.
     // Reference: riscv-spec-v2.2.pdf -  Page 14
-  function execute_auipc() returns (execute_status){
+  function execute_auipc(uint32 insn) returns (execute_status){
     uint32 rd = RiscVDecoder.insn_rd(insn);
     if(rd != 0){
       //TO-DO: Check if casts are not having undesired effects
@@ -120,7 +125,9 @@ contract MonolithicRiscV {
     mm.write(mmIndex, ShadowAddresses.get_pc(), bytes8(pc + 4));
     return execute_status.retired;
   }
-  function fetch_insn() returns (fetch_status){
+
+  // returns fetch status and instruction - if fetch was successfull
+  function fetch_insn() returns (uint32, fetch_status){
     emit Print("fetch");
     bool translateBool;
 
@@ -132,7 +139,7 @@ contract MonolithicRiscV {
     //translate_virtual_address failed
     if(!translateBool){
       //raise_exception(CAUSE_FETCH_PAGE_FAULT)
-      return fetch_status.exception;
+      return (0, fetch_status.exception);
     }
 
     // Finds the range in memory in which the physical address is located
@@ -145,13 +152,11 @@ contract MonolithicRiscV {
     // Reference: The Core of Cartesi, v1.02 - section 3.2 the board - page 5.
     if(!pma_get_istart_M() || !pma_get_istart_X()){
       //raise_exception(CAUSE_FETCH_FAULT)
-      return fetch_status.exception;
+      return (0, fetch_status.exception);
     }
     //TO-DO: make sure that this is the correct way to read memory
     //will this actually return the instruction? Should it be 32bits?
-    insn = uint32(mm.read(mmIndex, paddr)); //read memory
-
-    return fetch_status.success;
+    return (uint32(mm.read(mmIndex, paddr)), fetch_status.success);
   }
 
   // Finds the physical address associated to the virtual address (vaddr).
