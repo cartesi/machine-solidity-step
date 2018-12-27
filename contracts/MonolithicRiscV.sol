@@ -5,6 +5,8 @@ pragma solidity 0.4.24;
 import "./ShadowAddresses.sol";
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
+import "./lib/BitsManipulationLibrary.sol";
+
 contract mmInterface {
   function read(uint256 _index, uint64 _address) public view returns (bytes8);
   function write(uint256 _index, uint64 _address, bytes8 _value) public;
@@ -13,13 +15,12 @@ contract mmInterface {
 
 //TO-DO: use instantiator pattern so we can always use same instance of mm/pc etc
 contract MonolithicRiscV {
-  event Print(string message);
+  event Print(string message, uint value);
 
   //Real Storage variables
   PMAEntry pma_entry; //cannot return struct without experimental pragma
   mmInterface mm;
-  uint256 mmIndex;
-
+  uint256 mmIndex; //this has to be removed
   //Should not be Storage - but stack too deep
   //this will probably be ok when we split it into a bunch of different calls
   uint64 pc = 0;
@@ -51,8 +52,8 @@ contract MonolithicRiscV {
     bool IW;
   }
 
-  function step(address _memoryManagerAddress) returns (interpreter_status){
-
+  function step(uint _mmIndex, address _memoryManagerAddress) returns (interpreter_status){
+    mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
     mm = mmInterface(_memoryManagerAddress);
     //TO-DO: Check byte order -> riscv is little endian/ solidity is big endian
 
@@ -60,6 +61,7 @@ contract MonolithicRiscV {
     // If machine is halted - nothing else to do. H flag is stored on the least
     // signficant bit on iflags register.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
+//    emit Print("iflags", uint(mm.read(mmIndex, ShadowAddresses.get_iflags())));
     if( (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) & 1) != 0){
       //machine is halted
       return interpreter_status.success;
@@ -121,7 +123,6 @@ contract MonolithicRiscV {
     return execute_status.retired;
   }
   function fetch_insn() returns (fetch_status){
-    emit Print("fetch");
     bool translateBool;
 
     //read_pc
@@ -169,6 +170,7 @@ contract MonolithicRiscV {
     // on bits 2 and 3.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
     priv = (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) >> 2) & 3;
+    emit Print("priv", uint(priv));
     //read_mstatus
     mstatus = uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()));
 
@@ -190,13 +192,15 @@ contract MonolithicRiscV {
     // MODE is located on bits 60 to 63 for RV64.
     // Reference: riscv-priv-spec-1.10.pdf - Section 4.1.12, page 56.
     satp = uint64(mm.read(mmIndex, ShadowAddresses.get_satp()));
-
+    emit Print("satp", satp);
     // In RV64, mode can be
     //   0: Bare: No translation or protection
     //   8: sv39: Page-based 39-bit virtual addressing
     //   9: sv48: Page-based 48-bit virtual addressing
     // Reference: riscv-priv-spec-1.10.pdf - Table 4.3, page 57.
     mode = (satp >> 60) & 0xf;
+    emit Print("mode", uint(mode));
+
     if(mode == 0){
       return(true, vaddr);
     } else if(mode < 8 || mode > 9){
