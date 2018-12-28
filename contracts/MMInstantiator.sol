@@ -4,6 +4,7 @@ pragma solidity 0.4.24;
 import "./Decorated.sol";
 import "./MMInterface.sol";
 
+// TO-DO: Remove comments from requires
 contract MMInstantiator is MMInterface, Decorated {
   // the privider will fill the memory for the client to read and write
   // memory starts with hash and all values that are inserted are first verified
