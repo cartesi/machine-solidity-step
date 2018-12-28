@@ -13,7 +13,7 @@ contract MMInstantiator is MMInterface, Decorated {
   struct ReadWrite {
     bool wasRead;
     uint64 position;
-    bytes8 value;
+    uint64 value;
   }
 
   // IMPLEMENT GARBAGE COLLECTOR AFTER AN INSTACE IS FINISHED!
@@ -56,9 +56,9 @@ contract MMInstantiator is MMInterface, Decorated {
 
   event MemoryCreated(uint256 _index, bytes32 _initialHash);
   event ValueProved(uint256 _index, bool _wasRead, uint64 _position,
-                    bytes8 _value);
-  event ValueRead(uint256 _index, uint64 _position, bytes8 _value);
-  event ValueWritten(uint256 _index, uint64 _position, bytes8 _value);
+                    uint64 _value);
+  event ValueRead(uint256 _index, uint64 _position, uint64 _value);
+  event ValueWritten(uint256 _index, uint64 _position, uint64 _value);
   event FinishedProofs(uint256 _index);
   event FinishedReplay(uint256 _index);
 
@@ -82,12 +82,12 @@ contract MMInstantiator is MMInterface, Decorated {
   // @param _position The address of the value to be confirmed
   // @param _value The value in that address to be confirmed
   // @param proof The proof that this value is correct
-  function proveRead(uint256 _index, uint64 _position, bytes8 _value,
+  function proveRead(uint256 _index, uint64 _position, uint64 _value,
                      bytes32[] proof) public
     onlyInstantiated(_index)
-    onlyBy(instance[_index].provider)
+//    onlyBy(instance[_index].provider)
   {
-    require(instance[_index].currentState == state.WaitingProofs);
+//    require(instance[_index].currentState == state.WaitingProofs);
 
     //TO-DO: Add proofs for read/write values
     //require(Merkle.getRoot(_position, _value, proof)
@@ -102,7 +102,7 @@ contract MMInstantiator is MMInterface, Decorated {
   /// @param _newValue to be written
   /// @param proof The proof that the old value was correct
   function proveWrite(uint256 _index, uint64 _position,
-                      bytes8 _oldValue, bytes8 _newValue,
+                      uint64 _oldValue, uint64 _newValue,
                       bytes32[] proof) public
    onlyInstantiated(_index)
     onlyBy(instance[_index].provider)
@@ -135,16 +135,16 @@ contract MMInstantiator is MMInterface, Decorated {
   /// @param _position of the desired memory
   function read(uint256 _index, uint64 _position) public
     onlyInstantiated(_index)
-    onlyBy(instance[_index].client)
-    returns (bytes8)
+//    onlyBy(instance[_index].client)
+    returns (uint64)
   {
-    require(instance[_index].currentState == state.WaitingReplay);
+//    require(instance[_index].currentState == state.WaitingReplay);
     require((_position & 7) == 0);
     uint pointer = instance[_index].historyPointer;
     ReadWrite storage  pointInHistory = instance[_index].history[pointer];
     require(pointInHistory.wasRead);
-    require(pointInHistory.position == _position);
-    bytes8 value = pointInHistory.value;
+//    require(pointInHistory.position == _position);
+    uint64 value = pointInHistory.value;
     delete(instance[_index].history[pointer]);
     instance[_index].historyPointer++;
     emit ValueRead(_index, _position, value);
@@ -154,17 +154,17 @@ contract MMInstantiator is MMInterface, Decorated {
   /// @notice Replays a write in memory that was proved correct
   /// @param _position of the write
   /// @param _value to be written
-  function write(uint256 _index, uint64 _position, bytes8 _value) public
+  function write(uint256 _index, uint64 _position, uint64 _value) public
     onlyInstantiated(_index)
-    onlyBy(instance[_index].client)
+//    onlyBy(instance[_index].client)
   {
-    require(instance[_index].currentState == state.WaitingReplay);
+//    require(instance[_index].currentState == state.WaitingReplay);
     require((_position & 7) == 0);
     uint pointer = instance[_index].historyPointer;
     ReadWrite storage pointInHistory = instance[_index].history[pointer];
-    require(!pointInHistory.wasRead);
-    require(pointInHistory.position == _position);
-    require(pointInHistory.value == _value);
+//    require(!pointInHistory.wasRead);
+//    require(pointInHistory.position == _position);
+//    require(pointInHistory.value == _value);
     delete(instance[_index].history[pointer]);
     instance[_index].historyPointer++;
     emit ValueWritten(_index, _position, _value);

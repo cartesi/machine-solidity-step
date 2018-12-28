@@ -8,8 +8,8 @@ import "./RiscVDecoder.sol";
 import "./lib/BitsManipulationLibrary.sol";
 
 contract mmInterface {
-  function read(uint256 _index, uint64 _address) public view returns (bytes8);
-  function write(uint256 _index, uint64 _address, bytes8 _value) public;
+  function read(uint256 _index, uint64 _address) public view returns (uint64);
+  function write(uint256 _index, uint64 _address, uint64 _value) public;
   function finishReplayPhase(uint256 _index) public;
 }
 
@@ -61,8 +61,10 @@ contract MonolithicRiscV {
     // If machine is halted - nothing else to do. H flag is stored on the least
     // signficant bit on iflags register.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
-//    emit Print("iflags", uint(mm.read(mmIndex, ShadowAddresses.get_iflags())));
-    if( (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) & 1) != 0){
+
+    uint64 iflags = mm.read(mmIndex, ShadowAddresses.get_iflags());
+    emit Print("iflags", uint(iflags));
+    if((iflags & 1) != 0){
       //machine is halted
       return interpreter_status.success;
     }
@@ -76,14 +78,14 @@ contract MonolithicRiscV {
         // retired instructions. This number is stored on minstret CSR.
         // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
         uint64 minstret = uint64(mm.read(mmIndex, ShadowAddresses.get_minstret()));
-        mm.write(mmIndex, ShadowAddresses.get_minstret(), bytes8(minstret + 1));
+        mm.write(mmIndex, ShadowAddresses.get_minstret(), uint64(minstret + 1));
       }
     }
     // Last thing that has to be done in a step is to update the cycle counter.
     // The cycle counter is stored on mcycle CSR.
     // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
     uint64 mcycle = uint64(mm.read(mmIndex, ShadowAddresses.get_mcycle()));
-    mm.write(mmIndex, ShadowAddresses.get_mcycle(), bytes8(mcycle + 1));
+    mm.write(mmIndex, ShadowAddresses.get_mcycle(), uint64(mcycle + 1));
   }
 
   function execute_insn() returns (execute_status) {
@@ -113,13 +115,13 @@ contract MonolithicRiscV {
     uint32 rd = RiscVDecoder.insn_rd(insn);
     if(rd != 0){
       //TO-DO: Check if casts are not having undesired effects
-      mm.write(mmIndex, rd, bytes8(pc + uint64(RiscVDecoder.insn_U_imm(insn))));
+      mm.write(mmIndex, rd, uint64(pc + uint64(RiscVDecoder.insn_U_imm(insn))));
     }
     return advance_to_next_insn();
   }
 
   function advance_to_next_insn() returns (execute_status){
-    mm.write(mmIndex, ShadowAddresses.get_pc(), bytes8(pc + 4));
+    mm.write(mmIndex, ShadowAddresses.get_pc(), uint64(pc + 4));
     return execute_status.retired;
   }
   function fetch_insn() returns (fetch_status){
@@ -127,7 +129,7 @@ contract MonolithicRiscV {
 
     //read_pc
     vaddr = uint64(mm.read(mmIndex, ShadowAddresses.get_pc()));
-
+    Print("vaddr", vaddr);
     (translateBool, paddr) = translate_virtual_address(vaddr, RiscVConstants.PTE_XWR_CODE_SHIFT());
 
     //translate_virtual_address failed
@@ -169,7 +171,7 @@ contract MonolithicRiscV {
     // Reads privilege level on iflags register. The privilege level is located
     // on bits 2 and 3.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
-    priv = (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) >> 2) & 3;
+    priv = (mm.read(mmIndex, ShadowAddresses.get_iflags()) >> 2) & 3;
     emit Print("priv", uint(priv));
     //read_mstatus
     mstatus = uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()));
