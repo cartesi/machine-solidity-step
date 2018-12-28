@@ -32,57 +32,73 @@ contract('MonolithicRiscV', function(accounts){
       expect(event._index.toNumber()).to.equal(0);
       index = 0;
 
-      //Write to iflags
+      //Prove Read to iflags
       response = await mm.proveRead(index, 0x1d0, 12, [], {
         from: accounts[0],
         gas: 2000000
       });
 
-      //Write to mip
+      //Prove Read to mip
       response = await mm.proveRead(index, 0x170, 0, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Write to mie
+      //Prove Read to mie
       response = await mm.proveRead(index, 0x168, 0, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Write to pc
+      //Prove Read to pc
       response = await mm.proveRead(index, 0x100, 4096, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Write to mstatus
+      //Prove Read to iflags
+      response = await mm.proveRead(index, 0x1d0, 12, [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to mstatus
       response = await mm.proveRead(index, 0x130, 42949672960, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Write to pma@800
+      //Prove Read to pma@800
       response = await mm.proveRead(index, 0x800, 2147483649, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Write to pma@808
+      //Prove Read to pma@808
       response = await mm.proveRead(index, 0x808, 1048576, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Write to pma@810
+      //Prove Read to pma@810
       response = await mm.proveRead(index, 0x810, 4097, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Write to pma@818
+      //Prove Read to pma@818
       response = await mm.proveRead(index, 0x818, 61440, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Write to memory
+      //Prove Read to memory
       response = await mm.proveRead(index, 0x1000, 162836104410563223, [], {
         from: accounts[0],
         gas: 2000000
       });
+      //Prove Write to x@28
+      response = await mm.proveWrite(index, 0x28, 0, 4096, [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Write to pc
+      response = await mm.proveWrite(index, 0x100, 4096, 4100, [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+
     })
     it('Deploying Monolithic contract', async function() {
       let riscV = await MonolithicRiscV.new({
