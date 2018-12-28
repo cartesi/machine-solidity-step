@@ -98,7 +98,26 @@ contract('MonolithicRiscV', function(accounts){
         from: accounts[0],
         gas: 2000000
       });
-
+      //Prove Read to minstret
+      response = await mm.proveRead(index, 0x128, 0, [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Write to minstret
+      response = await mm.proveWrite(index, 0x128, 0, 1, [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to mcycle
+      response = await mm.proveRead(index, 0x120, 0, [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Write to mcycle 
+      response = await mm.proveWrite(index, 0x120, 0, 1, [], {
+        from: accounts[0],
+        gas: 2000000
+      });
     })
     it('Deploying Monolithic contract', async function() {
       let riscV = await MonolithicRiscV.new({
