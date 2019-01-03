@@ -121,7 +121,7 @@ contract('MonolithicRiscV', function(accounts){
     })
     it('Deploying Monolithic contract', async function() {
       let riscV = await MonolithicRiscV.new({
-        from: accounts[0], gas: 4600000
+        from: accounts[0], gas: 9007199254740991
       });
       response = await riscV.step(index, mmAddress, {
         from: accounts[1],

@@ -8,9 +8,9 @@ import "./RiscVDecoder.sol";
 import "./lib/BitsManipulationLibrary.sol";
 
 contract mmInterface {
-  function read(uint256 _index, uint64 _address) public view returns (bytes8);
-  function write(uint256 _index, uint64 _address, bytes8 _value) public;
-  function finishReplayPhase(uint256 _index) public;
+  function read(uint256 _index, uint64 _address) external returns (bytes8);
+  function write(uint256 _index, uint64 _address, bytes8 _value) external;
+  function finishReplayPhase(uint256 _index) external;
 }
 
 //TO-DO: use instantiator pattern so we can always use same instance of mm/pc etc
@@ -69,7 +69,7 @@ contract MonolithicRiscV {
       return interpreter_status.success;
     }
     //Raise the highest priority interrupt
-//    raise_interrupt_if_any();
+    raise_interrupt_if_any();
 
     if(fetch_insn() == fetch_status.success){
       // If fetch was successfull, tries to execute instruction
