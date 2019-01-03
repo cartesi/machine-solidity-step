@@ -32,89 +32,89 @@ contract('MonolithicRiscV', function(accounts){
       expect(event._index.toNumber()).to.equal(0);
       index = 0;
 
-      //Prove Read to iflags
-      response = await mm.proveRead(index, 0x1d0, 12, [], {
+      //Prove Read to iflags - value 12
+      response = await mm.proveRead(index, 0x1d0, 0x0C, [], {
         from: accounts[0],
         gas: 2000000
       });
 
-      //Prove Read to mip
-      response = await mm.proveRead(index, 0x170, 0, [], {
+      //Prove Read to mip - value 0
+      response = await mm.proveRead(index, 0x170, 0x0, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Read to mie
-      response = await mm.proveRead(index, 0x168, 0, [], {
+      //Prove Read to mie - value 0 
+      response = await mm.proveRead(index, 0x168, 0x0, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Read to pc
-      response = await mm.proveRead(index, 0x100, 4096, [], {
+      //Prove Read to pc value 4096
+      response = await mm.proveRead(index, 0x100, 0x1000, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Read to iflags
-      response = await mm.proveRead(index, 0x1d0, 12, [], {
+      //Prove Read to iflags - value 12
+      response = await mm.proveRead(index, 0x1d0, 0x0C, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Read to mstatus
-      response = await mm.proveRead(index, 0x130, 42949672960, [], {
+      //Prove Read to mstatus - value 42949672960
+      response = await mm.proveRead(index, 0x130, 0xA00000000, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Read to pma@800
-      response = await mm.proveRead(index, 0x800, 2147483649, [], {
+      //Prove Read to pma@800 - value: 12147483649
+      response = await mm.proveRead(index, 0x800, 0x8000000, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Read to pma@808
-      response = await mm.proveRead(index, 0x808, 1048576, [], {
+      //Prove Read to pma@808 - value 1048576
+      response = await mm.proveRead(index, 0x808, 0x100000, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Read to pma@810
-      response = await mm.proveRead(index, 0x810, 4097, [], {
+      //Prove Read to pma@810 - value 4097
+      response = await mm.proveRead(index, 0x810, 0x1001, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Read to pma@818
-      response = await mm.proveRead(index, 0x818, 61440, [], {
+      //Prove Read to pma@818 - value 61440
+      response = await mm.proveRead(index, 0x818, 0xF000, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Read to memory
-      response = await mm.proveRead(index, 0x1000, 162836104410563223, [], {
+      //Prove Read to memory - value 162836104410563223
+      response = await mm.proveRead(index, 0x1000, 0x242829300000297, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Write to x@28
-      response = await mm.proveWrite(index, 0x28, 0, 4096, [], {
+      //Prove Write to x@28 - first value: 0, second value 4096
+      response = await mm.proveWrite(index, 0x28, 0, 0x1000, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Write to pc
-      response = await mm.proveWrite(index, 0x100, 4096, 4100, [], {
+      //Prove Write to pc - first value: 4096, second value 4100
+      response = await mm.proveWrite(index, 0x100, 0x1000, 0x1004, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Read to minstret
+      //Prove Read to minstret - value 0
       response = await mm.proveRead(index, 0x128, 0, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Write to minstret
-      response = await mm.proveWrite(index, 0x128, 0, 1, [], {
+      //Prove Write to minstret - first value 0, second value 1
+      response = await mm.proveWrite(index, 0x128, 0, 0x01, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Read to mcycle
+      //Prove Read to mcycle - value 0
       response = await mm.proveRead(index, 0x120, 0, [], {
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Write to mcycle 
-      response = await mm.proveWrite(index, 0x120, 0, 1, [], {
+      //Prove Write to mcycle - first value 0, second value 1
+      response = await mm.proveWrite(index, 0x120, 0, 0x01, [], {
         from: accounts[0],
         gas: 2000000
       });
