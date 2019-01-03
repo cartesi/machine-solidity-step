@@ -1,5 +1,5 @@
 // @title RiscVDecoder
-pragma solidity 0.4.24;
+pragma solidity ^0.5.0;
 
 import "./RiscVInstructions/BranchInstructions.sol";
 import "./RiscVInstructions/ArithmeticInstructions.sol";

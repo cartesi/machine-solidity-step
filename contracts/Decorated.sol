@@ -1,4 +1,4 @@
-pragma solidity 0.4.24;
+pragma solidity ^0.5.0;
 
 contract Decorated {
   // This contract defines several modifiers but does not use

@@ -1,5 +1,5 @@
 /// @title An instantiator of memory managers
-pragma solidity 0.4.24;
+pragma solidity ^0.5.0;
 
 import "./Decorated.sol";
 import "./MMInterface.sol";
@@ -84,7 +84,7 @@ contract MMInstantiator is MMInterface, Decorated {
   // @param _value The value in that address to be confirmed
   // @param proof The proof that this value is correct
   function proveRead(uint256 _index, uint64 _position, bytes8 _value,
-                     bytes32[] proof) public
+                     bytes32[] memory proof) public
     onlyInstantiated(_index)
 //    onlyBy(instance[_index].provider)
   {
@@ -104,7 +104,7 @@ contract MMInstantiator is MMInterface, Decorated {
   /// @param proof The proof that the old value was correct
   function proveWrite(uint256 _index, uint64 _position,
                       bytes8 _oldValue, bytes8 _newValue,
-                      bytes32[] proof) public
+                      bytes32[] memory proof) public
    onlyInstantiated(_index)
     onlyBy(instance[_index].provider)
   {
