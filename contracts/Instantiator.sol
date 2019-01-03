@@ -1,5 +1,5 @@
 /// @title Interface for memory manager instantiator
-pragma solidity 0.4.24;
+pragma solidity ^0.5.0;
 
 contract Instantiator
 {

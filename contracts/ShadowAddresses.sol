@@ -1,5 +1,5 @@
 /// @title ShadowAddresses
-pragma solidity 0.4.24;
+pragma solidity ^0.5.0;
 
 library ShadowAddresses {
   // The processor state. Memory-mapped to the lowest 512 bytes in pm
