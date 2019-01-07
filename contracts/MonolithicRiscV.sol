@@ -370,19 +370,19 @@ contract MonolithicRiscV {
       // TO-DO: Shouldnt have -1 on start
       uint64 start = BitsManipulationLibrary.uint64_swapEndian(
         uint64(mm.read(mmIndex, pmaAddress + (i*8)))
-      );
+      ) - 1;
       emit Print("start", uint(start));
 
       uint64 length = BitsManipulationLibrary.uint64_swapEndian(
         uint64(mm.read(mmIndex, pmaAddress + ((i * 8 + 8))))
       );
+      emit Print("paddr", uint(paddr));
+      emit Print("start", uint(start));
       emit Print("length", uint(length));
 
       if(paddr >= start && paddr < (start + length)){
         return (start, length);
       }
-      //TO-DO: Remove this
-      return (4097, 61440);
 
       if(length == 0){
         break;
