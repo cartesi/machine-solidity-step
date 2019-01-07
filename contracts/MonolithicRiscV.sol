@@ -369,7 +369,7 @@ contract MonolithicRiscV {
     for(uint64 i = 0; i < lastPma; i+=2){
       // TO-DO: Shouldnt have -1 on start
       uint64 start = BitsManipulationLibrary.uint64_swapEndian(
-        uint64(mm.read(mmIndex, pmaAddress + (i*8))) - 1
+        uint64(mm.read(mmIndex, pmaAddress + (i*8)))
       );
       emit Print("start", uint(start));
 
