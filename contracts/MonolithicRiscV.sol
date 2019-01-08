@@ -158,12 +158,17 @@ contract MonolithicRiscV {
     // Returns start and length words from pma
     (pma_entry.start, pma_entry.length) = find_pma_entry(paddr);
 
+    emit Print("pma_entry.start", pma_entry.start);
+    emit Print("pma_entry.length", pma_entry.length);
+
     // M flag defines if the pma range is in memory 
     // X flag defines if the pma is executable
     // If the pma is not memory or not executable - this is a pma violation
     // Reference: The Core of Cartesi, v1.02 - section 3.2 the board - page 5.
 
     if(!pma_get_istart_M() || !pma_get_istart_X()){
+
+      emit Print("CAUSE_FETCH_FAULT", paddr);
       //raise_exception(CAUSE_FETCH_FAULT)
       return fetch_status.exception;
     }
@@ -367,20 +372,19 @@ contract MonolithicRiscV {
     uint64 lastPma = 62; // 0 - 31 * 2 words
     emit Print("paddr", paddr);
     for(uint64 i = 0; i < lastPma; i+=2){
-      // TO-DO: Shouldnt have -1 on start
       uint64 start = BitsManipulationLibrary.uint64_swapEndian(
         uint64(mm.read(mmIndex, pmaAddress + (i*8)))
-      ) - 1;
-      emit Print("start", uint(start));
+      );
 
       uint64 length = BitsManipulationLibrary.uint64_swapEndian(
         uint64(mm.read(mmIndex, pmaAddress + ((i * 8 + 8))))
       );
-      emit Print("paddr", uint(paddr));
-      emit Print("start", uint(start));
-      emit Print("length", uint(length));
 
-      if(paddr >= start && paddr < (start + length)){
+      // TO-DO: Shouldnt have -1 on start
+      if(paddr >= (start - 1) && paddr < (start + length)){
+        emit Print("paddr", uint(paddr));
+        emit Print("start", uint(start));
+        emit Print("length", uint(length));
         return (start, length);
       }
 
@@ -495,6 +499,7 @@ contract MonolithicRiscV {
   // Reference: The Core of Cartesi, v1.02 - figure 2.
   function pma_get_istart_M() public returns(bool){
     //M is pma_entry fisrt bit
+    emit Print("pma_get_istart_M", pma_entry.start & 1);
     return pma_entry.start & 1 == 1;
   }
 
@@ -503,6 +508,7 @@ contract MonolithicRiscV {
   // Reference: The Core of Cartesi, v1.02 - figure 2.
   function pma_get_istart_X() public returns(bool){
     //X is pma_entry sixth bit (index 5)
+    emit Print("pma_get_istart_X", (pma_entry.start >> 5) & 1);
     return (pma_entry.start >> 5) & 1 == 1;
   }
   //enums
