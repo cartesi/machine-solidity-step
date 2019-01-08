@@ -81,6 +81,7 @@ contract MonolithicRiscV {
 
     if(fetch_insn() == fetch_status.success){
       // If fetch was successfull, tries to execute instruction
+      emit Print("fetch.status successfull", 0);
       if(execute_insn() == execute_status.retired){
         // If execute_insn finishes successfully we need to update the number of
         // retired instructions. This number is stored on minstret CSR.
@@ -100,6 +101,7 @@ contract MonolithicRiscV {
     );
     emit Print("mcycle", uint(mcycle));
     mm.write(mmIndex, ShadowAddresses.get_mcycle(), bytes8(mcycle + 1));
+    return interpreter_status.success;
   }
 
   function execute_insn() public returns (execute_status) {
@@ -119,7 +121,8 @@ contract MonolithicRiscV {
     // TO-DO: We have to find a way to do this - insn_or_group should return a
     // pointer to a function - that can be either a direct instrunction or a branch
     if(insn_or_group == bytes32("AUIPC")){
-      execute_auipc();
+      emit Print("opcode AUIPC", opcode);
+      return execute_auipc();
     }
   }
     //AUIPC forms a 32-bit offset from the 20-bit U-immediate, filling in the 
@@ -127,15 +130,19 @@ contract MonolithicRiscV {
     // Reference: riscv-spec-v2.2.pdf -  Page 14
   function execute_auipc() public returns (execute_status){
     uint32 rd = RiscVDecoder.insn_rd(insn);
+    emit Print("execute_auipc RD", uint(rd));
+    emit Print("insn AUIPC", insn);
     if(rd != 0){
-      //TO-DO: Check if casts are not having undesired effects
-      mm.write(mmIndex, rd, bytes8(pc + uint64(RiscVDecoder.insn_U_imm(insn))));
+      //TO-DO: Fix rd hardcoded value
+      //mm.write(mmIndex, rd, bytes8(pc + uint64(RiscVDecoder.insn_U_imm(insn))));
+      mm.write(mmIndex, 40, bytes8(pc + uint64(RiscVDecoder.insn_U_imm(insn))));
     }
     return advance_to_next_insn();
   }
 
   function advance_to_next_insn() public returns (execute_status){
     mm.write(mmIndex, ShadowAddresses.get_pc(), bytes8(pc + 4));
+    emit Print("advance_to_next", 0);
     return execute_status.retired;
   }
   function fetch_insn() public returns (fetch_status){
@@ -170,7 +177,7 @@ contract MonolithicRiscV {
 
       emit Print("CAUSE_FETCH_FAULT", paddr);
       //raise_exception(CAUSE_FETCH_FAULT)
-      return fetch_status.exception;
+//      return fetch_status.exception;
     }
 
     emit Print("paddr/insn", paddr);
