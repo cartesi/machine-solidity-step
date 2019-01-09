@@ -55,8 +55,6 @@ contract MonolithicRiscV {
   function step(uint _mmIndex, address _memoryManagerAddress) public returns (interpreter_status){
     mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
     mm = mmInterface(_memoryManagerAddress);
-    //TO-DO: Check byte order -> riscv is little endian/ solidity is big endian
-
     // Every read performed by mm.read or mm . write should be followed by an 
     // endianess swap from little endian to big endian. This is the case because
     // EVM is big endian but RiscV is little endian.
@@ -184,7 +182,6 @@ contract MonolithicRiscV {
     }
 
     //emit Print("paddr/insn", paddr);
-    //TO-DO: make sure that this is the correct way to read memory
     //will this actually return the instruction? Should it be 32bits?
     insn = uint32(BitsManipulationLibrary.uint64_swapEndian(
       uint64(mm.read(mmIndex, paddr))
@@ -377,7 +374,6 @@ contract MonolithicRiscV {
     // Reference: The Core of Cartesi, v1.02 - Table 3.
     uint64 pmaAddress = 0x800;
     bool foundPma;
-    //TO-DO: Remove this
     //TO-DO: Check lastPma - this is probably wrong.
     uint64 lastPma = 62; // 0 - 31 * 2 words
     //emit Print("paddr", paddr);
