@@ -369,7 +369,7 @@ contract MonolithicRiscV {
   // @return public returns the two words that define a PMA - start and length
   function find_pma_entry(uint64 paddr) public returns (uint64, uint64){
 
-    //Hard coded ram address starts at 0x800
+    // Hard coded ram address starts at 0x800
     // In total there are 32 PMAs from processor shadow to Flash disk 7.
     // PMA 0 - describes RAM and is hardcoded to address 0x800
     // PMA 16 - 23 describe flash devices 0-7
@@ -382,24 +382,26 @@ contract MonolithicRiscV {
     uint64 lastPma = 62; // 0 - 31 * 2 words
     //emit Print("paddr", paddr);
     for(uint64 i = 0; i < lastPma; i+=2){
-      uint64 start = BitsManipulationLibrary.uint64_swapEndian(
+      uint64 start_word = BitsManipulationLibrary.uint64_swapEndian(
         uint64(mm.read(mmIndex, pmaAddress + (i*8)))
       );
 
-      uint64 length = BitsManipulationLibrary.uint64_swapEndian(
+      uint64 length_word = BitsManipulationLibrary.uint64_swapEndian(
         uint64(mm.read(mmIndex, pmaAddress + ((i * 8 + 8))))
       );
 
-      // TO-DO: Shouldnt have -1 on start
-      // TO-DO: Shoulndt start and length be pma_start/pma_length >> 12?
-      if(paddr >= (start - 1) && paddr < (start + length)){
-        //emit Print("paddr", uint(paddr));
-        //emit Print("start", uint(start));
-        //emit Print("length", uint(length));
-        return (start, length);
+      // Both pma_start and pma_length have to be aligned to a 4KiB boundary.
+      // So this leaves the lowest 12 bits for attributes. To find out the actual
+      // start and length of the PMAs it is necessary to clean those attribute bits
+      // Reference: The Core of Cartesi, v1.02 - Figure 2 - Page 5.
+      uint64 pma_start = start_word & 0xfffffffffffff000;
+      uint64 pma_length = length_word & 0xfffffffffffff000;
+
+      if(paddr >= pma_start && paddr < (pma_start + pma_length)){
+        return (start_word, length_word);
       }
 
-      if(length == 0){
+      if(pma_length == 0){
         break;
       }
     }
