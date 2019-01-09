@@ -137,8 +137,8 @@ contract MonolithicRiscV {
       mm.write(mmIndex, rd, bytes8(BitsManipulationLibrary.uint64_swapEndian(
         pc + uint64(RiscVDecoder.insn_U_imm(insn)))
       ));
-      emit Print("pc", uint(pc));
-      emit Print("ins_u_imm", uint(RiscVDecoder.insn_U_imm(insn)));
+     // emit Print("pc", uint(pc));
+     // emit Print("ins_u_imm", uint(RiscVDecoder.insn_U_imm(insn)));
     }
     return advance_to_next_insn();
   }
@@ -153,10 +153,10 @@ contract MonolithicRiscV {
     bool translateBool;
 
     //read_pc
-    vaddr = BitsManipulationLibrary.uint64_swapEndian(
+    pc = BitsManipulationLibrary.uint64_swapEndian(
       uint64(mm.read(mmIndex, ShadowAddresses.get_pc()))
     );
-    (translateBool, paddr) = translate_virtual_address(vaddr, RiscVConstants.PTE_XWR_CODE_SHIFT());
+    (translateBool, paddr) = translate_virtual_address(pc, RiscVConstants.PTE_XWR_CODE_SHIFT());
 
     //translate_virtual_address failed
     if(!translateBool){
