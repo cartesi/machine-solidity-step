@@ -99,7 +99,7 @@ contract('MonolithicRiscV', function(accounts){
         gas: 2000000
       });
       //Prove Read to minstret - value 0
-      response = await mm.proveRead(index, 0x128, "0x0", [], {
+      response = await mm.proveRead(index, 0x128, "0x00", [], {
         from: accounts[0],
         gas: 2000000
       });
