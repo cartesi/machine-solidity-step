@@ -129,13 +129,12 @@ contract MonolithicRiscV {
     // lowest 12 bits with zeros, adds this offset to pc and store the result on rd.
     // Reference: riscv-spec-v2.2.pdf -  Page 14
   function execute_auipc() public returns (execute_status){
-    uint32 rd = RiscVDecoder.insn_rd(insn);
+    uint32 rd = RiscVDecoder.insn_rd(insn) * 8; //8 = sizeOf(uint64)
     emit Print("execute_auipc RD", uint(rd));
     emit Print("insn AUIPC", insn);
     if(rd != 0){
       //TO-DO: Fix rd hardcoded value
-      //mm.write(mmIndex, rd, bytes8(pc + uint64(RiscVDecoder.insn_U_imm(insn))));
-      mm.write(mmIndex, 40, bytes8(pc + uint64(RiscVDecoder.insn_U_imm(insn))));
+      mm.write(mmIndex, rd, bytes8(pc + uint64(RiscVDecoder.insn_U_imm(insn))));
     }
     return advance_to_next_insn();
   }
@@ -388,6 +387,7 @@ contract MonolithicRiscV {
       );
 
       // TO-DO: Shouldnt have -1 on start
+      // TO-DO: Shoulndt start and length be pma_start/pma_length >> 12?
       if(paddr >= (start - 1) && paddr < (start + length)){
         emit Print("paddr", uint(paddr));
         emit Print("start", uint(start));
