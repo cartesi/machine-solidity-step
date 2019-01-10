@@ -175,10 +175,8 @@ contract MonolithicRiscV {
     // Reference: The Core of Cartesi, v1.02 - section 3.2 the board - page 5.
 
     if(!pma_get_istart_M() || !pma_get_istart_X()){
-
-      //emit Print("CAUSE_FETCH_FAULT", paddr);
-      //raise_exception(CAUSE_FETCH_FAULT)
-//      return fetch_status.exception;
+      //raise_exception(MCAUSE_INSN_ACCESS_FAULT)
+      return fetch_status.exception;
     }
 
     //emit Print("paddr/insn", paddr);

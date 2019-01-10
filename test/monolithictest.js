@@ -73,8 +73,8 @@ contract('MonolithicRiscV', function(accounts){
         from: accounts[0],
         gas: 2000000
       });
-      //Prove Read to pma@810 - value 4097
-      response = await mm.proveRead(index, 0x810, "0x0110000000000000", [], {
+      //Prove Read to pma@810 - value 4129 (it was 4097 but I turned on X flag)
+      response = await mm.proveRead(index, 0x810, "0x2110000000000000", [], {
         from: accounts[0],
         gas: 2000000
       });
