@@ -6,20 +6,17 @@ import "./ShadowAddresses.sol";
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
 import "./lib/BitsManipulationLibrary.sol";
-
-contract mmInterface {
-  function read(uint256 _index, uint64 _address) external returns (bytes8);
-  function write(uint256 _index, uint64 _address, bytes8 _value) external;
-  function finishReplayPhase(uint256 _index) external;
-}
+import "../contracts/Fetch.sol";
+import "../contracts/MemoryInteractor.sol";
 
 //TO-DO: use instantiator pattern so we can always use same instance of mm/pc etc
 contract MonolithicRiscV {
   event Print(string message, uint value);
+  event printaddress(address a);
 
   //Real Storage variables
   PMAEntry pma_entry; //cannot return struct without experimental pragma
-  mmInterface mm;
+  MemoryInteractor mi; 
   uint256 mmIndex; //this has to be removed
   //Should not be Storage - but stack too deep
   //this will probably be ok when we split it into a bunch of different calls
@@ -52,10 +49,12 @@ contract MonolithicRiscV {
     bool IW;
   }
 
-  function step(uint _mmIndex, address _memoryManagerAddress) public returns (interpreter_status){
+  function step(uint _mmIndex, address _memoryInteractorAddress, address _memoryManagerAddress) public returns (interpreter_status){
     mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
-    mm = mmInterface(_memoryManagerAddress);
-    // Every read performed by mm.read or mm . write should be followed by an 
+    mi = MemoryInteractor(_memoryInteractorAddress);
+    emit printaddress(_memoryManagerAddress);
+    emit printaddress(_memoryInteractorAddress);
+    // Every read performed by mi.memoryRead or mm . write should be followed by an 
     // endianess swap from little endian to big endian. This is the case because
     // EVM is big endian but RiscV is little endian.
     // Reference: riscv-spec-v2.2.pdf - Preface to Version 2.0
@@ -67,7 +66,7 @@ contract MonolithicRiscV {
     // signficant bit on iflags register.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
     uint64 iflags = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mm.read(mmIndex, ShadowAddresses.get_iflags()))
+      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_iflags()))
     );
     //emit Print("iflags", uint(iflags));
     if((iflags & 1) != 0){
@@ -76,7 +75,12 @@ contract MonolithicRiscV {
     }
     //Raise the highest priority interrupt
     raise_interrupt_if_any();
-
+    
+//    Fetch.fetch_status fetchStatus;
+//
+//    (fetchStatus, insn) = Fetch.fetch_insn(mm);
+   
+//    if(fetchStatus == Fetch.fetch_status.success){
     if(fetch_insn() == fetch_status.success){
       // If fetch was successfull, tries to execute instruction
       //emit Print("fetch.status successfull", 0);
@@ -85,22 +89,22 @@ contract MonolithicRiscV {
         // retired instructions. This number is stored on minstret CSR.
         // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
         uint64 minstret = BitsManipulationLibrary.uint64_swapEndian(
-          uint64(mm.read(mmIndex, ShadowAddresses.get_minstret()))
+          uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_minstret()))
         );
         //emit Print("minstret", uint(minstret));
         minstret = BitsManipulationLibrary.uint64_swapEndian(minstret + 1);
-        mm.write(mmIndex, ShadowAddresses.get_minstret(), bytes8(minstret ));
+        mi.memoryWrite(mmIndex, ShadowAddresses.get_minstret(), bytes8(minstret ));
       }
     }
     // Last thing that has to be done in a step is to update the cycle counter.
     // The cycle counter is stored on mcycle CSR.
     // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
     uint64 mcycle = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mm.read(mmIndex, ShadowAddresses.get_mcycle()))
+      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mcycle()))
     );
     //emit Print("mcycle", uint(mcycle));
     mcycle = BitsManipulationLibrary.uint64_swapEndian(mcycle + 1);
-    mm.write(mmIndex, ShadowAddresses.get_mcycle(), bytes8(mcycle));
+    mi.memoryWrite(mmIndex, ShadowAddresses.get_mcycle(), bytes8(mcycle));
     return interpreter_status.success;
   }
 
@@ -132,7 +136,7 @@ contract MonolithicRiscV {
     uint32 rd = RiscVDecoder.insn_rd(insn) * 8; //8 = sizeOf(uint64)
     //emit Print("execute_auipc RD", uint(rd));
     if(rd != 0){
-      mm.write(mmIndex, rd, bytes8(BitsManipulationLibrary.uint64_swapEndian(
+      mi.memoryWrite(mmIndex, rd, bytes8(BitsManipulationLibrary.uint64_swapEndian(
         pc + uint64(RiscVDecoder.insn_U_imm(insn)))
       ));
      // emit Print("pc", uint(pc));
@@ -143,7 +147,7 @@ contract MonolithicRiscV {
 
   function advance_to_next_insn() public returns (execute_status){
     pc = BitsManipulationLibrary.uint64_swapEndian(pc + 4);
-    mm.write(mmIndex, ShadowAddresses.get_pc(), bytes8(pc));
+    mi.memoryWrite(mmIndex, ShadowAddresses.get_pc(), bytes8(pc));
     //emit Print("advance_to_next", 0);
     return execute_status.retired;
   }
@@ -152,7 +156,7 @@ contract MonolithicRiscV {
 
     //read_pc
     pc = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mm.read(mmIndex, ShadowAddresses.get_pc()))
+      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_pc()))
     );
     (translateBool, paddr) = translate_virtual_address(pc, RiscVConstants.PTE_XWR_CODE_SHIFT());
 
@@ -184,7 +188,7 @@ contract MonolithicRiscV {
     //emit Print("paddr/insn", paddr);
     //will this actually return the instruction? Should it be 32bits?
     insn = uint32(BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mm.read(mmIndex, paddr))
+      uint64(mi.memoryRead(mmIndex, paddr))
     ));
     //emit Print("insn", uint(insn));
     return fetch_status.success;
@@ -205,13 +209,13 @@ contract MonolithicRiscV {
     // on bits 2 and 3.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
     priv = (BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())
+      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_iflags())
     )) >> 2) & 3;
     //emit Print("priv", uint(priv));
 
     //read_mstatus
     mstatus = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()))
+      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mstatus()))
     );
 
     //emit Print("mstatus", uint(mstatus));
@@ -233,7 +237,7 @@ contract MonolithicRiscV {
     // MODE is located on bits 60 to 63 for RV64.
     // Reference: riscv-priv-spec-1.10.pdf - Section 4.1.12, page 56.
     satp = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mm.read(mmIndex, ShadowAddresses.get_satp()))
+      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_satp()))
     );
     //emit Print("satp", satp);
     // In RV64, mode can be
@@ -379,11 +383,11 @@ contract MonolithicRiscV {
     //emit Print("paddr", paddr);
     for(uint64 i = 0; i < lastPma; i+=2){
       uint64 start_word = BitsManipulationLibrary.uint64_swapEndian(
-        uint64(mm.read(mmIndex, pmaAddress + (i*8)))
+        uint64(mi.memoryRead(mmIndex, pmaAddress + (i*8)))
       );
 
       uint64 length_word = BitsManipulationLibrary.uint64_swapEndian(
-        uint64(mm.read(mmIndex, pmaAddress + ((i * 8 + 8))))
+        uint64(mi.memoryRead(mmIndex, pmaAddress + ((i * 8 + 8))))
       );
 
       // Both pma_start and pma_length have to be aligned to a 4KiB boundary.
@@ -418,12 +422,12 @@ contract MonolithicRiscV {
   // Reference: riscv-privileged-v1.10 - section 3.1.14 - page 28.
   function get_pending_irq_mask() public returns (uint32){
     uint64 mip = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mm.read(mmIndex, ShadowAddresses.get_mip()))
+      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mip()))
     );
     //emit Print("mip", uint(mip));
 
     uint64 mie = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mm.read(mmIndex, ShadowAddresses.get_mie()))
+      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mie()))
     );
     //emit Print("mie", uint(mie));
 
@@ -441,7 +445,7 @@ contract MonolithicRiscV {
     // The privilege level is represented by bits 2 and 3 on iflags register.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
     priv = (BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())
+      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_iflags())
     )) >> 2) & 3;
     //emit Print("priv", uint(priv));
     
@@ -451,18 +455,18 @@ contract MonolithicRiscV {
       // MIE for 64bit is stored on location 3 - according to:
       // Reference: riscv-privileged-v1.10 - figure 3.7 - page 20.
       mstatus = BitsManipulationLibrary.uint64_swapEndian(
-        uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()))
+        uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mstatus()))
       );
       //emit Print("mstatus", uint(mstatus));
 
       if((mstatus & RiscVConstants.MSTATUS_MIE()) != 0){
         enabled_ints = uint32(~BitsManipulationLibrary.uint64_swapEndian(
-          uint64(mm.read(mmIndex, ShadowAddresses.get_mideleg())))
+          uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mideleg())))
         );
       }
     }else if(priv == RiscVConstants.PRV_S()){
       mstatus = BitsManipulationLibrary.uint64_swapEndian(
-        uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()))
+        uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mstatus()))
       );
       //emit Print("mstatus", uint(mstatus));
       // MIDELEG: Machine trap delegation register
@@ -470,7 +474,7 @@ contract MonolithicRiscV {
       // level. If mideleg bit is set, the trap will delegated to the S-Mode.
       // Reference: riscv-privileged-v1.10 - Section 3.1.13 - page 27.
       uint64 mideleg = BitsManipulationLibrary.uint64_swapEndian(
-        uint64(mm.read(mmIndex, ShadowAddresses.get_mideleg()))
+        uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mideleg()))
       );
       //emit Print("mideleg", uint(mideleg));
       enabled_ints = uint32(~mideleg);
