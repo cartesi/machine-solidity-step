@@ -9,6 +9,7 @@ const twoComplement32 = require('../utils/tools.js').twoComplement32;
 var MonolithicRiscV = artifacts.require("./MonolithicRiscV.sol");
 var MMInstantiator = artifacts.require("./MMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
+var AddressTracker = artifacts.require("./AddressTracker.sol");
 
 contract('MonolithicRiscV', function(accounts){
   describe('Checking functionalities', async function() {
@@ -125,11 +126,24 @@ contract('MonolithicRiscV', function(accounts){
       let riscV = await MonolithicRiscV.new({
         from: accounts[0], gas: 9007199254740991
       });
-      let mi = await MemoryInteractor.new(mmAddress, {
+
+      let addressTracker = await AddressTracker.new({
+           from: accounts[0], gas: 9007199254740991
+      });
+
+      response = await addressTracker.setMMAddress(mmAddress, {
         from: accounts[0], gas: 9007199254740991
       });
 
-      response = await riscV.step(index, mi.address, mmAddress, {
+      mi = await MemoryInteractor.new(addressTracker.address, {
+        from: accounts[0], gas: 9007199254740991
+      });
+
+      response = await addressTracker.setMemoryInteractorAddress(mi.address, {
+        from: accounts[0], gas: 9007199254740991
+      });
+
+      response = await riscV.step(index, addressTracker.address, {
         from: accounts[1],
         gas: 9007199254740991
       });

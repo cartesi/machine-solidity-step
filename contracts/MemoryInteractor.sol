@@ -1,6 +1,8 @@
 /// @title MemoryInteractor.sol
 pragma solidity ^0.5.0;
 
+import "../contracts/AddressTracker.sol";
+
 contract mmInterface {
   function read(uint256 _index, uint64 _address) external returns (bytes8);
   function write(uint256 _index, uint64 _address, bytes8 _value) external;
@@ -9,12 +11,12 @@ contract mmInterface {
 
 contract MemoryInteractor {
   mmInterface mm;
-  event PrintAddr(address a);
-  //TO-DO: This will be an address.get(MMAddress) probably
-  constructor(address _MemoryManagerAddress) public {
-    mm = mmInterface(_MemoryManagerAddress);
-    emit PrintAddr(_MemoryManagerAddress);
+
+  constructor(address _addressTrackerAddress) public {
+    address _mmAddress = AddressTracker(_addressTrackerAddress).getMMAddress();
+    mm = mmInterface(_mmAddress);
   }
+
   function memoryRead(uint256 _index, uint64 _address) public returns (bytes8){
     return mm.read(_index, _address);
   }

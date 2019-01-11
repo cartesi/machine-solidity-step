@@ -12,8 +12,10 @@ import "../contracts/MemoryInteractor.sol";
 //TO-DO: use instantiator pattern so we can always use same instance of mm/pc etc
 contract MonolithicRiscV {
   event Print(string message, uint value);
-  event printaddress(address a);
-
+ 
+  //Keep tracks of all contract's addresses
+  AddressTracker addrTracker;
+  
   //Real Storage variables
   PMAEntry pma_entry; //cannot return struct without experimental pragma
   MemoryInteractor mi; 
@@ -49,11 +51,10 @@ contract MonolithicRiscV {
     bool IW;
   }
 
-  function step(uint _mmIndex, address _memoryInteractorAddress, address _memoryManagerAddress) public returns (interpreter_status){
+  function step(uint _mmIndex, address _addressTrackerAddress) public returns (interpreter_status){
+    addrTracker = AddressTracker(_addressTrackerAddress);
     mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
-    mi = MemoryInteractor(_memoryInteractorAddress);
-    emit printaddress(_memoryManagerAddress);
-    emit printaddress(_memoryInteractorAddress);
+    mi = MemoryInteractor(addrTracker.getMemoryInteractorAddress());
     // Every read performed by mi.memoryRead or mm . write should be followed by an 
     // endianess swap from little endian to big endian. This is the case because
     // EVM is big endian but RiscV is little endian.
@@ -78,8 +79,8 @@ contract MonolithicRiscV {
     
 //    Fetch.fetch_status fetchStatus;
 //
-//    (fetchStatus, insn) = Fetch.fetch_insn(mm);
-   
+//    (fetchStatus, insn) = Fetch.fetch_insn(mmIndex, _memoryInteractorAddress);
+// 
 //    if(fetchStatus == Fetch.fetch_status.success){
     if(fetch_insn() == fetch_status.success){
       // If fetch was successfull, tries to execute instruction
