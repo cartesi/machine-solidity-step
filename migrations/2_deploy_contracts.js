@@ -7,6 +7,7 @@ var ArithmeticInstructions = artifacts.require("./RiscVInstructions/ArithmeticIn
 var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.sol");
 
 //Contracts
+var AddressTracker = artifacts.require("./AddressTracker.sol");
 var MMInstantiator = artifacts.require("./MMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
 var MonolithicRiscV = artifacts.require("./MonolithicRiscV.sol");
@@ -40,9 +41,9 @@ module.exports = function(deployer) {
   deployer.link(BitsManipulationLibrary, Fetch);
 
   deployer.deploy(Fetch);
-  deployer.link(Fetch, MonolithicRiscV);
+  deployer.deploy(AddressTracker);
   deployer.deploy(MMInstantiator).then(function(){
-    return deployer.deploy(MemoryInteractor, MMInstantiator.address);
+    return deployer.deploy(MemoryInteractor, AddressTracker.address);
   });
   deployer.deploy(MonolithicRiscV);
 };
