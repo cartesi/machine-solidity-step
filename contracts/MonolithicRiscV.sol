@@ -6,17 +6,19 @@ import "./ShadowAddresses.sol";
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
 import "./lib/BitsManipulationLibrary.sol";
-import "../contracts/Fetch.sol";
 import "../contracts/MemoryInteractor.sol";
+import "../contracts/AddressTracker.sol";
+import "../contracts/Fetch.sol";
+import "../contracts/Interrupts.sol";
 
 //TO-DO: use instantiator pattern so we can always use same instance of mm/pc etc
 contract MonolithicRiscV {
   event Print(string message, uint value);
- 
+
   //Keep tracks of all contract's addresses
   AddressTracker addrTracker;
-  MemoryInteractor mi; 
-  
+  MemoryInteractor mi;
+
   uint256 mmIndex; //this has to be removed
   //Should not be Storage - but stack too deep
   //this will probably be ok when we split it into a bunch of different calls
@@ -50,8 +52,10 @@ contract MonolithicRiscV {
       return interpreter_status.success;
     }
     //Raise the highest priority interrupt
-    raise_interrupt_if_any();
+    Interrupts interrupt = Interrupts(addrTracker.getInterruptsAddress());
+    interrupt.raise_interrupt_if_any(mmIndex, address(mi));
 
+    //Fetch Instruction
     Fetch fetchContract = Fetch(addrTracker.getFetchAddress());
     Fetch.fetch_status fetchStatus;
 

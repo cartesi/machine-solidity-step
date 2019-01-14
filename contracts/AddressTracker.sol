@@ -6,6 +6,7 @@ contract AddressTracker {
   address MMAddress;
   address memoryInteractorAddress;
   address fetchAddress;
+  address interruptAddress;
 
   constructor() public {
     owner = msg.sender;
@@ -26,6 +27,10 @@ contract AddressTracker {
   function getMMAddress() public returns(address){
     return MMAddress;
   }
+  
+  function getInterruptsAddress() public returns(address){
+    return interruptAddress;
+  }
 
   function setMemoryInteractorAddress(address _newAddr) public onlyOwner{
     memoryInteractorAddress = _newAddr;
@@ -38,6 +43,11 @@ contract AddressTracker {
   function setMMAddress(address _newAddr) public onlyOwner{
     MMAddress = _newAddr;
   }
+
+  function setInterruptsAddress(address _newAddr) public onlyOwner{
+    interruptAddress = _newAddr;
+  }
+
   function getOwner() public returns(address){
     return owner;
   }
