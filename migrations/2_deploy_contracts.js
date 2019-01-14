@@ -10,7 +10,7 @@ var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.s
 var AddressTracker = artifacts.require("./AddressTracker.sol");
 var MMInstantiator = artifacts.require("./MMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
-var MonolithicRiscV = artifacts.require("./MonolithicRiscV.sol");
+var Step = artifacts.require("./Step.sol");
 var Fetch = artifacts.require("./Fetch.sol");
 var Execute = artifacts.require("./Execute.sol");
 var Interrupts = artifacts.require("./Interrupts.sol");
@@ -31,10 +31,10 @@ module.exports = function(deployer) {
   deployer.deploy(RiscVDecoder);
 
   //Link all libraries to Monolithic
-  deployer.link(RiscVDecoder, MonolithicRiscV);
-  deployer.link(ShadowAddresses, MonolithicRiscV);
-  deployer.link(RiscVConstants, MonolithicRiscV);
-  deployer.link(BitsManipulationLibrary, MonolithicRiscV);
+  deployer.link(RiscVDecoder, Step);
+  deployer.link(ShadowAddresses, Step);
+  deployer.link(RiscVConstants, Step);
+  deployer.link(BitsManipulationLibrary, Step);
   
   //Link all libraries to Fetch
   deployer.link(RiscVDecoder, Fetch);
@@ -60,5 +60,5 @@ module.exports = function(deployer) {
   deployer.deploy(MMInstantiator).then(function(){
     return deployer.deploy(MemoryInteractor, AddressTracker.address);
   });
-  deployer.deploy(MonolithicRiscV);
+  deployer.deploy(Step);
 };

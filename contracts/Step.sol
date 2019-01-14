@@ -1,4 +1,4 @@
-/// @title Monolithic RiscV
+/// @title Step
 pragma solidity ^0.5.0;
 
 //Libraries
@@ -13,7 +13,7 @@ import "../contracts/Execute.sol";
 import "../contracts/Interrupts.sol";
 
 //TO-DO: use instantiator pattern so we can always use same instance of mm/pc etc
-contract MonolithicRiscV {
+contract Step {
   event Print(string message, uint value);
 
   //Keep tracks of all contract's addresses
