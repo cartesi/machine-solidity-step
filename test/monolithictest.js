@@ -6,7 +6,7 @@ const unwrap = require('../utils/tools.js').unwrap;
 const getError = require('../utils/tools.js').getError;
 const twoComplement32 = require('../utils/tools.js').twoComplement32;
 
-var MonolithicRiscV = artifacts.require("./MonolithicRiscV.sol");
+var Step = artifacts.require("./Step.sol");
 var MMInstantiator = artifacts.require("./MMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
 var AddressTracker = artifacts.require("./AddressTracker.sol");
@@ -14,7 +14,7 @@ var Fetch = artifacts.require("./Fetch.sol");
 var Execute = artifacts.require("./Execute.sol");
 var Interrupts = artifacts.require("./Interrupts.sol");
 
-contract('MonolithicRiscV', function(accounts){
+contract('Step', function(accounts){
   describe('Checking functionalities', async function() {
     let mmAddress;
     let miAddress;
@@ -125,8 +125,8 @@ contract('MonolithicRiscV', function(accounts){
         gas: 2000000
       });
     })
-    it('Deploying Monolithic contract', async function() {
-      let riscV = await MonolithicRiscV.new({
+    it('Deploying step contracts', async function() {
+      let riscV = await Step.new({
         from: accounts[0], gas: 9007199254740991
       });
 
