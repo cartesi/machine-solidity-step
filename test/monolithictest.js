@@ -11,6 +11,7 @@ var MMInstantiator = artifacts.require("./MMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
 var AddressTracker = artifacts.require("./AddressTracker.sol");
 var Fetch = artifacts.require("./Fetch.sol");
+var Execute = artifacts.require("./Execute.sol");
 var Interrupts = artifacts.require("./Interrupts.sol");
 
 contract('MonolithicRiscV', function(accounts){
@@ -133,6 +134,10 @@ contract('MonolithicRiscV', function(accounts){
         from: accounts[0], gas: 9007199254740991
       });
 
+      let executeContract = await Execute.new({
+        from: accounts[0], gas: 9007199254740991
+      });
+
       let addressTracker = await AddressTracker.new({
            from: accounts[0], gas: 9007199254740991
       });
@@ -142,6 +147,10 @@ contract('MonolithicRiscV', function(accounts){
       });
 
       response = await addressTracker.setFetchAddress(fetchContract.address, {
+        from: accounts[0], gas: 9007199254740991
+      });
+
+      response = await addressTracker.setExecuteAddress(executeContract.address, {
         from: accounts[0], gas: 9007199254740991
       });
 

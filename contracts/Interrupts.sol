@@ -22,7 +22,7 @@ contract Interrupts {
   // Reference: riscv-privileged-v1.10 - section 3.1.14 - page 28.
   function get_pending_irq_mask(uint256 mmIndex, address miAddress) public returns (uint32){
     MemoryInteractor mi = MemoryInteractor(miAddress); 
-    
+
     uint64 mip = BitsManipulationLibrary.uint64_swapEndian(
       uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mip()))
     );
