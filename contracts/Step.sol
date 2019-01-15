@@ -10,7 +10,7 @@ import "../contracts/MemoryInteractor.sol";
 import "../contracts/AddressTracker.sol";
 import {Fetch} from "../contracts/Fetch.sol";
 import {Execute} from "../contracts/Execute.sol";
-import "../contracts/Interrupts.sol";
+import {Interrupts} from "../contracts/Interrupts.sol";
 
 //TO-DO: use instantiator pattern so we can always use same instance of mm/pc etc
 contract Step {
@@ -53,8 +53,7 @@ contract Step {
       return interpreter_status.success;
     }
     //Raise the highest priority interrupt
-    Interrupts interrupt = Interrupts(addrTracker.getInterruptsAddress());
-    interrupt.raise_interrupt_if_any(mmIndex, address(mi));
+    Interrupts.raise_interrupt_if_any(mmIndex, address(mi));
 
     //Fetch Instruction
     Fetch.fetch_status fetchStatus;
