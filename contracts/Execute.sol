@@ -12,9 +12,7 @@ contract Execute {
   MemoryInteractor mi;
   uint256 mmIndex;
 
-  //TO-DO: this is gonna be on machinestate contract
-  uint64 pc = 0;
-  function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn) public returns (execute_status) {
+  function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc) public returns (execute_status) {
     mi = MemoryInteractor(_miAddress);
     mmIndex = _mmIndex;
 
@@ -35,13 +33,13 @@ contract Execute {
     // pointer to a function - that can be either a direct instrunction or a branch
     if(insn_or_group == bytes32("AUIPC")){
       //emit Print("opcode AUIPC", opcode);
-      return execute_auipc(insn);
+      return execute_auipc(insn, pc);
     }
   }
     //AUIPC forms a 32-bit offset from the 20-bit U-immediate, filling in the 
     // lowest 12 bits with zeros, adds this offset to pc and store the result on rd.
     // Reference: riscv-spec-v2.2.pdf -  Page 14
-  function execute_auipc(uint32 insn) public returns (execute_status){
+  function execute_auipc(uint32 insn, uint64 pc) public returns (execute_status){
     uint32 rd = RiscVDecoder.insn_rd(insn) * 8; //8 = sizeOf(uint64)
     //emit Print("execute_auipc RD", uint(rd));
     if(rd != 0){
@@ -51,10 +49,10 @@ contract Execute {
      // emit Print("pc", uint(pc));
      // emit Print("ins_u_imm", uint(RiscVDecoder.insn_U_imm(insn)));
     }
-    return advance_to_next_insn();
+    return advance_to_next_insn(pc);
   }
 
-  function advance_to_next_insn() public returns (execute_status){
+  function advance_to_next_insn(uint64 pc) public returns (execute_status){
     pc = BitsManipulationLibrary.uint64_swapEndian(pc + 4);
     mi.memoryWrite(mmIndex, ShadowAddresses.get_pc(), bytes8(pc));
     //emit Print("advance_to_next", 0);
@@ -64,5 +62,4 @@ contract Execute {
     illegal, // Exception was raised
     retired // Instruction retired - having raised or not an exception
   }
-
 }
