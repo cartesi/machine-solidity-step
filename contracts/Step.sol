@@ -60,13 +60,13 @@ contract Step {
     Fetch fetchContract = Fetch(addrTracker.getFetchAddress());
     Fetch.fetch_status fetchStatus;
 
-    (fetchStatus, insn) = fetchContract.fetch_insn(mmIndex, address(mi));
+    (fetchStatus, insn, pc) = fetchContract.fetch_insn(mmIndex, address(mi));
  
     if(fetchStatus == Fetch.fetch_status.success){
       // If fetch was successfull, tries to execute instruction
       Execute execute = Execute(addrTracker.getExecuteAddress());
-      
-      if(execute.execute_insn(mmIndex, address(mi), insn) == Execute.execute_status.retired){
+
+      if(execute.execute_insn(mmIndex, address(mi), insn, pc) == Execute.execute_status.retired){
         // If execute_insn finishes successfully we need to update the number of
         // retired instructions. This number is stored on minstret CSR.
         // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.

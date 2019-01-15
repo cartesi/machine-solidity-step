@@ -42,7 +42,7 @@ contract Fetch {
 
   }
 
-  function fetch_insn(uint256 _mmIndex, address _memoryInteractorAddress) public returns (fetch_status, uint32){
+  function fetch_insn(uint256 _mmIndex, address _memoryInteractorAddress) public returns (fetch_status, uint32, uint64){
     mi = MemoryInteractor(_memoryInteractorAddress); 
     mmIndex = _mmIndex;
 
@@ -59,8 +59,8 @@ contract Fetch {
     if(!translateBool){
       //raise_exception(CAUSE_FETCH_PAGE_FAULT)
 
-      //returns fetch_exception and returns zero as insn
-      return (fetch_status.exception, 0);
+      //returns fetch_exception and returns zero as insn and pc
+      return (fetch_status.exception, 0, 0);
     }
 
     // Finds the range in memory in which the physical address is located
@@ -88,7 +88,7 @@ contract Fetch {
       uint64(mi.memoryRead(mmIndex, paddr))
     ));
     //emit Print("insn", uint(insn));
-    return (fetch_status.success, insn);
+    return (fetch_status.success, insn, pc);
 
   }
   // Finds the physical address associated to the virtual address (vaddr).
