@@ -8,13 +8,11 @@ import "./lib/BitsManipulationLibrary.sol";
 import "../contracts/MemoryInteractor.sol";
 import "./RiscVDecoder.sol";
 
-contract Execute {
-  MemoryInteractor mi;
-  uint256 mmIndex;
-
-  function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc) public returns (execute_status) {
-    mi = MemoryInteractor(_miAddress);
-    mmIndex = _mmIndex;
+library Execute {
+  function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc) 
+  public returns (execute_status) {
+    MemoryInteractor mi = MemoryInteractor(_miAddress);
+    uint256 mmIndex = _mmIndex;
 
     // OPCODE is located on bit 0 - 6 of the following types of 32bits instructions:
     // R-Type, I-Type, S-Trype and U-Type
@@ -33,13 +31,14 @@ contract Execute {
     // pointer to a function - that can be either a direct instrunction or a branch
     if(insn_or_group == bytes32("AUIPC")){
       //emit Print("opcode AUIPC", opcode);
-      return execute_auipc(insn, pc);
+      return execute_auipc(mi, mmIndex, insn, pc);
     }
   }
     //AUIPC forms a 32-bit offset from the 20-bit U-immediate, filling in the 
     // lowest 12 bits with zeros, adds this offset to pc and store the result on rd.
     // Reference: riscv-spec-v2.2.pdf -  Page 14
-  function execute_auipc(uint32 insn, uint64 pc) public returns (execute_status){
+  function execute_auipc(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+  public returns (execute_status){
     uint32 rd = RiscVDecoder.insn_rd(insn) * 8; //8 = sizeOf(uint64)
     //emit Print("execute_auipc RD", uint(rd));
     if(rd != 0){
@@ -49,15 +48,17 @@ contract Execute {
      // emit Print("pc", uint(pc));
      // emit Print("ins_u_imm", uint(RiscVDecoder.insn_U_imm(insn)));
     }
-    return advance_to_next_insn(pc);
+    return advance_to_next_insn(mi, mmIndex, pc);
   }
 
-  function advance_to_next_insn(uint64 pc) public returns (execute_status){
+  function advance_to_next_insn(MemoryInteractor mi, uint256 mmIndex, uint64 pc) 
+  public returns (execute_status){
     pc = BitsManipulationLibrary.uint64_swapEndian(pc + 4);
     mi.memoryWrite(mmIndex, ShadowAddresses.get_pc(), bytes8(pc));
     //emit Print("advance_to_next", 0);
     return execute_status.retired;
   }
+
   enum execute_status {
     illegal, // Exception was raised
     retired // Instruction retired - having raised or not an exception
