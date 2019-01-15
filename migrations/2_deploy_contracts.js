@@ -5,6 +5,7 @@ var RiscVConstants = artifacts.require("./RiscVConstants.sol");
 var BranchInstructions = artifacts.require("./RiscVInstructions/BranchInstructions.sol");
 var ArithmeticInstructions = artifacts.require("./RiscVInstructions/ArithmeticInstructions.sol");
 var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.sol");
+var Execute = artifacts.require("./Execute.sol");
 
 //Contracts
 var AddressTracker = artifacts.require("./AddressTracker.sol");
@@ -12,7 +13,6 @@ var MMInstantiator = artifacts.require("./MMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
 var Step = artifacts.require("./Step.sol");
 var Fetch = artifacts.require("./Fetch.sol");
-var Execute = artifacts.require("./Execute.sol");
 var Interrupts = artifacts.require("./Interrupts.sol");
 
 
@@ -30,7 +30,7 @@ module.exports = function(deployer) {
 
   deployer.deploy(RiscVDecoder);
 
-  //Link all libraries to Monolithic
+  //Link all libraries to Step
   deployer.link(RiscVDecoder, Step);
   deployer.link(ShadowAddresses, Step);
   deployer.link(RiscVConstants, Step);
@@ -47,14 +47,15 @@ module.exports = function(deployer) {
   deployer.link(ShadowAddresses, Execute);
   deployer.link(RiscVConstants, Execute);
   deployer.link(BitsManipulationLibrary, Execute);
-
+  deployer.deploy(Execute);
+  deployer.link(Execute, Step);
+  
   //Link all libraries to Interrupts
   deployer.link(ShadowAddresses, Interrupts);
   deployer.link(RiscVConstants, Interrupts);
   deployer.link(BitsManipulationLibrary, Interrupts);
 
   deployer.deploy(Fetch);
-  deployer.deploy(Execute);
   deployer.deploy(Interrupts);
   deployer.deploy(AddressTracker);
   deployer.deploy(MMInstantiator).then(function(){
