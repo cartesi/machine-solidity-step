@@ -6,6 +6,7 @@ var BranchInstructions = artifacts.require("./RiscVInstructions/BranchInstructio
 var ArithmeticInstructions = artifacts.require("./RiscVInstructions/ArithmeticInstructions.sol");
 var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.sol");
 var Execute = artifacts.require("./Execute.sol");
+var Fetch = artifacts.require("./Fetch.sol");
 var PMA = artifacts.require("./PMA.sol");
 
 //Contracts
@@ -13,7 +14,6 @@ var AddressTracker = artifacts.require("./AddressTracker.sol");
 var MMInstantiator = artifacts.require("./MMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
 var Step = artifacts.require("./Step.sol");
-var Fetch = artifacts.require("./Fetch.sol");
 var Interrupts = artifacts.require("./Interrupts.sol");
 
 
@@ -25,7 +25,7 @@ module.exports = function(deployer) {
   deployer.deploy(ArithmeticInstructions);
   deployer.deploy(BitsManipulationLibrary);
 
-  
+
   deployer.link(BitsManipulationLibrary, PMA);
   deployer.deploy(PMA);
 
@@ -47,6 +47,8 @@ module.exports = function(deployer) {
   deployer.link(RiscVConstants, Fetch);
   deployer.link(BitsManipulationLibrary, Fetch);
   deployer.link(PMA, Fetch);
+  deployer.deploy(Fetch);
+  deployer.link(Fetch, Step);
 
   //Link all libraries to Execute
   deployer.link(RiscVDecoder, Execute);
@@ -61,7 +63,6 @@ module.exports = function(deployer) {
   deployer.link(RiscVConstants, Interrupts);
   deployer.link(BitsManipulationLibrary, Interrupts);
 
-  deployer.deploy(Fetch);
   deployer.deploy(Interrupts);
   deployer.deploy(AddressTracker);
   deployer.deploy(MMInstantiator).then(function(){

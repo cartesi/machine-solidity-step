@@ -8,31 +8,26 @@ import "./lib/BitsManipulationLibrary.sol";
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/PMA.sol";
 
-contract Fetch {
-  MemoryInteractor mi;
-  uint256 mmIndex;
-   // Through struct we force variables that were being put on stack to be stored
-  // in memory. It is more expensive, but the stack only supports 16 variables.
-  struct TranslateVars{
-    int priv;
-    int mode;
-    int vaddr_shift;
-    int pte_size_log2;
-    int vpn_bits;
-    int satp_ppn_bits;
+library Fetch {
+  // Variable positions on their respective array.
+  // This is not an enum because enum assumes the type from the number of variables
+  // So we would have to explicitly cast to uint256 on every single access
+  uint256 constant priv = 0;
+  uint256 constant mode= 1;
+  uint256 constant vaddr_shift = 2;
+  uint256 constant pte_size_log2= 3;
+  uint256 constant vpn_bits= 4;
+  uint256 constant satp_ppn_bits = 5;
 
-//    uint64 vaddr;
-    uint64 vaddr_mask;
-    uint64 pte_addr;
-    uint64 mstatus;
-    uint64 satp;
-    uint64 vpn_mask;
+  uint256 constant vaddr_mask = 0;
+  uint256 constant pte_addr = 1;
+  uint256 constant mstatus = 2;
+  uint256 constant satp = 3;
+  uint256 constant vpn_mask = 4;
 
-  }
 
-  function fetch_insn(uint256 _mmIndex, address _memoryInteractorAddress) public returns (fetch_status, uint32, uint64){
-    mi = MemoryInteractor(_memoryInteractorAddress); 
-    mmIndex = _mmIndex;
+  function fetch_insn(uint256 mmIndex, address _memoryInteractorAddress) public returns (fetch_status, uint32, uint64){
+    MemoryInteractor mi = MemoryInteractor(_memoryInteractorAddress); 
 
     bool translateBool;
     uint64 paddr;
@@ -41,7 +36,7 @@ contract Fetch {
     uint64 pc = BitsManipulationLibrary.uint64_swapEndian(
       uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_pc()))
     );
-    (translateBool, paddr) = translate_virtual_address(pc, RiscVConstants.PTE_XWR_CODE_SHIFT());
+    (translateBool, paddr) = translate_virtual_address(mmIndex, mi, pc, RiscVConstants.PTE_XWR_CODE_SHIFT());
 
     //translate_virtual_address failed
     if(!translateBool){
@@ -86,21 +81,27 @@ contract Fetch {
 
   // Virtual Address Translation proccess is defined, step by step on the following Reference:
   // Reference: riscv-priv-spec-1.10.pdf - Section 4.3.2, page 62.
-  function translate_virtual_address(uint64 vaddr, int xwr_shift) public returns(bool, uint64){
+  function translate_virtual_address(uint256 mmIndex, MemoryInteractor mi, uint64 vaddr, int xwr_shift)
+  public returns(bool, uint64){
     //TO-DO: check shift + mask
     //TO-DO: use bitmanipulation right shift
-    TranslateVars memory vars;
+
+    // Through arrays we force variables that were being put on stack to be stored
+   // in memory. It is more expensive, but the stack only supports 16 variables.
+    uint64[5] memory uint64vars;
+    int[6] memory intvars;
+
 
     // Reads privilege level on iflags register. The privilege level is located
     // on bits 2 and 3.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
-    vars.priv = (BitsManipulationLibrary.uint64_swapEndian(
+    intvars[priv] = (BitsManipulationLibrary.uint64_swapEndian(
       uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_iflags())
     )) >> 2) & 3;
     //emit Print("priv", uint(priv));
 
     //read_mstatus
-    vars.mstatus = BitsManipulationLibrary.uint64_swapEndian(
+    uint64vars[mstatus] = BitsManipulationLibrary.uint64_swapEndian(
       uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mstatus()))
     );
 
@@ -108,13 +109,13 @@ contract Fetch {
     // When MPRV is set, data loads and stores use privilege in MPP
     // instead of the current privilege level (code access is unaffected)
     //TO-DO: Check this &/&& and shifts
-    if((vars.mstatus & RiscVConstants.MSTATUS_MPRV() != 0) && (xwr_shift != RiscVConstants.PTE_XWR_CODE_SHIFT())){
-      vars.priv = (vars.mstatus >> RiscVConstants.MSTATUS_MPP_SHIFT()) & 3;
+    if((uint64vars[mstatus] & RiscVConstants.MSTATUS_MPRV() != 0) && (xwr_shift != RiscVConstants.PTE_XWR_CODE_SHIFT())){
+      intvars[priv] = (uint64vars[mstatus] >> RiscVConstants.MSTATUS_MPP_SHIFT()) & 3;
     }
     // Physical memory is mediated by Machine-mode so, if privilege is M-mode it 
     // does not use virtual Memory
     // Reference: riscv-priv-spec-1.7.pdf - Section 3.3, page 32.
-    if(vars.priv == RiscVConstants.PRV_M()){
+    if(intvars[priv] == RiscVConstants.PRV_M()){
       return(true, vaddr);
     }
 
@@ -122,7 +123,7 @@ contract Fetch {
     // Holds MODE, Physical page number (PPN) and address space identifier (ASID)
     // MODE is located on bits 60 to 63 for RV64.
     // Reference: riscv-priv-spec-1.10.pdf - Section 4.1.12, page 56.
-    vars.satp = BitsManipulationLibrary.uint64_swapEndian(
+    uint64vars[satp] = BitsManipulationLibrary.uint64_swapEndian(
       uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_satp()))
     );
     //emit Print("satp", satp);
@@ -131,18 +132,18 @@ contract Fetch {
     //   8: sv39: Page-based 39-bit virtual addressing
     //   9: sv48: Page-based 48-bit virtual addressing
     // Reference: riscv-priv-spec-1.10.pdf - Table 4.3, page 57.
-    vars.mode = (vars.satp >> 60) & 0xf;
+    intvars[mode] = (uint64vars[satp] >> 60) & 0xf;
     //emit Print("mode", uint(mode));
 
-    if(vars.mode == 0){
+    if(intvars[mode] == 0){
       return(true, vaddr);
-    } else if(vars.mode < 8 || vars.mode > 9){
+    } else if(intvars[mode] < 8 || intvars[mode] > 9){
       return(false, 0);
     }
     // Here we know we are in sv39 or sv48 modes
 
     // Page table hierarchy of sv39 has 3 levels, and sv48 has 4 levels
-    int levels = vars.mode - 8 + 3;
+    int levels = intvars[mode] - 8 + 3;
     // Page offset are bits located from 0 to 11.
     // Then come levels virtual page numbers (VPN)
     // The rest of vaddr must be filled with copies of the
@@ -151,35 +152,35 @@ contract Fetch {
     // Reference: riscv-priv-spec-1.10.pdf - Figure 4.16, page 63.
 
     //TO-DO: Use bitmanipulation library for arithmetic shift
-    vars.vaddr_shift = RiscVConstants.XLEN() - (RiscVConstants.PG_SHIFT() + levels * 9);
-    if(((int64(vaddr) << vars.vaddr_shift) >> vars.vaddr_shift) != int64(vaddr)){
+    intvars[vaddr_shift] = RiscVConstants.XLEN() - (RiscVConstants.PG_SHIFT() + levels * 9);
+    if(((int64(vaddr) << intvars[vaddr_shift]) >> intvars[vaddr_shift]) != int64(vaddr)){
       return(false, 0);
     }
     // The least significant 44 bits of satp contain the physical page number
     // for the root page table
     // Reference: riscv-priv-spec-1.10.pdf - Figure 4.12, page 57.
-    vars.satp_ppn_bits = 44;
+    intvars[satp_ppn_bits] = 44;
     // Initialize pte_addr with the base address for the root page table
-    vars.pte_addr = (vars.satp & ((uint64(1) << vars.satp_ppn_bits) -1)) << RiscVConstants.PG_SHIFT();
+    uint64vars[pte_addr] = (uint64vars[satp] & ((uint64(1) << intvars[satp_ppn_bits]) -1)) << RiscVConstants.PG_SHIFT();
     // All page table entries have 8 bytes
     // Each page table has 4k/pte_size entries
     // To index all entries, we need vpn_bits
     // Reference: riscv-priv-spec-1.10.pdf - Section 4.4.1, page 63.
-    vars.pte_size_log2 = 3;
-    vars.vpn_bits = 12 - vars.pte_size_log2;
-    vars.vpn_mask = uint64((1 << vars.vpn_bits) - 1);
+    intvars[pte_size_log2] = 3;
+    intvars[vpn_bits] = 12 - intvars[pte_size_log2];
+    uint64vars[vpn_mask] = uint64((1 << intvars[vpn_bits]) - 1);
 
     for(int i = 0; i < levels; i++) {
       // Mask out VPN[levels -i-1]
-      vars.vaddr_shift = RiscVConstants.PG_SHIFT() + vars.vpn_bits * (levels -1 -i);
-      uint64 vpn = (vaddr >> vars.vaddr_shift) & vars.vpn_mask;
+      intvars[vaddr_shift] = RiscVConstants.PG_SHIFT() + intvars[vpn_bits] * (levels -1 -i);
+      uint64 vpn = (vaddr >> intvars[vaddr_shift]) & uint64vars[vpn_mask];
       // Add offset to find physical address of page table entry
-      vars.pte_addr += vpn << vars.pte_size_log2;
+      uint64vars[pte_addr] += vpn << intvars[pte_size_log2];
       //Read page table entry from physical memory
       uint64 pte = 0;
 
       //TO-DO: Implement read_ram_uint64(a, pte_addr, &pte)
-      // if(!read_ram_uint64(vars.pte_addr)){
+      // if(!read_ram_uint64(uint64vars[pte_addr])){
       //   return(false, 0);
       // }
 
@@ -202,10 +203,10 @@ contract Fetch {
           return (false, 0);
         }
         // (We know we are not PRV_M if we reached here)
-        if(vars.priv == RiscVConstants.PRV_S()){
+        if(intvars[priv] == RiscVConstants.PRV_S()){
           // If SUM is set, forbid S-mode code from accessing U-mode memory
           //TO-DO: check if condition
-          if((pte & RiscVConstants.PTE_U_MASK() != 0) && ((vars.mstatus & RiscVConstants.MSTATUS_SUM())) == 0){
+          if((pte & RiscVConstants.PTE_U_MASK() != 0) && ((uint64vars[mstatus] & RiscVConstants.MSTATUS_SUM())) == 0){
             return (false, 0);
           }
         }else{
@@ -215,7 +216,7 @@ contract Fetch {
           }
         }
         // MXR allows to read access to execute-only pages
-        if(vars.mstatus & RiscVConstants.MSTATUS_MXR() != 0){
+        if(uint64vars[mstatus] & RiscVConstants.MSTATUS_MXR() != 0){
           //Set R bit if X bit is set
           xwr = xwr | (xwr >> 2);
         }
@@ -224,8 +225,8 @@ contract Fetch {
           return (false, 0);
         }
         // Check page, megapage, and gigapage alignment
-        vars.vaddr_mask = (uint64(1) << vars.vaddr_shift) - 1;
-        if(ppn & vars.vaddr_mask != 0){
+        uint64vars[vaddr_mask] = (uint64(1) << intvars[vaddr_shift]) - 1;
+        if(ppn & uint64vars[vaddr_mask] != 0){
           return (false, 0);
         }
         // Decide if we need to update access bits in pte
@@ -237,12 +238,12 @@ contract Fetch {
         // If so, update pte
         if(update_pte){
           //TO-DO: write_ram_uint64
-          //write_ram_uint64(a, vars.pte_addr,pte);
+          //write_ram_uint64(a, uint64vars[pte_addr],pte);
         }
         // Add page offset in vaddr to ppn to form physical address
-        return(true, (vaddr * vars.vaddr_mask) | (ppn & ~vars.vaddr_mask));
+        return(true, (vaddr * uint64vars[vaddr_mask]) | (ppn & ~uint64vars[vaddr_mask]));
       }else {
-        vars.pte_addr = ppn;
+        uint64vars[pte_addr] = ppn;
       }
     }
     return(false, 0);
