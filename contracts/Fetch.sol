@@ -6,21 +6,9 @@ import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
 import "./lib/BitsManipulationLibrary.sol";
 import "../contracts/MemoryInteractor.sol";
-
-//TO-DO: Updates on machine state should go back to main contract
-// for example: pc update on fetch
+import "../contracts/PMA.sol";
 
 contract Fetch {
-  PMAEntry pma_entry; //cannot return struct without experimental pragma
-  struct PMAEntry{
-    uint64 start;
-    uint64 length;
-    bool R;
-    bool W;
-    bool X;
-    bool IR;
-    bool IW;
-  }
   MemoryInteractor mi;
   uint256 mmIndex;
    // Through struct we force variables that were being put on stack to be stored
@@ -65,7 +53,7 @@ contract Fetch {
 
     // Finds the range in memory in which the physical address is located
     // Returns start and length words from pma
-    (pma_entry.start, pma_entry.length) = find_pma_entry(paddr);
+    (uint64 pma_start, uint64 pma_length) = PMA.find_pma_entry(mi, mmIndex, paddr);
 
     //emit Print("pma_entry.start", pma_entry.start);
     //emit Print("pma_entry.length", pma_entry.length);
@@ -75,7 +63,7 @@ contract Fetch {
     // If the pma is not memory or not executable - this is a pma violation
     // Reference: The Core of Cartesi, v1.02 - section 3.2 the board - page 5.
 
-    if(!pma_get_istart_M() || !pma_get_istart_X()){
+    if(!PMA.pma_get_istart_M(pma_start) || !PMA.pma_get_istart_X(pma_start)){
 
       //emit Print("CAUSE_FETCH_FAULT", paddr);
       //raise_exception(CAUSE_FETCH_FAULT)
@@ -258,65 +246,6 @@ contract Fetch {
       }
     }
     return(false, 0);
-  }
-
-
-  //pma functions
-  function find_pma_entry(uint64 paddr) public returns (uint64, uint64){
-
-    // Hard coded ram address starts at 0x800
-    // In total there are 32 PMAs from processor shadow to Flash disk 7.
-    // PMA 0 - describes RAM and is hardcoded to address 0x800
-    // PMA 16 - 23 describe flash devices 0-7
-    // RAM start field is hardcoded to 0x800
-    // Reference: The Core of Cartesi, v1.02 - Table 3.
-    uint64 pmaAddress = 0x800;
-    bool foundPma;
-    //TO-DO: Check lastPma - this is probably wrong.
-    uint64 lastPma = 62; // 0 - 31 * 2 words
-    //emit Print("paddr", paddr);
-    for(uint64 i = 0; i < lastPma; i+=2){
-      uint64 start_word = BitsManipulationLibrary.uint64_swapEndian(
-        uint64(mi.memoryRead(mmIndex, pmaAddress + (i*8)))
-      );
-
-      uint64 length_word = BitsManipulationLibrary.uint64_swapEndian(
-        uint64(mi.memoryRead(mmIndex, pmaAddress + ((i * 8 + 8))))
-      );
-
-      // Both pma_start and pma_length have to be aligned to a 4KiB boundary.
-      // So this leaves the lowest 12 bits for attributes. To find out the actual
-      // start and length of the PMAs it is necessary to clean those attribute bits
-      // Reference: The Core of Cartesi, v1.02 - Figure 2 - Page 5.
-      uint64 pma_start = start_word & 0xfffffffffffff000;
-      uint64 pma_length = length_word & 0xfffffffffffff000;
-
-      if(paddr >= pma_start && paddr < (pma_start + pma_length)){
-        return (start_word, length_word);
-      }
-
-      if(pma_length == 0){
-        break;
-      }
-    }
-  }
-
-  // M bit defines if the range is memory
-  // The flag is pma_entry start's word first bit
-  // Reference: The Core of Cartesi, v1.02 - figure 2.
-  function pma_get_istart_M() public returns(bool){
-    //M is pma_entry fisrt bit
-    //emit Print("pma_get_istart_M", pma_entry.start & 1);
-    return pma_entry.start & 1 == 1;
-  }
-
-  // X bit defines if the range is executable
-  // The flag is pma_entry start's word on position 5.
-  // Reference: The Core of Cartesi, v1.02 - figure 2.
-  function pma_get_istart_X() public returns(bool){
-    //X is pma_entry sixth bit (index 5)
-    //emit Print("pma_get_istart_X", (pma_entry.start >> 5) & 1);
-    return (pma_entry.start >> 5) & 1 == 1;
   }
 
   enum fetch_status {
