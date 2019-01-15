@@ -8,13 +8,13 @@ var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.s
 var Execute = artifacts.require("./Execute.sol");
 var Fetch = artifacts.require("./Fetch.sol");
 var PMA = artifacts.require("./PMA.sol");
+var Interrupts = artifacts.require("./Interrupts.sol");
 
 //Contracts
 var AddressTracker = artifacts.require("./AddressTracker.sol");
 var MMInstantiator = artifacts.require("./MMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
 var Step = artifacts.require("./Step.sol");
-var Interrupts = artifacts.require("./Interrupts.sol");
 
 
 module.exports = function(deployer) {
@@ -62,8 +62,10 @@ module.exports = function(deployer) {
   deployer.link(ShadowAddresses, Interrupts);
   deployer.link(RiscVConstants, Interrupts);
   deployer.link(BitsManipulationLibrary, Interrupts);
-
   deployer.deploy(Interrupts);
+  deployer.link(Interrupts, Step);
+  
+
   deployer.deploy(AddressTracker);
   deployer.deploy(MMInstantiator).then(function(){
     return deployer.deploy(MemoryInteractor, AddressTracker.address);

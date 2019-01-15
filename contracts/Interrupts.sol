@@ -6,7 +6,7 @@ import "./lib/BitsManipulationLibrary.sol";
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/RiscVConstants.sol";
 
-contract Interrupts {
+library Interrupts {
   function raise_interrupt_if_any(uint256 mmIndex, address miAddress) public {
    uint32 mask = get_pending_irq_mask(mmIndex, miAddress);
      if(mask != 0) {
