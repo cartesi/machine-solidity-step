@@ -7,7 +7,6 @@ import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
 import "./lib/BitsManipulationLibrary.sol";
 import "../contracts/MemoryInteractor.sol";
-import "../contracts/AddressTracker.sol";
 import {Fetch} from "../contracts/Fetch.sol";
 import {Execute} from "../contracts/Execute.sol";
 import {Interrupts} from "../contracts/Interrupts.sol";
@@ -16,8 +15,6 @@ import {Interrupts} from "../contracts/Interrupts.sol";
 contract Step {
   event Print(string message, uint value);
 
-  //Keep tracks of all contract's addresses
-  AddressTracker addrTracker;
   MemoryInteractor mi;
 
   uint256 mmIndex; //this has to be removed
@@ -28,10 +25,9 @@ contract Step {
   int priv;
   uint64 mstatus;
 
-  function step(uint _mmIndex, address _addressTrackerAddress) public returns (interpreter_status){
-    addrTracker = AddressTracker(_addressTrackerAddress);
+  function step(uint _mmIndex, address _miAddress) public returns (interpreter_status){
     mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
-    mi = MemoryInteractor(addrTracker.getMemoryInteractorAddress());
+    mi = MemoryInteractor(_miAddress);
 
     // Every read performed by mi.memoryRead or mm . write should be followed by an 
     // endianess swap from little endian to big endian. This is the case because
