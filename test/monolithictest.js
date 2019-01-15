@@ -170,7 +170,7 @@ contract('Step', function(accounts){
         from: accounts[0], gas: 9007199254740991
       });
 
-      response = await riscV.step(index, addressTracker.address, {
+      response = await riscV.step(index, mi.address, {
         from: accounts[1],
         gas: 9007199254740991
       });
