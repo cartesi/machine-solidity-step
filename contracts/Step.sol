@@ -8,7 +8,7 @@ import "./RiscVDecoder.sol";
 import "./lib/BitsManipulationLibrary.sol";
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/AddressTracker.sol";
-import "../contracts/Fetch.sol";
+import {Fetch} from "../contracts/Fetch.sol";
 import {Execute} from "../contracts/Execute.sol";
 import "../contracts/Interrupts.sol";
 
@@ -57,10 +57,9 @@ contract Step {
     interrupt.raise_interrupt_if_any(mmIndex, address(mi));
 
     //Fetch Instruction
-    Fetch fetchContract = Fetch(addrTracker.getFetchAddress());
     Fetch.fetch_status fetchStatus;
 
-    (fetchStatus, insn, pc) = fetchContract.fetch_insn(mmIndex, address(mi));
+    (fetchStatus, insn, pc) = Fetch.fetch_insn(mmIndex, address(mi));
  
     if(fetchStatus == Fetch.fetch_status.success){
       // If fetch was successfull, tries to execute instruction
