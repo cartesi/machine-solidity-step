@@ -13,18 +13,13 @@ library Execute {
     MemoryInteractor mi = MemoryInteractor(_miAddress);
     uint256 mmIndex = _mmIndex;
 
-    // OPCODE is located on bit 0 - 6 of the following types of 32bits instructions:
-    // R-Type, I-Type, S-Trype and U-Type
-    // Reference: riscv-spec-v2.2.pdf - Figure 2.2 - Page 11
-    uint32 opcode = RiscVDecoder.inst_opcode(insn);
-
-    // Find instruction associated with that opcode
+        // Find instruction associated with that opcode
     // Sometimes the opcode fully defines the associated instructions, but most
     // of the times it only specifies which group it belongs to.
     // For example, an opcode of: 01100111 is always a LUI instruction but an
     // opcode of 1100011 might be BEQ, BNE, BLT etc
     // Reference: riscv-spec-v2.2.pdf - Table 19.2 - Page 104
-     return opinsn(mi, mmIndex, insn, opcode, pc);
+     return opinsn(mi, mmIndex, insn, pc);
   }
 
   function execute_branch(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
@@ -119,7 +114,12 @@ library Execute {
   /// @notice Given an op code, finds the group of instructions it belongs to
   //  using a binary search for performance.
   //  @param insn for opcode fields.
-  function opinsn(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint32 opcode, uint64 pc) public returns (execute_status){
+  function opinsn(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) public returns (execute_status){
+    // OPCODE is located on bit 0 - 6 of the following types of 32bits instructions:
+    // R-Type, I-Type, S-Trype and U-Type
+    // Reference: riscv-spec-v2.2.pdf - Figure 2.2 - Page 11
+    uint32 opcode = RiscVDecoder.inst_opcode(insn);
+
     if(opcode < 0x002f){
       if(opcode < 0x0017){
         if(opcode == 0x0003){
