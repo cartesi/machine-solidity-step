@@ -42,9 +42,7 @@ library Execute {
     uint32 rd = RiscVDecoder.insn_rd(insn) * 8; //8 = sizeOf(uint64)
     //emit Print("execute_auipc RD", uint(rd));
     if(rd != 0){
-      mi.memoryWrite(mmIndex, rd, bytes8(BitsManipulationLibrary.uint64_swapEndian(
-        pc + uint64(RiscVDecoder.insn_U_imm(insn)))
-      ));
+      mi.memoryWrite(mmIndex, rd, pc + uint64(RiscVDecoder.insn_U_imm(insn)));
      // emit Print("pc", uint(pc));
      // emit Print("ins_u_imm", uint(RiscVDecoder.insn_U_imm(insn)));
     }
@@ -53,8 +51,7 @@ library Execute {
 
   function advance_to_next_insn(MemoryInteractor mi, uint256 mmIndex, uint64 pc) 
   public returns (execute_status){
-    pc = BitsManipulationLibrary.uint64_swapEndian(pc + 4);
-    mi.memoryWrite(mmIndex, ShadowAddresses.get_pc(), bytes8(pc));
+    mi.memoryWrite(mmIndex, ShadowAddresses.get_pc(), pc + 4);
     //emit Print("advance_to_next", 0);
     return execute_status.retired;
   }

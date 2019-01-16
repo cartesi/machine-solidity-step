@@ -40,9 +40,7 @@ contract Step {
     // If machine is halted - nothing else to do. H flag is stored on the least
     // signficant bit on iflags register.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
-    uint64 iflags = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_iflags()))
-    );
+    uint64 iflags = mi.memoryRead(mmIndex, ShadowAddresses.get_iflags());
     //emit Print("iflags", uint(iflags));
     if((iflags & 1) != 0){
       //machine is halted
@@ -62,23 +60,17 @@ contract Step {
         // If execute_insn finishes successfully we need to update the number of
         // retired instructions. This number is stored on minstret CSR.
         // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
-        uint64 minstret = BitsManipulationLibrary.uint64_swapEndian(
-          uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_minstret()))
-        );
+        uint64 minstret = mi.memoryRead(mmIndex, ShadowAddresses.get_minstret());
         //emit Print("minstret", uint(minstret));
-        minstret = BitsManipulationLibrary.uint64_swapEndian(minstret + 1);
-        mi.memoryWrite(mmIndex, ShadowAddresses.get_minstret(), bytes8(minstret ));
+        mi.memoryWrite(mmIndex, ShadowAddresses.get_minstret(), minstret + 1);
       }
     }
     // Last thing that has to be done in a step is to update the cycle counter.
     // The cycle counter is stored on mcycle CSR.
     // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
-    uint64 mcycle = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mcycle()))
-    );
+    uint64 mcycle = mi.memoryRead(mmIndex, ShadowAddresses.get_mcycle());
     //emit Print("mcycle", uint(mcycle));
-    mcycle = BitsManipulationLibrary.uint64_swapEndian(mcycle + 1);
-    mi.memoryWrite(mmIndex, ShadowAddresses.get_mcycle(), bytes8(mcycle));
+    mi.memoryWrite(mmIndex, ShadowAddresses.get_mcycle(), mcycle + 1);
     return interpreter_status.success;
   }
 

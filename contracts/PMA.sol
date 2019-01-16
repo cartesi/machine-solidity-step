@@ -20,13 +20,9 @@ library PMA {
     uint64 lastPma = 62; // 0 - 31 * 2 words
     //emit Print("paddr", paddr);
     for(uint64 i = 0; i < lastPma; i+=2){
-      uint64 start_word = BitsManipulationLibrary.uint64_swapEndian(
-        uint64(mi.memoryRead(mmIndex, pmaAddress + (i*8)))
-      );
+      uint64 start_word = mi.memoryRead(mmIndex, pmaAddress + (i*8));
 
-      uint64 length_word = BitsManipulationLibrary.uint64_swapEndian(
-        uint64(mi.memoryRead(mmIndex, pmaAddress + ((i * 8 + 8))))
-      );
+      uint64 length_word = mi.memoryRead(mmIndex, pmaAddress + ((i * 8 + 8)));
 
       // Both pma_start and pma_length have to be aligned to a 4KiB boundary.
       // So this leaves the lowest 12 bits for attributes. To find out the actual

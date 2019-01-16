@@ -2,6 +2,7 @@
 pragma solidity ^0.5.0;
 
 import "../contracts/AddressTracker.sol";
+import "./lib/BitsManipulationLibrary.sol";
 
 contract mmInterface {
   function read(uint256 _index, uint64 _address) external returns (bytes8);
@@ -17,12 +18,15 @@ contract MemoryInteractor {
     mm = mmInterface(_mmAddress);
   }
 
-  function memoryRead(uint256 _index, uint64 _address) public returns (bytes8){
-    return mm.read(_index, _address);
+  function memoryRead(uint256 _index, uint64 _address) public returns (uint64){
+    return BitsManipulationLibrary.uint64_swapEndian(
+      uint64(mm.read(_index, _address))
+    );
   }
 
-  function memoryWrite(uint256 _index, uint64 _address, bytes8 _value) public {
-    return mm.write(_index, _address, _value);
+  function memoryWrite(uint256 _index, uint64 _address, uint64 _value) public {
+    bytes8 bytesValue = bytes8(BitsManipulationLibrary.uint64_swapEndian(_value));
+    mm.write(_index, _address, bytesValue);
   }
 }
 

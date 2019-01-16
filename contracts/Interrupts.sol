@@ -23,14 +23,10 @@ library Interrupts {
   function get_pending_irq_mask(uint256 mmIndex, address miAddress) public returns (uint32){
     MemoryInteractor mi = MemoryInteractor(miAddress); 
 
-    uint64 mip = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mip()))
-    );
+    uint64 mip = mi.memoryRead(mmIndex, ShadowAddresses.get_mip());
     //emit Print("mip", uint(mip));
 
-    uint64 mie = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mie()))
-    );
+    uint64 mie = mi.memoryRead(mmIndex, ShadowAddresses.get_mie());
     //emit Print("mie", uint(mie));
 
     uint32 pending_ints = uint32(mip & mie);
@@ -46,9 +42,7 @@ library Interrupts {
     // Read privilege level on iflags register.
     // The privilege level is represented by bits 2 and 3 on iflags register.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
-    uint64 priv = (BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_iflags())
-    )) >> 2) & 3;
+    uint64 priv = (mi.memoryRead(mmIndex, ShadowAddresses.get_iflags()) >> 2) & 3;
     //emit Print("priv", uint(priv));
     
     if(priv == RiscVConstants.PRV_M()) {
@@ -56,28 +50,20 @@ library Interrupts {
       // operating state. The MIE is an interrupt-enable bit for machine mode.
       // MIE for 64bit is stored on location 3 - according to:
       // Reference: riscv-privileged-v1.10 - figure 3.7 - page 20.
-      mstatus = BitsManipulationLibrary.uint64_swapEndian(
-        uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mstatus()))
-      );
+      mstatus = mi.memoryRead(mmIndex, ShadowAddresses.get_mstatus());
       //emit Print("mstatus", uint(mstatus));
 
       if((mstatus & RiscVConstants.MSTATUS_MIE()) != 0){
-        enabled_ints = uint32(~BitsManipulationLibrary.uint64_swapEndian(
-          uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mideleg())))
-        );
+        enabled_ints = uint32(~mi.memoryRead(mmIndex, ShadowAddresses.get_mideleg()));
       }
     }else if(priv == RiscVConstants.PRV_S()){
-      mstatus = BitsManipulationLibrary.uint64_swapEndian(
-        uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mstatus()))
-      );
+      mstatus = mi.memoryRead(mmIndex, ShadowAddresses.get_mstatus());
       //emit Print("mstatus", uint(mstatus));
       // MIDELEG: Machine trap delegation register
       // mideleg defines if a interrupt can be proccessed by a lower privilege
       // level. If mideleg bit is set, the trap will delegated to the S-Mode.
       // Reference: riscv-privileged-v1.10 - Section 3.1.13 - page 27.
-      uint64 mideleg = BitsManipulationLibrary.uint64_swapEndian(
-        uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mideleg()))
-      );
+      uint64 mideleg = mi.memoryRead(mmIndex, ShadowAddresses.get_mideleg());
       //emit Print("mideleg", uint(mideleg));
       enabled_ints = uint32(~mideleg);
 

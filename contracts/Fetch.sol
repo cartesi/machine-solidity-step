@@ -33,9 +33,7 @@ library Fetch {
     uint64 paddr;
 
     //read_pc
-    uint64 pc = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_pc()))
-    );
+    uint64 pc = mi.memoryRead(mmIndex, ShadowAddresses.get_pc());
     (translateBool, paddr) = translate_virtual_address(mmIndex, mi, pc, RiscVConstants.PTE_XWR_CODE_SHIFT());
 
     //translate_virtual_address failed
@@ -67,9 +65,7 @@ library Fetch {
 
     //emit Print("paddr/insn", paddr);
     //will this actually return the instruction? Should it be 32bits?
-    uint32 insn = uint32(BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mi.memoryRead(mmIndex, paddr))
-    ));
+    uint32 insn = uint32(mi.memoryRead(mmIndex, paddr));
     //emit Print("insn", uint(insn));
     return (fetch_status.success, insn, pc);
 
@@ -95,15 +91,11 @@ library Fetch {
     // Reads privilege level on iflags register. The privilege level is located
     // on bits 2 and 3.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
-    intvars[priv] = (BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_iflags())
-    )) >> 2) & 3;
+    intvars[priv] = (mi.memoryRead(mmIndex, ShadowAddresses.get_iflags()) >> 2) & 3;
     //emit Print("priv", uint(priv));
 
     //read_mstatus
-    uint64vars[mstatus] = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_mstatus()))
-    );
+    uint64vars[mstatus] = mi.memoryRead(mmIndex, ShadowAddresses.get_mstatus());
 
     //emit Print("mstatus", uint(mstatus));
     // When MPRV is set, data loads and stores use privilege in MPP
@@ -123,9 +115,7 @@ library Fetch {
     // Holds MODE, Physical page number (PPN) and address space identifier (ASID)
     // MODE is located on bits 60 to 63 for RV64.
     // Reference: riscv-priv-spec-1.10.pdf - Section 4.1.12, page 56.
-    uint64vars[satp] = BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mi.memoryRead(mmIndex, ShadowAddresses.get_satp()))
-    );
+    uint64vars[satp] = mi.memoryRead(mmIndex, ShadowAddresses.get_satp());
     //emit Print("satp", satp);
     // In RV64, mode can be
     //   0: Bare: No translation or protection
