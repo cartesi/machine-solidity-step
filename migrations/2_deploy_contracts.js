@@ -66,6 +66,7 @@ module.exports = function(deployer) {
   deployer.link(Interrupts, Step);
   
 
+  deployer.link(BitsManipulationLibrary, MemoryInteractor);
   deployer.deploy(AddressTracker);
   deployer.deploy(MMInstantiator).then(function(){
     return deployer.deploy(MemoryInteractor, AddressTracker.address);
