@@ -51,6 +51,7 @@ module.exports = function(deployer) {
   deployer.link(RiscVDecoder, Execute);
   deployer.link(ShadowAddresses, Execute);
   deployer.link(RiscVConstants, Execute);
+  deployer.link(BranchInstructions, Execute);
   deployer.deploy(Execute);
   deployer.link(Execute, Step);
   
