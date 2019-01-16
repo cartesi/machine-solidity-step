@@ -76,37 +76,38 @@ library Execute {
   //  associated with it. Uses binary search for performance.
   //  @param insn for branch funct3 field.
   function branch_funct3(uint32 insn, uint64 rs1, uint64 rs2) public returns (bool){
-    if(insn < 0x0005){
-      if(insn == 0x0000){
-        /*insn == 0x0000*/
+    uint32 funct3 = RiscVDecoder.inst_funct3(insn);
+
+    if(funct3 < 0x0005){
+      if(funct3 == 0x0000){
+        /*funct3 == 0x0000*/
         //return "BEQ";
         return BranchInstructions.execute_BEQ(rs1, rs2);
-      }else if(insn == 0x0004){
-        /*insn == 0x0004*/
+      }else if(funct3 == 0x0004){
+        /*funct3 == 0x0004*/
         //return "BLT";
         return BranchInstructions.execute_BLT(rs1, rs2);
-      }else if(insn == 0x0001){
-        /*insn == 0x0001*/
+      }else if(funct3 == 0x0001){
+        /*funct3 == 0x0001*/
         //return "BNE";
         return BranchInstructions.execute_BNE(rs1, rs2);
       }
-    }else if(insn > 0x0005){
-      if(insn == 0x0007){
-        /*insn == 0x0007*/
+    }else if(funct3 > 0x0005){
+      if(funct3 == 0x0007){
+        /*funct3 == 0x0007*/
         //return "BGEU";
         return BranchInstructions.execute_BGEU(rs1, rs2);
-      }else if(insn == 0x0006){
-        /*insn == 0x0006*/
+      }else if(funct3 == 0x0006){
+        /*funct3 == 0x0006*/
         //return "BLTU";
         return BranchInstructions.execute_BLTU(rs1, rs2);
       }
-    }else if(insn == 0x0005){
-      /*insn==0x0005*/
+    }else if(funct3 == 0x0005){
+      /*funct3==0x0005*/
       //return "BGE";
       return BranchInstructions.execute_BGE(rs1, rs2);
     }
    //return "illegal insn";
-
    // TO-DO: this shouldnt be a return false
    return false;
   }
