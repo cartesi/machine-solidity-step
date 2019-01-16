@@ -5,7 +5,6 @@ pragma solidity ^0.5.0;
 import "./ShadowAddresses.sol";
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
-import "./lib/BitsManipulationLibrary.sol";
 import "../contracts/MemoryInteractor.sol";
 import {Fetch} from "../contracts/Fetch.sol";
 import {Execute} from "../contracts/Execute.sol";
