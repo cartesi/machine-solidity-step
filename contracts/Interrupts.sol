@@ -2,7 +2,6 @@
 pragma solidity ^0.5.0;
 
 import "./ShadowAddresses.sol";
-import "./lib/BitsManipulationLibrary.sol";
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/RiscVConstants.sol";
 

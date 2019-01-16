@@ -2,7 +2,6 @@
 pragma solidity ^0.5.0;
 
 import "../contracts/MemoryInteractor.sol";
-import "./lib/BitsManipulationLibrary.sol";
 
 library PMA {
 

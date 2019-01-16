@@ -26,7 +26,6 @@ module.exports = function(deployer) {
   deployer.deploy(BitsManipulationLibrary);
 
 
-  deployer.link(BitsManipulationLibrary, PMA);
   deployer.deploy(PMA);
 
   //Link Instruction libraries to Decoder 
@@ -39,13 +38,11 @@ module.exports = function(deployer) {
   deployer.link(RiscVDecoder, Step);
   deployer.link(ShadowAddresses, Step);
   deployer.link(RiscVConstants, Step);
-  deployer.link(BitsManipulationLibrary, Step);
 
   //Link all libraries to Fetch
   deployer.link(RiscVDecoder, Fetch);
   deployer.link(ShadowAddresses, Fetch);
   deployer.link(RiscVConstants, Fetch);
-  deployer.link(BitsManipulationLibrary, Fetch);
   deployer.link(PMA, Fetch);
   deployer.deploy(Fetch);
   deployer.link(Fetch, Step);
@@ -54,14 +51,12 @@ module.exports = function(deployer) {
   deployer.link(RiscVDecoder, Execute);
   deployer.link(ShadowAddresses, Execute);
   deployer.link(RiscVConstants, Execute);
-  deployer.link(BitsManipulationLibrary, Execute);
   deployer.deploy(Execute);
   deployer.link(Execute, Step);
   
   //Link all libraries to Interrupts
   deployer.link(ShadowAddresses, Interrupts);
   deployer.link(RiscVConstants, Interrupts);
-  deployer.link(BitsManipulationLibrary, Interrupts);
   deployer.deploy(Interrupts);
   deployer.link(Interrupts, Step);
   
