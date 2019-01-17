@@ -39,8 +39,8 @@ library Execute {
   function execute_branch(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
   public returns (execute_status){
 
-    uint64 rs1 = RiscVDecoder.insn_rs1(insn);
-    uint64 rs2 = RiscVDecoder.insn_rs2(insn);
+    uint64 rs1 = mi.memoryRead(mmIndex, RiscVDecoder.insn_rs1(insn));
+    uint64 rs2 = mi.memoryRead(mmIndex, RiscVDecoder.insn_rs2(insn));
 
     if(branch_funct3(insn, rs1, rs2)){
       uint64 new_pc = uint64(int64(pc) + int64(RiscVDecoder.insn_B_imm(insn)));
