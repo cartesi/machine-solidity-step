@@ -1,9 +1,6 @@
 // @title RiscVDecoder
 pragma solidity ^0.5.0;
 
-import "./RiscVInstructions/BranchInstructions.sol";
-import "./RiscVInstructions/ArithmeticInstructions.sol";
-
 //TO-DO: Implement illegal instruction
 library RiscVDecoder {
   // Contract responsible for decoding the riscv's instructions
@@ -219,105 +216,6 @@ library RiscVDecoder {
       return "SRAI";
     }
     return "illegal insn";
-  }
-
-  /// @notice Given a arithmetic funct3 funct7 insn, finds the func associated.
-  //  Uses binary search for performance.
-  //  @param insn for arithmetic 32 funct3 funct7 field.
-  function arithmetic_funct3_funct7(uint32 insn, uint64 rs1, uint64 rs2) public returns (uint64) {
-    if(insn < 0x0181){
-      if(insn < 0x0081){
-        if(insn < 0x0020){
-          if(insn == 0x0000){
-            /*insn == 0x0000*/
-            // return "ADD";
-            return ArithmeticInstructions.execute_ADD(rs1, rs2);
-          }else if(insn == 0x0001){
-            /*insn == 0x0001*/
-            //return "MUL";
-            return ArithmeticInstructions.execute_MUL(rs1, rs2);
-          }
-        }else if(insn == 0x0080){
-          /*insn == 0x0080*/
-          //return "SLL";
-          return ArithmeticInstructions.execute_SLL(rs1, rs2);
-        }else if(insn == 0x0020){
-          /*insn == 0x0020*/
-          //return "SUB";
-          return ArithmeticInstructions.execute_SUB(rs1, rs2);
-        }
-      }else if(insn > 0x0081){
-        if(insn == 0x0100){
-          /*insn == 0x0100*/
-          //return "SLT";
-          return ArithmeticInstructions.execute_SLT(rs1, rs2);
-        }else if(insn == 0x0180){
-          /*insn == 0x0180*/
-          //return "SLTU";
-          return ArithmeticInstructions.execute_SLTU(rs1, rs2);
-        }else if(insn == 0x0101){
-          /*insn == 0x0101*/
-          //return "MULHSU";
-          return ArithmeticInstructions.execute_MULHSU(rs1, rs2);
-        }
-      }else if(insn == 0x0081){
-        /* insn == 0x0081*/
-        //return "MULH";
-        return ArithmeticInstructions.execute_MULH(rs1, rs2);
-      }
-    }else if(insn > 0x0181){
-      if(insn < 0x02a0){
-        if(insn == 0x0200){
-          /*insn == 0x0200*/
-          //return "XOR";
-          return ArithmeticInstructions.execute_XOR(rs1, rs2);
-        }else if(insn > 0x0201){
-          if(insn ==  0x0280){
-            /*insn == 0x0280*/
-            //return "SRL";
-            return ArithmeticInstructions.execute_SRL(rs1, rs2);
-          }else if(insn == 0x0281){
-            /*insn == 0x0281*/
-            //return "DIVU";
-            return ArithmeticInstructions.execute_DIVU(rs1, rs2);
-          }
-        }else if(insn == 0x0201){
-          /*insn == 0x0201*/
-          //return "DIV";
-          return ArithmeticInstructions.execute_DIV(rs1, rs2);
-        }
-      }else if(insn > 0x02a0){
-        if(insn < 0x0380){
-          if(insn == 0x0300){
-            /*insn == 0x0300*/
-            //return "OR";
-            return ArithmeticInstructions.execute_OR(rs1, rs2);
-          }else if(insn == 0x0301){
-            /*insn == 0x0301*/
-            //return "REM";
-            return ArithmeticInstructions.execute_REM(rs1, rs2);
-          }
-        }else if(insn == 0x0381){
-          /*insn == 0x0381*/
-          //return "REMU";
-          return ArithmeticInstructions.execute_REMU(rs1, rs2);
-        }else if(insn == 0x380){
-          /*insn == 0x0380*/
-          //return "AND";
-          return ArithmeticInstructions.execute_AND(rs1, rs2);
-        }
-      }else if(insn == 0x02a0){
-        /*insn == 0x02a0*/
-        //return "SRA";
-        return ArithmeticInstructions.execute_SRA(rs1, rs2);
-      }
-    }else if(insn == 0x0181){
-      /*insn == 0x0181*/
-      //return "MULHU";
-      return ArithmeticInstructions.execute_MULHU(rs1, rs2);
-    }
-    return 0;
-    //return "illegal insn";
   }
 
   /// @notice Given a fence funct3 insn, finds the func associated.
