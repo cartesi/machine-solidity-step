@@ -10,6 +10,7 @@ import "./RiscVInstructions/ArithmeticInstructions.sol";
 import "./RiscVInstructions/ArithmeticImmediateInstructions.sol";
 
 library Execute {
+  event  Print(string a, uint b);
   function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc) 
   public returns (execute_status) {
     MemoryInteractor mi = MemoryInteractor(_miAddress);
@@ -27,11 +28,12 @@ library Execute {
   public returns (execute_status){
     uint32 rd = RiscVDecoder.insn_rd(insn) * 8; //8 = sizeOf(uint64)
     if(rd != 0){
-      uint64 rs1 = mi.memoryRead(mmIndex, RiscVDecoder.insn_rs1(insn));
+      uint64 rs1 =mi.memoryRead(mmIndex, RiscVDecoder.insn_rs1(insn) * 8);
       int32 imm = RiscVDecoder.insn_I_imm(insn);
 
       mi.memoryWrite(mmIndex, rd, arithmetic_immediate_funct3(insn, rs1, imm));
     }
+    return advance_to_next_insn(mi, mmIndex, pc);
   }
 
   function execute_arithmetic(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
@@ -39,8 +41,8 @@ library Execute {
     uint32 rd = RiscVDecoder.insn_rd(insn) * 8; //8 = sizeOf(uint64)
 
     if(rd != 0){
-      uint64 rs1 = mi.memoryRead(mmIndex, RiscVDecoder.insn_rs1(insn));
-      uint64 rs2 = mi.memoryRead(mmIndex, RiscVDecoder.insn_rs2(insn));
+      uint64 rs1 = mi.memoryRead(mmIndex, 8 * RiscVDecoder.insn_rs1(insn));
+      uint64 rs2 = mi.memoryRead(mmIndex, 8 * RiscVDecoder.insn_rs2(insn));
 
       mi.memoryWrite(mmIndex, rd, arithmetic_funct3_funct7(insn, rs1, rs2));
     }
@@ -50,8 +52,8 @@ library Execute {
   function execute_branch(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
   public returns (execute_status){
 
-    uint64 rs1 = mi.memoryRead(mmIndex, RiscVDecoder.insn_rs1(insn));
-    uint64 rs2 = mi.memoryRead(mmIndex, RiscVDecoder.insn_rs2(insn));
+    uint64 rs1 = mi.memoryRead(mmIndex, 8 * RiscVDecoder.insn_rs1(insn));
+    uint64 rs2 = mi.memoryRead(mmIndex, 8 * RiscVDecoder.insn_rs2(insn));
 
     if(branch_funct3(insn, rs1, rs2)){
       uint64 new_pc = uint64(int64(pc) + int64(RiscVDecoder.insn_B_imm(insn)));
@@ -301,8 +303,7 @@ library Execute {
           return execute_status.retired;
         }else if(opcode == 0x0013){
           /*opcode is 0x0013*/
-          //return "arithmetic_immediate_group";
-          return execute_status.retired;
+          return execute_arithmetic_immediate(mi, mmIndex, insn, pc);
         }
       }else if (opcode > 0x0017){
         if (opcode == 0x001b){
