@@ -55,11 +55,9 @@ contract MonolithicRiscV {
   function step(uint _mmIndex, address _memoryManagerAddress) returns (interpreter_status){
     mmIndex = _mmIndex;
     mm = mmInterface(_memoryManagerAddress);
-    //TO-DO: Check byte order -> riscv is little endian/ solidity is big endian
-
-    // Every read performed by mm.read should be followed by an endianess swap
-    // from little endian to big endian. This is the case because EVM is big
-    // endian but RiscV is little endian.
+    // Every read performed by mm.read or mm . write should be followed by an 
+    // endianess swap from little endian to big endian. This is the case because
+    // EVM is big endian but RiscV is little endian.
     // Reference: riscv-spec-v2.2.pdf - Preface to Version 2.0
     // Reference: Ethereum yellowpaper - Version 69351d5
     //            Appendix H. Virtual Machine Specification
@@ -71,7 +69,7 @@ contract MonolithicRiscV {
     uint64 iflags = BitsManipulationLibrary.uint64_swapEndian(
       uint64(mm.read(mmIndex, ShadowAddresses.get_iflags()))
     );
-    emit Print("iflags", uint(iflags));
+    //emit Print("iflags", uint(iflags));
     if((iflags & 1) != 0){
       //machine is halted
       return interpreter_status.success;
@@ -94,8 +92,9 @@ contract MonolithicRiscV {
         uint64 minstret = BitsManipulationLibrary.uint64_swapEndian(
           uint64(mm.read(mmIndex, ShadowAddresses.get_minstret()))
         );
-        emit Print("minstret", uint(minstret));
-        mm.write(mmIndex, ShadowAddresses.get_minstret(), bytes8(minstret + 1));
+        //emit Print("minstret", uint(minstret));
+        minstret = BitsManipulationLibrary.uint64_swapEndian(minstret + 1);
+        mm.write(mmIndex, ShadowAddresses.get_minstret(), bytes8(minstret ));
       }
     }
     // Last thing that has to be done in a step is to update the cycle counter.
@@ -104,8 +103,10 @@ contract MonolithicRiscV {
     uint64 mcycle = BitsManipulationLibrary.uint64_swapEndian(
       uint64(mm.read(mmIndex, ShadowAddresses.get_mcycle()))
     );
-    emit Print("mcycle", uint(mcycle));
-    mm.write(mmIndex, ShadowAddresses.get_mcycle(), bytes8(mcycle + 1));
+    //emit Print("mcycle", uint(mcycle));
+    mcycle = BitsManipulationLibrary.uint64_swapEndian(mcycle + 1);
+    mm.write(mmIndex, ShadowAddresses.get_mcycle(), bytes8(mcycle));
+    return interpreter_status.success;
   }
 
   function execute_insn(uint32 insn) returns (execute_status) {
@@ -125,23 +126,31 @@ contract MonolithicRiscV {
     // TO-DO: We have to find a way to do this - insn_or_group should return a
     // pointer to a function - that can be either a direct instrunction or a branch
     if(insn_or_group == bytes32("AUIPC")){
+
       execute_auipc(insn);
     }
   }
     //AUIPC forms a 32-bit offset from the 20-bit U-immediate, filling in the 
     // lowest 12 bits with zeros, adds this offset to pc and store the result on rd.
     // Reference: riscv-spec-v2.2.pdf -  Page 14
+
   function execute_auipc(uint32 insn) returns (execute_status){
     uint32 rd = RiscVDecoder.insn_rd(insn);
+
     if(rd != 0){
-      //TO-DO: Check if casts are not having undesired effects
-      mm.write(mmIndex, rd, bytes8(pc + uint64(RiscVDecoder.insn_U_imm(insn))));
+      mm.write(mmIndex, rd, bytes8(BitsManipulationLibrary.uint64_swapEndian(
+        pc + uint64(RiscVDecoder.insn_U_imm(insn)))
+      ));
+     // emit Print("pc", uint(pc));
+     // emit Print("ins_u_imm", uint(RiscVDecoder.insn_U_imm(insn)));
     }
     return advance_to_next_insn();
   }
 
   function advance_to_next_insn() public returns (execute_status){
-    mm.write(mmIndex, ShadowAddresses.get_pc(), bytes8(pc + 4));
+    pc = BitsManipulationLibrary.uint64_swapEndian(pc + 4);
+    mm.write(mmIndex, ShadowAddresses.get_pc(), bytes8(pc));
+    //emit Print("advance_to_next", 0);
     return execute_status.retired;
   }
   // returns fetch status and instruction - if fetch was successfull
@@ -149,11 +158,10 @@ contract MonolithicRiscV {
     bool translateBool;
 
     //read_pc
-    vaddr = BitsManipulationLibrary.uint64_swapEndian(
+    pc = BitsManipulationLibrary.uint64_swapEndian(
       uint64(mm.read(mmIndex, ShadowAddresses.get_pc()))
     );
-    emit Print("vaddr", vaddr);
-    (translateBool, paddr) = translate_virtual_address(vaddr, RiscVConstants.PTE_XWR_CODE_SHIFT());
+    (translateBool, paddr) = translate_virtual_address(pc, RiscVConstants.PTE_XWR_CODE_SHIFT());
 
     //translate_virtual_address failed
     if(!translateBool){
@@ -165,8 +173,8 @@ contract MonolithicRiscV {
     // Returns start and length words from pma
     (pma_entry.start, pma_entry.length) = find_pma_entry(paddr);
 
-    emit Print("pma_entry.start", pma_entry.start);
-    emit Print("pma_entry.length", pma_entry.length);
+    //emit Print("pma_entry.start", pma_entry.start);
+    //emit Print("pma_entry.length", pma_entry.length);
 
     // M flag defines if the pma range is in memory 
     // X flag defines if the pma is executable
@@ -174,15 +182,15 @@ contract MonolithicRiscV {
     // Reference: The Core of Cartesi, v1.02 - section 3.2 the board - page 5.
 
     if(!pma_get_istart_M() || !pma_get_istart_X()){
-
       emit Print("CAUSE_FETCH_FAULT", paddr);
       //raise_exception(CAUSE_FETCH_FAULT)
       return (0, fetch_status.exception);
+
     }
 
-    emit Print("paddr/insn", paddr);
-    //TO-DO: make sure that this is the correct way to read memory
+    //emit Print("paddr/insn", paddr);
     //will this actually return the instruction? Should it be 32bits?
+
     return (uint32(mm.read(mmIndex, paddr)), fetch_status.success);
   }
 
@@ -203,14 +211,14 @@ contract MonolithicRiscV {
     priv = (BitsManipulationLibrary.uint64_swapEndian(
       uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())
     )) >> 2) & 3;
-    emit Print("priv", uint(priv));
+    //emit Print("priv", uint(priv));
 
     //read_mstatus
     mstatus = BitsManipulationLibrary.uint64_swapEndian(
       uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()))
     );
 
-    emit Print("mstatus", uint(mstatus));
+    //emit Print("mstatus", uint(mstatus));
     // When MPRV is set, data loads and stores use privilege in MPP
     // instead of the current privilege level (code access is unaffected)
     //TO-DO: Check this &/&& and shifts
@@ -231,14 +239,14 @@ contract MonolithicRiscV {
     satp = BitsManipulationLibrary.uint64_swapEndian(
       uint64(mm.read(mmIndex, ShadowAddresses.get_satp()))
     );
-    emit Print("satp", satp);
+    //emit Print("satp", satp);
     // In RV64, mode can be
     //   0: Bare: No translation or protection
     //   8: sv39: Page-based 39-bit virtual addressing
     //   9: sv48: Page-based 48-bit virtual addressing
     // Reference: riscv-priv-spec-1.10.pdf - Table 4.3, page 57.
     mode = (satp >> 60) & 0xf;
-    emit Print("mode", uint(mode));
+    //emit Print("mode", uint(mode));
 
     if(mode == 0){
       return(true, vaddr);
@@ -362,7 +370,7 @@ contract MonolithicRiscV {
   // @return public returns the two words that define a PMA - start and length
   function find_pma_entry(uint64 paddr) public returns (uint64, uint64){
 
-    //Hard coded ram address starts at 0x800
+    // Hard coded ram address starts at 0x800
     // In total there are 32 PMAs from processor shadow to Flash disk 7.
     // PMA 0 - describes RAM and is hardcoded to address 0x800
     // PMA 16 - 23 describe flash devices 0-7
@@ -370,28 +378,30 @@ contract MonolithicRiscV {
     // Reference: The Core of Cartesi, v1.02 - Table 3.
     uint64 pmaAddress = 0x800;
     bool foundPma;
-    //TO-DO: Remove this
     //TO-DO: Check lastPma - this is probably wrong.
     uint64 lastPma = 62; // 0 - 31 * 2 words
-    emit Print("paddr", paddr);
+    //emit Print("paddr", paddr);
     for(uint64 i = 0; i < lastPma; i+=2){
-      uint64 start = BitsManipulationLibrary.uint64_swapEndian(
+      uint64 start_word = BitsManipulationLibrary.uint64_swapEndian(
         uint64(mm.read(mmIndex, pmaAddress + (i*8)))
       );
 
-      uint64 length = BitsManipulationLibrary.uint64_swapEndian(
+      uint64 length_word = BitsManipulationLibrary.uint64_swapEndian(
         uint64(mm.read(mmIndex, pmaAddress + ((i * 8 + 8))))
       );
 
-      // TO-DO: Shouldnt have -1 on start
-      if(paddr >= (start - 1) && paddr < (start + length)){
-        emit Print("paddr", uint(paddr));
-        emit Print("start", uint(start));
-        emit Print("length", uint(length));
-        return (start, length);
+      // Both pma_start and pma_length have to be aligned to a 4KiB boundary.
+      // So this leaves the lowest 12 bits for attributes. To find out the actual
+      // start and length of the PMAs it is necessary to clean those attribute bits
+      // Reference: The Core of Cartesi, v1.02 - Figure 2 - Page 5.
+      uint64 pma_start = start_word & 0xfffffffffffff000;
+      uint64 pma_length = length_word & 0xfffffffffffff000;
+
+      if(paddr >= pma_start && paddr < (pma_start + pma_length)){
+        return (start_word, length_word);
       }
 
-      if(length == 0){
+      if(pma_length == 0){
         break;
       }
     }
@@ -414,12 +424,12 @@ contract MonolithicRiscV {
     uint64 mip = BitsManipulationLibrary.uint64_swapEndian(
       uint64(mm.read(mmIndex, ShadowAddresses.get_mip()))
     );
-    emit Print("mip", uint(mip));
+    //emit Print("mip", uint(mip));
 
     uint64 mie = BitsManipulationLibrary.uint64_swapEndian(
       uint64(mm.read(mmIndex, ShadowAddresses.get_mie()))
     );
-    emit Print("mie", uint(mie));
+    //emit Print("mie", uint(mie));
 
     uint32 pending_ints = uint32(mip & mie);
     // if there are no pending interrupts, return 0.
@@ -437,7 +447,7 @@ contract MonolithicRiscV {
     priv = (BitsManipulationLibrary.uint64_swapEndian(
       uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())
     )) >> 2) & 3;
-    emit Print("priv", uint(priv));
+    //emit Print("priv", uint(priv));
     
     if(priv == RiscVConstants.PRV_M()) {
       // MSTATUS is the Machine Status Register - it controls the current
@@ -447,7 +457,7 @@ contract MonolithicRiscV {
       mstatus = BitsManipulationLibrary.uint64_swapEndian(
         uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()))
       );
-      emit Print("mstatus", uint(mstatus));
+      //emit Print("mstatus", uint(mstatus));
 
       if((mstatus & RiscVConstants.MSTATUS_MIE()) != 0){
         enabled_ints = uint32(~BitsManipulationLibrary.uint64_swapEndian(
@@ -458,7 +468,7 @@ contract MonolithicRiscV {
       mstatus = BitsManipulationLibrary.uint64_swapEndian(
         uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()))
       );
-      emit Print("mstatus", uint(mstatus));
+      //emit Print("mstatus", uint(mstatus));
       // MIDELEG: Machine trap delegation register
       // mideleg defines if a interrupt can be proccessed by a lower privilege
       // level. If mideleg bit is set, the trap will delegated to the S-Mode.
@@ -466,7 +476,7 @@ contract MonolithicRiscV {
       uint64 mideleg = BitsManipulationLibrary.uint64_swapEndian(
         uint64(mm.read(mmIndex, ShadowAddresses.get_mideleg()))
       );
-      emit Print("mideleg", uint(mideleg));
+      //emit Print("mideleg", uint(mideleg));
       enabled_ints = uint32(~mideleg);
 
 
@@ -502,7 +512,7 @@ contract MonolithicRiscV {
   // Reference: The Core of Cartesi, v1.02 - figure 2.
   function pma_get_istart_M() public returns(bool){
     //M is pma_entry fisrt bit
-    emit Print("pma_get_istart_M", pma_entry.start & 1);
+    //emit Print("pma_get_istart_M", pma_entry.start & 1);
     return pma_entry.start & 1 == 1;
   }
 
@@ -511,7 +521,7 @@ contract MonolithicRiscV {
   // Reference: The Core of Cartesi, v1.02 - figure 2.
   function pma_get_istart_X() public returns(bool){
     //X is pma_entry sixth bit (index 5)
-    emit Print("pma_get_istart_X", (pma_entry.start >> 5) & 1);
+    //emit Print("pma_get_istart_X", (pma_entry.start >> 5) & 1);
     return (pma_entry.start >> 5) & 1 == 1;
   }
   //enums
