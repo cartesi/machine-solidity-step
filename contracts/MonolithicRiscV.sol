@@ -1,25 +1,26 @@
 /// @title Monolithic RiscV
-pragma solidity 0.4.24;
+pragma solidity ^0.5.0;
 
 //Libraries
 import "./ShadowAddresses.sol";
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
+import "./lib/BitsManipulationLibrary.sol";
+
 contract mmInterface {
-  function read(uint256 _index, uint64 _address) public view returns (bytes8);
-  function write(uint256 _index, uint64 _address, bytes8 _value) public;
-  function finishReplayPhase(uint256 _index) public;
+  function read(uint256 _index, uint64 _address) external returns (bytes8);
+  function write(uint256 _index, uint64 _address, bytes8 _value) external;
+  function finishReplayPhase(uint256 _index) external;
 }
 
 //TO-DO: use instantiator pattern so we can always use same instance of mm/pc etc
 contract MonolithicRiscV {
-  event Print(string message);
+  event Print(string message, uint value);
 
   //Real Storage variables
   PMAEntry pma_entry; //cannot return struct without experimental pragma
   mmInterface mm;
-  uint256 mmIndex;
-
+  uint256 mmIndex; //this has to be removed
   //Should not be Storage - but stack too deep
   //this will probably be ok when we split it into a bunch of different calls
   uint64 pc = 0;
@@ -50,16 +51,28 @@ contract MonolithicRiscV {
     bool IW;
   }
 
+
   function step(uint _mmIndex, address _memoryManagerAddress) returns (interpreter_status){
     mmIndex = _mmIndex;
     mm = mmInterface(_memoryManagerAddress);
     //TO-DO: Check byte order -> riscv is little endian/ solidity is big endian
 
+    // Every read performed by mm.read should be followed by an endianess swap
+    // from little endian to big endian. This is the case because EVM is big
+    // endian but RiscV is little endian.
+    // Reference: riscv-spec-v2.2.pdf - Preface to Version 2.0
+    // Reference: Ethereum yellowpaper - Version 69351d5
+    //            Appendix H. Virtual Machine Specification
+
     // Read iflags register and check its H flag, to see if machine is halted.
     // If machine is halted - nothing else to do. H flag is stored on the least
     // signficant bit on iflags register.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
-    if( (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) & 1) != 0){
+    uint64 iflags = BitsManipulationLibrary.uint64_swapEndian(
+      uint64(mm.read(mmIndex, ShadowAddresses.get_iflags()))
+    );
+    emit Print("iflags", uint(iflags));
+    if((iflags & 1) != 0){
       //machine is halted
       return interpreter_status.success;
     }
@@ -78,14 +91,20 @@ contract MonolithicRiscV {
         // If execute_insn finishes successfully we need to update the number of
         // retired instructions. This number is stored on minstret CSR.
         // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
-        uint64 minstret = uint64(mm.read(mmIndex, ShadowAddresses.get_minstret()));
+        uint64 minstret = BitsManipulationLibrary.uint64_swapEndian(
+          uint64(mm.read(mmIndex, ShadowAddresses.get_minstret()))
+        );
+        emit Print("minstret", uint(minstret));
         mm.write(mmIndex, ShadowAddresses.get_minstret(), bytes8(minstret + 1));
       }
     }
     // Last thing that has to be done in a step is to update the cycle counter.
     // The cycle counter is stored on mcycle CSR.
     // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
-    uint64 mcycle = uint64(mm.read(mmIndex, ShadowAddresses.get_mcycle()));
+    uint64 mcycle = BitsManipulationLibrary.uint64_swapEndian(
+      uint64(mm.read(mmIndex, ShadowAddresses.get_mcycle()))
+    );
+    emit Print("mcycle", uint(mcycle));
     mm.write(mmIndex, ShadowAddresses.get_mcycle(), bytes8(mcycle + 1));
   }
 
@@ -121,19 +140,19 @@ contract MonolithicRiscV {
     return advance_to_next_insn();
   }
 
-  function advance_to_next_insn() returns (execute_status){
+  function advance_to_next_insn() public returns (execute_status){
     mm.write(mmIndex, ShadowAddresses.get_pc(), bytes8(pc + 4));
     return execute_status.retired;
   }
-
   // returns fetch status and instruction - if fetch was successfull
   function fetch_insn() returns (uint32, fetch_status){
-    emit Print("fetch");
     bool translateBool;
 
     //read_pc
-    vaddr = uint64(mm.read(mmIndex, ShadowAddresses.get_pc()));
-
+    vaddr = BitsManipulationLibrary.uint64_swapEndian(
+      uint64(mm.read(mmIndex, ShadowAddresses.get_pc()))
+    );
+    emit Print("vaddr", vaddr);
     (translateBool, paddr) = translate_virtual_address(vaddr, RiscVConstants.PTE_XWR_CODE_SHIFT());
 
     //translate_virtual_address failed
@@ -146,14 +165,22 @@ contract MonolithicRiscV {
     // Returns start and length words from pma
     (pma_entry.start, pma_entry.length) = find_pma_entry(paddr);
 
+    emit Print("pma_entry.start", pma_entry.start);
+    emit Print("pma_entry.length", pma_entry.length);
+
     // M flag defines if the pma range is in memory 
     // X flag defines if the pma is executable
     // If the pma is not memory or not executable - this is a pma violation
     // Reference: The Core of Cartesi, v1.02 - section 3.2 the board - page 5.
+
     if(!pma_get_istart_M() || !pma_get_istart_X()){
+
+      emit Print("CAUSE_FETCH_FAULT", paddr);
       //raise_exception(CAUSE_FETCH_FAULT)
       return (0, fetch_status.exception);
     }
+
+    emit Print("paddr/insn", paddr);
     //TO-DO: make sure that this is the correct way to read memory
     //will this actually return the instruction? Should it be 32bits?
     return (uint32(mm.read(mmIndex, paddr)), fetch_status.success);
@@ -166,17 +193,24 @@ contract MonolithicRiscV {
 
   // Virtual Address Translation proccess is defined, step by step on the following Reference:
   // Reference: riscv-priv-spec-1.10.pdf - Section 4.3.2, page 62.
-  function translate_virtual_address(uint64 vaddr, int xwr_shift) returns(bool, uint64){
+  function translate_virtual_address(uint64 vaddr, int xwr_shift) public returns(bool, uint64){
     //TO-DO: check shift + mask
     //TO-DO: use bitmanipulation right shift
 
     // Reads privilege level on iflags register. The privilege level is located
     // on bits 2 and 3.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
-    priv = (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) >> 2) & 3;
-    //read_mstatus
-    mstatus = uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()));
+    priv = (BitsManipulationLibrary.uint64_swapEndian(
+      uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())
+    )) >> 2) & 3;
+    emit Print("priv", uint(priv));
 
+    //read_mstatus
+    mstatus = BitsManipulationLibrary.uint64_swapEndian(
+      uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()))
+    );
+
+    emit Print("mstatus", uint(mstatus));
     // When MPRV is set, data loads and stores use privilege in MPP
     // instead of the current privilege level (code access is unaffected)
     //TO-DO: Check this &/&& and shifts
@@ -194,14 +228,18 @@ contract MonolithicRiscV {
     // Holds MODE, Physical page number (PPN) and address space identifier (ASID)
     // MODE is located on bits 60 to 63 for RV64.
     // Reference: riscv-priv-spec-1.10.pdf - Section 4.1.12, page 56.
-    satp = uint64(mm.read(mmIndex, ShadowAddresses.get_satp()));
-
+    satp = BitsManipulationLibrary.uint64_swapEndian(
+      uint64(mm.read(mmIndex, ShadowAddresses.get_satp()))
+    );
+    emit Print("satp", satp);
     // In RV64, mode can be
     //   0: Bare: No translation or protection
     //   8: sv39: Page-based 39-bit virtual addressing
     //   9: sv48: Page-based 48-bit virtual addressing
     // Reference: riscv-priv-spec-1.10.pdf - Table 4.3, page 57.
     mode = (satp >> 60) & 0xf;
+    emit Print("mode", uint(mode));
+
     if(mode == 0){
       return(true, vaddr);
     } else if(mode < 8 || mode > 9){
@@ -321,8 +359,8 @@ contract MonolithicRiscV {
   // to adjust this code.
 
   // @param physical address to look for
-  // @return returns the two words that define a PMA - start and length
-  function find_pma_entry(uint64 paddr) returns (uint64, uint64){
+  // @return public returns the two words that define a PMA - start and length
+  function find_pma_entry(uint64 paddr) public returns (uint64, uint64){
 
     //Hard coded ram address starts at 0x800
     // In total there are 32 PMAs from processor shadow to Flash disk 7.
@@ -332,23 +370,34 @@ contract MonolithicRiscV {
     // Reference: The Core of Cartesi, v1.02 - Table 3.
     uint64 pmaAddress = 0x800;
     bool foundPma;
-
+    //TO-DO: Remove this
     //TO-DO: Check lastPma - this is probably wrong.
     uint64 lastPma = 62; // 0 - 31 * 2 words
-
+    emit Print("paddr", paddr);
     for(uint64 i = 0; i < lastPma; i+=2){
-      uint64 start = uint64(mm.read(mmIndex, pmaAddress + (i*8)));
-      uint64 length = uint64(mm.read(mmIndex, pmaAddress + ((i * 8 + 8))));
-      if(paddr >= start && paddr < (start + length)){
+      uint64 start = BitsManipulationLibrary.uint64_swapEndian(
+        uint64(mm.read(mmIndex, pmaAddress + (i*8)))
+      );
+
+      uint64 length = BitsManipulationLibrary.uint64_swapEndian(
+        uint64(mm.read(mmIndex, pmaAddress + ((i * 8 + 8))))
+      );
+
+      // TO-DO: Shouldnt have -1 on start
+      if(paddr >= (start - 1) && paddr < (start + length)){
+        emit Print("paddr", uint(paddr));
+        emit Print("start", uint(start));
+        emit Print("length", uint(length));
         return (start, length);
       }
+
       if(length == 0){
         break;
       }
     }
   }
 
-  function raise_interrupt_if_any(){
+  function raise_interrupt_if_any() public {
     uint32 mask = get_pending_irq_mask();
     if(mask != 0) {
       uint64 irq_num = ilog2(mask);
@@ -361,9 +410,16 @@ contract MonolithicRiscV {
   // mip register contains information on pending interrupts.
   // mie register contains the interrupt enabled bits.
   // Reference: riscv-privileged-v1.10 - section 3.1.14 - page 28.
-  function get_pending_irq_mask() returns (uint32){
-    uint64 mip = uint64(mm.read(mmIndex, ShadowAddresses.get_mip()));
-    uint64 mie = uint64(mm.read(mmIndex, ShadowAddresses.get_mie()));
+  function get_pending_irq_mask() public returns (uint32){
+    uint64 mip = BitsManipulationLibrary.uint64_swapEndian(
+      uint64(mm.read(mmIndex, ShadowAddresses.get_mip()))
+    );
+    emit Print("mip", uint(mip));
+
+    uint64 mie = BitsManipulationLibrary.uint64_swapEndian(
+      uint64(mm.read(mmIndex, ShadowAddresses.get_mie()))
+    );
+    emit Print("mie", uint(mie));
 
     uint32 pending_ints = uint32(mip & mie);
     // if there are no pending interrupts, return 0.
@@ -378,23 +434,39 @@ contract MonolithicRiscV {
     // Read privilege level on iflags register.
     // The privilege level is represented by bits 2 and 3 on iflags register.
     // Reference: The Core of Cartesi, v1.02 - figure 1.
-    priv = (uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())) >> 2) & 3;
+    priv = (BitsManipulationLibrary.uint64_swapEndian(
+      uint64(mm.read(mmIndex, ShadowAddresses.get_iflags())
+    )) >> 2) & 3;
+    emit Print("priv", uint(priv));
+    
     if(priv == RiscVConstants.PRV_M()) {
       // MSTATUS is the Machine Status Register - it controls the current
       // operating state. The MIE is an interrupt-enable bit for machine mode.
       // MIE for 64bit is stored on location 3 - according to:
       // Reference: riscv-privileged-v1.10 - figure 3.7 - page 20.
-      mstatus = uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()));
+      mstatus = BitsManipulationLibrary.uint64_swapEndian(
+        uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()))
+      );
+      emit Print("mstatus", uint(mstatus));
+
       if((mstatus & RiscVConstants.MSTATUS_MIE()) != 0){
-        enabled_ints = uint32(~uint64(mm.read(mmIndex, ShadowAddresses.get_mideleg())));
+        enabled_ints = uint32(~BitsManipulationLibrary.uint64_swapEndian(
+          uint64(mm.read(mmIndex, ShadowAddresses.get_mideleg())))
+        );
       }
     }else if(priv == RiscVConstants.PRV_S()){
-      mstatus = uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()));
+      mstatus = BitsManipulationLibrary.uint64_swapEndian(
+        uint64(mm.read(mmIndex, ShadowAddresses.get_mstatus()))
+      );
+      emit Print("mstatus", uint(mstatus));
       // MIDELEG: Machine trap delegation register
       // mideleg defines if a interrupt can be proccessed by a lower privilege
       // level. If mideleg bit is set, the trap will delegated to the S-Mode.
       // Reference: riscv-privileged-v1.10 - Section 3.1.13 - page 27.
-      uint64 mideleg = uint64(mm.read(mmIndex, ShadowAddresses.get_mideleg()));
+      uint64 mideleg = BitsManipulationLibrary.uint64_swapEndian(
+        uint64(mm.read(mmIndex, ShadowAddresses.get_mideleg()))
+      );
+      emit Print("mideleg", uint(mideleg));
       enabled_ints = uint32(~mideleg);
 
 
@@ -411,7 +483,7 @@ contract MonolithicRiscV {
     return pending_ints & enabled_ints;
   }
   //TO-DO: optmize log2 function
-  function ilog2(uint32 v) returns(uint64){
+  function ilog2(uint32 v) public returns(uint64){
     //cpp emulator code:
     //return 31 - __builtin_clz(v)
 
@@ -428,16 +500,18 @@ contract MonolithicRiscV {
   // M bit defines if the range is memory
   // The flag is pma_entry start's word first bit
   // Reference: The Core of Cartesi, v1.02 - figure 2.
-  function pma_get_istart_M() returns(bool){
+  function pma_get_istart_M() public returns(bool){
     //M is pma_entry fisrt bit
+    emit Print("pma_get_istart_M", pma_entry.start & 1);
     return pma_entry.start & 1 == 1;
   }
 
   // X bit defines if the range is executable
   // The flag is pma_entry start's word on position 5.
   // Reference: The Core of Cartesi, v1.02 - figure 2.
-  function pma_get_istart_X() returns(bool){
+  function pma_get_istart_X() public returns(bool){
     //X is pma_entry sixth bit (index 5)
+    emit Print("pma_get_istart_X", (pma_entry.start >> 5) & 1);
     return (pma_entry.start >> 5) & 1 == 1;
   }
   //enums

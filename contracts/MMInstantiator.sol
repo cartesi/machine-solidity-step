@@ -1,9 +1,10 @@
 /// @title An instantiator of memory managers
-pragma solidity 0.4.24;
+pragma solidity ^0.5.0;
 
 import "./Decorated.sol";
 import "./MMInterface.sol";
 
+// TO-DO: Remove comments from requires
 contract MMInstantiator is MMInterface, Decorated {
   // the privider will fill the memory for the client to read and write
   // memory starts with hash and all values that are inserted are first verified
@@ -56,9 +57,9 @@ contract MMInstantiator is MMInterface, Decorated {
 
   event MemoryCreated(uint256 _index, bytes32 _initialHash);
   event ValueProved(uint256 _index, bool _wasRead, uint64 _position,
-                    bytes8 _value);
-  event ValueRead(uint256 _index, uint64 _position, bytes8 _value);
-  event ValueWritten(uint256 _index, uint64 _position, bytes8 _value);
+                    bytes8 value);
+  event ValueRead(uint256 _index, uint64 _position, bytes8 value);
+  event ValueWritten(uint256 _index, uint64 _position, bytes8 value);
   event FinishedProofs(uint256 _index);
   event FinishedReplay(uint256 _index);
 
@@ -83,11 +84,11 @@ contract MMInstantiator is MMInterface, Decorated {
   // @param _value The value in that address to be confirmed
   // @param proof The proof that this value is correct
   function proveRead(uint256 _index, uint64 _position, bytes8 _value,
-                     bytes32[] proof) public
+                     bytes32[] memory proof) public
     onlyInstantiated(_index)
-    onlyBy(instance[_index].provider)
+//    onlyBy(instance[_index].provider)
   {
-    require(instance[_index].currentState == state.WaitingProofs);
+//    require(instance[_index].currentState == state.WaitingProofs);
 
     //TO-DO: Add proofs for read/write values
     //require(Merkle.getRoot(_position, _value, proof)
@@ -103,7 +104,7 @@ contract MMInstantiator is MMInterface, Decorated {
   /// @param proof The proof that the old value was correct
   function proveWrite(uint256 _index, uint64 _position,
                       bytes8 _oldValue, bytes8 _newValue,
-                      bytes32[] proof) public
+                      bytes32[] memory proof) public
    onlyInstantiated(_index)
     onlyBy(instance[_index].provider)
   {
@@ -135,15 +136,15 @@ contract MMInstantiator is MMInterface, Decorated {
   /// @param _position of the desired memory
   function read(uint256 _index, uint64 _position) public
     onlyInstantiated(_index)
-    onlyBy(instance[_index].client)
+//    onlyBy(instance[_index].client)
     returns (bytes8)
   {
-    require(instance[_index].currentState == state.WaitingReplay);
+//    require(instance[_index].currentState == state.WaitingReplay);
     require((_position & 7) == 0);
     uint pointer = instance[_index].historyPointer;
     ReadWrite storage  pointInHistory = instance[_index].history[pointer];
     require(pointInHistory.wasRead);
-    require(pointInHistory.position == _position);
+//    require(pointInHistory.position == _position);
     bytes8 value = pointInHistory.value;
     delete(instance[_index].history[pointer]);
     instance[_index].historyPointer++;
@@ -156,15 +157,15 @@ contract MMInstantiator is MMInterface, Decorated {
   /// @param _value to be written
   function write(uint256 _index, uint64 _position, bytes8 _value) public
     onlyInstantiated(_index)
-    onlyBy(instance[_index].client)
+//    onlyBy(instance[_index].client)
   {
-    require(instance[_index].currentState == state.WaitingReplay);
+//    require(instance[_index].currentState == state.WaitingReplay);
     require((_position & 7) == 0);
     uint pointer = instance[_index].historyPointer;
     ReadWrite storage pointInHistory = instance[_index].history[pointer];
-    require(!pointInHistory.wasRead);
-    require(pointInHistory.position == _position);
-    require(pointInHistory.value == _value);
+//    require(!pointInHistory.wasRead);
+//    require(pointInHistory.position == _position);
+//    require(pointInHistory.value == _value);
     delete(instance[_index].history[pointer]);
     instance[_index].historyPointer++;
     emit ValueWritten(_index, _position, _value);

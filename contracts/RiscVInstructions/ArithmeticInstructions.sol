@@ -1,6 +1,6 @@
 /// @title ArithmeticInstructions
 
-pragma solidity 0.4.24;
+pragma solidity ^0.5.0;
 
 // Overflow/Underflow behaviour in solidity is to allow them to happen freely.
 // This mimics the RiscV behaviour, so we can use the arithmetic operators normally.
