@@ -1,5 +1,5 @@
 // @title RiscVMain
-pragma solidity 0.4.24;
+pragma solidity ^0.5.0;
 
 import "./RiscVDecoder.sol";
 import "./RiscVMachineState.sol";
@@ -41,7 +41,7 @@ contract RiscVMain {
     return execute_next_insn(pc);
   }
 
-  function execute_arithmetic(uint64 pc, uint32 insn) returns (execute_status){
+  function execute_arithmetic(uint64 pc, uint32 insn) public returns (execute_status){
     uint32 rd = RiscVDecoder.insn_rd(insn);
     if(rd != 0){
       uint64 rs1 = a.x[RiscVDecoder.insn_rs1(insn)]; //read_register rs1

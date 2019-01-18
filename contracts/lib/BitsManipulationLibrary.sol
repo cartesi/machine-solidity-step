@@ -1,5 +1,5 @@
 /// @title Bits Manipulation Library
-pragma solidity 0.4.24;
+pragma solidity ^0.5.0;
 
 //change to lib after testing
 library BitsManipulationLibrary {
