@@ -262,21 +262,14 @@ contract('Step', function(accounts){
         from: accounts[0],
         gas: 2000000
       });
-      response = await riscV.step(index, mi.address, {
-         from: accounts[1],
-         gas: 9007199254740991
-       });
-       expect(4).to.equal(0);
-
     })
-
-    //    it('Running ADDI step', async function() {
-    //      response = await riscV.step(index, mi.address, {
-    //        from: accounts[1],
-    //        gas: 9007199254740991
-    //      });
-    //      expect(4).to.equal(0);
-    //    });
+    it('Running ADDI step', async function() {
+      response = await riscV.step(index, mi.address, {
+        from: accounts[1],
+        gas: 9007199254740991
+      });
+      expect(4).to.equal(0);
+    });
   });
 });
 
