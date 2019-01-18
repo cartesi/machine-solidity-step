@@ -52,6 +52,7 @@ module.exports = function(deployer) {
   deployer.link(ShadowAddresses, Execute);
   deployer.link(RiscVConstants, Execute);
   deployer.link(BranchInstructions, Execute);
+  deployer.link(ArithmeticInstructions, Execute);
   deployer.deploy(Execute);
   deployer.link(Execute, Step);
   

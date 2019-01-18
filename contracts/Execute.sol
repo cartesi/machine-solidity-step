@@ -6,6 +6,7 @@ import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
 import "../contracts/MemoryInteractor.sol";
 import "./RiscVInstructions/BranchInstructions.sol";
+import "./RiscVInstructions/ArithmeticInstructions.sol";
 
 library Execute {
   function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc) 
@@ -22,11 +23,24 @@ library Execute {
      return opinsn(mi, mmIndex, insn, pc);
   }
 
+  function execute_arithmetic(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
+  public returns (execute_status){
+    uint32 rd = RiscVDecoder.insn_rd(insn) * 8; //8 = sizeOf(uint64)
+
+    if(rd != 0){
+      uint64 rs1 = mi.memoryRead(mmIndex, RiscVDecoder.insn_rs1(insn));
+      uint64 rs2 = mi.memoryRead(mmIndex, RiscVDecoder.insn_rs2(insn));
+
+      mi.memoryWrite(mmIndex, rd, arithmetic_funct3_funct7(insn, rs1, rs2));
+    }
+    return advance_to_next_insn(mi, mmIndex, pc);
+  }
+
   function execute_branch(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
   public returns (execute_status){
-    
-    uint64 rs1 = RiscVDecoder.insn_rs1(insn);
-    uint64 rs2 = RiscVDecoder.insn_rs2(insn);
+
+    uint64 rs1 = mi.memoryRead(mmIndex, RiscVDecoder.insn_rs1(insn));
+    uint64 rs2 = mi.memoryRead(mmIndex, RiscVDecoder.insn_rs2(insn));
 
     if(branch_funct3(insn, rs1, rs2)){
       uint64 new_pc = uint64(int64(pc) + int64(RiscVDecoder.insn_B_imm(insn)));
@@ -71,6 +85,107 @@ library Execute {
     //emit Print("advance_to_next", 0);
     return execute_status.retired;
   }
+
+  /// @notice Given a arithmetic funct3 funct7 insn, finds the func associated.
+  //  Uses binary search for performance.
+  //  @param insn for arithmetic 32 funct3 funct7 field.
+  function arithmetic_funct3_funct7(uint32 insn, uint64 rs1, uint64 rs2) public returns (uint64) {
+    uint32 funct3_funct7 = RiscVDecoder.insn_funct3_funct7(insn);
+    if(funct3_funct7 < 0x0181){
+      if(funct3_funct7 < 0x0081){
+        if(funct3_funct7 < 0x0020){
+          if(funct3_funct7 == 0x0000){
+            /*funct3_funct7 == 0x0000*/
+            // return "ADD";
+            return ArithmeticInstructions.execute_ADD(rs1, rs2);
+          }else if(funct3_funct7 == 0x0001){
+            /*funct3_funct7 == 0x0001*/
+            //return "MUL";
+            return ArithmeticInstructions.execute_MUL(rs1, rs2);
+          }
+        }else if(funct3_funct7 == 0x0080){
+          /*funct3_funct7 == 0x0080*/
+          //return "SLL";
+          return ArithmeticInstructions.execute_SLL(rs1, rs2);
+        }else if(funct3_funct7 == 0x0020){
+          /*funct3_funct7 == 0x0020*/
+          //return "SUB";
+          return ArithmeticInstructions.execute_SUB(rs1, rs2);
+        }
+      }else if(funct3_funct7 > 0x0081){
+        if(funct3_funct7 == 0x0100){
+          /*funct3_funct7 == 0x0100*/
+          //return "SLT";
+          return ArithmeticInstructions.execute_SLT(rs1, rs2);
+        }else if(funct3_funct7 == 0x0180){
+          /*funct3_funct7 == 0x0180*/
+          //return "SLTU";
+          return ArithmeticInstructions.execute_SLTU(rs1, rs2);
+        }else if(funct3_funct7 == 0x0101){
+          /*funct3_funct7 == 0x0101*/
+          //return "MULHSU";
+          return ArithmeticInstructions.execute_MULHSU(rs1, rs2);
+        }
+      }else if(funct3_funct7 == 0x0081){
+        /* funct3_funct7 == 0x0081*/
+        //return "MULH";
+        return ArithmeticInstructions.execute_MULH(rs1, rs2);
+      }
+    }else if(funct3_funct7 > 0x0181){
+      if(funct3_funct7 < 0x02a0){
+        if(funct3_funct7 == 0x0200){
+          /*funct3_funct7 == 0x0200*/
+          //return "XOR";
+          return ArithmeticInstructions.execute_XOR(rs1, rs2);
+        }else if(funct3_funct7 > 0x0201){
+          if(funct3_funct7 ==  0x0280){
+            /*funct3_funct7 == 0x0280*/
+            //return "SRL";
+            return ArithmeticInstructions.execute_SRL(rs1, rs2);
+          }else if(funct3_funct7 == 0x0281){
+            /*funct3_funct7 == 0x0281*/
+            //return "DIVU";
+            return ArithmeticInstructions.execute_DIVU(rs1, rs2);
+          }
+        }else if(funct3_funct7 == 0x0201){
+          /*funct3_funct7 == 0x0201*/
+          //return "DIV";
+          return ArithmeticInstructions.execute_DIV(rs1, rs2);
+        }
+      }else if(funct3_funct7 > 0x02a0){
+        if(funct3_funct7 < 0x0380){
+          if(funct3_funct7 == 0x0300){
+            /*funct3_funct7 == 0x0300*/
+            //return "OR";
+            return ArithmeticInstructions.execute_OR(rs1, rs2);
+          }else if(funct3_funct7 == 0x0301){
+            /*funct3_funct7 == 0x0301*/
+            //return "REM";
+            return ArithmeticInstructions.execute_REM(rs1, rs2);
+          }
+        }else if(funct3_funct7 == 0x0381){
+          /*funct3_funct7 == 0x0381*/
+          //return "REMU";
+          return ArithmeticInstructions.execute_REMU(rs1, rs2);
+        }else if(funct3_funct7 == 0x380){
+          /*funct3_funct7 == 0x0380*/
+          //return "AND";
+          return ArithmeticInstructions.execute_AND(rs1, rs2);
+        }
+      }else if(funct3_funct7 == 0x02a0){
+        /*funct3_funct7 == 0x02a0*/
+        //return "SRA";
+        return ArithmeticInstructions.execute_SRA(rs1, rs2);
+      }
+    }else if(funct3_funct7 == 0x0181){
+      /*funct3_funct7 == 0x0181*/
+      //return "MULHU";
+      return ArithmeticInstructions.execute_MULHU(rs1, rs2);
+    }
+    return 0;
+    //return "illegal insn";
+  }
+
 
   /// @notice Given a branch funct3 group instruction, finds the function
   //  associated with it. Uses binary search for performance.
