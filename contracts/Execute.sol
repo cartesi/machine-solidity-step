@@ -16,7 +16,7 @@ library Execute {
     MemoryInteractor mi = MemoryInteractor(_miAddress);
     uint256 mmIndex = _mmIndex;
 
-        // Find instruction associated with that opcode
+    // Find instruction associated with that opcode
     // Sometimes the opcode fully defines the associated instructions, but most
     // of the times it only specifies which group it belongs to.
     // For example, an opcode of: 01100111 is always a LUI instruction but an
@@ -26,25 +26,25 @@ library Execute {
   }
   function execute_arithmetic_immediate(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
   public returns (execute_status){
-    uint32 rd = RiscVDecoder.insn_rd(insn) * 8; //8 = sizeOf(uint64)
+    uint32 rd = RiscVDecoder.insn_rd(insn);
     if(rd != 0){
-      uint64 rs1 =mi.memoryRead(mmIndex, RiscVDecoder.insn_rs1(insn) * 8);
+      uint64 rs1 = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
       int32 imm = RiscVDecoder.insn_I_imm(insn);
 
-      mi.memoryWrite(mmIndex, rd, arithmetic_immediate_funct3(insn, rs1, imm));
+      mi.write_x(mmIndex, rd, arithmetic_immediate_funct3(insn, rs1, imm));
     }
     return advance_to_next_insn(mi, mmIndex, pc);
   }
 
   function execute_arithmetic(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
   public returns (execute_status){
-    uint32 rd = RiscVDecoder.insn_rd(insn) * 8; //8 = sizeOf(uint64)
+    uint32 rd = RiscVDecoder.insn_rd(insn);
 
     if(rd != 0){
-      uint64 rs1 = mi.memoryRead(mmIndex, 8 * RiscVDecoder.insn_rs1(insn));
-      uint64 rs2 = mi.memoryRead(mmIndex, 8 * RiscVDecoder.insn_rs2(insn));
+      uint64 rs1 = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
+      uint64 rs2 = mi.read_x(mmIndex, RiscVDecoder.insn_rs2(insn));
 
-      mi.memoryWrite(mmIndex, rd, arithmetic_funct3_funct7(insn, rs1, rs2));
+      mi.write_x(mmIndex, rd, arithmetic_funct3_funct7(insn, rs1, rs2));
     }
     return advance_to_next_insn(mi, mmIndex, pc);
   }
@@ -52,8 +52,8 @@ library Execute {
   function execute_branch(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
   public returns (execute_status){
 
-    uint64 rs1 = mi.memoryRead(mmIndex, 8 * RiscVDecoder.insn_rs1(insn));
-    uint64 rs2 = mi.memoryRead(mmIndex, 8 * RiscVDecoder.insn_rs2(insn));
+    uint64 rs1 = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
+    uint64 rs2 = mi.read_x(mmIndex, RiscVDecoder.insn_rs2(insn));
 
     if(branch_funct3(insn, rs1, rs2)){
       uint64 new_pc = uint64(int64(pc) + int64(RiscVDecoder.insn_B_imm(insn)));
@@ -71,12 +71,10 @@ library Execute {
   // Reference: riscv-spec-v2.2.pdf -  Page 14
   function execute_auipc(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
   public returns (execute_status){
-    uint32 rd = RiscVDecoder.insn_rd(insn) * 8; //8 = sizeOf(uint64)
-    //emit Print("execute_auipc RD", uint(rd));
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+
     if(rd != 0){
-      mi.memoryWrite(mmIndex, rd, pc + uint64(RiscVDecoder.insn_U_imm(insn)));
-     // emit Print("pc", uint(pc));
-     // emit Print("ins_u_imm", uint(RiscVDecoder.insn_U_imm(insn)));
+      mi.write_x(mmIndex, rd, pc + uint64(RiscVDecoder.insn_U_imm(insn)));
     }
     return advance_to_next_insn(mi, mmIndex, pc);
   }
