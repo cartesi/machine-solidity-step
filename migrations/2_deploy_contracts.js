@@ -4,6 +4,7 @@ var ShadowAddresses = artifacts.require("./ShadowAddresses.sol");
 var RiscVConstants = artifacts.require("./RiscVConstants.sol");
 var BranchInstructions = artifacts.require("./RiscVInstructions/BranchInstructions.sol");
 var ArithmeticInstructions = artifacts.require("./RiscVInstructions/ArithmeticInstructions.sol");
+var ArithmeticImmediateInstructions = artifacts.require("./RiscVInstructions/ArithmeticImmediateInstructions.sol");
 var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.sol");
 var Execute = artifacts.require("./Execute.sol");
 var Fetch = artifacts.require("./Fetch.sol");
@@ -23,6 +24,7 @@ module.exports = function(deployer) {
   deployer.deploy(RiscVConstants);
   deployer.deploy(BranchInstructions);
   deployer.deploy(ArithmeticInstructions);
+  deployer.deploy(ArithmeticImmediateInstructions);
   deployer.deploy(BitsManipulationLibrary);
 
 
@@ -53,6 +55,7 @@ module.exports = function(deployer) {
   deployer.link(RiscVConstants, Execute);
   deployer.link(BranchInstructions, Execute);
   deployer.link(ArithmeticInstructions, Execute);
+  deployer.link(ArithmeticImmediateInstructions, Execute);
   deployer.deploy(Execute);
   deployer.link(Execute, Step);
   

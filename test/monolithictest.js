@@ -19,12 +19,14 @@ contract('Step', function(accounts){
     let mmAddress;
     let miAddress;
     let index;
+    let riscV;
+    let mm;
 
-    it('Writing to MM manager', async function() {
+    it('Writing to MM manager - AUIPC step', async function() {
       let initialHash = "0x00";
       //acount[0] is provider
       //account[1] is client
-      let mm = await MMInstantiator.new({
+      mm = await MMInstantiator.new({
        from: accounts[0], gas: 2000000
       });
       mmAddress = mm.address;
@@ -126,39 +128,15 @@ contract('Step', function(accounts){
       });
     })
     it('Deploying step contracts', async function() {
-      let riscV = await Step.new({
-        from: accounts[0], gas: 9007199254740991
-      });
-
-      let fetchContract = await Fetch.new({
-        from: accounts[0], gas: 9007199254740991
-      });
-
-      let executeContract = await Execute.new({
+      riscV = await Step.new({
         from: accounts[0], gas: 9007199254740991
       });
 
       let addressTracker = await AddressTracker.new({
-           from: accounts[0], gas: 9007199254740991
-      });
-
-      let interrupContract = await Interrupts.new({
-        from: accounts[0], gas: 9007199254740991
-      });
-
-      response = await addressTracker.setFetchAddress(fetchContract.address, {
-        from: accounts[0], gas: 9007199254740991
-      });
-
-      response = await addressTracker.setExecuteAddress(executeContract.address, {
         from: accounts[0], gas: 9007199254740991
       });
 
       response = await addressTracker.setMMAddress(mmAddress, {
-        from: accounts[0], gas: 9007199254740991
-      });
-
-      response = await addressTracker.setInterruptsAddress(interrupContract.address, {
         from: accounts[0], gas: 9007199254740991
       });
 
@@ -169,7 +147,123 @@ contract('Step', function(accounts){
       response = await addressTracker.setMemoryInteractorAddress(mi.address, {
         from: accounts[0], gas: 9007199254740991
       });
+    });
 
+    it('Running AUIPC step', async function() {
+      response = await riscV.step(index, mi.address, {
+        from: accounts[1],
+        gas: 9007199254740991
+      });
+      expect(4).to.equal(0);
+    });
+
+    it('Writing to MM manager - ADDI step', async function() {
+      let initialHash = "0x00";
+      //acount[0] is provider
+      //account[1] is client
+     response = await mm.instantiate(
+      accounts[0], accounts[1], initialHash,{
+        from: accounts[2],
+        gas: 2000000
+      });
+
+      event = getEvent(response, 'MemoryCreated');
+      index = event._index.toNumber();
+
+      //Prove Read to iflags - value 12
+      response = await mm.proveRead(index, 0x1d0, "0x0C", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+
+      //Prove Read to mip - value 0
+      response = await mm.proveRead(index, 0x170, "0x0", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to mie - value 0 
+      response = await mm.proveRead(index, 0x168, "0x0", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to pc value 4112
+      response = await mm.proveRead(index, 0x100, "0x1010000000000000", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to iflags - value 12
+      response = await mm.proveRead(index, 0x1d0, "0x0C", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to mstatus - value 42949672960
+      response = await mm.proveRead(index, 0x130, "0x000000000A000000", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to pma@800 - value: 2147483649 
+      response = await mm.proveRead(index, 0x800, "0x0100008000000000", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to pma@808 - value 1048576
+      response = await mm.proveRead(index, 0x808, "0x0000100000000000", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to pma@810 - value 4097
+      response = await mm.proveRead(index, 0x810, "0x0110000000000000", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to pma@818 - value 61440
+      response = await mm.proveRead(index, 0x818, "0x00F0000000000000", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to memory - value 1409105756751123
+      response = await mm.proveRead(index, 0x1010, "0x1305150093010500", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to x@50 - value 1
+      response = await mm.proveRead(index, 0x50, "0x0100000000000000", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+
+      //Prove Write to x@50 - first value: 1, second value 2
+      response = await mm.proveWrite(index, 0x50, "0x0100000000000000", "0x0100000000000000", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Write to pc - first value: 4112, second value 4116
+      response = await mm.proveWrite(index, 0x100, "0x1010000000000000", "0x1410000000000000", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to minstret - value 4
+      response = await mm.proveRead(index, 0x128, "0x0400000000000000", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Write to minstret - first value 4, second value 5
+      response = await mm.proveWrite(index, 0x128, "0x0400000000000000", "0x0500000000000000", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Read to mcycle - value 4
+      response = await mm.proveRead(index, 0x120, "0x0400000000000000", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+      //Prove Write to mcycle - first value 4, second value 5
+      response = await mm.proveWrite(index, 0x120, "0x0400000000000000", "0x0500000000000000", [], {
+        from: accounts[0],
+        gas: 2000000
+      });
+    })
+    it('Running ADDI step', async function() {
       response = await riscV.step(index, mi.address, {
         from: accounts[1],
         gas: 9007199254740991
