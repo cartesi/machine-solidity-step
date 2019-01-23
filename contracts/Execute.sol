@@ -58,7 +58,7 @@ library Execute {
     if(branch_funct3(insn, rs1, rs2)){
       uint64 new_pc = uint64(int64(pc) + int64(RiscVDecoder.insn_B_imm(insn)));
       if((new_pc & 3) != 0) {
-        return misaligned_fetch_exception(new_pc);
+        return raise_misaligned_fetch_exception(new_pc);
       }else {
         return execute_jump(mi, mmIndex, new_pc);
       }
@@ -75,7 +75,7 @@ library Execute {
     uint64 new_pc = pc + uint64(RiscVDecoder.insn_J_imm(insn));
 
     if((new_pc & 3) != 0){
-      return misaligned_fetch_exception(new_pc);
+      return raise_misaligned_fetch_exception(new_pc);
     }
     uint32 rd = RiscVDecoder.insn_rd(insn);
 
@@ -103,7 +103,7 @@ library Execute {
     return execute_status.retired;
   }
 
-  function misaligned_fetch_exception(uint64 pc) public returns (execute_status){
+  function raise_misaligned_fetch_exception(uint64 pc) public returns (execute_status){
     // TO-DO: Raise excecption - Misaligned fetch
     return execute_status.retired;
   }
