@@ -8,4 +8,12 @@ library ArithmeticImmediateInstructions {
   function execute_ADDI(uint64 rs1, int32 imm) public returns (uint64){
     return rs1 + uint64(imm);
   }
+
+  // ORI performs logical Or bitwise operation on register rs1 and the sign-extended
+  // 12 bit immediate. It places the result in rd.
+  // Reference: riscv-spec-v2.2.pdf - Section 2.4 -  Page 14
+  function execute_ORI(uint64 rs1, int32 imm) public returns (uint64){
+    return rs1 | uint64(imm);
+  }
+
 }
