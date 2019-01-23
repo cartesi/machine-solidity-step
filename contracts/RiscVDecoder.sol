@@ -78,13 +78,13 @@ library RiscVDecoder {
 
   /// @notice Get the instruction's opcode field
   //  @param insn Instruction
-  function insn_opcode(uint32 insn) public returns (uint32){
+  function inst_opcode(uint32 insn) public returns (uint32){
     return insn & 0x7F;
   }
 
   /// @notice Get the instruction's funct3 field
   //  @param insn Instruction
-  function insn_funct3(uint32 insn) public returns (uint32){
+  function inst_funct3(uint32 insn) public returns (uint32){
     return (insn >> 12) & 0x07;
   }
 

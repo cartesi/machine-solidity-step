@@ -18,22 +18,10 @@ contract MemoryInteractor {
     mm = mmInterface(_mmAddress);
   }
 
-  function read_x(uint256 _mmIndex, uint64 _registerIndex) public returns (uint64){
-    return BitsManipulationLibrary.uint64_swapEndian(
-      //Address = registerIndex * sizeof(uint64)
-      uint64(mm.read(_mmIndex, _registerIndex * 8))
-    );
-  }
   function memoryRead(uint256 _index, uint64 _address) public returns (uint64){
     return BitsManipulationLibrary.uint64_swapEndian(
       uint64(mm.read(_index, _address))
     );
-  }
-
-  function write_x(uint256 _mmIndex, uint64 _registerIndex, uint64 _value) public {
-    bytes8 bytesValue = bytes8(BitsManipulationLibrary.uint64_swapEndian(_value));
-    //Address = registerIndex * sizeof(uint64)
-    mm.write(_mmIndex, _registerIndex * 8, bytesValue);
   }
 
   function memoryWrite(uint256 _index, uint64 _address, uint64 _value) public {
