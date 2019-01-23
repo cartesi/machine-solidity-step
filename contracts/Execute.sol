@@ -248,6 +248,7 @@ library Execute {
       }else if(funct3 == 0x0006){
         /*funct3 == 0x0006*/
 //        return "ORI";
+        return ArithmeticImmediateInstructions.execute_ORI(rs1, imm);
       }
     }else if(funct3 == 0x0003){
       /*funct3 == 0x0003*/
