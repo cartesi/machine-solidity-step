@@ -10,6 +10,7 @@ pragma solidity ^0.5.0;
 // https://solidity.readthedocs.io/en/latest/security-considerations.html?highlight=overflow#two-s-complement-underflows-overflows
 
 library ArithmeticInstructions {
+  // TO-DO: move XLEN to its own library
   uint constant XLEN = 64;
 
   event Print(string message);
