@@ -20,6 +20,11 @@ contract MemoryInteractor {
     address _mmAddress = AddressTracker(_addressTrackerAddress).getMMAddress();
     mm = mmInterface(_mmAddress);
   }
+  // Sets
+  function set_priv(uint256 _mmIndex, uint64 new_priv){
+    write_iflags_PRV(_mmIndex, new_priv);
+    write_ilrsc(_mmIndex, -1); // invalidate reserved address
+  }
 
   // Reads
   function read_x(uint256 _mmIndex, uint64 _registerIndex) public returns (uint64){
@@ -45,6 +50,10 @@ contract MemoryInteractor {
     return memoryRead(_mmIndex, ShadowAddresses.get_mstatus());
   }
 
+  function read_iflags(uint256 _mmIndex) public returns (uint64){
+    return memoryRead(_mmIndex, ShadowAddresses.get_iflags());
+  }
+
   function read_iflags_PRV(uint256 _mmIndex) public returns (uint64){
     return (memoryRead(_mmIndex, ShadowAddresses.get_iflags()) >> 2) & 3;
   }
@@ -56,6 +65,7 @@ contract MemoryInteractor {
   }
 
   // Writes
+
   function write_scause(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_scause(), _value);
   }
@@ -83,6 +93,19 @@ contract MemoryInteractor {
   }
   function write_pc(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_pc(), _value);
+  }
+  function write_ilrsc(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_ilrsc(), _value);
+  }
+
+  function write_iflags_PRV(uint256 _mmIndex, uint64 _new_priv) public {
+    uint64 iflags = read_iflags(_mmIndex);
+    uint64 priv_mask = 3 << 2;
+
+    // Clears bits 3 and 2 of iflags and use or to set new value
+    iflags = (iflags & (~priv_mask)) | (_new_priv << 2);
+
+    memoryWrite(_mmIndex, ShadowAddresses.get_iflags(), iflags);
   }
 
   function write_x(uint256 _mmIndex, uint64 _registerIndex, uint64 _value) public {
