@@ -27,6 +27,13 @@ contract MemoryInteractor {
       uint64(mm.read(_mmIndex, _registerIndex * 8))
     );
   }
+  function read_mideleg(uint256 _mmIndex) public returns (uint64) {
+    return memoryRead(_mmIndex, ShadowAddresses.get_mideleg());
+  }
+
+  function read_medeleg(uint256 _mmIndex) public returns (uint64) {
+    return memoryRead(_mmIndex, ShadowAddresses.get_medeleg());
+  }
 
   function read_iflags_PRV(uint256 _mmIndex) public returns (uint64){
     return (memoryRead(_mmIndex, ShadowAddresses.get_iflags()) >> 2) & 3;
