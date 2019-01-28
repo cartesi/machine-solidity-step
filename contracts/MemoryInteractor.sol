@@ -21,9 +21,9 @@ contract MemoryInteractor {
     mm = mmInterface(_mmAddress);
   }
   // Sets
-  function set_priv(uint256 _mmIndex, uint64 new_priv){
+  function set_priv(uint256 _mmIndex, uint64 new_priv) public{
     write_iflags_PRV(_mmIndex, new_priv);
-    write_ilrsc(_mmIndex, -1); // invalidate reserved address
+    write_ilrsc(_mmIndex, uint64(-1)); // invalidate reserved address
   }
 
   // Reads
@@ -36,6 +36,10 @@ contract MemoryInteractor {
 
   function read_medeleg(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_medeleg());
+  }
+
+  function read_mtvec(uint256 _mmIndex) public returns (uint64) {
+    return memoryRead(_mmIndex, ShadowAddresses.get_mtvec());
   }
 
   function read_pc(uint256 _mmIndex) public returns (uint64) {
