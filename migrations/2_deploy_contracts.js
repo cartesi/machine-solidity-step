@@ -7,6 +7,7 @@ var ArithmeticInstructions = artifacts.require("./RiscVInstructions/ArithmeticIn
 var ArithmeticImmediateInstructions = artifacts.require("./RiscVInstructions/ArithmeticImmediateInstructions.sol");
 var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.sol");
 var Execute = artifacts.require("./Execute.sol");
+var Exceptions = artifacts.require("./Exceptions.sol");
 var Fetch = artifacts.require("./Fetch.sol");
 var PMA = artifacts.require("./PMA.sol");
 var Interrupts = artifacts.require("./Interrupts.sol");
@@ -30,7 +31,7 @@ module.exports = function(deployer) {
 
   deployer.deploy(PMA);
 
-  //Link Instruction libraries to Decoder 
+  //Link Instruction libraries to Decoder
   deployer.link(BranchInstructions, RiscVDecoder);
   deployer.link(ArithmeticInstructions, RiscVDecoder);
 
@@ -49,27 +50,31 @@ module.exports = function(deployer) {
   deployer.deploy(Fetch);
   deployer.link(Fetch, Step);
 
-  //Link all libraries to Execute
+  //Link all libraries to Interrupts
+  deployer.link(ShadowAddresses, Interrupts);
+  deployer.link(RiscVConstants, Interrupts);
+  deployer.deploy(Interrupts);
+  deployer.link(Interrupts, Step);
+
+  // Link all libraries to MemoryInteractor
+  deployer.link(BitsManipulationLibrary, MemoryInteractor);
+  deployer.link(ShadowAddresses, MemoryInteractor);
+
+  //Link all libraries to Exceptions
+  deployer.link(RiscVConstants, Exceptions);
+  deployer.deploy(Exceptions);
+
+   //Link all libraries to Execute
   deployer.link(RiscVDecoder, Execute);
   deployer.link(ShadowAddresses, Execute);
   deployer.link(RiscVConstants, Execute);
   deployer.link(BranchInstructions, Execute);
   deployer.link(ArithmeticInstructions, Execute);
   deployer.link(ArithmeticImmediateInstructions, Execute);
+  deployer.link(Exceptions, Execute);
   deployer.deploy(Execute);
   deployer.link(Execute, Step);
-  
-  //Link all libraries to Interrupts
-  deployer.link(ShadowAddresses, Interrupts);
-  deployer.link(RiscVConstants, Interrupts);
-  deployer.deploy(Interrupts);
-  deployer.link(Interrupts, Step);
-  
-  // Link all libraries to MemoryInteractor
-  deployer.link(BitsManipulationLibrary, MemoryInteractor);
-  deployer.link(ShadowAddresses, MemoryInteractor);
-  
- 
+
   deployer.deploy(AddressTracker);
   deployer.deploy(MMInstantiator).then(function(){
     return deployer.deploy(MemoryInteractor, AddressTracker.address);

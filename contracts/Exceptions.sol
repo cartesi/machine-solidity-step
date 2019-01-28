@@ -5,24 +5,23 @@ import "../contracts/MemoryInteractor.sol";
 import "../contracts/RiscVConstants.sol";
 
 library Exceptions {
-  uint64 constant MCAUSE_INSN_ADDRESS_MISALIGNED      = 0x0;
-  uint64 constant MCAUSE_INSN_ACCESS_FAULT            = 0x1;
-  uint64 constant MCAUSE_ILLEGAL_INSN                 = 0x2;
-  uint64 constant MCAUSE_BREAKPOINT                   = 0x3;
-  uint64 constant MCAUSE_LOAD_ADDRESS_MISALIGNED      = 0x4;
-  uint64 constant MCAUSE_LOAD_ACCESS_FAULT            = 0x5;
-  uint64 constant MCAUSE_STORE_AMO_ADDRESS_MISALIGNED = 0x6;
-  uint64 constant MCAUSE_STORE_AMO_ACCESS_FAULT       = 0x7;
-  uint64 constant MCAUSE_ECALL_BASE                   = 0x8;
-  uint64 constant MCAUSE_FETCH_PAGE_FAULT             = 0xc;
-  uint64 constant MCAUSE_LOAD_PAGE_FAULT              = 0xd;
-  uint64 constant MCAUSE_STORE_AMO_PAGE_FAULT         = 0xf;
-  
-  function raise_exception(uint256 mmIndex, address _memoryInteractorAddress, uint64 cause, uint64 tval) 
-  public {
-    MemoryInteractor mi = MemoryInteractor(_memoryInteractorAddress);
+  function MCAUSE_INSN_ADDRESS_MISALIGNED      () public returns(uint64){return 0x0;}
+  function MCAUSE_INSN_ACCESS_FAULT            () public returns(uint64){return 0x1;}
+  function MCAUSE_ILLEGAL_INSN                 () public returns(uint64){return 0x2;}
+  function MCAUSE_BREAKPOINT                   () public returns(uint64){return 0x3;}
+  function MCAUSE_LOAD_ADDRESS_MISALIGNED      () public returns(uint64){return 0x4;}
+  function MCAUSE_LOAD_ACCESS_FAULT            () public returns(uint64){return 0x5;}
+  function MCAUSE_STORE_AMO_ADDRESS_MISALIGNED () public returns(uint64){return 0x6;}
+  function MCAUSE_STORE_AMO_ACCESS_FAULT       () public returns(uint64){return 0x7;}
+  function MCAUSE_ECALL_BASE                   () public returns(uint64){return 0x8;}
+  function MCAUSE_FETCH_PAGE_FAULT             () public returns(uint64){return 0xc;}
+  function MCAUSE_LOAD_PAGE_FAULT              () public returns(uint64){return 0xd;}
+  function MCAUSE_STORE_AMO_PAGE_FAULT         () public returns(uint64){return 0xf;}
 
-    uint64 mcause_interrupt_flag = 1 << uint64(RiscVConstants.XLEN() - 1);
+  function MCAUSE_INTERRUPT_FLAG               () public returns(uint64){return 1 << uint64(RiscVConstants.XLEN() - 1);}
+
+  function raise_exception(MemoryInteractor mi, uint256 mmIndex, uint64 cause, uint64 tval) 
+  public {
     // All traps are handled in machine-mode, by default. Mideleg or Medeleg provide
     // bits to indicate if the interruption/exception should be taken care of by
     // lower privilege levels.
@@ -33,11 +32,11 @@ library Exceptions {
     uint64 priv = mi.read_iflags_PRV(mmIndex);
 
     if (priv <= RiscVConstants.PRV_S()) {
-      if((cause & mcause_interrupt_flag) != 0) {
+      if((cause & MCAUSE_INTERRUPT_FLAG()) != 0) {
         // If exception was caused by an interruption the delegated information is
         // stored on mideleg register.
 
-        // Clear the mcause_interrupt_flag bit before shifting
+        // Clear the MCAUSE_INTERRUPT_FLAG() bit before shifting
         deleg = (mi.read_mideleg(mmIndex) >> (cause & uint64(RiscVConstants.XLEN() - 1))) & 1;
       } else {
         //If not, information is in the medeleg register

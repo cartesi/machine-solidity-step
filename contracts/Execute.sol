@@ -8,6 +8,7 @@ import "../contracts/MemoryInteractor.sol";
 import "./RiscVInstructions/BranchInstructions.sol";
 import "./RiscVInstructions/ArithmeticInstructions.sol";
 import "./RiscVInstructions/ArithmeticImmediateInstructions.sol";
+import {Exceptions} from "../contracts/Exceptions.sol";
 
 library Execute {
   event  Print(string a, uint b);
@@ -58,7 +59,7 @@ library Execute {
     if(branch_funct3(insn, rs1, rs2)){
       uint64 new_pc = uint64(int64(pc) + int64(RiscVDecoder.insn_B_imm(insn)));
       if((new_pc & 3) != 0) {
-        return raise_misaligned_fetch_exception(new_pc);
+        return raise_misaligned_fetch_exception(mi, mmIndex, new_pc);
       }else {
         return execute_jump(mi, mmIndex, new_pc);
       }
@@ -75,7 +76,7 @@ library Execute {
     uint64 new_pc = pc + uint64(RiscVDecoder.insn_J_imm(insn));
 
     if((new_pc & 3) != 0){
-      return raise_misaligned_fetch_exception(new_pc);
+      return raise_misaligned_fetch_exception(mi, mmIndex, new_pc);
     }
     uint32 rd = RiscVDecoder.insn_rd(insn);
 
@@ -103,8 +104,10 @@ library Execute {
     return execute_status.retired;
   }
 
-  function raise_misaligned_fetch_exception(uint64 pc) public returns (execute_status){
-    // TO-DO: Raise excecption - Misaligned fetch
+  function raise_misaligned_fetch_exception(MemoryInteractor mi, uint256 mmIndex, uint64 pc) 
+  public returns (execute_status){
+    Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_INSN_ADDRESS_MISALIGNED(), pc);
+
     return execute_status.retired;
   }
 
