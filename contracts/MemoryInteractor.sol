@@ -2,6 +2,7 @@
 pragma solidity ^0.5.0;
 
 import "../contracts/AddressTracker.sol";
+import "../contracts/ShadowAddresses.sol";
 import "./lib/BitsManipulationLibrary.sol";
 
 contract mmInterface {
@@ -9,6 +10,8 @@ contract mmInterface {
   function write(uint256 _index, uint64 _address, bytes8 _value) external;
   function finishReplayPhase(uint256 _index) external;
 }
+// TO-DO: Rewrite this - MemoryRead/MemoryWrite should be private/internal and
+// all reads/writes should be specific.
 
 contract MemoryInteractor {
   mmInterface mm;
@@ -24,6 +27,11 @@ contract MemoryInteractor {
       uint64(mm.read(_mmIndex, _registerIndex * 8))
     );
   }
+
+  function read_iflags_PRV(uint256 _mmIndex) public returns (uint64){
+    return (memoryRead(_mmIndex, ShadowAddresses.get_iflags()) >> 2) & 3;
+  }
+
   function memoryRead(uint256 _index, uint64 _address) public returns (uint64){
     return BitsManipulationLibrary.uint64_swapEndian(
       uint64(mm.read(_index, _address))
