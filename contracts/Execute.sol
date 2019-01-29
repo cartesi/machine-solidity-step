@@ -28,10 +28,13 @@ library Execute {
   public returns (execute_status){
     uint32 rd = RiscVDecoder.insn_rd(insn);
     if(rd != 0){
-      uint64 rs1 = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
-      int32 imm = RiscVDecoder.insn_I_imm(insn);
+      (uint64 arith_imm_result, bool insn_valid) = arithmetic_immediate_funct3(mi, mmIndex, insn);
 
-      mi.write_x(mmIndex, rd, arithmetic_immediate_funct3(insn, rs1, imm));
+      if(!insn_valid){
+        //return illegal insn
+      }
+
+      mi.write_x(mmIndex, rd, arith_imm_result);
     }
     return advance_to_next_insn(mi, mmIndex, pc);
   }
@@ -223,13 +226,14 @@ library Execute {
   /// @notice Given a arithmetic immediate funct3 insn, finds the func associated.
   //  Uses binary search for performance.
   //  @param insn for arithmetic immediate funct3 field.
-  function arithmetic_immediate_funct3(uint32 insn, uint64 rs1, int32 imm) public returns (uint64) {
+  function arithmetic_immediate_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn) 
+  public returns (uint64, bool) {
     uint32 funct3 = RiscVDecoder.insn_funct3(insn);
     if(funct3 < 0x0003){
       if(funct3 == 0x0000){
         /*funct3 == 0x0000*/
 //        return "ADDI";
-        return ArithmeticImmediateInstructions.execute_ADDI(rs1, imm);
+        return (ArithmeticImmediateInstructions.execute_ADDI(mi, mmIndex, insn), true);
 
       }else if(funct3 == 0x0002){
         /*funct3 == 0x0002*/
@@ -237,7 +241,7 @@ library Execute {
       }else if(funct3 == 0x0001){
         /*funct3 == 0x0001*/
 //        return "SLLI";
-        return ArithmeticImmediateInstructions.execute_SLLI(rs1, imm);
+        return (ArithmeticImmediateInstructions.execute_SLLI(mi, mmIndex, insn), true);
       }
     }else if(funct3 > 0x0003){
       if(funct3 < 0x0006){
@@ -254,14 +258,14 @@ library Execute {
       }else if(funct3 == 0x0006){
         /*funct3 == 0x0006*/
 //        return "ORI";
-        return ArithmeticImmediateInstructions.execute_ORI(rs1, imm);
+        return (ArithmeticImmediateInstructions.execute_ORI(mi, mmIndex, insn), true);
       }
     }else if(funct3 == 0x0003){
       /*funct3 == 0x0003*/
 //      return "SLTIU";
     }
 //    return "illegal insn";
-    return 0;
+    return (0, false);
   }
 
 
@@ -309,7 +313,8 @@ library Execute {
   /// @notice Given an op code, finds the group of instructions it belongs to
   //  using a binary search for performance.
   //  @param insn for opcode fields.
-  function opinsn(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) public returns (execute_status){
+  function opinsn(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
+  public returns (execute_status){
     // OPCODE is located on bit 0 - 6 of the following types of 32bits instructions:
     // R-Type, I-Type, S-Trype and U-Type
     // Reference: riscv-spec-v2.2.pdf - Figure 2.2 - Page 11
