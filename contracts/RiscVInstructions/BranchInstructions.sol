@@ -6,7 +6,8 @@ import "../../contracts/RiscVDecoder.sol";
 
 library BranchInstructions {
 
-  function get_rs1_rs2(MemoryInteractor mi, uint256 mmIndex, uint32 insn) internal returns(uint64 rs1, uint64 rs2) {
+  function get_rs1_rs2(MemoryInteractor mi, uint256 mmIndex, uint32 insn) internal 
+  returns(uint64 rs1, uint64 rs2) {
     rs1 = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
     rs2 = mi.read_x(mmIndex, RiscVDecoder.insn_rs2(insn));
   }
