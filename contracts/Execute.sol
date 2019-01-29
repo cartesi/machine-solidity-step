@@ -31,7 +31,7 @@ library Execute {
       (uint64 arith_imm_result, bool insn_valid) = arithmetic_immediate_funct3(mi, mmIndex, insn);
 
       if(!insn_valid){
-        //return illegal insn
+        return raise_illegal_insn_exception(pc, insn);
       }
 
       mi.write_x(mmIndex, rd, arith_imm_result);
@@ -47,7 +47,7 @@ library Execute {
       (uint64 arith_result, bool insn_valid) = arithmetic_funct3_funct7(mi, mmIndex, insn);
 
       if(!insn_valid){
-        //return illegal insn
+        return raise_illegal_insn_exception(pc, insn);
       }
       mi.write_x(mmIndex, rd, arith_result);
     }
@@ -60,7 +60,7 @@ library Execute {
     (bool branch_valuated, bool insn_valid) = branch_funct3(mi, mmIndex, insn);
 
     if(!insn_valid){
-      //return illegal insn
+      return raise_illegal_insn_exception(pc, insn);
     }
 
     if(branch_valuated){
@@ -113,6 +113,10 @@ library Execute {
 
   function raise_misaligned_fetch_exception(uint64 pc) public returns (execute_status){
     // TO-DO: Raise excecption - Misaligned fetch
+    return execute_status.retired;
+  }
+  function raise_illegal_insn_exception(uint64 pc, uint32 insn) public returns (execute_status){
+    // TO-DO: Raise exception - illegal insn
     return execute_status.retired;
   }
 
@@ -220,7 +224,6 @@ library Execute {
       return (ArithmeticInstructions.execute_MULHU(mi, mmIndex, insn), true);
     }
     return (0, false);
-    //return "illegal insn";
   }
 
   /// @notice Given a arithmetic immediate funct3 insn, finds the func associated.
@@ -268,7 +271,6 @@ library Execute {
       /*funct3 == 0x0003*/
 //      return "SLTIU";
     }
-//    return "illegal insn";
     return (0, false);
   }
 
@@ -309,8 +311,6 @@ library Execute {
       //return "BGE";
       return (BranchInstructions.execute_BGE(mi, mmIndex, insn), true);
     }
-   //return "illegal insn";
-   // TO-DO: this shouldnt be a return false
     return (false, false);
   }
 
@@ -391,8 +391,7 @@ library Execute {
       //return "atomic_group";
       return execute_status.retired;
     }
-    //return "illegal insn";
-    return execute_status.retired;
+    return raise_illegal_insn_exception(pc, insn);
   }
 
   enum execute_status {
