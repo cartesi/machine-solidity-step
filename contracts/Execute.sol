@@ -239,8 +239,12 @@ library Execute {
         /*funct3 == 0x0002*/
 //        return "SLTI";
       }else if(funct3 == 0x0001){
-        /*funct3 == 0x0001*/
-//        return "SLLI";
+        // Imm[11:6] must be zero for it to be SLLI.
+        // Reference: riscv-spec-v2.2.pdf - Section 2.4 -  Page 14
+        // TO-DO: change 0x3F to XLEN - 1
+        if(( insn & (0x3F << 26)) != 0){
+          return (0, false);
+        }
         return (ArithmeticImmediateInstructions.execute_SLLI(mi, mmIndex, insn), true);
       }
     }else if(funct3 > 0x0003){
