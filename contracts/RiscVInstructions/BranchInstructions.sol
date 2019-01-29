@@ -1,36 +1,43 @@
 /// @title BranchInstructions
 pragma solidity ^0.5.0;
 
-library BranchInstructions {
-  event Print(string message);
+import "../../contracts/MemoryInteractor.sol";
+import "../../contracts/RiscVDecoder.sol";
 
-  function execute_BEQ(uint64 rs1, uint64 rs2) public returns (bool){
-    emit Print("BQE");
+library BranchInstructions {
+
+  function get_rs1_rs2(MemoryInteractor mi, uint256 mmIndex, uint32 insn) internal returns(uint64 rs1, uint64 rs2) {
+    rs1 = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
+    rs2 = mi.read_x(mmIndex, RiscVDecoder.insn_rs2(insn));
+  }
+
+  function execute_BEQ(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (bool){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
     return rs1 == rs2;
   }
 
-  function execute_BNE(uint64 rs1, uint64 rs2) public returns (bool){
-    emit Print("BNE");
+  function execute_BNE(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (bool){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
     return rs1 != rs2;
   }
 
-  function execute_BLT(uint64 rs1, uint64 rs2) public returns (bool){
-    emit Print("BLT");
+  function execute_BLT(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (bool){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
     return int64(rs1) < int64(rs2);
   }
 
-  function execute_BGE(uint64 rs1, uint64 rs2) public returns (bool){
-    emit Print("BGE");
+  function execute_BGE(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (bool){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
     return int64(rs1) >= int64(rs2);
   }
 
-  function execute_BLTU(uint64 rs1, uint64 rs2) public returns (bool){
-    emit Print("BLTU");
+  function execute_BLTU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (bool){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
     return rs1 < rs2;
   }
 
-  function execute_BGEU(uint64 rs1, uint64 rs2) public returns (bool){
-    emit Print("BGEU");
+  function execute_BGEU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (bool){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
     return rs1 >= rs2;
   }
 }
