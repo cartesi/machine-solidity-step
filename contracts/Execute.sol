@@ -41,8 +41,6 @@ library Execute {
     uint32 rd = RiscVDecoder.insn_rd(insn);
 
     if(rd != 0){
-      uint64 rs1 = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
-      uint64 rs2 = mi.read_x(mmIndex, RiscVDecoder.insn_rs2(insn));
       (uint64 arith_result, bool insn_valid) = arithmetic_funct3_funct7(mi, mmIndex, insn);
 
       if(!insn_valid){
