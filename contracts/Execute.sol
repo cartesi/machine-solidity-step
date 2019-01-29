@@ -232,6 +232,7 @@ library Execute {
       }else if(funct3 == 0x0001){
         /*funct3 == 0x0001*/
 //        return "SLLI";
+        return ArithmeticImmediateInstructions.execute_SLLI(rs1, imm);
       }
     }else if(funct3 > 0x0003){
       if(funct3 < 0x0006){
