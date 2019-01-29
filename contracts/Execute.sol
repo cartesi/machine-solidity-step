@@ -52,10 +52,13 @@ library Execute {
   function execute_branch(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
   public returns (execute_status){
 
-    uint64 rs1 = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
-    uint64 rs2 = mi.read_x(mmIndex, RiscVDecoder.insn_rs2(insn));
+    (bool branch_valuated, bool insn_valid) = branch_funct3(mi, mmIndex, insn);
 
-    if(branch_funct3(insn, rs1, rs2)){
+    if(!insn_valid){
+      //return illegal insn
+    }
+
+    if(branch_valuated){
       uint64 new_pc = uint64(int64(pc) + int64(RiscVDecoder.insn_B_imm(insn)));
       if((new_pc & 3) != 0) {
         return raise_misaligned_fetch_exception(new_pc);
@@ -263,41 +266,42 @@ library Execute {
   /// @notice Given a branch funct3 group instruction, finds the function
   //  associated with it. Uses binary search for performance.
   //  @param insn for branch funct3 field.
-  function branch_funct3(uint32 insn, uint64 rs1, uint64 rs2) public returns (bool){
+  function branch_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
+  public returns (bool, bool){
     uint32 funct3 = RiscVDecoder.insn_funct3(insn);
 
     if(funct3 < 0x0005){
       if(funct3 == 0x0000){
         /*funct3 == 0x0000*/
         //return "BEQ";
-        return BranchInstructions.execute_BEQ(rs1, rs2);
+        return (BranchInstructions.execute_BEQ(mi, mmIndex, insn), true);
       }else if(funct3 == 0x0004){
         /*funct3 == 0x0004*/
         //return "BLT";
-        return BranchInstructions.execute_BLT(rs1, rs2);
+        return (BranchInstructions.execute_BLT(mi, mmIndex, insn), true);
       }else if(funct3 == 0x0001){
         /*funct3 == 0x0001*/
         //return "BNE";
-        return BranchInstructions.execute_BNE(rs1, rs2);
+        return (BranchInstructions.execute_BNE(mi, mmIndex, insn), true);
       }
     }else if(funct3 > 0x0005){
       if(funct3 == 0x0007){
         /*funct3 == 0x0007*/
         //return "BGEU";
-        return BranchInstructions.execute_BGEU(rs1, rs2);
+        return (BranchInstructions.execute_BGEU(mi, mmIndex, insn), true);
       }else if(funct3 == 0x0006){
         /*funct3 == 0x0006*/
         //return "BLTU";
-        return BranchInstructions.execute_BLTU(rs1, rs2);
+        return (BranchInstructions.execute_BLTU(mi, mmIndex, insn), true);
       }
     }else if(funct3 == 0x0005){
       /*funct3==0x0005*/
       //return "BGE";
-      return BranchInstructions.execute_BGE(rs1, rs2);
+      return (BranchInstructions.execute_BGE(mi, mmIndex, insn), true);
     }
    //return "illegal insn";
    // TO-DO: this shouldnt be a return false
-   return false;
+    return (false, false);
   }
 
   /// @notice Given an op code, finds the group of instructions it belongs to
