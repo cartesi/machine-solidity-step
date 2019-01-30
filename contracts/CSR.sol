@@ -71,7 +71,7 @@ library CSR {
 
 
   function read_csr(MemoryInteractor mi, uint256 mmIndex, uint32 csr_addr)
-  public returns (bool, uint32) {
+  public returns (bool, uint64) {
     // Attemps to access a CSR without appropriate privilege level raises a
     // illegal instruction exception.
     // Reference: riscv-privileged-v1.10 - section 2.1 - page 7.
@@ -81,67 +81,67 @@ library CSR {
     // TO-DO: Change this to binary search or mapping to increase performance
     // (in the meantime, pray for solidity devs to add switch statements)
     if(csr_addr == ucycle) {
-      //return read_csr_cycle();
+      return read_csr_cycle(mi, mmIndex, csr_addr);
     }else if(csr_addr == uinstret){
-      //return read_csr_instret();
+      return read_csr_instret(mi, mmIndex, csr_addr);
     }else if(csr_addr == utime){
-      //return read_csr_time();
+      return read_csr_time(mi, mmIndex, csr_addr);
     }else if(csr_addr == sstatus){
-      //return read_csr_sstatus();
+      return read_csr_sstatus(mi, mmIndex, csr_addr);
     }else if(csr_addr == sie){
-      //return read_csr_sie();
+      return read_csr_sie(mi, mmIndex, csr_addr);
     }else if(csr_addr == stvec){
-      //return read_csr_stvec();
+      return read_csr_stvec(mi, mmIndex, csr_addr);
     }else if(csr_addr == scounteren){
-      //return read_csr_scounteren();
+      return read_csr_scounteren(mi, mmIndex, csr_addr);
     }else if(csr_addr == sscratch){
-      //return read_csr_sscratch();
+      return read_csr_sscratch(mi, mmIndex, csr_addr);
     }else if(csr_addr == sepc){
-      //return read_csr_sepc();
+      return read_csr_sepc(mi, mmIndex, csr_addr);
     }else if(csr_addr == scause){
-      //return read_csr_scause();
+      return read_csr_scause(mi, mmIndex, csr_addr);
     }else if(csr_addr == stval){
-      //return read_csr_stval();
+      return read_csr_stval(mi, mmIndex, csr_addr);
     }else if(csr_addr == sip){
-      //return read_csr_sip();
+      return read_csr_sip(mi, mmIndex, csr_addr);
     }else if(csr_addr == satp){
-      //return read_csr_satp();
+      return read_csr_satp(mi, mmIndex, csr_addr);
     }else if(csr_addr == mstatus){
-      //return read_csr_mstatus();
+      return read_csr_mstatus(mi, mmIndex, csr_addr);
     }else if(csr_addr == misa){
-      //return read_csr_misa();
+      return read_csr_misa(mi, mmIndex, csr_addr);
     }else if(csr_addr == medeleg){
-      //return read_csr_medeleg();
+      return read_csr_medeleg(mi, mmIndex, csr_addr);
     }else if(csr_addr == mideleg){
-      //return read_csr_mideleg();
+      return read_csr_mideleg(mi, mmIndex, csr_addr);
     }else if(csr_addr == mie){
-      //return read_csr_mie();
+      return read_csr_mie(mi, mmIndex, csr_addr);
     }else if(csr_addr == mtvec){
-      //return read_csr_mtvec();
+      return read_csr_mtvec(mi, mmIndex, csr_addr);
     }else if(csr_addr == mcounteren){
-      //return read_csr_mcounteren();
+      return read_csr_mcounteren(mi, mmIndex, csr_addr);
     }else if(csr_addr == mscratch){
-      //return read_csr_mscratch();
+      return read_csr_mscratch(mi, mmIndex, csr_addr);
     }else if(csr_addr == mepc){
-      //return read_csr_mepc();
+      return read_csr_mepc(mi, mmIndex, csr_addr);
     }else if(csr_addr == mcause){
-      //return read_csr_mcause();
+      return read_csr_mcause(mi, mmIndex, csr_addr);
     }else if(csr_addr == mtval){
-      //return read_csr_mtval();
+      return read_csr_mtval(mi, mmIndex, csr_addr);
     }else if(csr_addr == mip){
-      //return read_csr_mip();
+      return read_csr_mip(mi, mmIndex, csr_addr);
     }else if(csr_addr == mcycle){
-      //return read_csr_mcycle();
+      return read_csr_mcycle(mi, mmIndex, csr_addr);
     }else if(csr_addr == minstret){
-      //return read_csr_minstret();
+      return read_csr_minstret(mi, mmIndex, csr_addr);
     }else if(csr_addr == mvendorid){
-      //return read_csr_mvendorid();
+      return read_csr_mvendorid(mi, mmIndex, csr_addr);
     }else if(csr_addr == marchid){
-      //return read_csr_marchid();
+      return read_csr_marchid(mi, mmIndex, csr_addr);
     }else if(csr_addr == mimpid){
-      //return read_csr_mimpid();
+      return read_csr_mimpid(mi, mmIndex, csr_addr);
     }
-    // All hardwired to zero
+    //All hardwired to zero
     else if(csr_addr == tselect || csr_addr == tdata1 || csr_addr == tdata2 || csr_addr == tdata3 ||  csr_addr == mhartid){
       return (true, 0);
     }
