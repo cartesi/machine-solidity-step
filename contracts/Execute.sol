@@ -5,6 +5,7 @@ import "./ShadowAddresses.sol";
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
 import "../contracts/MemoryInteractor.sol";
+import "../contracts/CSR.sol";
 import "./RiscVInstructions/BranchInstructions.sol";
 import "./RiscVInstructions/ArithmeticInstructions.sol";
 import "./RiscVInstructions/ArithmeticImmediateInstructions.sol";
@@ -72,6 +73,19 @@ library Execute {
       }
     }
     return advance_to_next_insn(mi, mmIndex, pc);
+  }
+
+  function execute_csr_RW(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
+  public returns (execute_status){
+    uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
+
+    bool status = true;
+    uint64 csrval = 0;
+
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+    if(rd != 0){
+      (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
+    }
   }
 
   // JAL (i.e Jump and Link). J_immediate encondes a signed offset in multiples
