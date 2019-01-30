@@ -2,6 +2,7 @@
 pragma solidity ^0.5.0;
 
 import "../contracts/AddressTracker.sol";
+import "../contracts/ShadowAddresses.sol";
 import "./lib/BitsManipulationLibrary.sol";
 
 contract mmInterface {
@@ -17,7 +18,17 @@ contract MemoryInteractor {
     address _mmAddress = AddressTracker(_addressTrackerAddress).getMMAddress();
     mm = mmInterface(_mmAddress);
   }
+  
+  function read_iflags_PRV(uint256 _mmIndex) public returns (uint64){
+    return (memoryRead(_mmIndex, ShadowAddresses.get_iflags()) >> 2) & 3;
+  }
+  function read_mcounteren(uint256 _mmIndex) public returns (uint64) {
+    return memoryRead(_mmIndex, ShadowAddresses.get_mcounteren());
+  }
 
+  function read_scounteren(uint256 _mmIndex) public returns (uint64) {
+    return memoryRead(_mmIndex, ShadowAddresses.get_scounteren());
+  }
   function read_x(uint256 _mmIndex, uint64 _registerIndex) public returns (uint64){
     return BitsManipulationLibrary.uint64_swapEndian(
       //Address = registerIndex * sizeof(uint64)
