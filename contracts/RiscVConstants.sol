@@ -13,7 +13,7 @@ library RiscVConstants {
   function PRV_M() public returns(uint64) {return 3;}
 
   //mstatus flags
-  //TO-DO: Add all constants (currently adding them as the need appears)
+  //to-do: add all constants (currently adding them as the need appears)
   function MSTATUS_MIE()  public returns(uint64)  {return (1 << 3);}
   function MSTATUS_SIE()  public returns(uint64)  {return (1 << 1);}
   function MSTATUS_MPRV() public returns(uint64)  {return (1 << 17);}
@@ -31,10 +31,70 @@ library RiscVConstants {
   function MSTATUS_SPP_SHIFT()  public returns(uint64) {return 8 ;}
   function MSTATUS_MPP_SHIFT()  public returns(uint64) {return 11;}
   function MSTATUS_FS_SHIFT()   public returns(uint64) {return 13;}
-  function MSTATUS_SD_SHIFT()   public returns(uint64) {return 31;}
+
+  function MSTATUS_XS_SHIFT()   public returns(uint64) {return 15;} 
+  function MSTATUS_MPRV_SHIFT() public returns(uint64) {return 17;}
+  function MSTATUS_SUM_SHIFT()  public returns(uint64) {return 18;}
+  function MSTATUS_MXR_SHIFT()  public returns(uint64) {return 19;}
+  function MSTATUS_TVM_SHIFT()  public returns(uint64) {return 20;}
+  function MSTATUS_TW_SHIFT()   public returns(uint64) {return 21;}
+  function MSTATUS_TSR_SHIFT()  public returns(uint64) {return 22;}  
+
   function MSTATUS_UXL_SHIFT()  public returns(uint64) {return 32;}
   function MSTATUS_SXL_SHIFT()  public returns(uint64) {return 34;}
 
+  function MSTATUS_SD_SHIFT()   public returns(uint64) {return XLEN() - 1;}
+
+  //mstatus masks
+  function MSTATUS_UIE_MASK()  public returns(uint64){return (uint64(1) << MSTATUS_UIE_SHIFT());}
+  function MSTATUS_SIE_MASK()  public returns(uint64){return uint64(1) << MSTATUS_SIE_SHIFT();}
+  function MSTATUS_MIE_MASK()  public returns(uint64){return uint64(1) << MSTATUS_MIE_SHIFT();}
+  function MSTATUS_UPIE_MASK() public returns(uint64){return uint64(1) << MSTATUS_UPIE_SHIFT();}
+  function MSTATUS_SPIE_MASK() public returns(uint64){return uint64(1) << MSTATUS_SPIE_SHIFT();}
+  function MSTATUS_MPIE_MASK() public returns(uint64){return uint64(1) << MSTATUS_MPIE_SHIFT();}
+  function MSTATUS_SPP_MASK()  public returns(uint64){return uint64(1) << MSTATUS_SPP_SHIFT();}
+  function MSTATUS_MPP_MASK()  public returns(uint64){return uint64(3) << MSTATUS_MPP_SHIFT();}
+  function MSTATUS_FS_MASK()   public returns(uint64){return uint64(3) << MSTATUS_FS_SHIFT();}
+  function MSTATUS_XS_MASK()   public returns(uint64){return uint64(3) << MSTATUS_XS_SHIFT();}
+  function MSTATUS_MPRV_MASK() public returns(uint64){return uint64(1) << MSTATUS_MPRV_SHIFT();}
+  function MSTATUS_SUM_MASK()  public returns(uint64){return uint64(1) << MSTATUS_SUM_SHIFT();}
+  function MSTATUS_MXR_MASK()  public returns(uint64){return uint64(1) << MSTATUS_MXR_SHIFT();}
+  function MSTATUS_TVM_MASK()  public returns(uint64){return uint64(1) << MSTATUS_TVM_SHIFT();}
+  function MSTATUS_TW_MASK()   public returns(uint64){return uint64(1) << MSTATUS_TW_SHIFT();}
+  function MSTATUS_TSR_MASK()  public returns(uint64){return uint64(1) << MSTATUS_TSR_SHIFT();}
+
+  function MSTATUS_UXL_MASK()  public returns(uint64){return uint64(3) << MSTATUS_UXL_SHIFT();}
+  function MSTATUS_SXL_MASK()  public returns(uint64){return uint64(3) << MSTATUS_SXL_SHIFT();}
+  function MSTATUS_SD_MASK()   public returns(uint64){return uint64(1) << MSTATUS_SD_SHIFT();}
+
+  // sstatus read/writes
+  function SSTATUS_W_MASK() public returns(uint64){
+    return (
+        MSTATUS_UIE_MASK()  |
+        MSTATUS_SIE_MASK()  |
+        MSTATUS_UPIE_MASK() |
+        MSTATUS_SPIE_MASK() |
+        MSTATUS_SPP_MASK()  |
+        MSTATUS_FS_MASK()   |
+        MSTATUS_SUM_MASK()  |
+        MSTATUS_MXR_MASK()
+    );
+  }
+
+  function SSTATUS_R_MASK() public returns(uint64){
+    return (
+        MSTATUS_UIE_MASK()  |
+        MSTATUS_SIE_MASK()  |
+        MSTATUS_UPIE_MASK() |
+        MSTATUS_SPIE_MASK() |
+        MSTATUS_SPP_MASK()  |
+        MSTATUS_FS_MASK()   |
+        MSTATUS_SUM_MASK()  |
+        MSTATUS_MXR_MASK()  |
+        MSTATUS_UXL_MASK()  |
+        MSTATUS_SD_MASK()
+    ); 
+  }
   // mcounteren constants
   function MCOUNTEREN_CY_SHIFT() public returns(uint64) {return 0;}
   function MCOUNTEREN_TM_SHIFT() public returns(uint64) {return 1;}
