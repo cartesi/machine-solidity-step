@@ -314,6 +314,43 @@ library Execute {
     return (false, false);
   }
 
+  /// @notice Given csr env trap int mm funct3 insn, finds the func associated.
+  //  Uses binary search for performance.
+  //  @param insn for csr env trap int mm funct3 field.
+  function csr_env_trap_int_mm_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
+  public returns (uint64, bool){
+    uint32 funct3 = RiscVDecoder.insn_funct3(insn);
+
+    if(funct3 < 0x0003){
+      if(funct3 == 0x0000){
+        /*funct3 == 0x0000*/
+        //return "env_trap_int_mm_group";
+      }else if(funct3 ==  0x0002){
+        /*funct3 == 0x0002*/
+        //return "CSRRS";
+      }else if(funct3 == 0x0001){
+        /*funct3 == 0x0001*/
+        //return "CSRRW";
+      }
+    }else if(funct3 > 0x0003){
+      if(funct3 == 0x0005){
+        /*funct3 == 0x0005*/
+        //return "CSRRWI";
+      }else if(funct3 == 0x0007){
+        /*funct3 == 0x0007*/
+        //return "CSRRCI";
+      }else if(funct3 == 0x0006){
+        /*funct3 == 0x0006*/
+        //return "CSRRSI";
+      }
+    }else if(funct3 == 0x0003){
+      /*funct3 == 0x0003*/
+      //return "CSRRC";
+    }
+    //return "illegal insn";
+    return (0, false);
+  }
+
   /// @notice Given an op code, finds the group of instructions it belongs to
   //  using a binary search for performance.
   //  @param insn for opcode fields.

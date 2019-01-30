@@ -262,39 +262,6 @@ library RiscVDecoder {
     return "illegal expression";
   }
 
-  /// @notice Given csr env trap int mm funct3 insn, finds the func associated.
-  //  Uses binary search for performance.
-  //  @param insn for csr env trap int mm funct3 field.
-  function csr_env_trap_int_mm_funct3(uint32 insn) public returns (bytes32){
-    if(insn < 0x0003){
-      if(insn == 0x0000){
-        /*insn == 0x0000*/
-        return "env_trap_int_mm_group";
-      }else if(insn ==  0x0002){
-        /*insn == 0x0002*/
-        return "CSRRS";
-      }else if(insn == 0x0001){
-        /*insn == 0x0001*/
-        return "CSRRW";
-      }
-    }else if(insn > 0x0003){
-      if(insn == 0x0005){
-        /*insn == 0x0005*/
-        return "CSRRWI";
-      }else if(insn == 0x0007){
-        /*insn == 0x0007*/
-        return "CSRRCI";
-      }else if(insn == 0x0006){
-        /*insn == 0x0006*/
-        return "CSRRSI";
-      }
-    }else if(insn == 0x0003){
-      /*insn == 0x0003*/
-      return "CSRRC";
-    }
-    return "illegal insn";
-  }
-
   /// @notice Given a arithmetic immediate32 funct3 insn, finds the associated func.
   //  Uses binary search for performance.
   //  @param insn for arithmetic immediate32 funct3 field.
