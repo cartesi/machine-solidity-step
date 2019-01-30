@@ -35,6 +35,18 @@ library RiscVConstants {
   function MSTATUS_UXL_SHIFT()  public returns(uint64) {return 32;}
   function MSTATUS_SXL_SHIFT()  public returns(uint64) {return 34;}
 
+  // mcounteren constants
+  function MCOUNTEREN_CY_SHIFT() public returns(uint64) {return 0;}
+  function MCOUNTEREN_TM_SHIFT() public returns(uint64) {return 1;}
+  function MCOUNTEREN_IR_SHIFT() public returns(uint64) {return 2;}
+
+  function MCOUNTEREN_CY_MASK() public returns(uint64) {return uint64(1) << MCOUNTEREN_CY_SHIFT();}
+  function MCOUNTEREN_TM_MASK() public returns(uint64) {return uint64(1) << MCOUNTEREN_TM_SHIFT();}
+  function MCOUNTEREN_IR_MASK() public returns(uint64) {return uint64(1) << MCOUNTEREN_IR_SHIFT();}
+
+  function MCOUNTEREN_RW_MASK() public returns(uint64) {return MCOUNTEREN_CY_MASK() | MCOUNTEREN_TM_MASK() | MCOUNTEREN_IR_MASK();}
+  function SCOUNTEREN_RW_MASK() public returns(uint64) {return MCOUNTEREN_RW_MASK();}  
+
   //Paging constants
   function PG_SHIFT() public returns(uint64) {return 12;}
   function PG_MASK()  public returns(uint64) {((1 << PG_SHIFT()) - 1);}
