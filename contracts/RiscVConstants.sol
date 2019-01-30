@@ -67,6 +67,48 @@ library RiscVConstants {
   function MSTATUS_SXL_MASK()  public returns(uint64){return uint64(3) << MSTATUS_SXL_SHIFT();}
   function MSTATUS_SD_MASK()   public returns(uint64){return uint64(1) << MSTATUS_SD_SHIFT();}
 
+  // mstatus read/writes
+  function MSTATUS_W_MASK() public returns(uint64){
+    return (
+      MSTATUS_UIE_MASK()  |
+      MSTATUS_SIE_MASK()  |
+      MSTATUS_MIE_MASK()  |
+      MSTATUS_UPIE_MASK() |
+      MSTATUS_SPIE_MASK() |
+      MSTATUS_MPIE_MASK() |
+      MSTATUS_SPP_MASK()  |
+      MSTATUS_MPP_MASK()  |
+      MSTATUS_FS_MASK()   |
+      MSTATUS_MPRV_MASK() |
+      MSTATUS_SUM_MASK()  |
+      MSTATUS_MXR_MASK()  |
+      MSTATUS_TVM_MASK()  |
+      MSTATUS_TW_MASK()   |
+      MSTATUS_TSR_MASK()
+    );
+  }
+  function MSTATUS_R_MASK() public returns(uint64){
+    return (
+      MSTATUS_UIE_MASK()  |
+      MSTATUS_SIE_MASK()  |
+      MSTATUS_MIE_MASK()  |
+      MSTATUS_UPIE_MASK() |
+      MSTATUS_SPIE_MASK() |
+      MSTATUS_MPIE_MASK() |
+      MSTATUS_SPP_MASK()  |
+      MSTATUS_MPP_MASK()  |
+      MSTATUS_FS_MASK()   |
+      MSTATUS_MPRV_MASK() |
+      MSTATUS_SUM_MASK()  |
+      MSTATUS_MXR_MASK()  |
+      MSTATUS_TVM_MASK()  |
+      MSTATUS_TW_MASK()   |
+      MSTATUS_TSR_MASK()  |
+      MSTATUS_UXL_MASK()  |
+      MSTATUS_SXL_MASK()  |
+      MSTATUS_SD_MASK()
+    );
+  }
   // sstatus read/writes
   function SSTATUS_W_MASK() public returns(uint64){
     return (
