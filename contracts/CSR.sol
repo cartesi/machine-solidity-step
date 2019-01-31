@@ -147,6 +147,74 @@ library CSR {
     }
   }
 
+  function write_csr(MemoryInteractor mi, uint256 mmIndex, uint32 csr_addr, uint64 val)
+  public returns (bool) {
+    // Attemps to access a CSR without appropriate privilege level raises a
+    // illegal instruction exception.
+    // Reference: riscv-privileged-v1.10 - section 2.1 - page 7.
+    if(csr_priv(csr_addr) > mi.read_iflags_PRV(mmIndex)){
+      return false;
+    }
+    if(csr_is_read_only(csr_addr)){
+      return false;
+    }
+
+    // TO-DO: Change this to binary search or mapping to increase performance
+    // (in the meantime, pray for solidity devs to add switch statements)
+    if (csr_addr == sstatus){
+      return write_csr_sstatus(mi, mmIndex, val);
+    }else if(csr_addr == sie){
+      return write_csr_sie(mi, mmIndex, val);
+    }else if(csr_addr == stvec){
+      return write_csr_stvec(mi, mmIndex, val);
+    }else if(csr_addr == scounteren){
+      return write_csr_scounteren(mi, mmIndex, val);
+    }else if(csr_addr == sscratch){
+      return write_csr_sscratch(mi, mmIndex, val);
+    }else if(csr_addr == sepc){
+      return write_csr_sepc(mi, mmIndex, val);
+    }else if(csr_addr == scause){
+      return write_csr_scause(mi, mmIndex, val);
+    }else if(csr_addr == stval){
+      return write_csr_stval(mi, mmIndex, val);
+    }else if(csr_addr == sip){
+      return write_csr_sip(mi, mmIndex, val);
+    }else if(csr_addr == satp){
+      return write_csr_satp(mi, mmIndex, val);
+    }else if(csr_addr == mstatus){
+      return write_csr_mstatus(mi, mmIndex, val);
+    }else if(csr_addr == medeleg){
+      return write_csr_medeleg(mi, mmIndex, val);
+    }else if(csr_addr == mideleg){
+      return write_csr_mideleg(mi, mmIndex, val);
+    }else if(csr_addr == mie){
+      return write_csr_mie(mi, mmIndex, val);
+    }else if(csr_addr == mtvec){
+      return write_csr_mtvec(mi, mmIndex, val);
+    }else if(csr_addr == mcounteren){
+      return write_csr_mcounteren(mi, mmIndex, val);
+    }else if(csr_addr == mscratch){
+      return write_csr_mscratch(mi, mmIndex, val);
+    }else if(csr_addr == mepc){
+      return write_csr_mepc(mi, mmIndex, val);
+    }else if(csr_addr == mcause){
+      return write_csr_mcause(mi, mmIndex, val);
+    }else if(csr_addr == mtval){
+      return write_csr_mtval(mi, mmIndex, val);
+    }else if(csr_addr == mip){
+      return write_csr_mip(mi, mmIndex, val);
+    }else if(csr_addr == mcycle){
+      return write_csr_mcycle(mi, mmIndex, val);
+    }else if(csr_addr == minstret){
+      return write_csr_minstret(mi, mmIndex, val);
+    }
+    // Ignore writes
+    else if(csr_addr == tselect || csr_addr == tdata1 || csr_addr == tdata2 || csr_addr == tdata3 ||  csr_addr == misa){
+      return (true);
+    }
+    return false;
+  }
+
   // Extract privilege level from CSR 
   // Bits csr[9:8] encode the CSR's privilege level (i.e lowest privilege level
   // that can access that CSR.
@@ -171,6 +239,180 @@ library CSR {
     }
     return (((counteren >> (csr_addr & 0x1f)) & 1) != 0);
   }
+
+  // csr writes
+  function write_csr_sstatus(MemoryInteractor mi, uint256 mmIndex, uint64 val)
+  internal returns(bool){
+    uint64 c_mstatus = mi.read_mstatus(mmIndex);
+    return write_csr_mstatus(mi, mmIndex, (c_mstatus & ~RiscVConstants.SSTATUS_W_MASK()) | (val * RiscVConstants.SSTATUS_W_MASK()));
+  }
+
+  function write_csr_sie(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    uint64 mask = mi.read_mideleg(mmIndex);
+    uint64 c_mie = mi.read_mie(mmIndex);
+
+    mi.write_mie(mmIndex, (c_mie & ~mask) | (val & mask));
+    return true;
+  }
+
+  function write_csr_stvec(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    mi.write_stvec(val & ~3);
+    return true;
+  }
+
+  function write_csr_scounteren(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    mi.write_scounteren(mmIndex, val & RiscVConstants.SCOUNTEREN_RW_MASK());
+    return true;
+  }
+
+  function write_csr_sscratch(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    mi.write_sscratch(mmIndex, val);
+    return true;
+  }
+
+  function write_csr_sepc(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    mi.write_sepc(mmIndex, val & ~3);
+    return true;
+  }
+
+  function write_csr_scause(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    mi.write_scause(mmIndex, val);
+    return true;
+  }
+
+  function write_csr_stval(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    mi.write_stval(mmIndex, val);
+    return true;
+  }
+
+  function write_csr_sip(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    uint64 c_mask = mi.read_mideleg(mmIndex);
+    uint64 c_mip = mi.read_mip(mmIndex);
+
+    c_mip = (c_mip & ~c_mask) | (val & c_mask);
+    mi.write_mip(mmIndex, c_mip);
+    return true;
+  }
+
+  function write_csr_satp(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    uint64 c_satp = mi.read_satp(mmIndex);
+    int mode = c_satp >> 60;
+    int new_mode = (val >> 60) & 0xf;
+
+    if (new_mode == 0 || (new_mode >= 8 && new_mode <= 9)) {
+      mode = new_mode;
+    }
+    mi.write_satp(mmIndex, (val & ((uint64(1) << 44) - 1) | uint64(mode) << 60));
+    return true;
+  }
+
+  function write_csr_mstatus(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    uint64 c_mstatus = mi.read_mstatus(mmIndex) & RiscVConstants.MSTATUS_R_MASK();
+    // Modifiy only bits that can be written to
+    c_mstatus = (c_mstatus & ~RiscVConstants.MSTATUS_W_MASK()) | (val & RiscVConstants.MSTATUS_W_MASK());
+    //Update the SD bit
+    if ((c_mstatus & RiscVConstants.MSTATUS_FS_MASK()) == RiscVConstants.MSTATUS_FS_MASK()){
+      c_mstatus |= RiscVConstants.MSTATUS_SD_MASK();
+    }
+    mi.write_mstatus(mmIndex, c_mstatus);
+    return true;
+  }
+
+  function write_csr_medeleg(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    uint64 mask = (uint64(1) << (RiscVConstants.MCAUSE_STORE_AMO_PAGE_FAULT() + 1) - 1);
+    mi.write_medeleg(mmIndex, (mi.read_medeleg(mmIndex) & ~mask) | (val & mask));
+    return true;
+  }
+
+  function write_csr_mideleg(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    uint64 mask = RiscVConstants.MIP_SSIP_MASK() | RiscVConstants.MIP_STIP_MASK() | RiscVConstants.MIP_SEIP_MASK(); 
+    mi.write_mideleg(mmIndex, ((mi.read_mideleg(mmIndex) & ~mask) | (val & mask)));
+    return true;
+  }
+
+  function write_csr_mie(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    uint64 mask = RiscVConstants.MIP_MSIP_MASK() | RiscVConstants.MIP_MTIP_MASK() | RiscVConstants.MIP_SSIP_MASK() | RiscVConstants.MIP_STIP_MASK() | RiscVConstants.MIP_SEIP_MASK();
+
+    mi.write_mie(mmIndex, ((mi.read_mie(mmIndex) & ~mask) | (val & mask)));
+    return true;
+  }
+
+  function write_csr_mtvec(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    mi.write_mtvec(mmIndex, val & ~3);
+    return true;
+  }
+
+  function write_csr_mcounteren(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    mi.write_mcounteren(mmIndex, val & RiscVConstants.MCOUNTEREN_RW_MASK());
+    return true;
+  }
+
+  function write_csr_minstret(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    // In Spike, QEMU, and riscvemu, mcycle and minstret are the aliases for the same counter
+    // QEMU calls exit (!) on writes to mcycle or minstret
+    mi.write_minstret(mmIndex, val-1); // The value will be incremented after the instruction is executed
+    return true;
+  }
+  function write_csr_mcycle(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    // We can't allow writes to mcycle because we use it to measure the progress in machine execution.
+    // The specs say it is an MRW CSR, read-writeable in M-mode.                                          mi.write_stval(mmIndex, val);
+    // BBL enables all counters in both M- and S-modes.                                                   return true;
+    // In Spike, QEMU, and riscvemu, mcycle and minstret are the aliases for the same counter.          }
+    // QEMU calls exit (!) on writes to mcycle or minstret.                                             function write_csr_stval(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+    // We instead raise an exception.                                                                   internal returns(bool){
+    return false;
+  }
+  function write_csr_mscratch(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    mi.write_mscratch(mmIndex, val);
+    return true;
+  }
+
+  function write_csr_mepc(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    mi.write_minstret(mmIndex, val & ~3);
+    return true;
+  }
+
+  function write_csr_mcause(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    mi.write_mcause(mmIndex, val);
+    return true;
+  }
+  function write_csr_mtval(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    mi.write_mtval(mmIndex, val);
+    return true;
+  }
+
+  function write_csr_mip(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    uint64 mask = RiscVConstants.MIP_SSIP_MASK() | RiscVConstants.MIP_STIP_MASK();
+    uint64 c_mip = mi.read_mip(mmIndex);
+
+    c_mip = (c_mip & ~mask) | (val & mask);
+
+    mi.write_mip(mmIndex, c_mip);
+    return true;
+  }
+
   // csr reads
   function read_csr_cycle(MemoryInteractor mi, uint256 mmIndex, uint32 csr_addr)
   internal returns(bool, uint64) {
@@ -351,11 +593,16 @@ library CSR {
   function read_csr_success(uint64 val) internal returns(bool, uint64){
     return (true, val); 
   }
-
   function read_csr_fail() internal returns(bool, uint64){
     return (false, 0); 
   }
+
+  // The standard RISC-V ISA sets aside a 12-bit encoding space (csr[11:0])
+  // The top two bits (csr[11:10]) indicate whether the register is 
+  // read/write (00, 01, or 10) or read-only (11)
+  // Reference: riscv-privileged-v1.10 - section 2.1 - page 7.
+  function csr_is_read_only(uint32 csr_addr) internal returns(bool){
+    return ((csr_addr & 0xc00) == 0xc00);
+  }
 }
-
-
 
