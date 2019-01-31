@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/RiscVConstants.sol";
+import "../contracts/RiscVDecoder.sol";
 import "../contracts/RealTimeClock.sol";
 
 library CSR {
@@ -69,6 +70,10 @@ library CSR {
   uint32 constant tdata2 = 0x7a2;
   uint32 constant tdata3 = 0x7a3;
 
+  function execute_CSRRW(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
+  public returns(uint64) {
+    return mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn)); 
+  }
 
   function read_csr(MemoryInteractor mi, uint256 mmIndex, uint32 csr_addr)
   public returns (bool, uint64) {
@@ -258,7 +263,7 @@ library CSR {
 
   function write_csr_stvec(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
   internal returns(bool){
-    mi.write_stvec(val & ~3);
+    mi.write_stvec(mmIndex, val & uint64(~3));
     return true;
   }
 
@@ -276,7 +281,7 @@ library CSR {
 
   function write_csr_sepc(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
   internal returns(bool){
-    mi.write_sepc(mmIndex, val & ~3);
+    mi.write_sepc(mmIndex, val & uint64(~3));
     return true;
   }
 
@@ -352,7 +357,7 @@ library CSR {
 
   function write_csr_mtvec(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
   internal returns(bool){
-    mi.write_mtvec(mmIndex, val & ~3);
+    mi.write_mtvec(mmIndex, val & uint64(~3));
     return true;
   }
 
@@ -369,14 +374,12 @@ library CSR {
     mi.write_minstret(mmIndex, val-1); // The value will be incremented after the instruction is executed
     return true;
   }
+
   function write_csr_mcycle(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
   internal returns(bool){
     // We can't allow writes to mcycle because we use it to measure the progress in machine execution.
-    // The specs say it is an MRW CSR, read-writeable in M-mode.                                          mi.write_stval(mmIndex, val);
-    // BBL enables all counters in both M- and S-modes.                                                   return true;
-    // In Spike, QEMU, and riscvemu, mcycle and minstret are the aliases for the same counter.          }
-    // QEMU calls exit (!) on writes to mcycle or minstret.                                             function write_csr_stval(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
-    // We instead raise an exception.                                                                   internal returns(bool){
+    // BBL enables all counters in both M- and S-modes
+    // We instead raise an exception.                                  
     return false;
   }
   function write_csr_mscratch(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
@@ -387,7 +390,7 @@ library CSR {
 
   function write_csr_mepc(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
   internal returns(bool){
-    mi.write_minstret(mmIndex, val & ~3);
+    mi.write_minstret(mmIndex, val & uint64(~3));
     return true;
   }
 
