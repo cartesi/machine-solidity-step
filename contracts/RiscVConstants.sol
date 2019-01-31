@@ -137,6 +137,23 @@ library RiscVConstants {
         MSTATUS_SD_MASK()
     ); 
   }
+
+  // MCAUSE for exceptions
+  function MCAUSE_INSN_ADDRESS_MISALIGNED()     public returns(uint64) {return 0x0;} ///< Instruction address misaligned
+  function MCAUSE_INSN_ACCESS_FAULT()           public returns(uint64) {return 0x1;} ///< Instruction access fault
+  function MCAUSE_ILLEGAL_INSN()                public returns(uint64) {return 0x2;} ///< Illegal instruction
+  function MCAUSE_BREAKPOINT()                  public returns(uint64) {return 0x3;} ///< Breakpoint
+  function MCAUSE_LOAD_ADDRESS_MISALIGNED()     public returns(uint64) {return 0x4;} ///< Load address misaligned
+  function MCAUSE_LOAD_ACCESS_FAULT()           public returns(uint64) {return 0x5;} ///< Load access fault
+  function MCAUSE_STORE_AMO_ADDRESS_MISALIGNED()public returns(uint64) {return 0x6;} ///< Store/AMO address misaligned
+  function MCAUSE_STORE_AMO_ACCESS_FAULT()      public returns(uint64) {return 0x7;} ///< Store/AMO access fault
+  function MCAUSE_ECALL_BASE()                  public returns(uint64) {return 0x8;} ///< Environment call (+0: from U-mode, +1: from S-mode, +3: from M-mode)
+  function MCAUSE_FETCH_PAGE_FAULT()            public returns(uint64) {return 0xc;} ///< Instruction page fault
+  function MCAUSE_LOAD_PAGE_FAULT()             public returns(uint64) {return 0xd;} ///< Load page fault
+  function MCAUSE_STORE_AMO_PAGE_FAULT()        public returns(uint64) {return 0xf;} ///< Store/AMO page fault
+
+  function MCAUSE_INTERRUPT_FLAG()               public returns(uint64) {return uint64(1) << (RiscVConstants.XLEN() - 1);} ///< Interrupt flag
+
   // mcounteren constants
   function MCOUNTEREN_CY_SHIFT() public returns(uint64) {return 0;}
   function MCOUNTEREN_TM_SHIFT() public returns(uint64) {return 1;}
@@ -161,29 +178,25 @@ library RiscVConstants {
   function PTE_XWR_READ_SHIFT() public returns(uint64)  {return 0;}
   function PTE_XWR_WRITE_SHIFT() public returns(uint64) {return 1;}
   function PTE_XWR_CODE_SHIFT() public returns(uint64)  {return 2;}
+
+// MIP Shifts:
+  function MIP_USIP_SHIFT() public returns(uint64) {return 0;}
+  function MIP_SSIP_SHIFT() public returns(uint64) {return 1;}
+  function MIP_MSIP_SHIFT() public returns(uint64) {return 3;}
+  function MIP_UTIP_SHIFT() public returns(uint64) {return 4;}
+  function MIP_STIP_SHIFT() public returns(uint64) {return 5;}
+  function MIP_MTIP_SHIFT() public returns(uint64) {return 7;}
+  function MIP_UEIP_SHIFT() public returns(uint64) {return 8;}
+  function MIP_SEIP_SHIFT() public returns(uint64) {return 9;}
+  function MIP_MEIP_SHIFT() public returns(uint64) {return 11;}
+
+  function MIP_USIP_MASK() public returns(uint64) {return uint64(1) <<MIP_USIP_SHIFT();}
+  function MIP_SSIP_MASK() public returns(uint64) {return uint64(1) <<MIP_SSIP_SHIFT();}
+  function MIP_MSIP_MASK() public returns(uint64) {return uint64(1) <<MIP_MSIP_SHIFT();}
+  function MIP_UTIP_MASK() public returns(uint64) {return uint64(1) <<MIP_UTIP_SHIFT();}
+  function MIP_STIP_MASK() public returns(uint64) {return uint64(1) <<MIP_STIP_SHIFT();}
+  function MIP_MTIP_MASK() public returns(uint64) {return uint64(1) <<MIP_MTIP_SHIFT();}
+  function MIP_UEIP_MASK() public returns(uint64) {return uint64(1) <<MIP_UEIP_SHIFT();}
+  function MIP_SEIP_MASK() public returns(uint64) {return uint64(1) <<MIP_SEIP_SHIFT();}
+  function MIP_MEIP_MASK() public returns(uint64) {return uint64(1) <<MIP_MEIP_SHIFT();}
 }
-
-//Rest of mstatus
-//  uint64 MSTATUS_UIE     = (1 << 0);
-//  uint64 MSTATUS_SIE     = (1 << 1);
-//  uint64 MSTATUS_HIE     = (1 << 2);
-//  uint64 MSTATUS_MIE     = (1 << 3);
-//  uint64 MSTATUS_UPIE    = (1 << 4);
-//  uint64 MSTATUS_SPIE  =   (1 << MSTATUS_SPIE_SHIFT)
-//  uint64 MSTATUS_HPIE    = (1 << 6);
-//  uint64 MSTATUS_MPIE  =   (1 << MSTATUS_MPIE_SHIFT)
-//  uint64 MSTATUS_SPP   =   (1 << MSTATUS_SPP_SHIFT)
-//  uint64 MSTATUS_HPP     = (3 << 9);
-//  uint64 MSTATUS_MPP   =   (3 << MSTATUS_MPP_SHIFT)
-//  uint64 MSTATUS_FS    =   (3 << MSTATUS_FS_SHIFT)
-//  uint64 MSTATUS_XS      = (3 << 15);
-//  uint64 MSTATUS_MPRV    = (1 << 17);
-//  uint64 MSTATUS_SUM     = (1 << 18);
-//  uint64 MSTATUS_MXR     = (1 << 19);
-//  uint64 MSTATUS_TVM     = (1 << 20);
-//  uint64 MSTATUS_TW      = (1 << 21);
-//  uint64 MSTATUS_TSR     = (1 << 22);
-//  uint64 MSTATUS_SD          ((uint64_t)1 << MSTATUS_SD_SHIFT)
-//  uint64 MSTATUS_UXL         ((uint64_t)3 << MSTATUS_UXL_SHIFT)
-//  uint64 MSTATUS_SXL         ((uint64_t)3 << MSTATUS_SXL_SHIFT)
-
