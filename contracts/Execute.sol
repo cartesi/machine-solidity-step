@@ -82,10 +82,27 @@ library Execute {
     bool status = true;
     uint64 csrval = 0;
 
+    (uint64 rs1val, bool insn_valid) = csr_env_trap_int_mm_funct3(mi, mmIndex, insn);
+
+    if(!insn_valid){
+      return raise_illegal_insn_exception(pc, insn);
+    }
+
     uint32 rd = RiscVDecoder.insn_rd(insn);
-    if(rd != 0){
+    if (rd != 0){
       (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
     }
+    if (!status) {
+      return raise_illegal_insn_exception(pc, insn);
+    }
+
+    if (!CSR.write_csr(mi, mmIndex, csr_address, rs1val)){
+      return raise_illegal_insn_exception(pc, insn);
+    }
+    if (rd != 0){
+      mi.write_x(mmIndex, rd, csrval);
+    }
+    return advance_to_next_insn(mi, mmIndex, pc);
   }
 
   // JAL (i.e Jump and Link). J_immediate encondes a signed offset in multiples
@@ -345,6 +362,7 @@ library Execute {
       }else if(funct3 == 0x0001){
         /*funct3 == 0x0001*/
         //return "CSRRW";
+        return (CSR.execute_CSRRW(mi, mmIndex, insn), true);
       }
     }else if(funct3 > 0x0003){
       if(funct3 == 0x0005){
