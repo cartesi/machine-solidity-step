@@ -152,7 +152,7 @@ library RiscVConstants {
   function MCAUSE_LOAD_PAGE_FAULT()             public returns(uint64) {return 0xd;} ///< Load page fault
   function MCAUSE_STORE_AMO_PAGE_FAULT()        public returns(uint64) {return 0xf;} ///< Store/AMO page fault
 
-  function MCAUSE_INTERRUPT_FLAG()               public returns(uint64) {return uint64(1) << (RiscVConstants.XLEN() - 1);} ///< Interrupt flag
+  function MCAUSE_INTERRUPT_FLAG()               public returns(uint64) {return uint64(1) << (XLEN() - 1);} ///< Interrupt flag
 
   // mcounteren constants
   function MCOUNTEREN_CY_SHIFT() public returns(uint64) {return 0;}
