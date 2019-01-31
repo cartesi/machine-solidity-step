@@ -129,7 +129,86 @@ contract MemoryInteractor {
       uint64(mm.read(_index, _address))
     );
   }
+ // Writes
+  function write_mie(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_mie(), _value);
+  }
+  function write_stvec(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_stvec(), _value);
+  }
+  function write_sscratch(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_sscratch(), _value);
+  }
+  function write_mip(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_mip(), _value);
+  }
+  function write_satp(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_satp(), _value);
+  }
+  function write_medeleg(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_medeleg(), _value);
+  }
+  function write_mideleg(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_mideleg(), _value);
+  }
+  function write_mtvec(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_mtvec(), _value);
+  }
+  function write_mcounteren(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_mcounteren(), _value);
+  }
+  function write_minstret(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_minstret(), _value);
+  }
+  function write_mscratch(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_mscratch(), _value);
+  }
 
+  function write_scounteren(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_scounteren(), _value);
+  }
+ 
+  function write_scause(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_scause(), _value);
+  }
+
+  function write_sepc(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_sepc(), _value);
+  }
+
+  function write_stval(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_stval(), _value);
+  }
+
+  function write_mstatus(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_mstatus(), _value);
+  }
+
+  function write_mcause(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_mcause(), _value);
+  }
+  function write_mepc(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_mepc(), _value);
+  }
+  function write_mtval(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_mtval(), _value);
+  }
+  function write_pc(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_pc(), _value);
+  }
+  function write_ilrsc(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_ilrsc(), _value);
+  }
+
+  function write_iflags_PRV(uint256 _mmIndex, uint64 _new_priv) public {
+    uint64 iflags = read_iflags(_mmIndex);
+    uint64 priv_mask = 3 << 2;
+
+    // Clears bits 3 and 2 of iflags and use or to set new value
+    iflags = (iflags & (~priv_mask)) | (_new_priv << 2);
+
+    memoryWrite(_mmIndex, ShadowAddresses.get_iflags(), iflags);
+  }
   function write_x(uint256 _mmIndex, uint64 _registerIndex, uint64 _value) public {
     bytes8 bytesValue = bytes8(BitsManipulationLibrary.uint64_swapEndian(_value));
     //Address = registerIndex * sizeof(uint64)
