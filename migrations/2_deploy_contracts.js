@@ -23,12 +23,16 @@ module.exports = function(deployer) {
   //Deploy libraries
   deployer.deploy(ShadowAddresses);
   deployer.deploy(RiscVConstants);
-  deployer.deploy(BranchInstructions);
+  deployer.deploy(BitsManipulationLibrary);
+  deployer.deploy(RiscVDecoder);
+
+  deployer.link(RiscVDecoder, BranchInstructions);
+  deployer.link(RiscVDecoder, ArithmeticInstructions);
+  deployer.link(RiscVDecoder, ArithmeticImmediateInstructions);
+
   deployer.deploy(ArithmeticInstructions);
   deployer.deploy(ArithmeticImmediateInstructions);
-  deployer.deploy(BitsManipulationLibrary);
-
-
+  deployer.deploy(BranchInstructions);
   deployer.deploy(PMA);
 
   //Link Instruction libraries to Decoder
