@@ -30,6 +30,10 @@ module.exports = function(deployer) {
   deployer.link(RiscVDecoder, ArithmeticInstructions);
   deployer.link(RiscVDecoder, ArithmeticImmediateInstructions);
 
+  deployer.link(RiscVConstants, BranchInstructions);
+  deployer.link(RiscVConstants, ArithmeticInstructions);
+  deployer.link(RiscVConstants, ArithmeticImmediateInstructions);
+
   deployer.deploy(ArithmeticInstructions);
   deployer.deploy(ArithmeticImmediateInstructions);
   deployer.deploy(BranchInstructions);

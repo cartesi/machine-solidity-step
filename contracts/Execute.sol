@@ -261,7 +261,7 @@ library Execute {
         }else if(funct3 == 0x0005){
           /*funct3 == 0x0005*/
 //          return "shift_right_immediate_group";
-          return shift_right_immediate_funct6(insn, rs1, imm);
+          return shift_right_immediate_funct6(mi, mmIndex, insn);
         }
       }else if(funct3 == 0x0007){
         /*funct3 == 0x0007*/
@@ -321,18 +321,19 @@ library Execute {
   /// @notice Given a right immediate funct6 insn, finds the func associated.
   //  Uses binary search for performance.
   //  @param insn for right immediate funct6 field.
-  function shift_right_immediate_funct6(uint32 insn, uint64 rs1, int32 imm) public returns (uint64) {
+  function shift_right_immediate_funct6(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
+  public returns (uint64, bool) {
     uint32 funct6 = RiscVDecoder.insn_funct6(insn);
     if(funct6 == 0x0000){
       /*funct6 == 0x0000*/
       //return "SRLI";
-      return ArithmeticImmediateInstructions.execute_SRLI(rs1, imm); 
+      return (ArithmeticImmediateInstructions.execute_SRLI(mi, mmIndex, insn), true);
     }else if(funct6 == 0x0010){
       /*funct6 == 0x0010*/
       //return "SRAI";
     }
     //return "illegal insn";
-    return 0;
+    return (0, false);
   }
 
 
