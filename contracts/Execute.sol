@@ -8,6 +8,7 @@ import "../contracts/MemoryInteractor.sol";
 import "./RiscVInstructions/BranchInstructions.sol";
 import "./RiscVInstructions/ArithmeticInstructions.sol";
 import "./RiscVInstructions/ArithmeticImmediateInstructions.sol";
+import {Exceptions} from "../contracts/Exceptions.sol";
 
 library Execute {
   event  Print(string a, uint b);
@@ -66,7 +67,7 @@ library Execute {
     if(branch_valuated){
       uint64 new_pc = uint64(int64(pc) + int64(RiscVDecoder.insn_B_imm(insn)));
       if((new_pc & 3) != 0) {
-        return raise_misaligned_fetch_exception(new_pc);
+        return raise_misaligned_fetch_exception(mi, mmIndex, new_pc);
       }else {
         return execute_jump(mi, mmIndex, new_pc);
       }
@@ -83,7 +84,7 @@ library Execute {
     uint64 new_pc = pc + uint64(RiscVDecoder.insn_J_imm(insn));
 
     if((new_pc & 3) != 0){
-      return raise_misaligned_fetch_exception(new_pc);
+      return raise_misaligned_fetch_exception(mi, mmIndex, new_pc);
     }
     uint32 rd = RiscVDecoder.insn_rd(insn);
 
@@ -111,8 +112,10 @@ library Execute {
     return execute_status.retired;
   }
 
-  function raise_misaligned_fetch_exception(uint64 pc) public returns (execute_status){
-    // TO-DO: Raise excecption - Misaligned fetch
+  function raise_misaligned_fetch_exception(MemoryInteractor mi, uint256 mmIndex, uint64 pc) 
+  public returns (execute_status){
+    Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_INSN_ADDRESS_MISALIGNED(), pc);
+
     return execute_status.retired;
   }
   function raise_illegal_insn_exception(uint64 pc, uint32 insn) public returns (execute_status){
@@ -258,6 +261,7 @@ library Execute {
         }else if(funct3 == 0x0005){
           /*funct3 == 0x0005*/
 //          return "shift_right_immediate_group";
+          return shift_right_immediate_funct6(insn, rs1, imm);
         }
       }else if(funct3 == 0x0007){
         /*funct3 == 0x0007*/
@@ -313,6 +317,24 @@ library Execute {
     }
     return (false, false);
   }
+
+  /// @notice Given a right immediate funct6 insn, finds the func associated.
+  //  Uses binary search for performance.
+  //  @param insn for right immediate funct6 field.
+  function shift_right_immediate_funct6(uint32 insn, uint64 rs1, int32 imm) public returns (uint64) {
+    uint32 funct6 = RiscVDecoder.insn_funct6(insn);
+    if(funct6 == 0x0000){
+      /*funct6 == 0x0000*/
+      //return "SRLI";
+      return ArithmeticImmediateInstructions.execute_SRLI(rs1, imm); 
+    }else if(funct6 == 0x0010){
+      /*funct6 == 0x0010*/
+      //return "SRAI";
+    }
+    //return "illegal insn";
+    return 0;
+  }
+
 
   /// @notice Given an op code, finds the group of instructions it belongs to
   //  using a binary search for performance.
