@@ -150,6 +150,8 @@ library CSR {
     else if(csr_addr == tselect || csr_addr == tdata1 || csr_addr == tdata2 || csr_addr == tdata3 ||  csr_addr == mhartid){
       return (true, 0);
     }
+
+    return read_csr_fail();
   }
 
   function write_csr(MemoryInteractor mi, uint256 mmIndex, uint32 csr_addr, uint64 val)
