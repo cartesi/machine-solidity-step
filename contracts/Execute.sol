@@ -444,7 +444,7 @@ library Execute {
         }else if(opcode == 0x0073){
           /*opcode == 0x0073*/
           //return "csr_env_trap_int_mm_group";
-          return execute_status.retired;
+          return execute_csr_RW(mi, mmIndex, insn, pc);
         }else if(opcode == 0x006f){
           /*opcode == 0x006f*/
           //return "JAL";
