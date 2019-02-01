@@ -204,20 +204,6 @@ library RiscVDecoder {
     return "illegal insn";
   }
 
-  /// @notice Given a right immediate funct6 insn, finds the func associated.
-  //  Uses binary search for performance.
-  //  @param insn for right immediate funct6 field.
-  function shift_right_immediate_funct6(uint32 insn) public returns (bytes32) {
-    if(insn == 0x0000){
-      /*insn == 0x0000*/
-      return "SRLI";
-    }else if(insn == 0x0010){
-      /*insn == 0x0010*/
-      return "SRAI";
-    }
-    return "illegal insn";
-  }
-
   /// @notice Given a fence funct3 insn, finds the func associated.
   //  Uses binary search for performance.
   //  @param insn for fence funct3 field.
