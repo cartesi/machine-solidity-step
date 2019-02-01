@@ -58,12 +58,31 @@ library Execute {
     if(branch_funct3(insn, rs1, rs2)){
       uint64 new_pc = uint64(int64(pc) + int64(RiscVDecoder.insn_B_imm(insn)));
       if((new_pc & 3) != 0) {
-        return misaligned_fetch_exception(new_pc);
+        return raise_misaligned_fetch_exception(new_pc);
       }else {
         return execute_jump(mi, mmIndex, new_pc);
       }
     }
     return advance_to_next_insn(mi, mmIndex, pc);
+  }
+
+  // JAL (i.e Jump and Link). J_immediate encondes a signed offset in multiples
+  // of 2 bytes. The offset is added to pc and JAL stores the address of the jump
+  // (pc + 4) to the rd register.
+  // Reference: riscv-spec-v2.2.pdf -  Section 2.5 - page 16
+  function execute_jal(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+  public returns (execute_status){
+    uint64 new_pc = pc + uint64(RiscVDecoder.insn_J_imm(insn));
+
+    if((new_pc & 3) != 0){
+      return raise_misaligned_fetch_exception(new_pc);
+    }
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+
+    if(rd != 0){
+      mi.write_x(mmIndex, rd, pc + 4);
+    }
+    return execute_jump(mi, mmIndex, new_pc);
   }
 
   //AUIPC forms a 32-bit offset from the 20-bit U-immediate, filling in the 
@@ -80,12 +99,11 @@ library Execute {
   }
 
   function execute_jump(MemoryInteractor mi, uint256 mmIndex, uint64 new_pc) public returns (execute_status){
-    //   a.pc = new_pc;
     mi.memoryWrite(mmIndex, ShadowAddresses.get_pc(), new_pc);
     return execute_status.retired;
   }
 
-  function misaligned_fetch_exception(uint64 pc) public returns (execute_status){
+  function raise_misaligned_fetch_exception(uint64 pc) public returns (execute_status){
     // TO-DO: Raise excecption - Misaligned fetch
     return execute_status.retired;
   }
@@ -230,6 +248,7 @@ library Execute {
       }else if(funct3 == 0x0006){
         /*funct3 == 0x0006*/
 //        return "ORI";
+        return ArithmeticImmediateInstructions.execute_ORI(rs1, imm);
       }
     }else if(funct3 == 0x0003){
       /*funct3 == 0x0003*/
@@ -344,7 +363,7 @@ library Execute {
         }else if(opcode == 0x006f){
           /*opcode == 0x006f*/
           //return "JAL";
-          return execute_status.retired;
+          return execute_jal(mi, mmIndex, insn, pc);
         }
       }else if (opcode == 0x0063){
         /*opcode == 0x0063*/
