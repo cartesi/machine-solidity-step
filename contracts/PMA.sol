@@ -53,4 +53,19 @@ library PMA {
   function pma_get_istart_X(uint64 start) public returns (bool) {
     return (start >> 5) & 1 == 1;
   }
+
+  // E bit defines if the range is excluded
+  // The flag is pma_entry start's word third bit
+  // Reference: The Core of Cartesi, v1.02 - figure 2.
+  function pma_get_istart_E(uint64 start) public returns (bool) {
+    return (start >> 2) & 1 == 1;
+  }
+
+  // W bit defines write permission
+  // The flag is pma_entry start's word bit on position 4
+  // Reference: The Core of Cartesi, v1.02 - figure 2.
+  function pma_get_istart_W(uint64 start) public returns (bool) {
+    return (start >> 4) & 1 == 1;
+  }
+
 }
