@@ -1,4 +1,4 @@
-/// @title Fetch
+/// @title Virtual Memory
 pragma solidity ^0.5.0;
 
 import "./ShadowAddresses.sol";
@@ -6,9 +6,9 @@ import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/PMA.sol";
-import "../contracts/VirtualMemory.sol";
 
-library Fetch {
+library VirtualMemory {
+
   // Variable positions on their respective array.
   // This is not an enum because enum assumes the type from the number of variables
   // So we would have to explicitly cast to uint256 on every single access
@@ -25,51 +25,6 @@ library Fetch {
   uint256 constant satp = 3;
   uint256 constant vpn_mask = 4;
 
-
-  function fetch_insn(uint256 mmIndex, address _memoryInteractorAddress) public returns (fetch_status, uint32, uint64){
-    MemoryInteractor mi = MemoryInteractor(_memoryInteractorAddress); 
-
-    bool translateBool;
-    uint64 paddr;
-
-    //read_pc
-    uint64 pc = mi.memoryRead(mmIndex, ShadowAddresses.get_pc());
-    (translateBool, paddr) = VirtualMemory.translate_virtual_address(mi, mmIndex, pc, RiscVConstants.PTE_XWR_CODE_SHIFT());
-
-    //translate_virtual_address failed
-    if(!translateBool){
-      //raise_exception(CAUSE_FETCH_PAGE_FAULT)
-
-      //returns fetch_exception and returns zero as insn and pc
-      return (fetch_status.exception, 0, 0);
-    }
-
-    // Finds the range in memory in which the physical address is located
-    // Returns start and length words from pma
-    (uint64 pma_start, uint64 pma_length) = PMA.find_pma_entry(mi, mmIndex, paddr);
-
-    //emit Print("pma_entry.start", pma_entry.start);
-    //emit Print("pma_entry.length", pma_entry.length);
-
-    // M flag defines if the pma range is in memory 
-    // X flag defines if the pma is executable
-    // If the pma is not memory or not executable - this is a pma violation
-    // Reference: The Core of Cartesi, v1.02 - section 3.2 the board - page 5.
-
-    if(!PMA.pma_get_istart_M(pma_start) || !PMA.pma_get_istart_X(pma_start)){
-
-      //emit Print("CAUSE_FETCH_FAULT", paddr);
-      //raise_exception(CAUSE_FETCH_FAULT)
-//      return fetch_status.exception;
-    }
-
-    //emit Print("paddr/insn", paddr);
-    //will this actually return the instruction? Should it be 32bits?
-    uint32 insn = uint32(mi.memoryRead(mmIndex, paddr));
-    //emit Print("insn", uint(insn));
-    return (fetch_status.success, insn, pc);
-
-  }
   // Finds the physical address associated to the virtual address (vaddr).
   // Walks the page table until it finds a valid one. Returns a bool if the physical
   // address was succesfully found along with the address. Returns false and zer0
@@ -77,16 +32,15 @@ library Fetch {
 
   // Virtual Address Translation proccess is defined, step by step on the following Reference:
   // Reference: riscv-priv-spec-1.10.pdf - Section 4.3.2, page 62.
-  function translate_virtual_address(uint256 mmIndex, MemoryInteractor mi, uint64 vaddr, int xwr_shift)
-  public returns(bool, uint64){
+  function translate_virtual_address(MemoryInteractor mi, uint256 mmIndex, uint64 vaddr, int xwr_shift)
+  public returns(bool, uint64) {
     //TO-DO: check shift + mask
     //TO-DO: use bitmanipulation right shift
 
     // Through arrays we force variables that were being put on stack to be stored
-   // in memory. It is more expensive, but the stack only supports 16 variables.
+    // in memory. It is more expensive, but the stack only supports 16 variables.
     uint64[5] memory uint64vars;
     int[6] memory intvars;
-
 
     // Reads privilege level on iflags register. The privilege level is located
     // on bits 2 and 3.
@@ -237,10 +191,5 @@ library Fetch {
       }
     }
     return(false, 0);
-  }
-
-  enum fetch_status {
-    exception, //failed: exception raised
-    success
   }
 }
