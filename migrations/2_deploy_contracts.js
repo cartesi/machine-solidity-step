@@ -16,6 +16,7 @@ var Interrupts = artifacts.require("./Interrupts.sol");
 var AddressTracker = artifacts.require("./AddressTracker.sol");
 var MMInstantiator = artifacts.require("./MMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
+var VirtualMemory = artifacts.require("./VirtualMemory.sol");
 var Step = artifacts.require("./Step.sol");
 
 
@@ -45,6 +46,13 @@ module.exports = function(deployer) {
 
   deployer.deploy(RiscVDecoder);
 
+  //Link libraries to Virtual Memory
+  deployer.link(RiscVDecoder, VirtualMemory);
+  deployer.link(ShadowAddresses, VirtualMemory);
+  deployer.link(RiscVConstants, VirtualMemory);
+  deployer.link(PMA, VirtualMemory);
+  deployer.deploy(VirtualMemory);
+
   //Link all libraries to Step
   deployer.link(RiscVDecoder, Step);
   deployer.link(ShadowAddresses, Step);
@@ -55,6 +63,7 @@ module.exports = function(deployer) {
   deployer.link(ShadowAddresses, Fetch);
   deployer.link(RiscVConstants, Fetch);
   deployer.link(PMA, Fetch);
+  deployer.link(VirtualMemory, Fetch);
   deployer.deploy(Fetch);
   deployer.link(Fetch, Step);
 
