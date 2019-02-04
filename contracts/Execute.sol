@@ -336,6 +336,29 @@ library Execute {
     return (0, false);
   }
 
+  /// @notice Given a store funct3 group insn, finds the function  associated.
+  //  Uses binary search for performance
+  //  @param insn for store funct3 field
+  function store_funct3(uint32 insn) public returns (execute_status){
+    uint32 funct3 = RiscVDecoder.insn_funct3(insn);
+
+    if(funct3 == 0x0000){
+      /*funct3 == 0x0000*/
+      return "SB";
+    }else if(funct3 > 0x0001){
+      if(funct3 == 0x0002){
+        /*funct3 == 0x0002*/
+        return "SW";
+      }else if(funct3 == 0x0003){
+        /*funct3 == 0x0003*/
+        return "SD";
+      }
+    }else if(funct3 == 0x0001){
+      /*funct3 == 0x0001*/
+      return "SH";
+    }
+    return "illegal funct3";
+  }
 
   /// @notice Given an op code, finds the group of instructions it belongs to
   //  using a binary search for performance.
