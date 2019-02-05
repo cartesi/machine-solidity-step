@@ -79,6 +79,11 @@ library RiscVConstants {
   function PTE_XWR_READ_SHIFT() public returns(uint64)  {return 0;}
   function PTE_XWR_WRITE_SHIFT() public returns(uint64) {return 1;}
   function PTE_XWR_CODE_SHIFT() public returns(uint64)  {return 2;}
+
+  // PAGE masks
+  function PAGE_NUMBER_SHIFT() public returns(uint64)  {return 12;}
+
+  function PAGE_OFFSET_MASK() public returns(uint64) {return ((uint64(1) << PAGE_NUMBER_SHIFT()) - 1);}
 }
 
 //Rest of mstatus
