@@ -67,5 +67,11 @@ library PMA {
   function pma_get_istart_W(uint64 start) public returns (bool) {
     return (start >> 4) & 1 == 1;
   }
+  // R bit defines read permission
+  // The flag is pma_entry start's word bit on position 3
+  // Reference: The Core of Cartesi, v1.02 - figure 2.
+  function pma_get_istart_R(uint64 start) public returns (bool) {
+    return (start >> 3) & 1 == 1;
+  }
 
 }
