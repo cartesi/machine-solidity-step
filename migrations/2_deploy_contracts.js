@@ -6,6 +6,8 @@ var BranchInstructions = artifacts.require("./RiscVInstructions/BranchInstructio
 var ArithmeticInstructions = artifacts.require("./RiscVInstructions/ArithmeticInstructions.sol");
 var ArithmeticImmediateInstructions = artifacts.require("./RiscVInstructions/ArithmeticImmediateInstructions.sol");
 var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.sol");
+var S_Instructions = artifacts.require("./RiscVInstructions/S_Instructions.sol");
+
 var Execute = artifacts.require("./Execute.sol");
 var Exceptions = artifacts.require("./Exceptions.sol");
 var Fetch = artifacts.require("./Fetch.sol");
@@ -46,12 +48,23 @@ module.exports = function(deployer) {
 
   deployer.deploy(RiscVDecoder);
 
+  //Link all libraries to Exceptions
+  deployer.link(RiscVConstants, Exceptions);
+  deployer.deploy(Exceptions);
+
+
   //Link libraries to Virtual Memory
   deployer.link(RiscVDecoder, VirtualMemory);
   deployer.link(ShadowAddresses, VirtualMemory);
   deployer.link(RiscVConstants, VirtualMemory);
   deployer.link(PMA, VirtualMemory);
+  deployer.link(Exceptions, VirtualMemory);
   deployer.deploy(VirtualMemory);
+
+  //Link all libraries to S_Instructions
+  deployer.link(RiscVDecoder, S_Instructions);
+  deployer.link(VirtualMemory, S_Instructions);
+  deployer.deploy(S_Instructions);
 
   //Link all libraries to Step
   deployer.link(RiscVDecoder, Step);
@@ -77,10 +90,6 @@ module.exports = function(deployer) {
   deployer.link(BitsManipulationLibrary, MemoryInteractor);
   deployer.link(ShadowAddresses, MemoryInteractor);
 
-  //Link all libraries to Exceptions
-  deployer.link(RiscVConstants, Exceptions);
-  deployer.deploy(Exceptions);
-
    //Link all libraries to Execute
   deployer.link(RiscVDecoder, Execute);
   deployer.link(ShadowAddresses, Execute);
@@ -89,6 +98,7 @@ module.exports = function(deployer) {
   deployer.link(ArithmeticInstructions, Execute);
   deployer.link(ArithmeticImmediateInstructions, Execute);
   deployer.link(Exceptions, Execute);
+  deployer.link(S_Instructions, Execute);
   deployer.deploy(Execute);
   deployer.link(Execute, Step);
 
