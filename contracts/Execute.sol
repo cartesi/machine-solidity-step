@@ -8,6 +8,7 @@ import "../contracts/MemoryInteractor.sol";
 import "./RiscVInstructions/BranchInstructions.sol";
 import "./RiscVInstructions/ArithmeticInstructions.sol";
 import "./RiscVInstructions/ArithmeticImmediateInstructions.sol";
+import "./RiscVInstructions/S_Instructions.sol";
 import {Exceptions} from "../contracts/Exceptions.sol";
 
 library Execute {
@@ -339,25 +340,31 @@ library Execute {
   /// @notice Given a store funct3 group insn, finds the function  associated.
   //  Uses binary search for performance
   //  @param insn for store funct3 field
-  function store_funct3(uint32 insn) public returns (execute_status){
+  function store_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+  public returns (execute_status){
     uint32 funct3 = RiscVDecoder.insn_funct3(insn);
+    bool write_success = false;
 
     if(funct3 == 0x0000){
       /*funct3 == 0x0000*/
-      return "SB";
+      //return "SB";
+      return S_Instructions.SB(mi, mmIndex, pc, insn) ? advance_to_next_insn(mi, mmIndex, pc) : execute_status.retired;
     }else if(funct3 > 0x0001){
       if(funct3 == 0x0002){
         /*funct3 == 0x0002*/
-        return "SW";
+        //return "SW";
+        return S_Instructions.SW(mi, mmIndex, pc, insn) ? advance_to_next_insn(mi, mmIndex, pc) : execute_status.retired;
       }else if(funct3 == 0x0003){
         /*funct3 == 0x0003*/
-        return "SD";
+        //return "SD";
+        return S_Instructions.SD(mi, mmIndex, pc, insn) ? advance_to_next_insn(mi, mmIndex, pc) : execute_status.retired;
       }
     }else if(funct3 == 0x0001){
       /*funct3 == 0x0001*/
-      return "SH";
+      //return "SH";
+      return S_Instructions.SH(mi, mmIndex, pc, insn) ? advance_to_next_insn(mi, mmIndex, pc) : execute_status.retired;
     }
-    return "illegal funct3";
+    return raise_illegal_insn_exception(pc, insn);
   }
 
   /// @notice Given an op code, finds the group of instructions it belongs to
