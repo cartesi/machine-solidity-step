@@ -3,10 +3,20 @@ pragma solidity ^0.5.0;
 
 import "../contracts/MemoryInteractor.sol";
 
-library PMA {
+library PMA { 
+  // 0 for memory ranges
+  // 1 for shadows
+  // 2 for CLINT
+  // 3 for HTIF
+
+  uint64 constant MEMORY_ID = 0;
+  uint64 constant SHADOW_ID = 1;
+  uint64 constant CLINT_ID = 2;
+  uint64 constant HTIF_ID = 3;
+
+
 
   function find_pma_entry(MemoryInteractor mi, uint256 mmIndex, uint64 paddr) public returns (uint64, uint64){
-  
     // Hard coded ram address starts at 0x800
     // In total there are 32 PMAs from processor shadow to Flash disk 7.
     // PMA 0 - describes RAM and is hardcoded to address 0x800
@@ -23,13 +33,14 @@ library PMA {
 
       uint64 length_word = mi.memoryRead(mmIndex, pmaAddress + ((i * 8 + 8)));
 
-      // Both pma_start and pma_length have to be aligned to a 4KiB boundary.
-      // So this leaves the lowest 12 bits for attributes. To find out the actual
-      // start and length of the PMAs it is necessary to clean those attribute bits
-      // Reference: The Core of Cartesi, v1.02 - Figure 2 - Page 5.
-      uint64 pma_start = start_word & 0xfffffffffffff000;
-      uint64 pma_length = length_word & 0xfffffffffffff000;
+      uint64 pma_start = pma_get_start(start_word);
+      uint64 pma_length = pma_get_length(length_word);
 
+      // TO-DO: paddr +
+      //else if (pma == io)
+      //else raise_exception store access fault
+
+      //checar device no virtual write
       if(paddr >= pma_start && paddr < (pma_start + pma_length)){
         return (start_word, length_word);
       }
@@ -39,6 +50,36 @@ library PMA {
       }
     }
   }
+  // Both pma_start and pma_length have to be aligned to a 4KiB boundary.
+  // So this leaves the lowest 12 bits for attributes. To find out the actual
+  // start and length of the PMAs it is necessary to clean those attribute bits
+  // Reference: The Core of Cartesi, v1.02 - Figure 2 - Page 5.
+  function pma_get_start(uint64 start_word) public returns (uint64){
+    return start_word & 0xfffffffffffff000;
+  }
+
+  function pma_get_length(uint64 length_word) public returns (uint64){
+    return length_word & 0xfffffffffffff000;
+  }
+
+  // DID is encoded on bytes 8 - 11 of pma's start word.
+  // It defines the devices id.
+  // 0 for memory ranges
+  // 1 for shadows
+  // 2 for CLINT
+  // 3 for HTIF
+  // Reference: The Core of Cartesi, v1.02 - Figure 2 - Page 5.
+  function pma_get_DID(uint64 start_word) internal returns (uint64) {
+    return (start_word >> 8) & 0x0F;
+  }
+
+  function pma_is_CLINT(uint64 start_word) public returns (bool) {
+    return pma_get_DID(start_word) == CLINT_ID;
+  }
+
+  function pma_is_HTIF(uint64 start_word) public returns (bool) {
+    return pma_get_DID(start_word) == HTIF_ID;
+  }
 
   // M bit defines if the range is memory
   // The flag is pma_entry start's word first bit
@@ -46,7 +87,7 @@ library PMA {
   function pma_get_istart_M(uint64 start) public returns (bool) {
     return start & 1 == 1;
   }
- 
+
   // X bit defines if the range is executable
   // The flag is pma_entry start's word on position 5.
   // Reference: The Core of Cartesi, v1.02 - figure 2.
@@ -73,5 +114,4 @@ library PMA {
   function pma_get_istart_R(uint64 start) public returns (bool) {
     return (start >> 3) & 1 == 1;
   }
-
 }
