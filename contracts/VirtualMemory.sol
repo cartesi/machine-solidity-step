@@ -63,13 +63,11 @@ library VirtualMemory {
          return true;
       }else {
         uint64 offset = paddr - PMA.pma_get_start(pma_start);
-
+        // TO-DO: complete read_htif and read_clint
         if (PMA.pma_is_HTIF(pma_start)) {
         } else if (PMA.pma_is_CLINT(pma_start)) {
         }
-        // if pma get driver offset
-        // raise exception 
-        //return false;
+
         return true; //(true, pval);
       }
     }

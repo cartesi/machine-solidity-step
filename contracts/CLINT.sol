@@ -42,7 +42,7 @@ library CLINT {
   // \param wordsize can be uint8, uint16, uint32 or uint64
   // \return bool if read was successfull
   // \return uint64 pval
-  function clint_write(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 offset, uint64 val, uint256 wordSize)
+  function clint_write(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 offset, uint64 val, uint64 wordSize)
   public returns (bool) {
 
     if (offset == CLINT_CSR_REL_MSIP0){
