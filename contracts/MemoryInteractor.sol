@@ -135,12 +135,6 @@ contract MemoryInteractor {
     return (memoryRead(_mmIndex, ShadowAddresses.get_iflags()) >> 2) & 3;
   }
 
-  function memoryRead(uint256 _index, uint64 _address) public returns (uint64){
-    return BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mm.read(_index, _address))
-    );
-  }
-
   // Sets
   function set_priv(uint256 _mmIndex, uint64 new_priv) public{
     write_iflags_PRV(_mmIndex, new_priv);
@@ -238,16 +232,50 @@ contract MemoryInteractor {
 
     memoryWrite(_mmIndex, ShadowAddresses.get_iflags(), iflags);
   }
-  
+
+  function write_memory(uint256 _mmIndex, uint64 paddr, uint64 value, uint64 wordSize) public {
+    uint64 numberOfBytes = wordSize / 8;
+    uint64 oldVal = pure_memoryRead(_mmIndex, paddr);
+
+    if (numberOfBytes == 8) {
+      memoryWrite(_mmIndex, paddr, value);
+    } else {
+      uint64 closestStartAddr = paddr & uint64(~0x3F);
+      uint64 relAddr = paddr - closestStartAddr;
+
+      uint64 mask = ((2 ** (numberOfBytes * 8)) - 1) << relAddr;
+      uint64 little_e_value = BitsManipulationLibrary.uint64_swapEndian(value);
+      uint64 newValue = (oldVal & (~mask)) | (little_e_value << relAddr);
+      pure_memoryWrite(_mmIndex, closestStartAddr, newValue);
+    }
+  }
+
   function write_x(uint256 _mmIndex, uint64 _registerIndex, uint64 _value) public {
     //Address = registerIndex * sizeof(uint64)
     memoryWrite(_mmIndex, _registerIndex * 8, _value);
+  }
+
+  // Internal functions
+  function memoryRead(uint256 _index, uint64 _address) public returns (uint64){
+    return BitsManipulationLibrary.uint64_swapEndian(
+      uint64(mm.read(_index, _address))
+    );
+  }
+
+  // Memory Read endianess swap
+  function pure_memoryRead(uint256 _index, uint64 _address) public returns (uint64){
+    return uint64(mm.read(_index, _address));
   }
 
   function memoryWrite(uint256 _index, uint64 _address, uint64 _value) public {
     bytes8 bytesValue = bytes8(BitsManipulationLibrary.uint64_swapEndian(_value));
     mm.write(_index, _address, bytesValue);
   }
-}
 
+  // Memory Write without endianess swap
+  function pure_memoryWrite(uint256 _index, uint64 _address, uint64 _value) public {
+    mm.write(_index, _address, bytes8(_value));
+  }
+
+}
 
