@@ -3,6 +3,7 @@ var RiscVDecoder = artifacts.require("./RiscVDecoder.sol");
 var ShadowAddresses = artifacts.require("./ShadowAddresses.sol");
 var RiscVConstants = artifacts.require("./RiscVConstants.sol");
 var BranchInstructions = artifacts.require("./RiscVInstructions/BranchInstructions.sol");
+var RealTimeClock = artifacts.require("./RealTimeClock.sol");
 var ArithmeticInstructions = artifacts.require("./RiscVInstructions/ArithmeticInstructions.sol");
 var ArithmeticImmediateInstructions = artifacts.require("./RiscVInstructions/ArithmeticImmediateInstructions.sol");
 var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.sol");
@@ -10,6 +11,7 @@ var Execute = artifacts.require("./Execute.sol");
 var Exceptions = artifacts.require("./Exceptions.sol");
 var Fetch = artifacts.require("./Fetch.sol");
 var PMA = artifacts.require("./PMA.sol");
+var CSR = artifacts.require("./CSR.sol");
 var Interrupts = artifacts.require("./Interrupts.sol");
 
 //Contracts
@@ -25,6 +27,7 @@ module.exports = function(deployer) {
   deployer.deploy(RiscVConstants);
   deployer.deploy(BitsManipulationLibrary);
   deployer.deploy(RiscVDecoder);
+  deployer.deploy(RealTimeClock);
 
   deployer.link(RiscVDecoder, BranchInstructions);
   deployer.link(RiscVDecoder, ArithmeticInstructions);
@@ -39,11 +42,19 @@ module.exports = function(deployer) {
   deployer.deploy(BranchInstructions);
   deployer.deploy(PMA);
 
+
+  //Link all libraries to CSR
+  deployer.link(RealTimeClock, CSR);
+  deployer.link(RiscVDecoder, CSR);
+  deployer.link(RiscVConstants, CSR);
+  deployer.deploy(CSR);
+
   //Link Instruction libraries to Decoder
   deployer.link(BranchInstructions, RiscVDecoder);
   deployer.link(ArithmeticInstructions, RiscVDecoder);
 
   deployer.deploy(RiscVDecoder);
+
 
   //Link all libraries to Step
   deployer.link(RiscVDecoder, Step);
@@ -79,9 +90,13 @@ module.exports = function(deployer) {
   deployer.link(BranchInstructions, Execute);
   deployer.link(ArithmeticInstructions, Execute);
   deployer.link(ArithmeticImmediateInstructions, Execute);
+  deployer.link(CSR, Execute);
   deployer.link(Exceptions, Execute);
   deployer.deploy(Execute);
   deployer.link(Execute, Step);
+
+  deployer.link(BitsManipulationLibrary, MemoryInteractor);
+  deployer.link(ShadowAddresses, MemoryInteractor);
 
   deployer.deploy(AddressTracker);
   deployer.deploy(MMInstantiator).then(function(){
