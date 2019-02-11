@@ -60,7 +60,7 @@ library Fetch {
 
       //emit Print("CAUSE_FETCH_FAULT", paddr);
       //raise_exception(CAUSE_FETCH_FAULT)
-//      return fetch_status.exception;
+      return (fetch_status.exception, 0, 0);
     }
 
     //emit Print("paddr/insn", paddr);
