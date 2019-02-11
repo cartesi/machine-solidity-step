@@ -80,6 +80,8 @@ module.exports = function(deployer) {
   deployer.link(ShadowAddresses, VirtualMemory);
   deployer.link(RiscVConstants, VirtualMemory);
   deployer.link(PMA, VirtualMemory);
+  deployer.link(CLINT, VirtualMemory);
+  deployer.link(HTIF, VirtualMemory);
   deployer.link(Exceptions, VirtualMemory);
   deployer.deploy(VirtualMemory);
 
