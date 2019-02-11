@@ -1,4 +1,4 @@
-/// @title Virtual Memory
+// @title Virtual Memory
 pragma solidity ^0.5.0;
 
 import "./ShadowAddresses.sol";
@@ -6,6 +6,7 @@ import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/PMA.sol";
+import "../contracts/Exceptions.sol";
 
 library VirtualMemory {
 
@@ -25,6 +26,85 @@ library VirtualMemory {
   uint256 constant satp = 3;
   uint256 constant vpn_mask = 4;
 
+  // \brief Read word to virtual memory
+  // \param wordsize can be uint8, uint16, uint32 or uint64
+  // \param vaddr is the words virtual address 
+  // \param val is the value to be written
+  // \returns True if write was succesfull, false if not.
+  // \returns Word with receiveing value.
+  function read_virtual_memory(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize, uint64 vaddr, uint64 val)
+  public returns(bool) { //, uint64){
+     if (vaddr & (wordSize - 1) != 0){
+      // Word is not aligned - raise exception
+      Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_LOAD_ADDRESS_MISALIGNED(), vaddr);
+      return false;
+    } else {
+     (bool translate_success, uint64 paddr) = translate_virtual_address(mi, mmIndex, vaddr, RiscVConstants.PTE_XWR_WRITE_SHIFT());
+      if (!translate_success) {
+        // translation failed - raise exception
+        Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_LOAD_PAGE_FAULT(), vaddr);
+        return false;
+      }
+      (uint64 pma_start, uint64 pma_length) = PMA.find_pma_entry(mi, mmIndex, paddr);
+      if (PMA.pma_get_istart_E(pma_start) || !PMA.pma_get_istart_R(pma_start)) {
+        // PMA is either excluded or we dont have permission to write - raise exception
+        Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_LOAD_ACCESS_FAULT(), vaddr);
+        return false;
+      } else if (PMA.pma_get_istart_M(pma_start)) {
+         mi.memoryRead(mmIndex, paddr);
+         return true;
+      }else {
+        uint64 offset = paddr - PMA.get_start(pma_start);
+
+        if (PMA.pma_is_HTIF(pma_start)) {
+        } else if (PMA.pma_is_CLINT(pma_start)) {
+        }
+        // if pma get driver offset
+        // raise exception 
+        //return false;
+        return true; //(true, pval);
+      }
+    }
+  }
+
+  // \brief Writes word to virtual memory
+  // \param wordsize can be uint8, uint16, uint32 or uint64
+  // \param vaddr is the words virtual address 
+  // \param val is the value to be written
+  // \returns True if write was succesfull, false if not.
+  function write_virtual_memory(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize, uint64 vaddr, uint64 val)
+  public returns (bool) {
+    if (vaddr & (wordSize - 1) != 0){
+      // Word is not aligned - raise exception
+      Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_STORE_AMO_ADDRESS_MISALIGNED(), vaddr);
+      return false;
+    } else {
+     (bool translate_success, uint64 paddr) = translate_virtual_address(mi, mmIndex, vaddr, RiscVConstants.PTE_XWR_WRITE_SHIFT());
+      if (!translate_success) {
+        // translation failed - raise exception
+        Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_STORE_AMO_PAGE_FAULT(), vaddr);
+        return false;
+      }
+      (uint64 pma_start, uint64 pma_length) = PMA.find_pma_entry(mi, mmIndex, paddr);
+
+      if (PMA.pma_get_istart_E(pma_start) || !PMA.pma_get_istart_W(pma_start)) {
+        // PMA is either excluded or we dont have permission to write - raise exception
+        Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_STORE_AMO_ACCESS_FAULT(), vaddr);
+        return false;
+      } else if (PMA.pma_get_istart_M(pma_start)) {
+         //write to memory
+         return true;
+      } else {
+        //virtual_state_access ?
+        // If we do not know how to write, treat as a PMA violation
+        //if (!pma.get_device().get_driver() -> write(pma, &da, offset, val ...){
+        //  raise_exception(MCAUSE_STORE_AMO_ACCESS_FAULT)
+        //  return false
+        //} 
+        return true;
+      }
+    }
+  }
   // Finds the physical address associated to the virtual address (vaddr).
   // Walks the page table until it finds a valid one. Returns a bool if the physical
   // address was succesfully found along with the address. Returns false and zer0
@@ -192,4 +272,5 @@ library VirtualMemory {
     }
     return(false, 0);
   }
+
 }
