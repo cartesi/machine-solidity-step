@@ -54,7 +54,7 @@ library VirtualMemory {
          mi.memoryRead(mmIndex, paddr);
          return true;
       }else {
-        uint64 offset = paddr - PMA.get_start(pma_start);
+        uint64 offset = paddr - PMA.pma_get_start(pma_start);
 
         if (PMA.pma_is_HTIF(pma_start)) {
         } else if (PMA.pma_is_CLINT(pma_start)) {
