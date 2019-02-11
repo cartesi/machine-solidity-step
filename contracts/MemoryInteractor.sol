@@ -139,7 +139,7 @@ contract MemoryInteractor {
       uint64(mm.read(_index, _address))
     );
   }
-  
+
   // Writes
   function write_mie(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mie(), _value);
@@ -174,44 +174,21 @@ contract MemoryInteractor {
   function write_mscratch(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mscratch(), _value);
   }
-
   function write_scounteren(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_scounteren(), _value);
   }
- 
   function write_scause(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_scause(), _value);
   }
-
   function write_sepc(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_sepc(), _value);
   }
-
   function write_stval(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_stval(), _value);
   }
-
   function write_mstatus(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mstatus(), _value);
   }
-
-  // Writes
-  function write_scause(uint256 _mmIndex, uint64 _value) public {
-    memoryWrite(_mmIndex, ShadowAddresses.get_scause(), _value);
-  }
-
-  function write_sepc(uint256 _mmIndex, uint64 _value) public {
-    memoryWrite(_mmIndex, ShadowAddresses.get_sepc(), _value);
-  }
-
-  function write_stval(uint256 _mmIndex, uint64 _value) public {
-    memoryWrite(_mmIndex, ShadowAddresses.get_stval(), _value);
-  }
-
-  function write_mstatus(uint256 _mmIndex, uint64 _value) public {
-    memoryWrite(_mmIndex, ShadowAddresses.get_mstatus(), _value);
-  }
-
   function write_mcause(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mcause(), _value);
   }
