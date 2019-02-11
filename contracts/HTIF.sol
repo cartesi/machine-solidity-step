@@ -8,8 +8,8 @@ import "../contracts/MemoryInteractor.sol";
 // Reference: The Core of Cartesi, v1.02 - Section 3.2 - The Board
 library HTIF {
 
-  uint64 constant HTIF_TOHOST_ADDR = 0x40000000;
-  uint64 constant HTIF_FROMHOST_ADDR = 0x40000008;
+  uint64 constant HTIF_TOHOST_ADDR_CONST = 0x40000000;
+  uint64 constant HTIF_FROMHOST_ADDR_CONST = 0x40000008;
 
   uint64 constant CSR_HTIF_REL_TOHOST_ADDR = 0x0;
   uint64 constant CSR_HTIF_REL_FROMHOST_ADDR = 0x8;
@@ -68,11 +68,11 @@ library HTIF {
 
   function htif_write_tohost(MemoryInteractor mi, uint256 mmIndex, uint64 tohost)
   internal returns (bool){
-    uint32 device = tohost >> 56;
-    uint32 cmd = (tohost >> 48) & 0xff;
-    uint64 payload = (tohost & (~(uint256(1) >> 16)));
+    uint32 device = uint32(tohost >> 56);
+    uint32 cmd = uint32((tohost >> 48) & 0xff);
+    uint64 payload = uint32((tohost & (~(uint256(1) >> 16))));
 
-    mi.write_htif_tohost(tohost);
+    mi.write_htif_tohost(mmIndex, tohost);
 
     if (device == 0 && cmd == 0 && (payload & 1) != 0) {
       return htif_write_halt(mi, mmIndex);
@@ -94,7 +94,7 @@ library HTIF {
   returns (bool) {
     mi.write_htif_tohost(mmIndex, 0); // Acknowledge command (?)
     // TO-DO: what to do in the blockchain? Generate event?
-    mi.write_htif_fromhost((uint64(1) << 56) | uint64(1) << 48);
+    mi.write_htif_fromhost(mmIndex, (uint64(1) << 56) | uint64(1) << 48);
     return true;
   }
 
@@ -102,5 +102,13 @@ library HTIF {
   returns (bool) {
     mi.write_htif_tohost(mmIndex, 0); // Acknowledge command (?)
     return true;
+  }
+
+  // getters
+  function HTIF_TOHOST_ADDR() public returns (uint64) {
+    return HTIF_TOHOST_ADDR_CONST;
+  }
+  function HTIF_FROMHOST_ADDR() public returns (uint64) {
+    return HTIF_FROMHOST_ADDR_CONST;
   }
 }
