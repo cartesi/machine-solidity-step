@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 
 import "../contracts/AddressTracker.sol";
 import "../contracts/ShadowAddresses.sol";
+import "../contracts/HTIF.sol";
 import "./lib/BitsManipulationLibrary.sol";
 
 contract mmInterface {
@@ -27,7 +28,13 @@ contract MemoryInteractor {
       uint64(mm.read(_mmIndex, _registerIndex * 8))
     );
   }
-
+  
+  function read_htif_fromhost(uint256 _mmIndex) public returns (uint64) {
+    return memoryRead(_mmIndex, HTIF.HTIF_FROMHOST_ADDR());
+  }
+  function read_htif_tohost(uint256 _mmIndex) public returns (uint64) {
+    return memoryRead(_mmIndex, HTIF.HTIF_TOHOST_ADDR());
+  }
   function read_mie(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_mie());
   }
@@ -107,12 +114,6 @@ contract MemoryInteractor {
     return memoryRead(_mmIndex, ShadowAddresses.get_sscratch());
   }
   
-  // Sets
-  function set_priv(uint256 _mmIndex, uint64 new_priv) public{
-    write_iflags_PRV(_mmIndex, new_priv);
-    write_ilrsc(_mmIndex, uint64(-1)); // invalidate reserved address
-  }
-
   function read_stvec(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_stvec());
   }
@@ -139,6 +140,13 @@ contract MemoryInteractor {
       uint64(mm.read(_index, _address))
     );
   }
+
+  // Sets
+  function set_priv(uint256 _mmIndex, uint64 new_priv) public{
+    write_iflags_PRV(_mmIndex, new_priv);
+    write_ilrsc(_mmIndex, uint64(-1)); // invalidate reserved address
+  }
+
 
   // Writes
   function write_mie(uint256 _mmIndex, uint64 _value) public {
@@ -203,6 +211,22 @@ contract MemoryInteractor {
   }
   function write_ilrsc(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_ilrsc(), _value);
+  }
+
+  function write_htif_fromhost(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, HTIF.HTIF_FROMHOST_ADDR(), _value);
+  }
+
+  function write_htif_tohost(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, HTIF.HTIF_TOHOST_ADDR(), _value);
+  }
+
+  function write_iflags_H(uint256 _mmIndex, uint64 _value) public {
+    uint64 iflags = read_iflags(_mmIndex);
+    uint64 h_mask = 1;
+    iflags = (iflags & (~h_mask)) | (_value);
+
+    memoryWrite(_mmIndex, ShadowAddresses.get_iflags(), iflags);
   }
 
   function write_iflags_PRV(uint256 _mmIndex, uint64 _new_priv) public {
