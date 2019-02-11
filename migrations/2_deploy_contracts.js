@@ -14,6 +14,8 @@ var Exceptions = artifacts.require("./Exceptions.sol");
 var Fetch = artifacts.require("./Fetch.sol");
 var PMA = artifacts.require("./PMA.sol");
 var CSR = artifacts.require("./CSR.sol");
+var HTIF = artifacts.require("./HTIF.sol");
+var CLINT = artifacts.require("./CLINT.sol");
 var Interrupts = artifacts.require("./Interrupts.sol");
 
 //Contracts
@@ -45,6 +47,16 @@ module.exports = function(deployer) {
   deployer.deploy(BranchInstructions);
   deployer.deploy(PMA);
 
+  //Link all libraries to CLINT
+  deployer.link(RealTimeClock, CLINT);
+  deployer.link(RiscVConstants, CLINT);
+  deployer.deploy(CLINT);
+
+  //Link all libraries to HTIF
+  deployer.link(RealTimeClock, HTIF);
+  deployer.link(RiscVConstants, HTIF);
+
+  deployer.deploy(HTIF);
 
   //Link all libraries to CSR
   deployer.link(RealTimeClock, CSR);
@@ -98,6 +110,8 @@ module.exports = function(deployer) {
 
   // Link all libraries to MemoryInteractor
   deployer.link(BitsManipulationLibrary, MemoryInteractor);
+  deployer.link(HTIF, MemoryInteractor);
+  deployer.link(CLINT, MemoryInteractor);
   deployer.link(ShadowAddresses, MemoryInteractor);
 
    //Link all libraries to Execute
