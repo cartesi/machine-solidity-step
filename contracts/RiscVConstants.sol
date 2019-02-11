@@ -184,9 +184,8 @@ library RiscVConstants {
   function PAGE_NUMBER_SHIFT() public returns(uint64)  {return 12;}
 
   function PAGE_OFFSET_MASK() public returns(uint64) {return ((uint64(1) << PAGE_NUMBER_SHIFT()) - 1);}
-}
 
-// MIP Shifts:
+  // MIP Shifts:
   function MIP_USIP_SHIFT() public returns(uint64) {return 0;}
   function MIP_SSIP_SHIFT() public returns(uint64) {return 1;}
   function MIP_MSIP_SHIFT() public returns(uint64) {return 3;}
