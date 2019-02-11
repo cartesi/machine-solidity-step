@@ -308,7 +308,24 @@ library Execute {
     }
     return (0, false);
   }
-
+  
+  /// @notice Given a right immediate funct6 insn, finds the func associated.
+  //  Uses binary search for performance.
+  //  @param insn for right immediate funct6 field.
+  function shift_right_immediate_funct6(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
+  public returns (uint64, bool) {
+    uint32 funct6 = RiscVDecoder.insn_funct6(insn);
+    if(funct6 == 0x0000){
+      /*funct6 == 0x0000*/
+      //return "SRLI";
+      return (ArithmeticImmediateInstructions.execute_SRLI(mi, mmIndex, insn), true);
+    }else if(funct6 == 0x0010){
+      /*funct6 == 0x0010*/
+      //return "SRAI";
+    }
+    //return "illegal insn";
+    return (0, false);
+  }
 
   /// @notice Given a branch funct3 group instruction, finds the function
   //  associated with it. Uses binary search for performance.
