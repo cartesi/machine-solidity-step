@@ -12,6 +12,7 @@ import "../../contracts/MemoryInteractor.sol";
 import "../../contracts/RiscVDecoder.sol";
 
 library ArithmeticInstructions {
+  // TO-DO: move XLEN to its own library
   uint constant XLEN = 64;
 
   event Print(string message);

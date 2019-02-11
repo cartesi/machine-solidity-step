@@ -40,6 +40,7 @@ library RiscVConstants {
   function MSTATUS_TW_SHIFT()   public returns(uint64) {return 21;}
   function MSTATUS_TSR_SHIFT()  public returns(uint64) {return 22;}  
 
+
   function MSTATUS_UXL_SHIFT()  public returns(uint64) {return 32;}
   function MSTATUS_SXL_SHIFT()  public returns(uint64) {return 34;}
 

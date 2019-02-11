@@ -10,6 +10,8 @@ contract mmInterface {
   function write(uint256 _index, uint64 _address, bytes8 _value) external;
   function finishReplayPhase(uint256 _index) external;
 }
+// TO-DO: Rewrite this - MemoryRead/MemoryWrite should be private/internal and
+// all reads/writes should be specific.
 
 contract MemoryInteractor {
   mmInterface mm;
@@ -18,7 +20,8 @@ contract MemoryInteractor {
     address _mmAddress = AddressTracker(_addressTrackerAddress).getMMAddress();
     mm = mmInterface(_mmAddress);
   }
-    function read_x(uint256 _mmIndex, uint64 _registerIndex) public returns (uint64){
+  
+  function read_x(uint256 _mmIndex, uint64 _registerIndex) public returns (uint64){
     return BitsManipulationLibrary.uint64_swapEndian(
       //Address = registerIndex * sizeof(uint64)
       uint64(mm.read(_mmIndex, _registerIndex * 8))
@@ -103,6 +106,12 @@ contract MemoryInteractor {
   function read_sscratch(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_sscratch());
   }
+  
+  // Sets
+  function set_priv(uint256 _mmIndex, uint64 new_priv) public{
+    write_iflags_PRV(_mmIndex, new_priv);
+    write_ilrsc(_mmIndex, uint64(-1)); // invalidate reserved address
+  }
 
   function read_stvec(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_stvec());
@@ -111,6 +120,7 @@ contract MemoryInteractor {
   function read_mstatus(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_mstatus());
   }
+
 
   function read_misa(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_misa());
@@ -129,7 +139,8 @@ contract MemoryInteractor {
       uint64(mm.read(_index, _address))
     );
   }
- // Writes
+  
+  // Writes
   function write_mie(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mie(), _value);
   }
@@ -184,6 +195,23 @@ contract MemoryInteractor {
     memoryWrite(_mmIndex, ShadowAddresses.get_mstatus(), _value);
   }
 
+  // Writes
+  function write_scause(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_scause(), _value);
+  }
+
+  function write_sepc(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_sepc(), _value);
+  }
+
+  function write_stval(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_stval(), _value);
+  }
+
+  function write_mstatus(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, ShadowAddresses.get_mstatus(), _value);
+  }
+
   function write_mcause(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mcause(), _value);
   }
@@ -209,10 +237,10 @@ contract MemoryInteractor {
 
     memoryWrite(_mmIndex, ShadowAddresses.get_iflags(), iflags);
   }
+  
   function write_x(uint256 _mmIndex, uint64 _registerIndex, uint64 _value) public {
-    bytes8 bytesValue = bytes8(BitsManipulationLibrary.uint64_swapEndian(_value));
     //Address = registerIndex * sizeof(uint64)
-    mm.write(_mmIndex, _registerIndex * 8, bytesValue);
+    memoryWrite(_mmIndex, _registerIndex * 8, _value);
   }
 
   function memoryWrite(uint256 _index, uint64 _address, uint64 _value) public {

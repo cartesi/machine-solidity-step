@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 
 import "../../contracts/MemoryInteractor.sol";
 import "../../contracts/RiscVDecoder.sol";
+import "../../contracts/RiscVConstants.sol";
 
 library ArithmeticImmediateInstructions {
 
@@ -33,5 +34,16 @@ library ArithmeticImmediateInstructions {
   function execute_SLLI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64){
     (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
     return rs1 << (imm & 0x3F);
+  }
+
+  // SLRI instructions is a logical shift right instruction. The variable to be 
+  // shift is in rs1 and the amount of shift operations is encoded in the lower
+  // 6 bits of the I-immediate field.
+  function execute_SRLI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64){
+    // Get imm's lower 6 bits
+    (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
+    int32 shiftAmount = imm & int32(RiscVConstants.XLEN() - 1);
+    
+    return rs1 >> shiftAmount;
   }
 }
