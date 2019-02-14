@@ -36,11 +36,7 @@ library PMA {
       uint64 pma_start = pma_get_start(start_word);
       uint64 pma_length = pma_get_length(length_word);
 
-      // TO-DO: paddr +
-      //else if (pma == io)
-      //else raise_exception store access fault
-
-      //checar device no virtual write
+      // TO-DO: fix this - should check for aligned addr
       if(paddr >= pma_start && paddr < (pma_start + pma_length)){
         return (start_word, length_word);
       }
