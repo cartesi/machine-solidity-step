@@ -25,6 +25,7 @@ library Fetch {
   uint256 constant satp = 3;
   uint256 constant vpn_mask = 4;
 
+ // event Print(string name, uint64 val);
 
   function fetch_insn(uint256 mmIndex, address _memoryInteractorAddress) public returns (fetch_status, uint32, uint64){
     MemoryInteractor mi = MemoryInteractor(_memoryInteractorAddress); 
@@ -64,11 +65,18 @@ library Fetch {
     }
 
     //emit Print("paddr/insn", paddr);
-    //will this actually return the instruction? Should it be 32bits?
-    uint32 insn = uint32(mi.memoryRead(mmIndex, paddr));
-    //emit Print("insn", uint(insn));
-    return (fetch_status.success, insn, pc);
+    uint32 insn = 0;
 
+    // Check if instruction is on first 32 bits or last 32 bits
+    if ((paddr & 7) == 0) {
+      insn = uint32(mi.memoryRead(mmIndex, paddr));
+    } else{
+      // If not aligned, read at the last addr and shift to get the correct insn
+      uint64 full_memory = mi.memoryRead(mmIndex, paddr - 4);
+      insn = uint32(full_memory >> 32);
+    }
+
+    return (fetch_status.success, insn, pc);
   }
   enum fetch_status {
     exception, //failed: exception raised
