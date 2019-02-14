@@ -21,14 +21,12 @@ contract MemoryInteractor {
     address _mmAddress = AddressTracker(_addressTrackerAddress).getMMAddress();
     mm = mmInterface(_mmAddress);
   }
-  
+
   function read_x(uint256 _mmIndex, uint64 _registerIndex) public returns (uint64){
-    return BitsManipulationLibrary.uint64_swapEndian(
       //Address = registerIndex * sizeof(uint64)
-      uint64(mm.read(_mmIndex, _registerIndex * 8))
-    );
+    return uint64(mm.read(_mmIndex, _registerIndex * 8));
   }
-  
+
   function read_htif_fromhost(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, HTIF.HTIF_FROMHOST_ADDR());
   }
@@ -252,7 +250,8 @@ contract MemoryInteractor {
 
   function write_x(uint256 _mmIndex, uint64 _registerIndex, uint64 _value) public {
     //Address = registerIndex * sizeof(uint64)
-    memoryWrite(_mmIndex, _registerIndex * 8, _value);
+    //bytes8 bytesValue = bytes8(BitsManipulationLibrary.uint64_swapEndian(_value));
+    mm.write(_mmIndex, _registerIndex * 8, bytes8(_value));
   }
 
   // Internal functions
@@ -269,8 +268,6 @@ contract MemoryInteractor {
   }
 
   function memoryWrite(uint256 _index, uint64 _address, uint64 _value) public {
-    //bytes8 bytesValue = bytes8(BitsManipulationLibrary.uint64_swapEndian(_value));
-    //mm.write(_index, _address, bytesValue);
     mm.write(_index, _address, bytes8(_value));
   }
 
