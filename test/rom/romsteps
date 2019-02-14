@@ -148,7 +148,6 @@
       //iflags.PRV
       response = await mm.proveRead(index,464, "0x000000000000000c", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
       
-      // TO-DO:
       //mtvec // BITS OUT OF ORDER
       response = await mm.proveWrite(index,312,"0x0000000000000000","0x0000000000001024", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
       
@@ -261,8 +260,6 @@
       //x
       response = await mm.proveRead(index,80, "0x0000000000000001", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
 
-
-     // TO-DO: Write is wrong value! 
       //x
       response = await mm.proveWrite(index,80,"0x0000000000000001","0x0000000000000002", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
       
@@ -319,7 +316,6 @@
       //x
       response = await mm.proveRead(index,80, "0x0000000000000002", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
       
-      // TO-DO: Write errado
       //x
       response = await mm.proveWrite(index,24,"0x0000000000000000","0x0000000000000002", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
       
@@ -426,7 +422,6 @@
       //x
       response = await mm.proveRead(index,24, "0x0000000000000002", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
      
-     // TO-DO: Write is wrong!
       //x
       response = await mm.proveWrite(index,24,"0x0000000000000002","0x0000000000020000", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
       
@@ -482,7 +477,6 @@
       
       //x
       response = await mm.proveRead(index,24, "0x0000000000020000", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
-      // TO-DO: Write is wrong 
       //x
       response = await mm.proveWrite(index,24,"0x0000000000020000","0x0000000000000004", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
       
@@ -539,7 +533,6 @@
       //x
       response = await mm.proveRead(index,24, "0x0000000000000004", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
      
-      // TO-DO: correct write
       //x
       response = await mm.proveWrite(index,24,"0x0000000000000004","0x0000000000000005", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
       
@@ -644,7 +637,6 @@
       
       //memory
       response = await mm.proveRead(index,4152, "0xff9ff06ffc3f3623", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
-     // TO-DO: WRONG READ! 
       //x
       response = await mm.proveRead(index,240, "0x0000000040008034", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
       
