@@ -257,9 +257,10 @@ contract MemoryInteractor {
 
   // Internal functions
   function memoryRead(uint256 _index, uint64 _address) public returns (uint64){
-    return BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mm.read(_index, _address))
-    );
+    return uint64(mm.read(_index, _address));
+    //return BitsManipulationLibrary.uint64_swapEndian(
+    //  uint64(mm.read(_index, _address))
+    //);
   }
 
   // Memory Read endianess swap
@@ -268,8 +269,9 @@ contract MemoryInteractor {
   }
 
   function memoryWrite(uint256 _index, uint64 _address, uint64 _value) public {
-    bytes8 bytesValue = bytes8(BitsManipulationLibrary.uint64_swapEndian(_value));
-    mm.write(_index, _address, bytesValue);
+    //bytes8 bytesValue = bytes8(BitsManipulationLibrary.uint64_swapEndian(_value));
+    //mm.write(_index, _address, bytesValue);
+    mm.write(_index, _address, bytes8(_value));
   }
 
   // Memory Write without endianess swap
