@@ -9,23 +9,6 @@ import "../contracts/PMA.sol";
 import "../contracts/VirtualMemory.sol";
 
 library Fetch {
-  // Variable positions on their respective array.
-  // This is not an enum because enum assumes the type from the number of variables
-  // So we would have to explicitly cast to uint256 on every single access
-  uint256 constant priv = 0;
-  uint256 constant mode= 1;
-  uint256 constant vaddr_shift = 2;
-  uint256 constant pte_size_log2= 3;
-  uint256 constant vpn_bits= 4;
-  uint256 constant satp_ppn_bits = 5;
-
-  uint256 constant vaddr_mask = 0;
-  uint256 constant pte_addr = 1;
-  uint256 constant mstatus = 2;
-  uint256 constant satp = 3;
-  uint256 constant vpn_mask = 4;
-
- // event Print(string name, uint64 val);
 
   function fetch_insn(uint256 mmIndex, address _memoryInteractorAddress) public returns (fetch_status, uint32, uint64){
     MemoryInteractor mi = MemoryInteractor(_memoryInteractorAddress); 
