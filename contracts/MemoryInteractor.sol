@@ -24,7 +24,7 @@ contract MemoryInteractor {
 
   function read_x(uint256 _mmIndex, uint64 _registerIndex) public returns (uint64){
       //Address = registerIndex * sizeof(uint64)
-    return uint64(mm.read(_mmIndex, _registerIndex * 8));
+    return memoryRead(_mmIndex, _registerIndex * 8);
   }
 
   function read_htif_fromhost(uint256 _mmIndex) public returns (uint64) {
@@ -251,7 +251,7 @@ contract MemoryInteractor {
   function write_x(uint256 _mmIndex, uint64 _registerIndex, uint64 _value) public {
     //Address = registerIndex * sizeof(uint64)
     //bytes8 bytesValue = bytes8(BitsManipulationLibrary.uint64_swapEndian(_value));
-    mm.write(_mmIndex, _registerIndex * 8, bytes8(_value));
+    memoryWrite(_mmIndex, _registerIndex * 8, _value);
   }
 
   // Internal functions
