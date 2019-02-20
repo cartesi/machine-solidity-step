@@ -27,7 +27,7 @@ library VirtualMemory {
   uint256 constant mstatus = 2;
   uint256 constant satp = 3;
   uint256 constant vpn_mask = 4;
-  
+
   // Write Virtual Address variable indexes
   uint256 constant offset = 0;
   uint256 constant pma_start = 1;
@@ -106,9 +106,9 @@ library VirtualMemory {
          return true;
       } else {
         uint64vars[offset] = uint64vars[paddr] - PMA.pma_get_start(uint64vars[pma_start]);
-        
+
         if (PMA.pma_is_HTIF(uint64vars[pma_start])) {
-          if (!HTIF.htif_write(mi, mmIndex, uint64vars[pma_start], uint64vars[pma_length], uint64vars[offset], val, wordSize)) {
+          if (!HTIF.htif_write(mi, mmIndex, uint64vars[pma_start], uint64vars[pma_length], PMA.pma_get_start(uint64vars[pma_start]), val, wordSize)) {
             Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_STORE_AMO_ACCESS_FAULT(), vaddr);
             return false;
           }
