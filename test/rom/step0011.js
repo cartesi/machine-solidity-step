@@ -108,6 +108,9 @@ contract('STEP0011', function(accounts){
       //htif.tohost
       response = await mm.proveWrite(index,1073774592,"0x0000000000000000","0x0000000000000005", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
       
+      //iflags
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
       //iflags.H
       response = await mm.proveWrite(index,464,"0x000000000000000c","0x000000000000000d", ["0xae3d92a0b0a266593ee8059e27d830a00ce14c2ca28f7b2af8f3839d756f856a"], {from: accounts[0], gas: 2000000});
       
