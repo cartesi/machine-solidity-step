@@ -21,15 +21,15 @@ library CLINT {
   // \param wordsize can be uint8, uint16, uint32 or uint64
   // \return bool if read was successfull
   // \return uint64 pval
-  function clint_read(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 offset, uint64 val, uint256 wordSize)
+  function clint_read(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 offset, uint256 wordSize)
   public returns (bool, uint64) {
 
     if (offset == CLINT_MSIP0_ADDR){
-      clint_read_msip(mi, mmIndex, wordSize);
+      return clint_read_msip(mi, mmIndex, wordSize);
     } else if (offset == CLINT_MTIMECMP_ADDR){
-      clint_read_mtime(mi, mmIndex, wordSize);
+      return clint_read_mtime(mi, mmIndex, wordSize);
     } else if (offset == CLINT_MTIME_ADDR){
-      clint_read_mtimecmp(mi, mmIndex, wordSize);
+      return clint_read_mtimecmp(mi, mmIndex, wordSize);
     } else{
       return (false, 0);
     }
