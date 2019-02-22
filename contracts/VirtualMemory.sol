@@ -62,7 +62,6 @@ library VirtualMemory {
          mi.memoryRead(mmIndex, paddr);
          return true;
       }else {
-        uint64 offset = paddr - PMA.pma_get_start(pma_start);
         // TO-DO: complete read_htif and read_clint
         if (PMA.pma_is_HTIF(pma_start)) {
         } else if (PMA.pma_is_CLINT(pma_start)) {
@@ -105,7 +104,6 @@ library VirtualMemory {
          mi.write_memory(mmIndex, uint64vars[paddr], val, wordSize);
          return true;
       } else {
-        uint64vars[offset] = uint64vars[paddr] - PMA.pma_get_start(uint64vars[pma_start]);
 
         if (PMA.pma_is_HTIF(uint64vars[pma_start])) {
           if (!HTIF.htif_write(mi, mmIndex, uint64vars[pma_start], uint64vars[pma_length], PMA.pma_get_start(uint64vars[pma_start]), val, wordSize)) {
@@ -113,7 +111,7 @@ library VirtualMemory {
             return false;
           }
         } else if (PMA.pma_is_CLINT(uint64vars[pma_start])) {
-            if (!CLINT.clint_write(mi, mmIndex, uint64vars[pma_start], uint64vars[pma_length], uint64vars[offset], val, wordSize)) {
+            if (!CLINT.clint_write(mi, mmIndex, uint64vars[pma_start], uint64vars[pma_length], PMA.pma_get_start(uint64vars[pma_start]), val, wordSize)) {
             Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_STORE_AMO_ACCESS_FAULT(), vaddr);
             return false;
           }

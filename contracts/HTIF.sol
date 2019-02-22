@@ -11,9 +11,6 @@ library HTIF {
   uint64 constant HTIF_TOHOST_ADDR_CONST = 0x40008000;
   uint64 constant HTIF_FROMHOST_ADDR_CONST = 0x40008008;
 
-  uint64 constant CSR_HTIF_REL_TOHOST_ADDR = 0x0;
-  uint64 constant CSR_HTIF_REL_FROMHOST_ADDR = 0x8;
-
   event Print(string a, uint64 b);
   // \brief reads htif
   // \param pma_start_word first word, defines pma's start
