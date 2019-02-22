@@ -412,7 +412,6 @@ library Execute {
   public returns (execute_status){
     uint32 funct3 = RiscVDecoder.insn_funct3(insn);
     bool write_success = false;
-    emit Print("store_funct3", uint(funct3));
     if(funct3 == 0x0000){
       /*funct3 == 0x0000*/
       //return "SB";
