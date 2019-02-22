@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 
 import "../contracts/AddressTracker.sol";
 import "../contracts/ShadowAddresses.sol";
+import "../contracts/HTIF.sol";
 import "./lib/BitsManipulationLibrary.sol";
 
 contract mmInterface {
@@ -27,7 +28,13 @@ contract MemoryInteractor {
       uint64(mm.read(_mmIndex, _registerIndex * 8))
     );
   }
-
+  
+  function read_htif_fromhost(uint256 _mmIndex) public returns (uint64) {
+    return memoryRead(_mmIndex, HTIF.HTIF_FROMHOST_ADDR());
+  }
+  function read_htif_tohost(uint256 _mmIndex) public returns (uint64) {
+    return memoryRead(_mmIndex, HTIF.HTIF_TOHOST_ADDR());
+  }
   function read_mie(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_mie());
   }
@@ -107,12 +114,6 @@ contract MemoryInteractor {
     return memoryRead(_mmIndex, ShadowAddresses.get_sscratch());
   }
   
-  // Sets
-  function set_priv(uint256 _mmIndex, uint64 new_priv) public{
-    write_iflags_PRV(_mmIndex, new_priv);
-    write_ilrsc(_mmIndex, uint64(-1)); // invalidate reserved address
-  }
-
   function read_stvec(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_stvec());
   }
@@ -134,11 +135,12 @@ contract MemoryInteractor {
     return (memoryRead(_mmIndex, ShadowAddresses.get_iflags()) >> 2) & 3;
   }
 
-  function memoryRead(uint256 _index, uint64 _address) public returns (uint64){
-    return BitsManipulationLibrary.uint64_swapEndian(
-      uint64(mm.read(_index, _address))
-    );
+  // Sets
+  function set_priv(uint256 _mmIndex, uint64 new_priv) public{
+    write_iflags_PRV(_mmIndex, new_priv);
+    write_ilrsc(_mmIndex, uint64(-1)); // invalidate reserved address
   }
+
 
   // Writes
   function write_mie(uint256 _mmIndex, uint64 _value) public {
@@ -205,6 +207,22 @@ contract MemoryInteractor {
     memoryWrite(_mmIndex, ShadowAddresses.get_ilrsc(), _value);
   }
 
+  function write_htif_fromhost(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, HTIF.HTIF_FROMHOST_ADDR(), _value);
+  }
+
+  function write_htif_tohost(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, HTIF.HTIF_TOHOST_ADDR(), _value);
+  }
+
+  function write_iflags_H(uint256 _mmIndex, uint64 _value) public {
+    uint64 iflags = read_iflags(_mmIndex);
+    uint64 h_mask = 1;
+    iflags = (iflags & (~h_mask)) | (_value);
+
+    memoryWrite(_mmIndex, ShadowAddresses.get_iflags(), iflags);
+  }
+
   function write_iflags_PRV(uint256 _mmIndex, uint64 _new_priv) public {
     uint64 iflags = read_iflags(_mmIndex);
     uint64 priv_mask = 3 << 2;
@@ -214,16 +232,50 @@ contract MemoryInteractor {
 
     memoryWrite(_mmIndex, ShadowAddresses.get_iflags(), iflags);
   }
-  
+
+  function write_memory(uint256 _mmIndex, uint64 paddr, uint64 value, uint64 wordSize) public {
+    uint64 numberOfBytes = wordSize / 8;
+    uint64 oldVal = pure_memoryRead(_mmIndex, paddr);
+
+    if (numberOfBytes == 8) {
+      memoryWrite(_mmIndex, paddr, value);
+    } else {
+      uint64 closestStartAddr = paddr & uint64(~0x3F);
+      uint64 relAddr = paddr - closestStartAddr;
+
+      uint64 mask = ((2 ** (numberOfBytes * 8)) - 1) << relAddr;
+      uint64 little_e_value = BitsManipulationLibrary.uint64_swapEndian(value);
+      uint64 newValue = (oldVal & (~mask)) | (little_e_value << relAddr);
+      pure_memoryWrite(_mmIndex, closestStartAddr, newValue);
+    }
+  }
+
   function write_x(uint256 _mmIndex, uint64 _registerIndex, uint64 _value) public {
     //Address = registerIndex * sizeof(uint64)
     memoryWrite(_mmIndex, _registerIndex * 8, _value);
+  }
+
+  // Internal functions
+  function memoryRead(uint256 _index, uint64 _address) public returns (uint64){
+    return BitsManipulationLibrary.uint64_swapEndian(
+      uint64(mm.read(_index, _address))
+    );
+  }
+
+  // Memory Read endianess swap
+  function pure_memoryRead(uint256 _index, uint64 _address) public returns (uint64){
+    return uint64(mm.read(_index, _address));
   }
 
   function memoryWrite(uint256 _index, uint64 _address, uint64 _value) public {
     bytes8 bytesValue = bytes8(BitsManipulationLibrary.uint64_swapEndian(_value));
     mm.write(_index, _address, bytesValue);
   }
-}
 
+  // Memory Write without endianess swap
+  function pure_memoryWrite(uint256 _index, uint64 _address, uint64 _value) public {
+    mm.write(_index, _address, bytes8(_value));
+  }
+
+}
 

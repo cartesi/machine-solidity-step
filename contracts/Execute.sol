@@ -9,11 +9,12 @@ import "../contracts/CSR.sol";
 import "./RiscVInstructions/BranchInstructions.sol";
 import "./RiscVInstructions/ArithmeticInstructions.sol";
 import "./RiscVInstructions/ArithmeticImmediateInstructions.sol";
+import "./RiscVInstructions/S_Instructions.sol";
 import {Exceptions} from "../contracts/Exceptions.sol";
 
 library Execute {
   event  Print(string a, uint b);
-  function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc) 
+  function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc)
   public returns (execute_status) {
     MemoryInteractor mi = MemoryInteractor(_miAddress);
     uint256 mmIndex = _mmIndex;
@@ -41,7 +42,7 @@ library Execute {
     return advance_to_next_insn(mi, mmIndex, pc);
   }
 
-  function execute_arithmetic(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
+  function execute_arithmetic(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
   public returns (execute_status){
     uint32 rd = RiscVDecoder.insn_rd(insn);
 
@@ -308,7 +309,7 @@ library Execute {
     }
     return (0, false);
   }
-  
+
   /// @notice Given a right immediate funct6 insn, finds the func associated.
   //  Uses binary search for performance.
   //  @param insn for right immediate funct6 field.
@@ -402,6 +403,36 @@ library Execute {
     }
     //return "illegal insn";
     return (0, false);
+  }
+
+  /// @notice Given a store funct3 group insn, finds the function  associated.
+  //  Uses binary search for performance
+  //  @param insn for store funct3 field
+  function store_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+  public returns (execute_status){
+    uint32 funct3 = RiscVDecoder.insn_funct3(insn);
+    bool write_success = false;
+
+    if(funct3 == 0x0000){
+      /*funct3 == 0x0000*/
+      //return "SB";
+      return S_Instructions.SB(mi, mmIndex, pc, insn) ? advance_to_next_insn(mi, mmIndex, pc) : execute_status.retired;
+    }else if(funct3 > 0x0001){
+      if(funct3 == 0x0002){
+        /*funct3 == 0x0002*/
+        //return "SW";
+        return S_Instructions.SW(mi, mmIndex, pc, insn) ? advance_to_next_insn(mi, mmIndex, pc) : execute_status.retired;
+      }else if(funct3 == 0x0003){
+        /*funct3 == 0x0003*/
+        //return "SD";
+        return S_Instructions.SD(mi, mmIndex, pc, insn) ? advance_to_next_insn(mi, mmIndex, pc) : execute_status.retired;
+      }
+    }else if(funct3 == 0x0001){
+      /*funct3 == 0x0001*/
+      //return "SH";
+      return S_Instructions.SH(mi, mmIndex, pc, insn) ? advance_to_next_insn(mi, mmIndex, pc) : execute_status.retired;
+    }
+    return raise_illegal_insn_exception(pc, insn);
   }
 
   /// @notice Given an op code, finds the group of instructions it belongs to
