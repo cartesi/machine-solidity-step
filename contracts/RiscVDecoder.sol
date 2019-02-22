@@ -144,28 +144,6 @@ library RiscVDecoder {
     return "illegal insn";
   }
 
-  /// @notice Given a store funct3 group insn, finds the function  associated.
-  //  Uses binary search for performance
-  //  @param insn for store funct3 field
-  function store_funct3(uint32 insn) public returns (bytes32){
-    if(insn == 0x0000){
-      /*insn == 0x0000*/
-      return "SB";
-    }else if(insn > 0x0001){
-      if(insn == 0x0002){
-        /*insn == 0x0002*/
-        return "SW";
-      }else if(insn == 0x0003){
-        /*insn == 0x0003*/
-        return "SD";
-      }
-    }else if(insn == 0x0001){
-      /*insn == 0x0001*/
-      return "SH";
-    }
-    return "illegal insn";
-  }
-
   /// @notice Given a arithmetic immediate funct3 insn, finds the func associated.
   //  Uses binary search for performance.
   //  @param insn for arithmetic immediate funct3 field.
