@@ -9,22 +9,6 @@ import "../contracts/PMA.sol";
 import "../contracts/VirtualMemory.sol";
 
 library Fetch {
-  // Variable positions on their respective array.
-  // This is not an enum because enum assumes the type from the number of variables
-  // So we would have to explicitly cast to uint256 on every single access
-  uint256 constant priv = 0;
-  uint256 constant mode= 1;
-  uint256 constant vaddr_shift = 2;
-  uint256 constant pte_size_log2= 3;
-  uint256 constant vpn_bits= 4;
-  uint256 constant satp_ppn_bits = 5;
-
-  uint256 constant vaddr_mask = 0;
-  uint256 constant pte_addr = 1;
-  uint256 constant mstatus = 2;
-  uint256 constant satp = 3;
-  uint256 constant vpn_mask = 4;
-
 
   function fetch_insn(uint256 mmIndex, address _memoryInteractorAddress) public returns (fetch_status, uint32, uint64){
     MemoryInteractor mi = MemoryInteractor(_memoryInteractorAddress); 
@@ -64,11 +48,18 @@ library Fetch {
     }
 
     //emit Print("paddr/insn", paddr);
-    //will this actually return the instruction? Should it be 32bits?
-    uint32 insn = uint32(mi.memoryRead(mmIndex, paddr));
-    //emit Print("insn", uint(insn));
-    return (fetch_status.success, insn, pc);
+    uint32 insn = 0;
 
+    // Check if instruction is on first 32 bits or last 32 bits
+    if ((paddr & 7) == 0) {
+      insn = uint32(mi.memoryRead(mmIndex, paddr));
+    } else{
+      // If not aligned, read at the last addr and shift to get the correct insn
+      uint64 full_memory = mi.memoryRead(mmIndex, paddr - 4);
+      insn = uint32(full_memory >> 32);
+    }
+
+    return (fetch_status.success, insn, pc);
   }
   enum fetch_status {
     exception, //failed: exception raised

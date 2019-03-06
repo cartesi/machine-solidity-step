@@ -412,7 +412,6 @@ library Execute {
   public returns (execute_status){
     uint32 funct3 = RiscVDecoder.insn_funct3(insn);
     bool write_success = false;
-
     if(funct3 == 0x0000){
       /*funct3 == 0x0000*/
       //return "SB";
@@ -466,8 +465,7 @@ library Execute {
           return execute_status.retired;
         }else if(opcode == 0x0023){
           /*opcode is 0x0023*/
-          //return "store_group";
-          return execute_status.retired;
+          return store_funct3(mi, mmIndex, insn, pc);
         }
       }else if(opcode == 0x0017){
         /*opcode == 0x0017*/
@@ -495,7 +493,6 @@ library Execute {
           return execute_status.retired;
         }else if(opcode == 0x0073){
           /*opcode == 0x0073*/
-          //return "csr_env_trap_int_mm_group";
           return execute_csr_RW(mi, mmIndex, insn, pc);
         }else if(opcode == 0x006f){
           /*opcode == 0x006f*/

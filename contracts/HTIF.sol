@@ -8,12 +8,10 @@ import "../contracts/MemoryInteractor.sol";
 // Reference: The Core of Cartesi, v1.02 - Section 3.2 - The Board
 library HTIF {
 
-  uint64 constant HTIF_TOHOST_ADDR_CONST = 0x40000000;
-  uint64 constant HTIF_FROMHOST_ADDR_CONST = 0x40000008;
+  uint64 constant HTIF_TOHOST_ADDR_CONST = 0x40008000;
+  uint64 constant HTIF_FROMHOST_ADDR_CONST = 0x40008008;
 
-  uint64 constant CSR_HTIF_REL_TOHOST_ADDR = 0x0;
-  uint64 constant CSR_HTIF_REL_FROMHOST_ADDR = 0x8;
-
+  event Print(string a, uint64 b);
   // \brief reads htif
   // \param pma_start_word first word, defines pma's start
   // \param pma_length_word second word, defines pma's length
@@ -21,15 +19,16 @@ library HTIF {
   // \param wordsize can be uint8, uint16, uint32 or uint64
   // \return bool if read was successfull
   // \return uint64 pval
-  function htif_read(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 offset, uint256 wordSize)
+  function htif_read(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 addr, uint256 wordSize)
   public returns (bool, uint64) {
     // HTIF reads must be aligned and 8 bytes
-    if(wordSize != 64 || (offset & 7) != 0) {
+    if(wordSize != 64 || (addr & 7) != 0) {
       return (false, 0);
     }
-    if (offset == CSR_HTIF_REL_TOHOST_ADDR){
+
+    if (addr == HTIF_TOHOST_ADDR_CONST){
       return (true, mi.read_htif_tohost(mmIndex));
-    } else if (offset == CSR_HTIF_REL_FROMHOST_ADDR){
+    } else if (addr == HTIF_FROMHOST_ADDR_CONST){
       return (true, mi.read_htif_fromhost(mmIndex));
     } else {
       return (false, 0);
@@ -43,15 +42,15 @@ library HTIF {
   // \param val value to be written
   // \param wordsize can be uint8, uint16, uint32 or uint64
   // \return bool if write was successfull
-  function htif_write(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 offset, uint64 val, uint256 wordSize)
+  function htif_write(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 addr, uint64 val, uint256 wordSize)
   public returns (bool) {
     // HTIF writes must be aligned and 8 bytes
-    if(wordSize != 64 || (offset & 7) != 0) {
+    if(wordSize != 64 || (addr & 7) != 0) {
       return false;
     }
-    if (offset == CSR_HTIF_REL_TOHOST_ADDR){
+    if (addr == HTIF_TOHOST_ADDR_CONST){
       return htif_write_tohost(mi, mmIndex, val);
-    } else if (offset == CSR_HTIF_REL_FROMHOST_ADDR){
+    } else if (addr == HTIF_FROMHOST_ADDR_CONST){
       return htif_write_fromhost(mi, mmIndex, val);
     } else {
       return false;

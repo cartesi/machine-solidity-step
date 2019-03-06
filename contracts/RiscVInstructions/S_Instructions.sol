@@ -6,11 +6,11 @@ import "../../contracts/RiscVDecoder.sol";
 import "../../contracts/VirtualMemory.sol";
 
 library S_Instructions {
-
+  event Print(string a, uint64 b);
   function get_rs1_imm_rs2(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
   internal returns(uint64 rs1, int32 imm, uint64 val){
     rs1 = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
-    imm = RiscVDecoder.insn_I_imm(insn);
+    imm = RiscVDecoder.insn_S_imm(insn);
     val = mi.read_x(mmIndex, RiscVDecoder.insn_rs2(insn));
   }
 
