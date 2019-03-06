@@ -30,9 +30,11 @@ contract MemoryInteractor {
   function read_htif_fromhost(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, HTIF.HTIF_FROMHOST_ADDR());
   }
+
   function read_htif_tohost(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, HTIF.HTIF_TOHOST_ADDR());
   }
+
   function read_mie(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_mie());
   }
@@ -56,21 +58,27 @@ contract MemoryInteractor {
   function read_mepc(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_mepc());
   }
+
   function read_mip(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_mip());
   }
+
   function read_mtval(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_mtval());
   }
+
   function read_mvendorid(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_mvendorid());
   }
+
   function read_marchid(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_marchid());
   }
-   function read_mimpid(uint256 _mmIndex) public returns (uint64) {
+
+  function read_mimpid(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_mimpid());
   }
+
   function read_mscratch(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_mscratch());
   }
@@ -78,6 +86,7 @@ contract MemoryInteractor {
   function read_satp(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_satp());
   }
+
   function read_scause(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_scause());
   }
@@ -89,9 +98,11 @@ contract MemoryInteractor {
   function read_scounteren(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_scounteren());
   }
+
   function read_stval(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_stval());
   }
+
   function read_mideleg(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_mideleg());
   }
@@ -111,7 +122,7 @@ contract MemoryInteractor {
   function read_sscratch(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_sscratch());
   }
-  
+
   function read_stvec(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_stvec());
   }
@@ -119,7 +130,6 @@ contract MemoryInteractor {
   function read_mstatus(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_mstatus());
   }
-
 
   function read_misa(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_misa());
@@ -139,68 +149,87 @@ contract MemoryInteractor {
     write_ilrsc(_mmIndex, uint64(-1)); // invalidate reserved address
   }
 
-
   // Writes
   function write_mie(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mie(), _value);
   }
+
   function write_stvec(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_stvec(), _value);
   }
+
   function write_sscratch(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_sscratch(), _value);
   }
+
   function write_mip(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mip(), _value);
   }
+
   function write_satp(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_satp(), _value);
   }
+
   function write_medeleg(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_medeleg(), _value);
   }
+
   function write_mideleg(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mideleg(), _value);
   }
+
   function write_mtvec(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mtvec(), _value);
   }
+
   function write_mcounteren(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mcounteren(), _value);
   }
+
   function write_minstret(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_minstret(), _value);
   }
+
   function write_mscratch(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mscratch(), _value);
   }
+
   function write_scounteren(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_scounteren(), _value);
   }
+
   function write_scause(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_scause(), _value);
   }
+
   function write_sepc(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_sepc(), _value);
   }
+
   function write_stval(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_stval(), _value);
   }
+
   function write_mstatus(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mstatus(), _value);
   }
+
   function write_mcause(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mcause(), _value);
   }
+
   function write_mepc(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mepc(), _value);
   }
+
   function write_mtval(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_mtval(), _value);
   }
+
   function write_pc(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_pc(), _value);
   }
+
   function write_ilrsc(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_ilrsc(), _value);
   }
@@ -256,10 +285,10 @@ contract MemoryInteractor {
 
   // Internal functions
   function memoryRead(uint256 _index, uint64 _address) public returns (uint64){
-    return uint64(mm.read(_index, _address));
-    //return BitsManipulationLibrary.uint64_swapEndian(
-    //  uint64(mm.read(_index, _address))
-    //);
+    //return uint64(mm.read(_index, _address));
+    return BitsManipulationLibrary.uint64_swapEndian(
+      uint64(mm.read(_index, _address))
+    );
   }
 
   // Memory Read endianess swap
@@ -268,13 +297,13 @@ contract MemoryInteractor {
   }
 
   function memoryWrite(uint256 _index, uint64 _address, uint64 _value) public {
-    mm.write(_index, _address, bytes8(_value));
+    bytes8 bytesValue = bytes8(BitsManipulationLibrary.uint64_swapEndian(_value));
+    mm.write(_index, _address, bytesValue);
   }
 
   // Memory Write without endianess swap
   function pure_memoryWrite(uint256 _index, uint64 _address, uint64 _value) public {
     mm.write(_index, _address, bytes8(_value));
   }
-
 }
 
