@@ -27,12 +27,13 @@ library VirtualMemory {
   uint256 constant mstatus = 2;
   uint256 constant satp = 3;
   uint256 constant vpn_mask = 4;
-  
-  // Write Virtual Address variable indexes
+
+  // Write/Read Virtual Address variable indexes
   uint256 constant offset = 0;
   uint256 constant pma_start = 1;
   uint256 constant pma_length = 2;
   uint256 constant paddr = 3;
+  uint256 constant val = 4;
 
   // \brief Read word to virtual memory
   // \param wordsize can be uint8, uint16, uint32 or uint64
@@ -41,34 +42,37 @@ library VirtualMemory {
   // \returns True if write was succesfull, false if not.
   // \returns Word with receiveing value.
   function read_virtual_memory(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize, uint64 vaddr, uint64 val)
-  public returns(bool) { //, uint64){
-     if (vaddr & (wordSize - 1) != 0){
+  public returns(bool, uint64) {
+    uint64[5] memory uint64vars;
+    if (vaddr & (wordSize - 1) != 0){
       // Word is not aligned - raise exception
       Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_LOAD_ADDRESS_MISALIGNED(), vaddr);
-      return false;
+      return (false, 0);
     } else {
      (bool translate_success, uint64 paddr) = translate_virtual_address(mi, mmIndex, vaddr, RiscVConstants.PTE_XWR_WRITE_SHIFT());
       if (!translate_success) {
         // translation failed - raise exception
         Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_LOAD_PAGE_FAULT(), vaddr);
-        return false;
+        return (false, 0);
       }
-      (uint64 pma_start, uint64 pma_length) = PMA.find_pma_entry(mi, mmIndex, paddr);
-      if (PMA.pma_get_istart_E(pma_start) || !PMA.pma_get_istart_R(pma_start)) {
+      (uint64vars[pma_start], uint64vars[pma_length]) = PMA.find_pma_entry(mi, mmIndex, paddr);
+      if (PMA.pma_get_istart_E(uint64vars[pma_start]) || !PMA.pma_get_istart_R(uint64vars[pma_start])) {
         // PMA is either excluded or we dont have permission to write - raise exception
         Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_LOAD_ACCESS_FAULT(), vaddr);
-        return false;
-      } else if (PMA.pma_get_istart_M(pma_start)) {
-         mi.memoryRead(mmIndex, paddr);
-         return true;
+        return (false, 0);
+      } else if (PMA.pma_get_istart_M(uint64vars[pma_start])) {
+         return (true, mi.memoryRead(mmIndex, paddr));
       }else {
-        uint64 offset = paddr - PMA.pma_get_start(pma_start);
-        // TO-DO: complete read_htif and read_clint
-        if (PMA.pma_is_HTIF(pma_start)) {
-        } else if (PMA.pma_is_CLINT(pma_start)) {
+        bool success = false;
+        if (PMA.pma_is_HTIF(uint64vars[pma_start])) {
+          (success, uint64vars[val]) = HTIF.htif_read(mi, mmIndex, uint64vars[pma_start], uint64vars[pma_length], paddr, wordSize);
+        } else if (PMA.pma_is_CLINT(uint64vars[pma_start])) {
+         (success, uint64vars[val]) = CLINT.clint_read(mi, mmIndex, uint64vars[pma_start], uint64vars[pma_length], paddr, wordSize);
         }
-
-        return true; //(true, pval);
+        if (!success) {
+          Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_LOAD_ACCESS_FAULT(), vaddr);
+        }
+        return (success, val);
       }
     }
   }
@@ -105,15 +109,14 @@ library VirtualMemory {
          mi.write_memory(mmIndex, uint64vars[paddr], val, wordSize);
          return true;
       } else {
-        uint64vars[offset] = uint64vars[paddr] - PMA.pma_get_start(uint64vars[pma_start]);
-        
+
         if (PMA.pma_is_HTIF(uint64vars[pma_start])) {
-          if (!HTIF.htif_write(mi, mmIndex, uint64vars[pma_start], uint64vars[pma_length], uint64vars[offset], val, wordSize)) {
+          if (!HTIF.htif_write(mi, mmIndex, uint64vars[pma_start], uint64vars[pma_length], PMA.pma_get_start(uint64vars[pma_start]), val, wordSize)) {
             Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_STORE_AMO_ACCESS_FAULT(), vaddr);
             return false;
           }
         } else if (PMA.pma_is_CLINT(uint64vars[pma_start])) {
-            if (!CLINT.clint_write(mi, mmIndex, uint64vars[pma_start], uint64vars[pma_length], uint64vars[offset], val, wordSize)) {
+            if (!CLINT.clint_write(mi, mmIndex, uint64vars[pma_start], uint64vars[pma_length], PMA.pma_get_start(uint64vars[pma_start]), val, wordSize)) {
             Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_STORE_AMO_ACCESS_FAULT(), vaddr);
             return false;
           }

@@ -10,9 +10,9 @@ import "../contracts/RealTimeClock.sol";
 // Reference: The Core of Cartesi, v1.02 - Section 3.2 - The Board
 library CLINT {
 
-  uint64 constant CLINT_CSR_REL_MSIP0 = 0;
-  uint64 constant CLINT_CSR_REL_MTIMECMP = 0x4000;
-  uint64 constant CLINT_CSR_REL_MTIME = 0xbff8;
+  uint64 constant CLINT_MSIP0_ADDR = 0x02000000;
+  uint64 constant CLINT_MTIMECMP_ADDR = 0x02004000;
+  uint64 constant CLINT_MTIME_ADDR = 0x0200bff8;
 
   // \brief reads clint
   // \param pma_start_word first word, defines pma's start
@@ -21,15 +21,15 @@ library CLINT {
   // \param wordsize can be uint8, uint16, uint32 or uint64
   // \return bool if read was successfull
   // \return uint64 pval
-  function clint_read(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 offset, uint64 val, uint256 wordSize)
+  function clint_read(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 offset, uint256 wordSize)
   public returns (bool, uint64) {
 
-    if (offset == CLINT_CSR_REL_MSIP0){
-      clint_read_msip(mi, mmIndex, wordSize);
-    } else if (offset == CLINT_CSR_REL_MTIMECMP){
-      clint_read_mtime(mi, mmIndex, wordSize);
-    } else if (offset == CLINT_CSR_REL_MTIME){
-      clint_read_mtimecmp(mi, mmIndex, wordSize);
+    if (offset == CLINT_MSIP0_ADDR){
+      return clint_read_msip(mi, mmIndex, wordSize);
+    } else if (offset == CLINT_MTIMECMP_ADDR){
+      return clint_read_mtime(mi, mmIndex, wordSize);
+    } else if (offset == CLINT_MTIME_ADDR){
+      return clint_read_mtimecmp(mi, mmIndex, wordSize);
     } else{
       return (false, 0);
     }
@@ -45,7 +45,7 @@ library CLINT {
   function clint_write(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 offset, uint64 val, uint64 wordSize)
   public returns (bool) {
 
-    if (offset == CLINT_CSR_REL_MSIP0){
+    if (offset == CLINT_MSIP0_ADDR){
       if (wordSize == 32){
         if ((val & 1) != 0){
           // TO-DO: mi.set_mip
@@ -57,7 +57,7 @@ library CLINT {
         return true;
       }
       return false;
-    } else if (offset == CLINT_CSR_REL_MTIMECMP) {
+    } else if (offset == CLINT_MTIMECMP_ADDR) {
       if (wordSize == 64){
         // TO-DO: mi.set_mip / write_clint_mtimecmp
         // mi.write_clint_mtimecmp(val);

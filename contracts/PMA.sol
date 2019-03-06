@@ -27,21 +27,17 @@ library PMA {
     bool foundPma;
     //TO-DO: Check lastPma - this is probably wrong.
     uint64 lastPma = 62; // 0 - 31 * 2 words
-    //emit Print("paddr", paddr);
-    for(uint64 i = 0; i < lastPma; i+=2){
-      uint64 start_word = mi.memoryRead(mmIndex, pmaAddress + (i*8));
+
+    for(uint64 i = 0; i < lastPma; i += 2){
+      uint64 start_word = mi.memoryRead(mmIndex, pmaAddress + (i * 8));
 
       uint64 length_word = mi.memoryRead(mmIndex, pmaAddress + ((i * 8 + 8)));
 
       uint64 pma_start = pma_get_start(start_word);
       uint64 pma_length = pma_get_length(length_word);
 
-      // TO-DO: paddr +
-      //else if (pma == io)
-      //else raise_exception store access fault
-
-      //checar device no virtual write
-      if(paddr >= pma_start && paddr < (pma_start + pma_length)){
+      // TO-DO: fix this - should check for aligned addr
+      if(paddr >= pma_start && paddr <= (pma_start + pma_length)){
         return (start_word, length_word);
       }
 

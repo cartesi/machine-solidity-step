@@ -42,6 +42,8 @@ module.exports = function(deployer) {
   deployer.link(RiscVConstants, ArithmeticInstructions);
   deployer.link(RiscVConstants, ArithmeticImmediateInstructions);
 
+  deployer.link(BitsManipulationLibrary, ArithmeticImmediateInstructions);
+
   deployer.deploy(ArithmeticInstructions);
   deployer.deploy(ArithmeticImmediateInstructions);
   deployer.deploy(BranchInstructions);
@@ -123,6 +125,7 @@ module.exports = function(deployer) {
   deployer.link(BranchInstructions, Execute);
   deployer.link(ArithmeticInstructions, Execute);
   deployer.link(ArithmeticImmediateInstructions, Execute);
+  deployer.link(BitsManipulationLibrary, Execute);
   deployer.link(CSR, Execute);
   deployer.link(Exceptions, Execute);
   deployer.link(S_Instructions, Execute);

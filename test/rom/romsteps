@@ -1,0 +1,690 @@
+      //Step: 0
+      //----------------
+      //iflags.H
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845"], {from: accounts[0], gas: 2000000});
+      
+      //mip
+      response = await mm.proveRead(index,368, "0x0000000000000000", ["0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845"], {from: accounts[0], gas: 2000000});
+      
+      //mie
+      response = await mm.proveRead(index,360, "0x0000000000000000", ["0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveRead(index,256, "0x0000000000001000", ["0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845"], {from: accounts[0], gas: 2000000});
+      
+      //mstatus
+      response = await mm.proveRead(index,304, "0x0000000a00000000", ["0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2048, "0x00000000800000f9", ["0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2056, "0x0000000000100000", ["0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2064, "0x00000000000010e9", ["0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2072, "0x000000000000f000", ["0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845"], {from: accounts[0], gas: 2000000});
+      
+      //memory
+      response = await mm.proveRead(index,4096, "0x0242829300000297", ["0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveWrite(index,40,"0x0000000000000000","0x0000000000001000", ["0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveWrite(index,256,"0x0000000000001000","0x0000000000001004", ["0x6be393a6570a3c2321e3175baa7d6b397eca55a8a99a98639af723edc956f18f"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveRead(index,296, "0x0000000000000000", ["0xd06dd5f8e1783e06a4f1140a6235e5c8ff99c043b56495156466c57b944ff892"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveWrite(index,296,"0x0000000000000000","0x0000000000000001", ["0xd06dd5f8e1783e06a4f1140a6235e5c8ff99c043b56495156466c57b944ff892"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveRead(index,288, "0x0000000000000000", ["0x9d9108dcdece700c4e880cb04b0807fb494f70f866bbb26a65ca95e341e9df92"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveWrite(index,288,"0x0000000000000000","0x0000000000000001", ["0x9d9108dcdece700c4e880cb04b0807fb494f70f866bbb26a65ca95e341e9df92"], {from: accounts[0], gas: 2000000});
+      
+      //Step: 1
+      //----------------
+      //iflags.H
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce"], {from: accounts[0], gas: 2000000});
+      
+      //mip
+      response = await mm.proveRead(index,368, "0x0000000000000000", ["0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce"], {from: accounts[0], gas: 2000000});
+      
+      //mie
+      response = await mm.proveRead(index,360, "0x0000000000000000", ["0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveRead(index,256, "0x0000000000001004", ["0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce"], {from: accounts[0], gas: 2000000});
+      
+      //mstatus
+      response = await mm.proveRead(index,304, "0x0000000a00000000", ["0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2048, "0x00000000800000f9", ["0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2056, "0x0000000000100000", ["0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2064, "0x00000000000010e9", ["0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2072, "0x000000000000f000", ["0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce"], {from: accounts[0], gas: 2000000});
+      
+      //memory
+      response = await mm.proveRead(index,4096, "0x0242829300000297", ["0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveRead(index,40, "0x0000000000001000", ["0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveWrite(index,40,"0x0000000000001000","0x0000000000001024", ["0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveWrite(index,256,"0x0000000000001004","0x0000000000001008", ["0x0b6a39125eca8f7fbfcce376a1322b37c6c0830e06984a7dcf5c6877218e13b3"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveRead(index,296, "0x0000000000000001", ["0x8ca0fc02e5a1df85ac24f19f17ac3d70aad37b01367a9e839c85952f3efe9d43"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveWrite(index,296,"0x0000000000000001","0x0000000000000002", ["0x8ca0fc02e5a1df85ac24f19f17ac3d70aad37b01367a9e839c85952f3efe9d43"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveRead(index,288, "0x0000000000000001", ["0xe1c17d45361129d659d8b35284887116dbdb508488f0220dadf0c42fb9c0e687"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveWrite(index,288,"0x0000000000000001","0x0000000000000002", ["0xe1c17d45361129d659d8b35284887116dbdb508488f0220dadf0c42fb9c0e687"], {from: accounts[0], gas: 2000000});
+      
+      //Step: 2
+      //----------------
+      //iflags.H
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //mip
+      response = await mm.proveRead(index,368, "0x0000000000000000", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //mie
+      response = await mm.proveRead(index,360, "0x0000000000000000", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveRead(index,256, "0x0000000000001008", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //mstatus
+      response = await mm.proveRead(index,304, "0x0000000a00000000", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2048, "0x00000000800000f9", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2056, "0x0000000000100000", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2064, "0x00000000000010e9", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2072, "0x000000000000f000", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //memory
+      response = await mm.proveRead(index,4104, "0x0010051330529073", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveRead(index,40, "0x0000000000001024", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //mtvec // BITS OUT OF ORDER
+      response = await mm.proveWrite(index,312,"0x0000000000000000","0x0000000000001024", ["0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveWrite(index,256,"0x0000000000001008","0x000000000000100c", ["0x9171ae089cc9881b82179457abebdcb6262b2d452aa098acec3a600e043e1e95"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveRead(index,296, "0x0000000000000002", ["0x2809f5c44c23a1381bf64aacdbb4b46911a4e57de9ec206447c033f60b69d09c"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveWrite(index,296,"0x0000000000000002","0x0000000000000003", ["0x2809f5c44c23a1381bf64aacdbb4b46911a4e57de9ec206447c033f60b69d09c"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveRead(index,288, "0x0000000000000002", ["0x3bd8f7b991f5fafa16505f656b83993db23a605476d86e0fa7ce571dc41fde3d"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveWrite(index,288,"0x0000000000000002","0x0000000000000003", ["0x3bd8f7b991f5fafa16505f656b83993db23a605476d86e0fa7ce571dc41fde3d"], {from: accounts[0], gas: 2000000});
+      
+      //Step: 3
+      //----------------
+      //iflags.H
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26"], {from: accounts[0], gas: 2000000});
+      
+      //mip
+      response = await mm.proveRead(index,368, "0x0000000000000000", ["0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26"], {from: accounts[0], gas: 2000000});
+      
+      //mie
+      response = await mm.proveRead(index,360, "0x0000000000000000", ["0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveRead(index,256, "0x000000000000100c", ["0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26"], {from: accounts[0], gas: 2000000});
+      
+      //mstatus
+      response = await mm.proveRead(index,304, "0x0000000a00000000", ["0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2048, "0x00000000800000f9", ["0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2056, "0x0000000000100000", ["0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2064, "0x00000000000010e9", ["0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2072, "0x000000000000f000", ["0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26"], {from: accounts[0], gas: 2000000});
+      
+      //memory
+      response = await mm.proveRead(index,4104, "0x0010051330529073", ["0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveRead(index,0, "0x0000000000000000", ["0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveWrite(index,80,"0x0000000000000000","0x0000000000000001", ["0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveWrite(index,256,"0x000000000000100c","0x0000000000001010", ["0x764cb0055c829a48dadbda4ee8b8915920c62e67cb0b44c85fca87714b124d3f"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveRead(index,296, "0x0000000000000003", ["0xac19c11d97eb69dc54bacdaa408a63e328bf518e286c468193ecac40cf54ad5e"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveWrite(index,296,"0x0000000000000003","0x0000000000000004", ["0xac19c11d97eb69dc54bacdaa408a63e328bf518e286c468193ecac40cf54ad5e"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveRead(index,288, "0x0000000000000003", ["0x8ae9a0c8de3989be50e782878cf516c47b2a55fdfa4b713966ea47a5e0dc3d30"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveWrite(index,288,"0x0000000000000003","0x0000000000000004", ["0x8ae9a0c8de3989be50e782878cf516c47b2a55fdfa4b713966ea47a5e0dc3d30"], {from: accounts[0], gas: 2000000});
+      
+      //Step: 4
+      //----------------
+      //iflags.H
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
+      
+      //mip
+      response = await mm.proveRead(index,368, "0x0000000000000000", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
+      
+      //mie
+      response = await mm.proveRead(index,360, "0x0000000000000000", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveRead(index,256, "0x0000000000001010", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
+      
+      //mstatus
+      response = await mm.proveRead(index,304, "0x0000000a00000000", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2048, "0x00000000800000f9", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2056, "0x0000000000100000", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2064, "0x00000000000010e9", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2072, "0x000000000000f000", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
+      
+      //memory
+      response = await mm.proveRead(index,4112, "0x0005019300150513", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveRead(index,80, "0x0000000000000001", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
+
+      //x
+      response = await mm.proveWrite(index,80,"0x0000000000000001","0x0000000000000002", ["0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveWrite(index,256,"0x0000000000001010","0x0000000000001014", ["0x095daae56a8e46c1ac7ef3452b349802e2a746372270b5a69c2588ff46498bc7"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveRead(index,296, "0x0000000000000004", ["0x6f0666e4ac36c357a86109a5984e5b22937188f0f4163971e6cda5ab0b1b59dc"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveWrite(index,296,"0x0000000000000004","0x0000000000000005", ["0x6f0666e4ac36c357a86109a5984e5b22937188f0f4163971e6cda5ab0b1b59dc"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveRead(index,288, "0x0000000000000004", ["0x9d11d6fd8db8efd1ac6dbf5850162b87efdaf9c79a294ad3eb487084fc8cd11a"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveWrite(index,288,"0x0000000000000004","0x0000000000000005", ["0x9d11d6fd8db8efd1ac6dbf5850162b87efdaf9c79a294ad3eb487084fc8cd11a"], {from: accounts[0], gas: 2000000});
+      
+      //Step: 5
+      //----------------
+      //iflags.H
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
+      
+      //mip
+      response = await mm.proveRead(index,368, "0x0000000000000000", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
+      
+      //mie
+      response = await mm.proveRead(index,360, "0x0000000000000000", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveRead(index,256, "0x0000000000001014", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
+      
+      //mstatus
+      response = await mm.proveRead(index,304, "0x0000000a00000000", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2048, "0x00000000800000f9", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2056, "0x0000000000100000", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2064, "0x00000000000010e9", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2072, "0x000000000000f000", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
+      
+      //memory
+      response = await mm.proveRead(index,4112, "0x0005019300150513", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveRead(index,80, "0x0000000000000002", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveWrite(index,24,"0x0000000000000000","0x0000000000000002", ["0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveWrite(index,256,"0x0000000000001014","0x0000000000001018", ["0x7520e8a8be34fd7d9850e2b7a49eb1eec725f0ea0b3c835a796b50ba01db11c1"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveRead(index,296, "0x0000000000000005", ["0xb658eed4a6934b4d1c38e51ef82679f4f3f34ff055129d2e06fe1947d7907590"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveWrite(index,296,"0x0000000000000005","0x0000000000000006", ["0xb658eed4a6934b4d1c38e51ef82679f4f3f34ff055129d2e06fe1947d7907590"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveRead(index,288, "0x0000000000000005", ["0xa09d33e253f48f61e086b75a780a9adf185a6af1855c936c0121cea34aec01fc"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveWrite(index,288,"0x0000000000000005","0x0000000000000006", ["0xa09d33e253f48f61e086b75a780a9adf185a6af1855c936c0121cea34aec01fc"], {from: accounts[0], gas: 2000000});
+      
+      //Step: 6
+      //----------------
+      //iflags.H
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa"], {from: accounts[0], gas: 2000000});
+      
+      //mip
+      response = await mm.proveRead(index,368, "0x0000000000000000", ["0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa"], {from: accounts[0], gas: 2000000});
+      
+      //mie
+      response = await mm.proveRead(index,360, "0x0000000000000000", ["0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveRead(index,256, "0x0000000000001018", ["0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa"], {from: accounts[0], gas: 2000000});
+      
+      //mstatus
+      response = await mm.proveRead(index,304, "0x0000000a00000000", ["0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2048, "0x00000000800000f9", ["0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2056, "0x0000000000100000", ["0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2064, "0x00000000000010e9", ["0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2072, "0x000000000000f000", ["0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa"], {from: accounts[0], gas: 2000000});
+      
+      //memory
+      response = await mm.proveRead(index,4120, "0x000001930100006f", ["0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveWrite(index,256,"0x0000000000001018","0x0000000000001028", ["0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveRead(index,296, "0x0000000000000006", ["0x1924c8932ce332ed7108e391f320075a6a8a04e2c2264a0b92cde2278127098b"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveWrite(index,296,"0x0000000000000006","0x0000000000000007", ["0x1924c8932ce332ed7108e391f320075a6a8a04e2c2264a0b92cde2278127098b"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveRead(index,288, "0x0000000000000006", ["0x52c22986cca7112ed1d771df7ea8a12864a6dbf66520db5a50e9352175c85931"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveWrite(index,288,"0x0000000000000006","0x0000000000000007", ["0x52c22986cca7112ed1d771df7ea8a12864a6dbf66520db5a50e9352175c85931"], {from: accounts[0], gas: 2000000});
+      
+      //Step: 7
+      //----------------
+      //iflags.H
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
+      
+      //mip
+      response = await mm.proveRead(index,368, "0x0000000000000000", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
+      
+      //mie
+      response = await mm.proveRead(index,360, "0x0000000000000000", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveRead(index,256, "0x0000000000001028", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
+      
+      //mstatus
+      response = await mm.proveRead(index,304, "0x0000000a00000000", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2048, "0x00000000800000f9", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2056, "0x0000000000100000", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2064, "0x00000000000010e9", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2072, "0x000000000000f000", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
+      
+      //memory
+      response = await mm.proveRead(index,4136, "0x00f1d19301019193", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveRead(index,24, "0x0000000000000002", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
+     
+      //x
+      response = await mm.proveWrite(index,24,"0x0000000000000002","0x0000000000020000", ["0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveWrite(index,256,"0x0000000000001028","0x000000000000102c", ["0x5e3fc32818b4957bb35ff25c92d8dbad75867ad4b28bdf19f8b51211ec0b20d4"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveRead(index,296, "0x0000000000000007", ["0xb309f24074da4ebb2d6a8c45cf2cafac76d32c02be918db1937b729ebc8d08c0"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveWrite(index,296,"0x0000000000000007","0x0000000000000008", ["0xb309f24074da4ebb2d6a8c45cf2cafac76d32c02be918db1937b729ebc8d08c0"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveRead(index,288, "0x0000000000000007", ["0xf811376312c2a51697086dba3ec468c6796b90d49daf307cdb94516fb9d31697"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveWrite(index,288,"0x0000000000000007","0x0000000000000008", ["0xf811376312c2a51697086dba3ec468c6796b90d49daf307cdb94516fb9d31697"], {from: accounts[0], gas: 2000000});
+      
+      //Step: 8
+      //----------------
+      //iflags.H
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
+      
+      //mip
+      response = await mm.proveRead(index,368, "0x0000000000000000", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
+      
+      //mie
+      response = await mm.proveRead(index,360, "0x0000000000000000", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveRead(index,256, "0x000000000000102c", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
+      
+      //mstatus
+      response = await mm.proveRead(index,304, "0x0000000a00000000", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2048, "0x00000000800000f9", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2056, "0x0000000000100000", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2064, "0x00000000000010e9", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2072, "0x000000000000f000", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
+      
+      //memory
+      response = await mm.proveRead(index,4136, "0x00f1d19301019193", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveRead(index,24, "0x0000000000020000", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
+      //x
+      response = await mm.proveWrite(index,24,"0x0000000000020000","0x0000000000000004", ["0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveWrite(index,256,"0x000000000000102c","0x0000000000001030", ["0xb6e5dcf0e14cff58433cd671cc900c35f6b6f4b39c950bd218545af6f5a393fd"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveRead(index,296, "0x0000000000000008", ["0x71069644cfefa79cfe643e9e0b1ec63ca777b303e4c2a87968f565502d6ff663"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveWrite(index,296,"0x0000000000000008","0x0000000000000009", ["0x71069644cfefa79cfe643e9e0b1ec63ca777b303e4c2a87968f565502d6ff663"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveRead(index,288, "0x0000000000000008", ["0x3631dd819f2a8cab0aaa1fcb6d677d6e62f0d8af63b85c191eedb70c807acade"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveWrite(index,288,"0x0000000000000008","0x0000000000000009", ["0x3631dd819f2a8cab0aaa1fcb6d677d6e62f0d8af63b85c191eedb70c807acade"], {from: accounts[0], gas: 2000000});
+      
+      //Step: 9
+      //----------------
+      //iflags.H
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
+      
+      //mip
+      response = await mm.proveRead(index,368, "0x0000000000000000", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
+      
+      //mie
+      response = await mm.proveRead(index,360, "0x0000000000000000", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveRead(index,256, "0x0000000000001030", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
+      
+      //mstatus
+      response = await mm.proveRead(index,304, "0x0000000a00000000", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2048, "0x00000000800000f9", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2056, "0x0000000000100000", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2064, "0x00000000000010e9", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2072, "0x000000000000f000", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
+      
+      //memory
+      response = await mm.proveRead(index,4144, "0x40007f170011e193", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveRead(index,24, "0x0000000000000004", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
+     
+      //x
+      response = await mm.proveWrite(index,24,"0x0000000000000004","0x0000000000000005", ["0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5"], {from: accounts[0], gas: 2000000});
+      
+      //pc response = await mm.proveWrite(index,256,"0x0000000000001030","0x0000000000001034", ["0x1d37f3a38995d1cfad7b41ba6dea2e7174139ed3ce54c72add52418252833582"], {from: accounts[0], gas: 2000000}); 
+      
+      //minstret
+      response = await mm.proveRead(index,296, "0x0000000000000009", ["0xe16d9da914d2e5ffd9ccafd09b7dcffbb5865235ca4df211806278c1726a5dd3"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveWrite(index,296,"0x0000000000000009","0x000000000000000a", ["0xe16d9da914d2e5ffd9ccafd09b7dcffbb5865235ca4df211806278c1726a5dd3"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveRead(index,288, "0x0000000000000009", ["0x53213815ebe2045617a084b9ffdff82619b7f6e481aa2982ba3d4d24ff1e834a"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveWrite(index,288,"0x0000000000000009","0x000000000000000a", ["0x53213815ebe2045617a084b9ffdff82619b7f6e481aa2982ba3d4d24ff1e834a"], {from: accounts[0], gas: 2000000});
+      
+      //Step: 10
+      //----------------
+      //iflags.H
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d"], {from: accounts[0], gas: 2000000});
+      
+      //mip
+      response = await mm.proveRead(index,368, "0x0000000000000000", ["0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d"], {from: accounts[0], gas: 2000000});
+      
+      //mie
+      response = await mm.proveRead(index,360, "0x0000000000000000", ["0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveRead(index,256, "0x0000000000001034", ["0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d"], {from: accounts[0], gas: 2000000});
+      
+      //mstatus
+      response = await mm.proveRead(index,304, "0x0000000a00000000", ["0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2048, "0x00000000800000f9", ["0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2056, "0x0000000000100000", ["0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2064, "0x00000000000010e9", ["0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2072, "0x000000000000f000", ["0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d"], {from: accounts[0], gas: 2000000});
+      
+      //memory
+      response = await mm.proveRead(index,4144, "0x40007f170011e193", ["0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveWrite(index,240,"0x0000000000000000","0x0000000040008034", ["0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveWrite(index,256,"0x0000000000001034","0x0000000000001038", ["0x638d794f2cc7259ee0cb37506f2092ffc98a7a86716213d48d5d6a18befb9775"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveRead(index,296, "0x000000000000000a", ["0x8427416e043f243414c3592249c0e7bd4d42e64e5a3d725b457fabdc181878b3"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveWrite(index,296,"0x000000000000000a","0x000000000000000b", ["0x8427416e043f243414c3592249c0e7bd4d42e64e5a3d725b457fabdc181878b3"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveRead(index,288, "0x000000000000000a", ["0x9bcdfbe0acbd77b1b91b0dbd4aaabd42388b837456249f6fedf46731fe05e96d"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveWrite(index,288,"0x000000000000000a","0x000000000000000b", ["0x9bcdfbe0acbd77b1b91b0dbd4aaabd42388b837456249f6fedf46731fe05e96d"], {from: accounts[0], gas: 2000000});
+      
+      //Step: 11
+      //----------------
+      //iflags.H
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //mip
+      response = await mm.proveRead(index,368, "0x0000000000000000", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //mie
+      response = await mm.proveRead(index,360, "0x0000000000000000", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveRead(index,256, "0x0000000000001038", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //mstatus
+      response = await mm.proveRead(index,304, "0x0000000a00000000", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2048, "0x00000000800000f9", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2056, "0x0000000000100000", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2064, "0x00000000000010e9", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2072, "0x000000000000f000", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //memory
+      response = await mm.proveRead(index,4152, "0xff9ff06ffc3f3623", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      //x
+      response = await mm.proveRead(index,240, "0x0000000040008034", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //x
+      response = await mm.proveRead(index,24, "0x0000000000000005", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.PRV
+      response = await mm.proveRead(index,464, "0x000000000000000c", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //mstatus
+      response = await mm.proveRead(index,304, "0x0000000a00000000", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2048, "0x00000000800000f9", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2056, "0x0000000000100000", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2064, "0x00000000000010e9", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2072, "0x000000000000f000", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //pma.istart
+      response = await mm.proveRead(index,2080, "0x000000004000831a", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //pma.ilength
+      response = await mm.proveRead(index,2088, "0x0000000000001000", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //htif.tohost
+      response = await mm.proveWrite(index,1073774592,"0x0000000000000000","0x0000000000000005", ["0x4e34100984b02109927279c368ba3bd6ec10955aba142f16822785ee637625dd"], {from: accounts[0], gas: 2000000});
+      
+      //iflags.H
+      response = await mm.proveWrite(index,464,"0x000000000000000c","0x000000000000000d", ["0xae3d92a0b0a266593ee8059e27d830a00ce14c2ca28f7b2af8f3839d756f856a"], {from: accounts[0], gas: 2000000});
+      
+      //pc
+      response = await mm.proveWrite(index,256,"0x0000000000001038","0x000000000000103c", ["0x787a061ad04a18ac6533e5682de51c221fff42a10420cea15f84d4b4d2b147d9"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveRead(index,296, "0x000000000000000b", ["0x1afe84f8cad75345324c3fe68f668a0bdb7086a61d289201dccad4c9509e6a5f"], {from: accounts[0], gas: 2000000});
+      
+      //minstret
+      response = await mm.proveWrite(index,296,"0x000000000000000b","0x000000000000000c", ["0x1afe84f8cad75345324c3fe68f668a0bdb7086a61d289201dccad4c9509e6a5f"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveRead(index,288, "0x000000000000000b", ["0xf1d7dfb7ae5c2c24c8593ff3c6f1f4bf14f2edaec78e21f42badae927f5ab11d"], {from: accounts[0], gas: 2000000});
+      
+      //mcycle
+      response = await mm.proveWrite(index,288,"0x000000000000000b","0x000000000000000c", ["0xf1d7dfb7ae5c2c24c8593ff3c6f1f4bf14f2edaec78e21f42badae927f5ab11d"], {from: accounts[0], gas: 2000000});
+      

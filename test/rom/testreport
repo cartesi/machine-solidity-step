@@ -1,0 +1,376 @@
+ Contract: Step 0
+    Checking functionalities
+      ✓ Writing to MM manager - STEP 0 step (1008ms)
+      ✓ Deploying step contracts (286ms)
+      1) Running step 0
+
+    Events emitted during test:
+    ---------------------------
+
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 368, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 360, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 256, value: 0x0000000000001000)
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 304, value: 0x0000000a00000000)
+    ValueRead(_index: 0, _position: 2048, value: 0x00000000800000f9)
+    ValueRead(_index: 0, _position: 2056, value: 0x0000000000100000)
+    ValueRead(_index: 0, _position: 2064, value: 0x00000000000010e9)
+    ValueRead(_index: 0, _position: 2072, value: 0x000000000000f000)
+    Print(name: paddr/insn, val: 4096)
+    ValueRead(_index: 0, _position: 4096, value: 0x0242829300000297)
+    Print(name: insn, val: 663)
+    ValueWritten(_index: 0, _position: 40, value: 0x0000000000001000)
+    ValueWritten(_index: 0, _position: 256, value: 0x0000000000001004)
+    ValueRead(_index: 0, _position: 296, value: 0x0000000000000000)
+    ValueWritten(_index: 0, _position: 296, value: 0x0000000000000001)
+    ValueRead(_index: 0, _position: 288, value: 0x0000000000000000)
+    ValueWritten(_index: 0, _position: 288, value: 0x0000000000000001)
+
+    ---------------------------
+
+  Contract: STEP 0001
+    Checking functionalities
+      ✓ Writing to MM manager - STEP 0001 (924ms)
+      ✓ Deploying step contracts (264ms)
+      2) Running step 1
+
+    Events emitted during test:
+    ---------------------------
+
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 368, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 360, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 256, value: 0x0000000000001004)
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 304, value: 0x0000000a00000000)
+    ValueRead(_index: 0, _position: 2048, value: 0x00000000800000f9)
+    ValueRead(_index: 0, _position: 2056, value: 0x0000000000100000)
+    ValueRead(_index: 0, _position: 2064, value: 0x00000000000010e9)
+    ValueRead(_index: 0, _position: 2072, value: 0x000000000000f000)
+    Print(name: paddr/insn, val: 4100)
+    ValueRead(_index: 0, _position: 4096, value: 0x0242829300000297)
+    Print(name: insn, val: 37913235)
+    ValueRead(_index: 0, _position: 40, value: 0x0000000000001000)
+    ValueWritten(_index: 0, _position: 40, value: 0x0010000000000024)
+    ValueWritten(_index: 0, _position: 256, value: 0x0000000000001008)
+    ValueRead(_index: 0, _position: 296, value: 0x0000000000000001)
+    ValueWritten(_index: 0, _position: 296, value: 0x0000000000000002)
+    ValueRead(_index: 0, _position: 288, value: 0x0000000000000001)
+    ValueWritten(_index: 0, _position: 288, value: 0x0000000000000002)
+
+    ---------------------------
+
+  Contract: STEP 2
+    Checking functionalities
+      ✓ Writing to MM manager - STEP 2 (945ms)
+      ✓ Deploying step contracts (243ms)
+      3) Running step 2
+
+    Events emitted during test:
+    ---------------------------
+
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 368, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 360, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 256, value: 0x0000000000001008)
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 304, value: 0x0000000a00000000)
+    ValueRead(_index: 0, _position: 2048, value: 0x00000000800000f9)
+    ValueRead(_index: 0, _position: 2056, value: 0x0000000000100000)
+    ValueRead(_index: 0, _position: 2064, value: 0x00000000000010e9)
+    ValueRead(_index: 0, _position: 2072, value: 0x000000000000f000)
+    Print(name: paddr/insn, val: 4104)
+    ValueRead(_index: 0, _position: 4104, value: 0x0010051330529073)
+    Print(name: insn, val: 810717299)
+    ValueRead(_index: 0, _position: 40, value: 0x0000000000001024)
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueWritten(_index: 0, _position: 312, value: 0x2410000000000000)
+    ValueWritten(_index: 0, _position: 256, value: 0x000000000000100c)
+    ValueRead(_index: 0, _position: 296, value: 0x0000000000000002)
+    ValueWritten(_index: 0, _position: 296, value: 0x0000000000000003)
+    ValueRead(_index: 0, _position: 288, value: 0x0000000000000002)
+    ValueWritten(_index: 0, _position: 288, value: 0x0000000000000003)
+
+    ---------------------------
+
+  Contract: STEP 3
+    Checking functionalities
+      ✓ Writing to MM manager - STEP 3 (964ms)
+      ✓ Deploying step contracts (272ms)
+      4) Running step 3
+
+    Events emitted during test:
+    ---------------------------
+
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 368, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 360, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 256, value: 0x000000000000100c)
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 304, value: 0x0000000a00000000)
+    ValueRead(_index: 0, _position: 2048, value: 0x00000000800000f9)
+    ValueRead(_index: 0, _position: 2056, value: 0x0000000000100000)
+    ValueRead(_index: 0, _position: 2064, value: 0x00000000000010e9)
+    ValueRead(_index: 0, _position: 2072, value: 0x000000000000f000)
+    Print(name: paddr/insn, val: 4108)
+    ValueRead(_index: 0, _position: 4104, value: 0x0010051330529073)
+    Print(name: insn, val: 1049875)
+    ValueRead(_index: 0, _position: 0, value: 0x0000000000000000)
+    ValueWritten(_index: 0, _position: 80, value: 0x0000000000000001)
+    ValueWritten(_index: 0, _position: 256, value: 0x0000000000001010)
+    ValueRead(_index: 0, _position: 296, value: 0x0000000000000003)
+    ValueWritten(_index: 0, _position: 296, value: 0x0000000000000004)
+    ValueRead(_index: 0, _position: 288, value: 0x0000000000000003)
+    ValueWritten(_index: 0, _position: 288, value: 0x0000000000000004)
+
+    ---------------------------
+
+  Contract: STEP4
+    Checking functionalities
+      ✓ Writing to MM manager - STEP 4 (959ms)
+      ✓ Deploying step contracts (247ms)
+      5) Running step 4
+
+    Events emitted during test:
+    ---------------------------
+
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 368, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 360, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 256, value: 0x0000000000001010)
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 304, value: 0x0000000a00000000)
+    ValueRead(_index: 0, _position: 2048, value: 0x00000000800000f9)
+    ValueRead(_index: 0, _position: 2056, value: 0x0000000000100000)
+    ValueRead(_index: 0, _position: 2064, value: 0x00000000000010e9)
+    ValueRead(_index: 0, _position: 2072, value: 0x000000000000f000)
+    Print(name: paddr/insn, val: 4112)
+    ValueRead(_index: 0, _position: 4112, value: 0x0005019300150513)
+    Print(name: insn, val: 1377555)
+    ValueRead(_index: 0, _position: 80, value: 0x0000000000000001)
+    ValueWritten(_index: 0, _position: 80, value: 0x0100000000000001)
+    ValueWritten(_index: 0, _position: 256, value: 0x0000000000001014)
+    ValueRead(_index: 0, _position: 296, value: 0x0000000000000004)
+    ValueWritten(_index: 0, _position: 296, value: 0x0000000000000005)
+    ValueRead(_index: 0, _position: 288, value: 0x0000000000000004)
+    ValueWritten(_index: 0, _position: 288, value: 0x0000000000000005)
+
+    ---------------------------
+
+  Contract: STEP5
+    Checking functionalities
+      ✓ Writing to MM manager - STEP 2 step (1010ms)
+      ✓ Deploying step contracts (214ms)
+      6) Running step 5
+
+    Events emitted during test:
+    ---------------------------
+
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 368, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 360, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 256, value: 0x0000000000001014)
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 304, value: 0x0000000a00000000)
+    ValueRead(_index: 0, _position: 2048, value: 0x00000000800000f9)
+    ValueRead(_index: 0, _position: 2056, value: 0x0000000000100000)
+    ValueRead(_index: 0, _position: 2064, value: 0x00000000000010e9)
+    ValueRead(_index: 0, _position: 2072, value: 0x000000000000f000)
+    Print(name: paddr/insn, val: 4116)
+    ValueRead(_index: 0, _position: 4112, value: 0x0005019300150513)
+    Print(name: insn, val: 328083)
+    ValueRead(_index: 0, _position: 80, value: 0x0000000000000002)
+    ValueWritten(_index: 0, _position: 24, value: 0x0200000000000000)
+    ValueWritten(_index: 0, _position: 256, value: 0x0000000000001018)
+    ValueRead(_index: 0, _position: 296, value: 0x0000000000000005)
+    ValueWritten(_index: 0, _position: 296, value: 0x0000000000000006)
+    ValueRead(_index: 0, _position: 288, value: 0x0000000000000005)
+    ValueWritten(_index: 0, _position: 288, value: 0x0000000000000006)
+
+    ---------------------------
+
+  Contract: STEP6
+    Checking functionalities
+      ✓ Writing to MM manager - STEP6 (878ms)
+      ✓ Deploying step contracts (223ms)
+      7) Running step 6
+
+    Events emitted during test:
+    ---------------------------
+
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 368, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 360, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 256, value: 0x0000000000001018)
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 304, value: 0x0000000a00000000)
+    ValueRead(_index: 0, _position: 2048, value: 0x00000000800000f9)
+    ValueRead(_index: 0, _position: 2056, value: 0x0000000000100000)
+    ValueRead(_index: 0, _position: 2064, value: 0x00000000000010e9)
+    ValueRead(_index: 0, _position: 2072, value: 0x000000000000f000)
+    Print(name: paddr/insn, val: 4120)
+    ValueRead(_index: 0, _position: 4120, value: 0x000001930100006f)
+    Print(name: insn, val: 16777327)
+    ValueWritten(_index: 0, _position: 256, value: 0x0000000000001028)
+    ValueRead(_index: 0, _position: 296, value: 0x0000000000000006)
+    ValueWritten(_index: 0, _position: 296, value: 0x0000000000000007)
+    ValueRead(_index: 0, _position: 288, value: 0x0000000000000006)
+    ValueWritten(_index: 0, _position: 288, value: 0x0000000000000007)
+
+    ---------------------------
+
+  Contract: Step 7
+    Checking functionalities
+      ✓ Writing to MM manager - Step 7 (808ms)
+      ✓ Deploying step contracts (203ms)
+      8) Running step 7
+
+    Events emitted during test:
+    ---------------------------
+
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 368, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 360, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 256, value: 0x0000000000001028)
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 304, value: 0x0000000a00000000)
+    ValueRead(_index: 0, _position: 2048, value: 0x00000000800000f9)
+    ValueRead(_index: 0, _position: 2056, value: 0x0000000000100000)
+    ValueRead(_index: 0, _position: 2064, value: 0x00000000000010e9)
+    ValueRead(_index: 0, _position: 2072, value: 0x000000000000f000)
+    Print(name: paddr/insn, val: 4136)
+    ValueRead(_index: 0, _position: 4136, value: 0x00f1d19301019193)
+    Print(name: insn, val: 16880019)
+    ValueRead(_index: 0, _position: 24, value: 0x0000000000000002)
+    ValueWritten(_index: 0, _position: 24, value: 0x0000000000000000)
+    ValueWritten(_index: 0, _position: 256, value: 0x000000000000102c)
+    ValueRead(_index: 0, _position: 296, value: 0x0000000000000007)
+    ValueWritten(_index: 0, _position: 296, value: 0x0000000000000008)
+    ValueRead(_index: 0, _position: 288, value: 0x0000000000000007)
+    ValueWritten(_index: 0, _position: 288, value: 0x0000000000000008)
+
+    ---------------------------
+
+  Contract: STEP8
+    Checking functionalities
+      ✓ Writing to MM manager - Step 8 (876ms)
+      ✓ Deploying step contracts (216ms)
+      9) Running step 8
+
+    Events emitted during test:
+    ---------------------------
+
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 368, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 360, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 256, value: 0x000000000000102c)
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 304, value: 0x0000000a00000000)
+    ValueRead(_index: 0, _position: 2048, value: 0x00000000800000f9)
+    ValueRead(_index: 0, _position: 2056, value: 0x0000000000100000)
+    ValueRead(_index: 0, _position: 2064, value: 0x00000000000010e9)
+    ValueRead(_index: 0, _position: 2072, value: 0x000000000000f000)
+    Print(name: paddr/insn, val: 4140)
+    ValueRead(_index: 0, _position: 4136, value: 0x00f1d19301019193)
+    Print(name: insn, val: 15847827)
+    ValueRead(_index: 0, _position: 24, value: 0x0000000000020000)
+    ValueWritten(_index: 0, _position: 24, value: 0x0000000004000000)
+    ValueWritten(_index: 0, _position: 256, value: 0x0000000000001030)
+    ValueRead(_index: 0, _position: 296, value: 0x0000000000000008)
+    ValueWritten(_index: 0, _position: 296, value: 0x0000000000000009)
+    ValueRead(_index: 0, _position: 288, value: 0x0000000000000008)
+    ValueWritten(_index: 0, _position: 288, value: 0x0000000000000009)
+
+    ---------------------------
+
+  Contract: STEP9
+    Checking functionalities
+      ✓ Writing to MM manager - Step 9 (913ms)
+      ✓ Deploying step contracts (209ms)
+      10) Running step 9
+
+    Events emitted during test:
+    ---------------------------
+
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 368, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 360, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 256, value: 0x0000000000001030)
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 304, value: 0x0000000a00000000)
+    ValueRead(_index: 0, _position: 2048, value: 0x00000000800000f9)
+    ValueRead(_index: 0, _position: 2056, value: 0x0000000000100000)
+    ValueRead(_index: 0, _position: 2064, value: 0x00000000000010e9)
+    ValueRead(_index: 0, _position: 2072, value: 0x000000000000f000)
+    Print(name: paddr/insn, val: 4144)
+    ValueRead(_index: 0, _position: 4144, value: 0x40007f170011e193)
+    Print(name: insn, val: 1171859)
+    ValueRead(_index: 0, _position: 24, value: 0x0000000000000004)
+    ValueWritten(_index: 0, _position: 24, value: 0x0400000000000001)
+    ValueWritten(_index: 0, _position: 256, value: 0x0000000000001034)
+    ValueRead(_index: 0, _position: 296, value: 0x0000000000000009)
+    ValueWritten(_index: 0, _position: 296, value: 0x000000000000000a)
+    ValueRead(_index: 0, _position: 288, value: 0x0000000000000009)
+    ValueWritten(_index: 0, _position: 288, value: 0x000000000000000a)
+
+    ---------------------------
+
+  Contract: STEP10
+    Checking functionalities
+      ✓ Writing to MM manager - Step 10 (889ms)
+      ✓ Deploying step contracts (319ms)
+      11) Running step 10
+
+    Events emitted during test:
+    ---------------------------
+
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 368, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 360, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 256, value: 0x0000000000001034)
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 304, value: 0x0000000a00000000)
+    ValueRead(_index: 0, _position: 2048, value: 0x00000000800000f9)
+    ValueRead(_index: 0, _position: 2056, value: 0x0000000000100000)
+    ValueRead(_index: 0, _position: 2064, value: 0x00000000000010e9)
+    ValueRead(_index: 0, _position: 2072, value: 0x000000000000f000)
+    Print(name: paddr/insn, val: 4148)
+    ValueRead(_index: 0, _position: 4144, value: 0x40007f170011e193)
+    Print(name: insn, val: 1073774359)
+    ValueWritten(_index: 0, _position: 240, value: 0x0000000040008034)
+    ValueWritten(_index: 0, _position: 256, value: 0x0000000000001038)
+    ValueRead(_index: 0, _position: 296, value: 0x000000000000000a)
+    ValueWritten(_index: 0, _position: 296, value: 0x000000000000000b)
+    ValueRead(_index: 0, _position: 288, value: 0x000000000000000a)
+    ValueWritten(_index: 0, _position: 288, value: 0x000000000000000b)
+
+    ---------------------------
+
+  Contract: STEP0011
+    Checking functionalities
+      ✓ Writing to MM manager - Step 11 (1336ms)
+      ✓ Deploying step contracts (212ms)
+      12) Running step 11
+
+    Events emitted during test:
+    ---------------------------
+
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 368, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 360, value: 0x0000000000000000)
+    ValueRead(_index: 0, _position: 256, value: 0x0000000000001038)
+    ValueRead(_index: 0, _position: 464, value: 0x000000000000000c)
+    ValueRead(_index: 0, _position: 304, value: 0x0000000a00000000)
+    ValueRead(_index: 0, _position: 2048, value: 0x00000000800000f9)
+    ValueRead(_index: 0, _position: 2056, value: 0x0000000000100000)
+    ValueRead(_index: 0, _position: 2064, value: 0x00000000000010e9)
+    ValueRead(_index: 0, _position: 2072, value: 0x000000000000f000)
+    Print(name: paddr/insn, val: 4152)
+    ValueRead(_index: 0, _position: 4152, value: 0xff9ff06ffc3f3623)
+    Print(name: insn, val: 4232001059)
+    ValueRead(_index: 0, _position: 296, value: 0x0000000040008034)
+    ValueWritten(_index: 0, _position: 296, value: 0x0000000040008035)
+    ValueRead(_index: 0, _position: 288, value: 0x000000000000000c)
+    ValueWritten(_index: 0, _position: 288, value: 0x000000000000000d)
+
