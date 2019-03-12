@@ -144,20 +144,6 @@ library RiscVDecoder {
     return "illegal insn";
   }
 
-  /// @notice Given a fence funct3 insn, finds the func associated.
-  //  Uses binary search for performance.
-  //  @param insn for fence funct3 field.
-  function fence_group_funct3(uint32 insn) public returns(bytes32){
-    if(insn == 0x0000){
-      /*insn == 0x0000*/
-      return "FENCE";
-    }else if(insn == 0x0001){
-      /*insn == 0x0001*/
-      return "FENCE_I";
-    }
-    return "illegal insn";
-  }
-
   /// @notice Given a env trap int group insn, finds the func associated.
   //  Uses binary search for performance.
   //  @param insn for env trap int group field.
