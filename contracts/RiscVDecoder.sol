@@ -1,4 +1,4 @@
-// @title RiscVDecoder
+// title RiscVDecoder
 pragma solidity ^0.5.0;
 
 //TO-DO: Implement illegal instruction
@@ -140,58 +140,6 @@ library RiscVDecoder {
     }else if(insn == 0x0003){
       /*insn == 0x0003*/
       return "LD";
-    }
-    return "illegal insn";
-  }
-
-  /// @notice Given a arithmetic immediate funct3 insn, finds the func associated.
-  //  Uses binary search for performance.
-  //  @param insn for arithmetic immediate funct3 field.
-  function arithmetic_immediate_funct3(uint32 insn) public returns (bytes32) {
-    if(insn < 0x0003){
-      if(insn == 0x0000){
-        /*insn == 0x0000*/
-        return "ADDI";
-      }else if(insn == 0x0002){
-        /*insn == 0x0002*/
-        return "SLTI";
-      }else if(insn == 0x0001){
-        /*insn == 0x0001*/
-        return "SLLI";
-      }
-    }else if(insn > 0x0003){
-      if(insn < 0x0006){
-        if(insn == 0x0004){
-          /*insn == 0x0004*/
-          return "XORI";
-        }else if(insn == 0x0005){
-          /*insn == 0x0005*/
-          return "shift_right_immediate_group";
-        }
-      }else if(insn == 0x0007){
-        /*insn == 0x0007*/
-        return "ANDU";
-      }else if(insn == 0x0006){
-        /*insn == 0x0006*/
-        return "ORI";
-      }
-    }else if(insn == 0x0003){
-      /*insn == 0x0003*/
-      return "SLTIU";
-    }
-    return "illegal insn";
-  }
-
-  /// @notice Given a fence funct3 insn, finds the func associated.
-  //  Uses binary search for performance.
-  //  @param insn for fence funct3 field.
-  function fence_group_funct3(uint32 insn) public returns(bytes32){
-    if(insn == 0x0000){
-      /*insn == 0x0000*/
-      return "FENCE";
-    }else if(insn == 0x0001){
-      /*insn == 0x0001*/
-      return "FENCE_I";
     }
     return "illegal insn";
   }
