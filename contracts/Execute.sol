@@ -285,7 +285,7 @@ library Execute {
       return (ArithmeticImmediateInstructions.execute_ADDIW(mi, mmIndex, insn), true);
     }else if(funct3 ==  0x0005){
       /*funct3 == 0x0005*/
-      //return "shift_right_immediate_32_group";
+      return shift_right_immediate_32_group(mi, mmIndex, insn);
     }else if(funct3 == 0x0001){
       /*funct3 == 0x0001*/
       //return "SLLIW";
@@ -484,6 +484,25 @@ library Execute {
       return S_Instructions.SH(mi, mmIndex, pc, insn) ? advance_to_next_insn(mi, mmIndex, pc) : execute_status.retired;
     }
     return raise_illegal_insn_exception(pc, insn);
+  }
+
+  /// @notice Given a shift right immediate32 funct3 insn, finds the associated func.
+  //  Uses binary search for performance.
+  //  @param insn for shift right immediate32 funct3 field.
+  function shift_right_immediate_32_group(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
+  public returns (uint64, bool) {
+    uint32 funct7 = RiscVDecoder.insn_funct7(insn);
+
+    if (funct7 == 0x0000){
+      /*funct7 == 0x0000*/
+      //return "SRLIW";
+      return (ArithmeticImmediateInstructions.execute_SRLIW(mi, mmIndex, insn), true);
+    } else if (funct7 == 0x0020){
+      /*funct7 == 0x0020*/
+      //return "SRAIW";
+      return (ArithmeticImmediateInstructions.execute_SRAIW(mi, mmIndex, insn), true);
+    }
+    return (0, false);
   }
 
   /// @notice Given an op code, finds the group of instructions it belongs to
