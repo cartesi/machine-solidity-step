@@ -1,0 +1,2320 @@
+{
+ "steps" : [{
+ "Step number" : "0",
+"readwrites" : [
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.H",
+
+ "Access Proof" : "0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "368",
+
+ "Register Access" : "mip",
+
+ "Access Proof" : "0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "360",
+
+ "Register Access" : "mie",
+
+ "Access Proof" : "0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845",
+
+ "Value Read" : "0x0010000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.PRV",
+
+ "Access Proof" : "0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "304",
+
+ "Register Access" : "mstatus",
+
+ "Access Proof" : "0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845",
+
+ "Value Read" : "0x000000000a000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2048",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845",
+
+ "Value Read" : "0xf900008000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2056",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845",
+
+ "Value Read" : "0x0000100000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2064",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845",
+
+ "Value Read" : "0xe910000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2072",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845",
+
+ "Value Read" : "0x00f0000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "4096",
+
+ "Register Access" : "memory",
+
+ "Access Proof" : "0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845",
+
+ "Value Read" : "0x9702000093824202"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "40",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0xcff1f169518b541c2796f5caeb20927d67009f3af9c3f5a3c7d0ac5390a29845",
+
+ "Value Read" : "0x0000000000000000"
+,
+
+ "Value Written" : "0x0010000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x6be393a6570a3c2321e3175baa7d6b397eca55a8a99a98639af723edc956f18f",
+
+ "Value Read" : "0x0010000000000000"
+,
+
+ "Value Written" : "0x0410000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0xd06dd5f8e1783e06a4f1140a6235e5c8ff99c043b56495156466c57b944ff892",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0xd06dd5f8e1783e06a4f1140a6235e5c8ff99c043b56495156466c57b944ff892",
+
+ "Value Read" : "0x0000000000000000"
+,
+
+ "Value Written" : "0x0100000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x9d9108dcdece700c4e880cb04b0807fb494f70f866bbb26a65ca95e341e9df92",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x9d9108dcdece700c4e880cb04b0807fb494f70f866bbb26a65ca95e341e9df92",
+
+ "Value Read" : "0x0000000000000000"
+,
+
+ "Value Written" : "0x0100000000000000"
+}
+]},
+{
+ "Step number" : "1",
+"readwrites" : [
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.H",
+
+ "Access Proof" : "0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "368",
+
+ "Register Access" : "mip",
+
+ "Access Proof" : "0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "360",
+
+ "Register Access" : "mie",
+
+ "Access Proof" : "0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce",
+
+ "Value Read" : "0x0410000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.PRV",
+
+ "Access Proof" : "0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "304",
+
+ "Register Access" : "mstatus",
+
+ "Access Proof" : "0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce",
+
+ "Value Read" : "0x000000000a000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2048",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce",
+
+ "Value Read" : "0xf900008000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2056",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce",
+
+ "Value Read" : "0x0000100000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2064",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce",
+
+ "Value Read" : "0xe910000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2072",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce",
+
+ "Value Read" : "0x00f0000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "4096",
+
+ "Register Access" : "memory",
+
+ "Access Proof" : "0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce",
+
+ "Value Read" : "0x9702000093824202"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "40",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce",
+
+ "Value Read" : "0x0010000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "40",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0xf11e1faa8c7422e5487bcb6ccc997f72a8f33d6c486f1964e0527e2c3a8b1dce",
+
+ "Value Read" : "0x0010000000000000"
+,
+
+ "Value Written" : "0x2410000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x0b6a39125eca8f7fbfcce376a1322b37c6c0830e06984a7dcf5c6877218e13b3",
+
+ "Value Read" : "0x0410000000000000"
+,
+
+ "Value Written" : "0x0810000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0x8ca0fc02e5a1df85ac24f19f17ac3d70aad37b01367a9e839c85952f3efe9d43",
+
+ "Value Read" : "0x0100000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0x8ca0fc02e5a1df85ac24f19f17ac3d70aad37b01367a9e839c85952f3efe9d43",
+
+ "Value Read" : "0x0100000000000000"
+,
+
+ "Value Written" : "0x0200000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0xe1c17d45361129d659d8b35284887116dbdb508488f0220dadf0c42fb9c0e687",
+
+ "Value Read" : "0x0100000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0xe1c17d45361129d659d8b35284887116dbdb508488f0220dadf0c42fb9c0e687",
+
+ "Value Read" : "0x0100000000000000"
+,
+
+ "Value Written" : "0x0200000000000000"
+}
+]},
+{
+ "Step number" : "2",
+"readwrites" : [
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.H",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "368",
+
+ "Register Access" : "mip",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "360",
+
+ "Register Access" : "mie",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0x0810000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.PRV",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "304",
+
+ "Register Access" : "mstatus",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0x000000000a000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2048",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0xf900008000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2056",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0x0000100000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2064",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0xe910000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2072",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0x00f0000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "4104",
+
+ "Register Access" : "memory",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0x7390523013051000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "40",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0x2410000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.PRV",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "312",
+
+ "Register Access" : "mtvec",
+
+ "Access Proof" : "0x504ee57a0a9e815fcfc2f14949cb1605a6259ad8901fb627c1db5de257c5452c",
+
+ "Value Read" : "0x0000000000000000"
+,
+
+ "Value Written" : "0x2410000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x9171ae089cc9881b82179457abebdcb6262b2d452aa098acec3a600e043e1e95",
+
+ "Value Read" : "0x0810000000000000"
+,
+
+ "Value Written" : "0x0c10000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0x2809f5c44c23a1381bf64aacdbb4b46911a4e57de9ec206447c033f60b69d09c",
+
+ "Value Read" : "0x0200000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0x2809f5c44c23a1381bf64aacdbb4b46911a4e57de9ec206447c033f60b69d09c",
+
+ "Value Read" : "0x0200000000000000"
+,
+
+ "Value Written" : "0x0300000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x3bd8f7b991f5fafa16505f656b83993db23a605476d86e0fa7ce571dc41fde3d",
+
+ "Value Read" : "0x0200000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x3bd8f7b991f5fafa16505f656b83993db23a605476d86e0fa7ce571dc41fde3d",
+
+ "Value Read" : "0x0200000000000000"
+,
+
+ "Value Written" : "0x0300000000000000"
+}
+]},
+{
+ "Step number" : "3",
+"readwrites" : [
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.H",
+
+ "Access Proof" : "0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "368",
+
+ "Register Access" : "mip",
+
+ "Access Proof" : "0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "360",
+
+ "Register Access" : "mie",
+
+ "Access Proof" : "0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26",
+
+ "Value Read" : "0x0c10000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.PRV",
+
+ "Access Proof" : "0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "304",
+
+ "Register Access" : "mstatus",
+
+ "Access Proof" : "0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26",
+
+ "Value Read" : "0x000000000a000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2048",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26",
+
+ "Value Read" : "0xf900008000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2056",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26",
+
+ "Value Read" : "0x0000100000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2064",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26",
+
+ "Value Read" : "0xe910000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2072",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26",
+
+ "Value Read" : "0x00f0000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "4104",
+
+ "Register Access" : "memory",
+
+ "Access Proof" : "0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26",
+
+ "Value Read" : "0x7390523013051000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "0",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "80",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0xcf3ce51de20af57c876aca5fa70061d4cbbff77646651565a079cf25e2e34d26",
+
+ "Value Read" : "0x0000000000000000"
+,
+
+ "Value Written" : "0x0100000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x764cb0055c829a48dadbda4ee8b8915920c62e67cb0b44c85fca87714b124d3f",
+
+ "Value Read" : "0x0c10000000000000"
+,
+
+ "Value Written" : "0x1010000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0xac19c11d97eb69dc54bacdaa408a63e328bf518e286c468193ecac40cf54ad5e",
+
+ "Value Read" : "0x0300000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0xac19c11d97eb69dc54bacdaa408a63e328bf518e286c468193ecac40cf54ad5e",
+
+ "Value Read" : "0x0300000000000000"
+,
+
+ "Value Written" : "0x0400000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x8ae9a0c8de3989be50e782878cf516c47b2a55fdfa4b713966ea47a5e0dc3d30",
+
+ "Value Read" : "0x0300000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x8ae9a0c8de3989be50e782878cf516c47b2a55fdfa4b713966ea47a5e0dc3d30",
+
+ "Value Read" : "0x0300000000000000"
+,
+
+ "Value Written" : "0x0400000000000000"
+}
+]},
+{
+ "Step number" : "4",
+"readwrites" : [
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.H",
+
+ "Access Proof" : "0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "368",
+
+ "Register Access" : "mip",
+
+ "Access Proof" : "0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "360",
+
+ "Register Access" : "mie",
+
+ "Access Proof" : "0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb",
+
+ "Value Read" : "0x1010000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.PRV",
+
+ "Access Proof" : "0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "304",
+
+ "Register Access" : "mstatus",
+
+ "Access Proof" : "0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb",
+
+ "Value Read" : "0x000000000a000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2048",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb",
+
+ "Value Read" : "0xf900008000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2056",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb",
+
+ "Value Read" : "0x0000100000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2064",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb",
+
+ "Value Read" : "0xe910000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2072",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb",
+
+ "Value Read" : "0x00f0000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "4112",
+
+ "Register Access" : "memory",
+
+ "Access Proof" : "0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb",
+
+ "Value Read" : "0x1305150093010500"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "80",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb",
+
+ "Value Read" : "0x0100000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "80",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0x169b14b100f888c2c5b7a2a2181d05bbeaa7a5291758991fd804cdd7a96a5bbb",
+
+ "Value Read" : "0x0100000000000000"
+,
+
+ "Value Written" : "0x0200000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x095daae56a8e46c1ac7ef3452b349802e2a746372270b5a69c2588ff46498bc7",
+
+ "Value Read" : "0x1010000000000000"
+,
+
+ "Value Written" : "0x1410000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0x6f0666e4ac36c357a86109a5984e5b22937188f0f4163971e6cda5ab0b1b59dc",
+
+ "Value Read" : "0x0400000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0x6f0666e4ac36c357a86109a5984e5b22937188f0f4163971e6cda5ab0b1b59dc",
+
+ "Value Read" : "0x0400000000000000"
+,
+
+ "Value Written" : "0x0500000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x9d11d6fd8db8efd1ac6dbf5850162b87efdaf9c79a294ad3eb487084fc8cd11a",
+
+ "Value Read" : "0x0400000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x9d11d6fd8db8efd1ac6dbf5850162b87efdaf9c79a294ad3eb487084fc8cd11a",
+
+ "Value Read" : "0x0400000000000000"
+,
+
+ "Value Written" : "0x0500000000000000"
+}
+]},
+{
+ "Step number" : "5",
+"readwrites" : [
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.H",
+
+ "Access Proof" : "0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "368",
+
+ "Register Access" : "mip",
+
+ "Access Proof" : "0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "360",
+
+ "Register Access" : "mie",
+
+ "Access Proof" : "0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c",
+
+ "Value Read" : "0x1410000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.PRV",
+
+ "Access Proof" : "0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "304",
+
+ "Register Access" : "mstatus",
+
+ "Access Proof" : "0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c",
+
+ "Value Read" : "0x000000000a000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2048",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c",
+
+ "Value Read" : "0xf900008000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2056",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c",
+
+ "Value Read" : "0x0000100000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2064",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c",
+
+ "Value Read" : "0xe910000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2072",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c",
+
+ "Value Read" : "0x00f0000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "4112",
+
+ "Register Access" : "memory",
+
+ "Access Proof" : "0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c",
+
+ "Value Read" : "0x1305150093010500"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "80",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c",
+
+ "Value Read" : "0x0200000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "24",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0xbef1c6b85dbb3462ab02a60b5891a456402c8c90061a30fe49b0a7c7082dc84c",
+
+ "Value Read" : "0x0000000000000000"
+,
+
+ "Value Written" : "0x0200000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x7520e8a8be34fd7d9850e2b7a49eb1eec725f0ea0b3c835a796b50ba01db11c1",
+
+ "Value Read" : "0x1410000000000000"
+,
+
+ "Value Written" : "0x1810000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0xb658eed4a6934b4d1c38e51ef82679f4f3f34ff055129d2e06fe1947d7907590",
+
+ "Value Read" : "0x0500000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0xb658eed4a6934b4d1c38e51ef82679f4f3f34ff055129d2e06fe1947d7907590",
+
+ "Value Read" : "0x0500000000000000"
+,
+
+ "Value Written" : "0x0600000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0xa09d33e253f48f61e086b75a780a9adf185a6af1855c936c0121cea34aec01fc",
+
+ "Value Read" : "0x0500000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0xa09d33e253f48f61e086b75a780a9adf185a6af1855c936c0121cea34aec01fc",
+
+ "Value Read" : "0x0500000000000000"
+,
+
+ "Value Written" : "0x0600000000000000"
+}
+]},
+{
+ "Step number" : "6",
+"readwrites" : [
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.H",
+
+ "Access Proof" : "0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "368",
+
+ "Register Access" : "mip",
+
+ "Access Proof" : "0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "360",
+
+ "Register Access" : "mie",
+
+ "Access Proof" : "0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa",
+
+ "Value Read" : "0x1810000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.PRV",
+
+ "Access Proof" : "0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "304",
+
+ "Register Access" : "mstatus",
+
+ "Access Proof" : "0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa",
+
+ "Value Read" : "0x000000000a000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2048",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa",
+
+ "Value Read" : "0xf900008000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2056",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa",
+
+ "Value Read" : "0x0000100000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2064",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa",
+
+ "Value Read" : "0xe910000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2072",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa",
+
+ "Value Read" : "0x00f0000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "4120",
+
+ "Register Access" : "memory",
+
+ "Access Proof" : "0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa",
+
+ "Value Read" : "0x6f00000193010000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0xd7082f24c5e5320be97950a86f3747026d68a70b5fe3fb326da7b7b5243639fa",
+
+ "Value Read" : "0x1810000000000000"
+,
+
+ "Value Written" : "0x2810000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0x1924c8932ce332ed7108e391f320075a6a8a04e2c2264a0b92cde2278127098b",
+
+ "Value Read" : "0x0600000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0x1924c8932ce332ed7108e391f320075a6a8a04e2c2264a0b92cde2278127098b",
+
+ "Value Read" : "0x0600000000000000"
+,
+
+ "Value Written" : "0x0700000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x52c22986cca7112ed1d771df7ea8a12864a6dbf66520db5a50e9352175c85931",
+
+ "Value Read" : "0x0600000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x52c22986cca7112ed1d771df7ea8a12864a6dbf66520db5a50e9352175c85931",
+
+ "Value Read" : "0x0600000000000000"
+,
+
+ "Value Written" : "0x0700000000000000"
+}
+]},
+{
+ "Step number" : "7",
+"readwrites" : [
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.H",
+
+ "Access Proof" : "0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "368",
+
+ "Register Access" : "mip",
+
+ "Access Proof" : "0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "360",
+
+ "Register Access" : "mie",
+
+ "Access Proof" : "0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666",
+
+ "Value Read" : "0x2810000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.PRV",
+
+ "Access Proof" : "0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "304",
+
+ "Register Access" : "mstatus",
+
+ "Access Proof" : "0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666",
+
+ "Value Read" : "0x000000000a000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2048",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666",
+
+ "Value Read" : "0xf900008000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2056",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666",
+
+ "Value Read" : "0x0000100000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2064",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666",
+
+ "Value Read" : "0xe910000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2072",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666",
+
+ "Value Read" : "0x00f0000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "4136",
+
+ "Register Access" : "memory",
+
+ "Access Proof" : "0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666",
+
+ "Value Read" : "0x9391010193d1f100"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "24",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666",
+
+ "Value Read" : "0x0200000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "24",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0x76f003480ef38e593a51dac6af7fef60fc691140a01deeddf5c6c069dd8f0666",
+
+ "Value Read" : "0x0200000000000000"
+,
+
+ "Value Written" : "0x0000020000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x5e3fc32818b4957bb35ff25c92d8dbad75867ad4b28bdf19f8b51211ec0b20d4",
+
+ "Value Read" : "0x2810000000000000"
+,
+
+ "Value Written" : "0x2c10000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0xb309f24074da4ebb2d6a8c45cf2cafac76d32c02be918db1937b729ebc8d08c0",
+
+ "Value Read" : "0x0700000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0xb309f24074da4ebb2d6a8c45cf2cafac76d32c02be918db1937b729ebc8d08c0",
+
+ "Value Read" : "0x0700000000000000"
+,
+
+ "Value Written" : "0x0800000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0xf811376312c2a51697086dba3ec468c6796b90d49daf307cdb94516fb9d31697",
+
+ "Value Read" : "0x0700000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0xf811376312c2a51697086dba3ec468c6796b90d49daf307cdb94516fb9d31697",
+
+ "Value Read" : "0x0700000000000000"
+,
+
+ "Value Written" : "0x0800000000000000"
+}
+]},
+{
+ "Step number" : "8",
+"readwrites" : [
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.H",
+
+ "Access Proof" : "0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "368",
+
+ "Register Access" : "mip",
+
+ "Access Proof" : "0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "360",
+
+ "Register Access" : "mie",
+
+ "Access Proof" : "0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2",
+
+ "Value Read" : "0x2c10000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.PRV",
+
+ "Access Proof" : "0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "304",
+
+ "Register Access" : "mstatus",
+
+ "Access Proof" : "0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2",
+
+ "Value Read" : "0x000000000a000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2048",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2",
+
+ "Value Read" : "0xf900008000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2056",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2",
+
+ "Value Read" : "0x0000100000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2064",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2",
+
+ "Value Read" : "0xe910000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2072",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2",
+
+ "Value Read" : "0x00f0000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "4136",
+
+ "Register Access" : "memory",
+
+ "Access Proof" : "0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2",
+
+ "Value Read" : "0x9391010193d1f100"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "24",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2",
+
+ "Value Read" : "0x0000020000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "24",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0x8f3739b03f9b721ad17abacefbf0c7be9bea46b04bc3a6cb6bc17c3b504f11e2",
+
+ "Value Read" : "0x0000020000000000"
+,
+
+ "Value Written" : "0x0400000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0xb6e5dcf0e14cff58433cd671cc900c35f6b6f4b39c950bd218545af6f5a393fd",
+
+ "Value Read" : "0x2c10000000000000"
+,
+
+ "Value Written" : "0x3010000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0x71069644cfefa79cfe643e9e0b1ec63ca777b303e4c2a87968f565502d6ff663",
+
+ "Value Read" : "0x0800000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0x71069644cfefa79cfe643e9e0b1ec63ca777b303e4c2a87968f565502d6ff663",
+
+ "Value Read" : "0x0800000000000000"
+,
+
+ "Value Written" : "0x0900000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x3631dd819f2a8cab0aaa1fcb6d677d6e62f0d8af63b85c191eedb70c807acade",
+
+ "Value Read" : "0x0800000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x3631dd819f2a8cab0aaa1fcb6d677d6e62f0d8af63b85c191eedb70c807acade",
+
+ "Value Read" : "0x0800000000000000"
+,
+
+ "Value Written" : "0x0900000000000000"
+}
+]},
+{
+ "Step number" : "9",
+"readwrites" : [
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.H",
+
+ "Access Proof" : "0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "368",
+
+ "Register Access" : "mip",
+
+ "Access Proof" : "0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "360",
+
+ "Register Access" : "mie",
+
+ "Access Proof" : "0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5",
+
+ "Value Read" : "0x3010000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.PRV",
+
+ "Access Proof" : "0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "304",
+
+ "Register Access" : "mstatus",
+
+ "Access Proof" : "0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5",
+
+ "Value Read" : "0x000000000a000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2048",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5",
+
+ "Value Read" : "0xf900008000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2056",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5",
+
+ "Value Read" : "0x0000100000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2064",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5",
+
+ "Value Read" : "0xe910000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2072",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5",
+
+ "Value Read" : "0x00f0000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "4144",
+
+ "Register Access" : "memory",
+
+ "Access Proof" : "0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5",
+
+ "Value Read" : "0x93e11100177f0040"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "24",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5",
+
+ "Value Read" : "0x0400000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "24",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0x8a631d0f18ad4058566e8e8661c7e5d1055976795e731460a75c989aea46d7e5",
+
+ "Value Read" : "0x0400000000000000"
+,
+
+ "Value Written" : "0x0500000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x1d37f3a38995d1cfad7b41ba6dea2e7174139ed3ce54c72add52418252833582",
+
+ "Value Read" : "0x3010000000000000"
+,
+
+ "Value Written" : "0x3410000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0xe16d9da914d2e5ffd9ccafd09b7dcffbb5865235ca4df211806278c1726a5dd3",
+
+ "Value Read" : "0x0900000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0xe16d9da914d2e5ffd9ccafd09b7dcffbb5865235ca4df211806278c1726a5dd3",
+
+ "Value Read" : "0x0900000000000000"
+,
+
+ "Value Written" : "0x0a00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x53213815ebe2045617a084b9ffdff82619b7f6e481aa2982ba3d4d24ff1e834a",
+
+ "Value Read" : "0x0900000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x53213815ebe2045617a084b9ffdff82619b7f6e481aa2982ba3d4d24ff1e834a",
+
+ "Value Read" : "0x0900000000000000"
+,
+
+ "Value Written" : "0x0a00000000000000"
+}
+]},
+{
+ "Step number" : "10",
+"readwrites" : [
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.H",
+
+ "Access Proof" : "0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "368",
+
+ "Register Access" : "mip",
+
+ "Access Proof" : "0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "360",
+
+ "Register Access" : "mie",
+
+ "Access Proof" : "0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d",
+
+ "Value Read" : "0x0000000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d",
+
+ "Value Read" : "0x3410000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "464",
+
+ "Register Access" : "iflags.PRV",
+
+ "Access Proof" : "0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d",
+
+ "Value Read" : "0x0c00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "304",
+
+ "Register Access" : "mstatus",
+
+ "Access Proof" : "0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d",
+
+ "Value Read" : "0x000000000a000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2048",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d",
+
+ "Value Read" : "0xf900008000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2056",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d",
+
+ "Value Read" : "0x0000100000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2064",
+
+ "Register Access" : "pma.istart",
+
+ "Access Proof" : "0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d",
+
+ "Value Read" : "0xe910000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "2072",
+
+ "Register Access" : "pma.ilength",
+
+ "Access Proof" : "0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d",
+
+ "Value Read" : "0x00f0000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "4144",
+
+ "Register Access" : "memory",
+
+ "Access Proof" : "0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d",
+
+ "Value Read" : "0x93e11100177f0040"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "240",
+
+ "Register Access" : "x",
+
+ "Access Proof" : "0xe9e76f9795c7d43a510b2e4ec08657ef443474bf1f93d3e4ea061d0b8299c93d",
+
+ "Value Read" : "0x0000000000000000"
+,
+
+ "Value Written" : "0x3480004000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "256",
+
+ "Register Access" : "pc",
+
+ "Access Proof" : "0x638d794f2cc7259ee0cb37506f2092ffc98a7a86716213d48d5d6a18befb9775",
+
+ "Value Read" : "0x3410000000000000"
+,
+
+ "Value Written" : "0x3810000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0x8427416e043f243414c3592249c0e7bd4d42e64e5a3d725b457fabdc181878b3",
+
+ "Value Read" : "0x0a00000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "296",
+
+ "Register Access" : "minstret",
+
+ "Access Proof" : "0x8427416e043f243414c3592249c0e7bd4d42e64e5a3d725b457fabdc181878b3",
+
+ "Value Read" : "0x0a00000000000000"
+,
+
+ "Value Written" : "0x0b00000000000000"
+},
+
+ {"Access Type" : "read",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x9bcdfbe0acbd77b1b91b0dbd4aaabd42388b837456249f6fedf46731fe05e96d",
+
+ "Value Read" : "0x0a00000000000000"
+},
+
+ {"Access Type" : "write",
+
+ "Address Access" : "288",
+
+ "Register Access" : "mcycle",
+
+ "Access Proof" : "0x9bcdfbe0acbd77b1b91b0dbd4aaabd42388b837456249f6fedf46731fe05e96d",
+
+ "Value Read" : "0x0a00000000000000"
+,
+
+ "Value Written" : "0x0b00000000000000"
+}
+]}
+]}
