@@ -144,7 +144,7 @@ library Execute {
     return execute_status.retired;
   }
 
-  function raise_misaligned_fetch_exception(MemoryInteractor mi, uint256 mmIndex, uint64 pc) 
+  function raise_misaligned_fetch_exception(MemoryInteractor mi, uint256 mmIndex, uint64 pc)
   public returns (execute_status){
     Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_INSN_ADDRESS_MISALIGNED(), pc);
 
@@ -155,7 +155,7 @@ library Execute {
     return execute_status.retired;
   }
 
-  function advance_to_next_insn(MemoryInteractor mi, uint256 mmIndex, uint64 pc) 
+  function advance_to_next_insn(MemoryInteractor mi, uint256 mmIndex, uint64 pc)
   public returns (execute_status){
     mi.memoryWrite(mmIndex, ShadowAddresses.get_pc(), pc + 4);
     //emit Print("advance_to_next", 0);
@@ -328,6 +328,25 @@ library Execute {
     return (0, false);
   }
 
+  /// @notice Given a fence funct3 insn, finds the func associated.
+  //  Uses binary search for performance.
+  //  @param insn for fence funct3 field.
+  function fence_group(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+  public returns(execute_status){
+    if(insn == 0x0000100f){
+      /*insn == 0x0000*/
+      //return "FENCE";
+      //really do nothing
+      return advance_to_next_insn(mi, mmIndex, pc);
+    }else if(insn & 0xf00fff80 != 0){
+      /*insn == 0x0001*/
+      return raise_illegal_insn_exception(pc, insn);
+    }
+    //return "FENCE_I";
+    //really do nothing
+    return advance_to_next_insn(mi, mmIndex, pc);
+  }
+
   /// @notice Given a branch funct3 group instruction, finds the function
   //  associated with it. Uses binary search for performance.
   //  @param insn for branch funct3 field.
@@ -453,7 +472,7 @@ library Execute {
         }else if(opcode == 0x000f){
           /*insn is 0x000f*/
           //return "fence_group";
-          return execute_status.retired;
+          return fence_group(mi, mmIndex, insn, pc);
         }else if(opcode == 0x0013){
           /*opcode is 0x0013*/
           return execute_arithmetic_immediate(mi, mmIndex, insn, pc);
