@@ -65,4 +65,24 @@ library ArithmeticImmediateInstructions {
 
     return rs1 >> shiftAmount;
   }
+
+  // SRLIW instructions operates on a 32bit value and produce a signed results.
+  // The variable to be shift is in rs1 and the amount of shift operations is 
+  // encoded in the lower 6 bits of the I-immediate field.
+  function execute_SRLIW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64){
+    // Get imm's lower 6 bits
+    (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
+    int32 rs1w = int32(uint32(rs1) >> (imm & 0x1F));
+    return uint64(rs1w);
+  }
+
+  // SRAIW instructions operates on a 32bit value and produce a signed results.
+  // The variable to be shift is in rs1 and the amount of shift operations is 
+  // encoded in the lower 6 bits of the I-immediate field.
+  function execute_SRAIW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64){
+    // Get imm's lower 6 bits
+    (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
+    int32 rs1w = int32(rs1) >> (imm & 0x1F);
+    return uint64(rs1w);
+  }
 }
