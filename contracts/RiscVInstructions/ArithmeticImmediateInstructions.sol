@@ -36,7 +36,6 @@ library ArithmeticImmediateInstructions {
     (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
     int32 rs1w = int32(rs1) << (imm & 0x1F);
     return uint64(rs1w);
-
   }
 
   // ORI performs logical Or bitwise operation on register rs1 and the sign-extended
@@ -75,7 +74,12 @@ library ArithmeticImmediateInstructions {
     int32 rs1w = int32(uint32(rs1) >> (imm & 0x1F));
     return uint64(rs1w);
   }
-
+  // SLTIU is analogous to SLLTI but treats imm as unsigned.
+  // Reference: riscv-spec-v2.2.pdf - Section 2.4 -  Page 14
+  function execute_SLTIU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
+    return rs1 < uint64(imm);
+  }
   // SRAIW instructions operates on a 32bit value and produce a signed results.
   // The variable to be shift is in rs1 and the amount of shift operations is 
   // encoded in the lower 6 bits of the I-immediate field.
