@@ -324,6 +324,7 @@ library Execute {
         if(funct3 == 0x0004){
           /*funct3 == 0x0004*/
 //          return "XORI";
+          return (ArithmeticImmediateInstructions.execute_XORI(mi, mmIndex, insn), true);
         }else if(funct3 == 0x0005){
           /*funct3 == 0x0005*/
 //          return "shift_right_immediate_group";
