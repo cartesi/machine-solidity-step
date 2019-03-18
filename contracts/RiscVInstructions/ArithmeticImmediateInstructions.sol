@@ -85,4 +85,13 @@ library ArithmeticImmediateInstructions {
     int32 rs1w = int32(rs1) >> (imm & 0x1F);
     return uint64(rs1w);
   }
+
+  // XORI instructions performs XOR operation on register rs1 and hhe sign extended
+  // 12 bit immediate, placing result in rd.
+  function execute_XORI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64){
+    // Get imm's lower 6 bits
+    (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
+    return rs1 ^ uint64(imm);
+  }
+
 }
