@@ -332,7 +332,9 @@ library Execute {
         }
       }else if(funct3 == 0x0007){
         /*funct3 == 0x0007*/
-//        return "ANDU";
+//        return "ANDI";
+          return (ArithmeticImmediateInstructions.execute_ANDI(mi, mmIndex, insn), true);
+        }else if(funct3 == 0x0005){
       }else if(funct3 == 0x0006){
         /*funct3 == 0x0006*/
 //        return "ORI";
