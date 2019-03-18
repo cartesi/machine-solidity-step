@@ -94,4 +94,10 @@ library ArithmeticImmediateInstructions {
     return rs1 ^ uint64(imm);
   }
 
-}
+  // ANDI instructions performs AND operation on register rs1 and hhe sign extended
+  // 12 bit immediate, placing result in rd.                                                      }
+  function execute_ANDI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64){
+    // Get imm's lower 6 bits
+    (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
+    return rs1 & uint64(imm);
+  }
