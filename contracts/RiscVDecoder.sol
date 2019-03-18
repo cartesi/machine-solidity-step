@@ -144,35 +144,6 @@ library RiscVDecoder {
     return "illegal insn";
   }
 
-  /// @notice Given a env trap int group insn, finds the func associated.
-  //  Uses binary search for performance.
-  //  @param insn for env trap int group field.
-  function env_trap_int_group_insn(uint32 insn) public returns (bytes32){
-    if(insn < 0x10200073){
-      if(insn == 0x0073){
-        /*insn == 0x0073*/
-        return "ECALL";
-      }else if(insn == 0x200073){
-        /*insn == 0x200073*/
-        return "URET";
-      }else if(insn == 0x100073){
-        /*insn == 0x100073*/
-        return "EBREAK";
-      }
-    }else if(insn > 0x10200073){
-      if(insn == 0x10500073){
-        /*insn == 0x10500073*/
-        return "WFI";
-      }else if(insn == 0x30200073){
-        /*insn == 0x30200073*/
-        return "MRET";
-      }
-    }else if(insn == 0x10200073){
-      /*insn = 0x10200073*/
-      return "SRET";
-    }
-    return "illegal expression";
-  }
 
 
   /// @notice Given an arithmetic32 funct3 funct7 insn, finds the associated func.
