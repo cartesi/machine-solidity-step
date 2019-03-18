@@ -8,6 +8,7 @@ var ArithmeticInstructions = artifacts.require("./RiscVInstructions/ArithmeticIn
 var ArithmeticImmediateInstructions = artifacts.require("./RiscVInstructions/ArithmeticImmediateInstructions.sol");
 var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.sol");
 var S_Instructions = artifacts.require("./RiscVInstructions/S_Instructions.sol");
+var EnvTrapInstructions = artifacts.require("./RiscVInstructions/EnvTrapIntInstructions.sol");
 
 var Execute = artifacts.require("./Execute.sol");
 var Exceptions = artifacts.require("./Exceptions.sol");
@@ -41,6 +42,7 @@ module.exports = function(deployer) {
   deployer.link(RiscVConstants, BranchInstructions);
   deployer.link(RiscVConstants, ArithmeticInstructions);
   deployer.link(RiscVConstants, ArithmeticImmediateInstructions);
+  deployer.link(RiscVConstants, EnvTrapInstructions);
 
   deployer.link(BitsManipulationLibrary, ArithmeticImmediateInstructions);
 
@@ -66,17 +68,14 @@ module.exports = function(deployer) {
   deployer.link(RiscVConstants, CSR);
   deployer.deploy(CSR);
 
-  //Link Instruction libraries to Decoder
-  deployer.link(BranchInstructions, RiscVDecoder);
-  deployer.link(ArithmeticInstructions, RiscVDecoder);
-
   deployer.deploy(RiscVDecoder);
 
   //Link all libraries to Exceptions
   deployer.link(RiscVConstants, Exceptions);
   deployer.deploy(Exceptions);
 
-
+  deployer.link(Exceptions, EnvTrapInstructions);
+  deployer.deploy(EnvTrapInstructions);
   //Link libraries to Virtual Memory
   deployer.link(RiscVDecoder, VirtualMemory);
   deployer.link(ShadowAddresses, VirtualMemory);
@@ -125,6 +124,7 @@ module.exports = function(deployer) {
   deployer.link(BranchInstructions, Execute);
   deployer.link(ArithmeticInstructions, Execute);
   deployer.link(ArithmeticImmediateInstructions, Execute);
+  deployer.link(EnvTrapInstructions, Execute);
   deployer.link(BitsManipulationLibrary, Execute);
   deployer.link(CSR, Execute);
   deployer.link(Exceptions, Execute);
