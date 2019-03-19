@@ -174,19 +174,6 @@ library RiscVDecoder {
     return "illegal expression";
   }
 
-  /// @notice Given a shift right immediate32 funct3 insn, finds the associated func.
-  //  Uses binary search for performance.
-  //  @param insn for shift right immediate32 funct3 field.
-  function shift_right_immediate_32_funct3(uint32 insn) public returns (bytes32){
-    if(insn == 0x0000){
-      /*insn == 0x0000*/
-      return "SRLIW";
-    }else if(insn == 0x0020){
-      /*insn == 0x0020*/
-      return "SRAIW";
-    }
-    return "illegal insn";
-  }
 
   /// @notice Given an arithmetic32 funct3 funct7 insn, finds the associated func.
   //  Uses binary search for performance.
