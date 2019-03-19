@@ -88,7 +88,7 @@ library ArithmeticImmediateInstructions {
   function execute_SLTIU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
     (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
     return (rs1 < uint64(imm))? 1 : 0;
-  }
+  } 
   // SRAIW instructions operates on a 32bit value and produce a signed results.
   // The variable to be shift is in rs1 and the amount of shift operations is 
   // encoded in the lower 6 bits of the I-immediate field.
@@ -104,7 +104,7 @@ library ArithmeticImmediateInstructions {
   function execute_SRAI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64){
     // Get imm's lower 6 bits
     (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
-    return uint64(int64(rs1) >> (imm & (RiscVConstants.XLEN() - 1)));
+    return uint64(int64(rs1) >> (int64(imm) & int64((RiscVConstants.XLEN() - 1))));
   }
 
   // XORI instructions performs XOR operation on register rs1 and hhe sign extended
