@@ -74,6 +74,15 @@ library ArithmeticImmediateInstructions {
     int32 rs1w = int32(uint32(rs1) >> (imm & 0x1F));
     return uint64(rs1w);
   }
+
+  // SLTI - Set less than immediate. Places value 1 in rd if rs1 is less than
+  // the signed extended imm when both are signed. Else 0 is written.
+  // Reference: riscv-spec-v2.2.pdf - Section 2.4 -  Page 13.
+  function execute_SLTI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
+    return (int64(rs1) < int64(imm))? 1 : 0;
+  }
+
   // SLTIU is analogous to SLLTI but treats imm as unsigned.
   // Reference: riscv-spec-v2.2.pdf - Section 2.4 -  Page 14
   function execute_SLTIU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
@@ -88,6 +97,14 @@ library ArithmeticImmediateInstructions {
     (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
     int32 rs1w = int32(rs1) >> (imm & 0x1F);
     return uint64(rs1w);
+  }
+  
+  // TO-DO: make sure that >> is now arithmetic shift and not logical shift
+  // SRAI instruction is analogous to SRAIW but for RV64I
+  function execute_SRAI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64){
+    // Get imm's lower 6 bits
+    (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
+    return uint64(int64(rs1) >> (imm & (RiscVConstants.XLEN() - 1)));
   }
 
   // XORI instructions performs XOR operation on register rs1 and hhe sign extended
