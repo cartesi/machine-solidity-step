@@ -14,6 +14,10 @@ import {Exceptions} from "../contracts/Exceptions.sol";
 
 library Execute {
   event  Print(string a, uint b);
+
+  uint256 constant arith_imm_group = 0;
+  uint256 constant arith_imm_group_32 = 1;
+
   function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc)
   public returns (execute_status) {
     MemoryInteractor mi = MemoryInteractor(_miAddress);
@@ -27,11 +31,19 @@ library Execute {
     // Reference: riscv-spec-v2.2.pdf - Table 19.2 - Page 104
      return opinsn(mi, mmIndex, insn, pc);
   }
-  function execute_arithmetic_immediate(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+  function execute_arithmetic_immediate(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 imm_group)
   public returns (execute_status){
     uint32 rd = RiscVDecoder.insn_rd(insn);
+    uint64 arith_imm_result;
+    bool insn_valid;
+
     if(rd != 0){
-      (uint64 arith_imm_result, bool insn_valid) = arithmetic_immediate_funct3(mi, mmIndex, insn);
+      if (imm_group == arith_imm_group){
+        (arith_imm_result, insn_valid) = arithmetic_immediate_funct3(mi, mmIndex, insn);
+      } else {
+        //imm_group == arith_imm_group_32
+        (arith_imm_result, insn_valid) = arithmetic_immediate_32_funct3(mi, mmIndex, insn);
+      }
 
       if(!insn_valid){
         return raise_illegal_insn_exception(pc, insn);
@@ -261,6 +273,27 @@ library Execute {
     return (0, false);
   }
 
+  /// @notice Given a arithmetic immediate32 funct3 insn, finds the associated func.
+  //  Uses binary search for performance.
+  //  @param insn for arithmetic immediate32 funct3 field.
+  function arithmetic_immediate_32_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
+  public returns (uint64, bool) {
+    uint32 funct3 = RiscVDecoder.insn_funct3(insn);
+    if(funct3 == 0x0000){
+      /*funct3 == 0x0000*/
+      //return "ADDIW";
+      return (ArithmeticImmediateInstructions.execute_ADDIW(mi, mmIndex, insn), true);
+    }else if(funct3 ==  0x0005){
+      /*funct3 == 0x0005*/
+      //return "shift_right_immediate_32_group";
+    }else if(funct3 == 0x0001){
+      /*funct3 == 0x0001*/
+      //return "SLLIW";
+      return (ArithmeticImmediateInstructions.execute_SLLIW(mi, mmIndex, insn), true);
+    }
+    return (0, false);
+  }
+
   /// @notice Given a arithmetic immediate funct3 insn, finds the func associated.
   //  Uses binary search for performance.
   //  @param insn for arithmetic immediate funct3 field.
@@ -475,13 +508,13 @@ library Execute {
           return fence_group(mi, mmIndex, insn, pc);
         }else if(opcode == 0x0013){
           /*opcode is 0x0013*/
-          return execute_arithmetic_immediate(mi, mmIndex, insn, pc);
+          return execute_arithmetic_immediate(mi, mmIndex, insn, pc, arith_imm_group);
         }
       }else if (opcode > 0x0017){
         if (opcode == 0x001b){
           /*opcode is 0x001b*/
           //return "arithmetic_immediate_32_group";
-          return execute_status.retired;
+          return execute_arithmetic_immediate(mi, mmIndex, insn, pc, arith_imm_group_32);
         }else if(opcode == 0x0023){
           /*opcode is 0x0023*/
           return store_funct3(mi, mmIndex, insn, pc);
