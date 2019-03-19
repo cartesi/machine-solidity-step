@@ -448,6 +448,7 @@ library Execute {
       if(funct3 == 0x0005){
         /*funct3 == 0x0005*/
         //return "CSRRWI";
+        return (CSR.execute_CSRRWI(mi, mmIndex, insn), true);
       }else if(funct3 == 0x0007){
         /*funct3 == 0x0007*/
         //return "CSRRCI";
