@@ -75,6 +75,11 @@ library CSR {
     return mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn)); 
   }
 
+  function execute_CSRRWI(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
+  public returns(uint64) {
+    return uint64(RiscVDecoder.insn_rs1(insn)); 
+  }
+
   function read_csr(MemoryInteractor mi, uint256 mmIndex, uint32 csr_addr)
   public returns (bool, uint64) {
     // Attemps to access a CSR without appropriate privilege level raises a
