@@ -1,4 +1,4 @@
-// title RiscVDecoder
+// @title RiscVDecoder
 pragma solidity ^0.5.0;
 
 //TO-DO: Implement illegal instruction
@@ -172,23 +172,6 @@ library RiscVDecoder {
       return "SRET";
     }
     return "illegal expression";
-  }
-
-  /// @notice Given a arithmetic immediate32 funct3 insn, finds the associated func.
-  //  Uses binary search for performance.
-  //  @param insn for arithmetic immediate32 funct3 field.
-  function arithmetic_immediate_32_funct3(uint32 insn) public returns (bytes32){
-    if(insn == 0x0000){
-      /*insn == 0x0000*/
-      return "ADDI";
-    }else if(insn ==  0x0005){
-      /*insn == 0x0005*/
-      return "shift_right_immediate_32_group";
-    }else if(insn == 0x0001){
-      /*insn == 0x0001*/
-      return "SLLIW";
-    }
-    return "illegal insn";
   }
 
   /// @notice Given a shift right immediate32 funct3 insn, finds the associated func.
