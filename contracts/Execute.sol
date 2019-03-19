@@ -310,6 +310,7 @@ library Execute {
       }else if(funct3 == 0x0002){
         /*funct3 == 0x0002*/
 //        return "SLTI";
+        return (ArithmeticImmediateInstructions.execute_SLTI(mi, mmIndex, insn), true);
       }else if(funct3 == 0x0001){
         // Imm[11:6] must be zero for it to be SLLI.
         // Reference: riscv-spec-v2.2.pdf - Section 2.4 -  Page 14
@@ -360,6 +361,7 @@ library Execute {
     }else if(funct6 == 0x0010){
       /*funct6 == 0x0010*/
       //return "SRAI";
+      return (ArithmeticImmediateInstructions.execute_SRAI(mi, mmIndex, insn), true);
     }
     //return "illegal insn";
     return (0, false);
