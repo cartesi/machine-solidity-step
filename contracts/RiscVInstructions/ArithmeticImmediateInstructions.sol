@@ -78,7 +78,7 @@ library ArithmeticImmediateInstructions {
   // Reference: riscv-spec-v2.2.pdf - Section 2.4 -  Page 14
   function execute_SLTIU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
     (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
-    return rs1 < uint64(imm);
+    return (rs1 < uint64(imm))? 1 : 0;
   }
   // SRAIW instructions operates on a 32bit value and produce a signed results.
   // The variable to be shift is in rs1 and the amount of shift operations is 
@@ -99,9 +99,10 @@ library ArithmeticImmediateInstructions {
   }
 
   // ANDI instructions performs AND operation on register rs1 and hhe sign extended
-  // 12 bit immediate, placing result in rd.                                                      }
+  // 12 bit immediate, placing result in rd.                                                      
   function execute_ANDI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64){
     // Get imm's lower 6 bits
     (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
-    return rs1 & uint64(imm);
+    return (rs1 & uint64(imm) != 0)? 1 : 0;
   }
+}
