@@ -19,9 +19,12 @@ library Execute {
   uint256 constant CSRRW_code = 0;
   uint256 constant CSRRWI_code = 1;
 
+  uint256 constant CSRRS_code = 0;
+  uint256 constant CSRRC_code = 1;
+
+
   uint256 constant arith_imm_group = 0;
   uint256 constant arith_imm_group_32 = 1;
-
   function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc)
   public returns (execute_status) {
     MemoryInteractor mi = MemoryInteractor(_miAddress);
@@ -100,7 +103,7 @@ library Execute {
     bool status = false;
     uint64 csrval = 0;
 
-    //uint64 exec_value = if insncode == etc
+    //uint64 exec_value = if insncode == etc (csrval, rs1val)
     (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
 
     if (!status) {
@@ -113,6 +116,21 @@ library Execute {
     if (rd != 0) {
       mi.write_x(mmIndex, cd, csrval);
     }
+
+    uint64 exec_value = 0;
+    if (insncode == CSRRS_code) {
+      exec_value = CSR.execute_CSRRS(mi, mmIndex, insn);
+    } else {
+      // insncode == CSRRC_code
+      exec_value = CSR.execute_CSRRC(mi, mmIndex, insn);
+    }
+
+    if (rs1 != 0) {
+      if (!CSR.write_csr(mi, mmIndex, csr_address, exec_value)){
+        return raise_illegal_insn_exception(pc, insn);
+      }
+    }
+    return advance_to_next_insn(mi, mmIndex, pc);
   }
 
   function execute_csr_SCI(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
@@ -470,7 +488,7 @@ library Execute {
       }else if(funct3 ==  0x0002){
         /*funct3 == 0x0002*/
         //return "CSRRS";
-        //execute_csr_SC()
+        return execute_csr_SC(mi, mmIndex, insn, pc, CSRRS_code);
       }else if(funct3 == 0x0001){
         /*funct3 == 0x0001*/
         //return "CSRRW";
@@ -493,7 +511,7 @@ library Execute {
     }else if(funct3 == 0x0003){
       /*funct3 == 0x0003*/
       //return "CSRRC";
-      //execute_csr_SC()
+      return execute_csr_SC(mi, mmIndex, insn, pc, CSRRC_code);
     }
     return raise_illegal_insn_exception(pc, insn);
   }
