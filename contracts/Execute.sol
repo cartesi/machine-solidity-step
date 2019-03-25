@@ -28,6 +28,7 @@ library Execute {
 
   uint256 constant arith_imm_group = 0;
   uint256 constant arith_imm_group_32 = 1;
+
   function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc)
   public returns (execute_status) {
     MemoryInteractor mi = MemoryInteractor(_miAddress);
@@ -230,6 +231,20 @@ library Execute {
 
     if(rd != 0){
       mi.write_x(mmIndex, rd, pc + uint64(RiscVDecoder.insn_U_imm(insn)));
+    }
+    return advance_to_next_insn(mi, mmIndex, pc);
+  }
+
+  // LUI (i.e load upper immediate). Is used to build 32-bit constants and uses 
+  // the U-type format. LUI places the U-immediate value in the top 20 bits of
+  // the destination register rd, filling in the lowest 12 bits with zeros
+  // Reference: riscv-spec-v2.2.pdf -  Section 2.5 - page 13
+  function execute_lui(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+  public returns (execute_status){
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+
+    if(rd != 0){
+      mi.write_x(mmIndex, rd, RiscVDecoder.insn_U_imm(insn));
     }
     return advance_to_next_insn(mi, mmIndex, pc);
   }
@@ -696,7 +711,7 @@ library Execute {
         }else if(opcode == 0x0037){
           /*opcode == 0x0037*/
           //return "LUI";
-          return execute_status.retired;
+          return execute_lui(mi, mmIndex, insn, pc);
         }
       }else if (opcode > 0x0063){
         if(opcode == 0x0067){
