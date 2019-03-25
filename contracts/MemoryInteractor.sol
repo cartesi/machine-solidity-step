@@ -144,9 +144,16 @@ contract MemoryInteractor {
   }
 
   // Sets
-  function set_priv(uint256 _mmIndex, uint64 new_priv) public{
+  function set_priv(uint256 _mmIndex, uint64 new_priv) public {
     write_iflags_PRV(_mmIndex, new_priv);
     write_ilrsc(_mmIndex, uint64(-1)); // invalidate reserved address
+  }
+
+  function set_iflags_I(uint256 _mmIndex) public {
+    uint64 iflags = read_iflags(_mmIndex);
+    iflags = (iflags | 10);
+
+    memoryWrite(_mmIndex, ShadowAddresses.get_iflags(), iflags);
   }
 
   // Writes

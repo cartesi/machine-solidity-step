@@ -10,6 +10,7 @@ import "./RiscVInstructions/BranchInstructions.sol";
 import "./RiscVInstructions/ArithmeticInstructions.sol";
 import "./RiscVInstructions/ArithmeticImmediateInstructions.sol";
 import "./RiscVInstructions/S_Instructions.sol";
+import "./RiscVInstructions/EnvTrapIntInstructions.sol";
 import {Exceptions} from "../contracts/Exceptions.sol";
 
 library Execute {
@@ -503,6 +504,55 @@ library Execute {
       return (ArithmeticImmediateInstructions.execute_SRAIW(mi, mmIndex, insn), true);
     }
     return (0, false);
+  }
+
+  /// @notice Given a env trap int group insn, finds the func associated.
+  //  Uses binary search for performance.
+  //  @param insn for env trap int group field.
+  function env_trap_int_group_insn(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+  public returns (execute_status){
+    if(insn < 0x10200073){
+      if(insn == 0x0073){
+        /*insn == 0x0073*/
+        //return "ECALL";
+        EnvTrapIntInstructions.execute_ECALL(mi, mmIndex, insn, pc);
+        return execute_status.retired;
+      }else if(insn == 0x200073){
+        /*insn == 0x200073*/
+        //return "URET";
+        // No U-Mode traps
+        raise_illegal_insn_exception(pc, insn);
+      }else if(insn == 0x100073){
+        /*insn == 0x100073*/
+        //return "EBREAK"; 
+        EnvTrapIntInstructions.execute_EBREAK(mi, mmIndex, insn, pc);
+        return execute_status.retired;
+      }
+    }else if(insn > 0x10200073){
+      if(insn == 0x10500073){
+        /*insn == 0x10500073*/
+        //return "WFI";
+        if (!EnvTrapIntInstructions.execute_WFI(mi, mmIndex, insn, pc)) {
+          return raise_illegal_insn_exception(pc, insn);
+        }
+        return advance_to_next_insn(mi, mmIndex, pc);
+      }else if(insn == 0x30200073){
+        /*insn == 0x30200073*/
+        //return "MRET";
+        if (!EnvTrapIntInstructions.execute_MRET(mi, mmIndex, insn, pc)){
+        return raise_illegal_insn_exception(pc, insn);
+      }
+        return execute_status.retired;
+      }
+    }else if(insn == 0x10200073){
+      /*insn = 0x10200073*/
+      //return "SRET";
+      if (!EnvTrapIntInstructions.execute_SRET(mi, mmIndex, insn, pc)){
+        return raise_illegal_insn_exception(pc, insn);
+      }
+      return execute_status.retired;
+   }
+    return raise_illegal_insn_exception(pc, insn);
   }
 
   /// @notice Given an op code, finds the group of instructions it belongs to
