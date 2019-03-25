@@ -114,15 +114,15 @@ library Execute {
     uint32 rd = RiscVDecoder.insn_rd(insn);
 
     if (rd != 0) {
-      mi.write_x(mmIndex, cd, csrval);
+      mi.write_x(mmIndex, rd, csrval);
     }
 
     uint64 exec_value = 0;
     if (insncode == CSRRS_code) {
-      exec_value = CSR.execute_CSRRS(mi, mmIndex, insn);
+      exec_value = CSR.execute_CSRRS(mi, mmIndex, insn, csrval, rs1val);
     } else {
       // insncode == CSRRC_code
-      exec_value = CSR.execute_CSRRC(mi, mmIndex, insn);
+      exec_value = CSR.execute_CSRRC(mi, mmIndex, insn, csrval, rs1val);
     }
 
     if (rs1 != 0) {
@@ -136,8 +136,9 @@ library Execute {
   function execute_csr_SCI(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
   public returns (execute_status){
 
+  }
   function execute_csr_RW(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
-  public returns (execute_status){
+  public returns (execute_status) {
     uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
 
     bool status = true;
