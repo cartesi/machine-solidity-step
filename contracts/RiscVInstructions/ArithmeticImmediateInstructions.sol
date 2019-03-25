@@ -36,7 +36,6 @@ library ArithmeticImmediateInstructions {
     (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
     int32 rs1w = int32(rs1) << (imm & 0x1F);
     return uint64(rs1w);
-
   }
 
   // ORI performs logical Or bitwise operation on register rs1 and the sign-extended
@@ -76,6 +75,20 @@ library ArithmeticImmediateInstructions {
     return uint64(rs1w);
   }
 
+  // SLTI - Set less than immediate. Places value 1 in rd if rs1 is less than
+  // the signed extended imm when both are signed. Else 0 is written.
+  // Reference: riscv-spec-v2.2.pdf - Section 2.4 -  Page 13.
+  function execute_SLTI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
+    return (int64(rs1) < int64(imm))? 1 : 0;
+  }
+
+  // SLTIU is analogous to SLLTI but treats imm as unsigned.
+  // Reference: riscv-spec-v2.2.pdf - Section 2.4 -  Page 14
+  function execute_SLTIU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
+    return (rs1 < uint64(imm))? 1 : 0;
+  } 
   // SRAIW instructions operates on a 32bit value and produce a signed results.
   // The variable to be shift is in rs1 and the amount of shift operations is 
   // encoded in the lower 6 bits of the I-immediate field.
@@ -84,5 +97,29 @@ library ArithmeticImmediateInstructions {
     (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
     int32 rs1w = int32(rs1) >> (imm & 0x1F);
     return uint64(rs1w);
+  }
+  
+  // TO-DO: make sure that >> is now arithmetic shift and not logical shift
+  // SRAI instruction is analogous to SRAIW but for RV64I
+  function execute_SRAI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64){
+    // Get imm's lower 6 bits
+    (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
+    return uint64(int64(rs1) >> (int64(imm) & int64((RiscVConstants.XLEN() - 1))));
+  }
+
+  // XORI instructions performs XOR operation on register rs1 and hhe sign extended
+  // 12 bit immediate, placing result in rd.
+  function execute_XORI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64){
+    // Get imm's lower 6 bits
+    (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
+    return rs1 ^ uint64(imm);
+  }
+
+  // ANDI instructions performs AND operation on register rs1 and hhe sign extended
+  // 12 bit immediate, placing result in rd.                                                      
+  function execute_ANDI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64){
+    // Get imm's lower 6 bits
+    (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
+    return (rs1 & uint64(imm) != 0)? 1 : 0;
   }
 }
