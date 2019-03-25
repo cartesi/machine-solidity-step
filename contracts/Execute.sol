@@ -737,7 +737,7 @@ library Execute {
         if(opcode == 0x0067){
           /*opcode == 0x0067*/
           //return "JALR";
-          return execute_status.retired;
+          return execute_jalr(mi, mmIndex, insn, pc);
         }else if(opcode == 0x0073){
           /*opcode == 0x0073*/
           return csr_env_trap_int_mm_funct3(mi, mmIndex, insn, pc);
