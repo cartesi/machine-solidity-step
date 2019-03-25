@@ -688,7 +688,7 @@ library Execute {
         if (opcode == 0x0033){
           /*opcode is 0x0033*/
           //return "arithmetic_group";
-          return execute_status.retired;
+          return execute_arithmetic(mi, mmIndex, insn, pc);
         }else if (opcode == 0x003b){
           /*opcode is 0x003b*/
           //return "arithmetic_32_group";
