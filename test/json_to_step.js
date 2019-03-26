@@ -83,7 +83,7 @@ contract('Running data.json', function(accounts) {
 
     jsonsteps["steps"].forEach(function(entry, index) {
       it('Running step: ' + index, async function() {
-        response = await riscV.step(index, mi.address, {
+        response = await riscV.step(mi.address, index, {
            from: accounts[1],
            gas: 9007199254740991
         });
