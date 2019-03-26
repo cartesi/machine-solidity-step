@@ -41,7 +41,7 @@ library Fetch {
     // Reference: The Core of Cartesi, v1.02 - section 3.2 the board - page 5.
 
     if(!PMA.pma_get_istart_M(pma_start) || !PMA.pma_get_istart_X(pma_start)){
-
+      // TO-DO: raise exception
       //emit Print("CAUSE_FETCH_FAULT", paddr);
       //raise_exception(CAUSE_FETCH_FAULT)
       return (fetch_status.exception, 0, 0);
