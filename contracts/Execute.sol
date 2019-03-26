@@ -16,9 +16,18 @@ import {Exceptions} from "../contracts/Exceptions.sol";
 library Execute {
   event  Print(string a, uint b);
 
+  uint256 constant CSRRW_code = 0;
+  uint256 constant CSRRWI_code = 1;
+
+  uint256 constant CSRRS_code = 0;
+  uint256 constant CSRRC_code = 1;
+
+  uint256 constant CSRRSI_code = 0;
+  uint256 constant CSRRCI_code = 1;
+
+
   uint256 constant arith_imm_group = 0;
   uint256 constant arith_imm_group_32 = 1;
-
   function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc)
   public returns (execute_status) {
     MemoryInteractor mi = MemoryInteractor(_miAddress);
@@ -90,20 +99,93 @@ library Execute {
     return advance_to_next_insn(mi, mmIndex, pc);
   }
 
-  function execute_csr_RW(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
+  function execute_csr_SC(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
+  public returns (execute_status) {
+    uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
+
+    bool status = false;
+    uint64 csrval = 0;
+
+    (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
+
+    if (!status) {
+      return raise_illegal_insn_exception(pc, insn);
+    }
+    uint32 rs1 = RiscVDecoder.insn_rs1(insn);
+    uint64 rs1val = mi.read_x(mmIndex, rs1);
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+
+    if (rd != 0) {
+      mi.write_x(mmIndex, rd, csrval);
+    }
+
+    uint64 exec_value = 0;
+    if (insncode == CSRRS_code) {
+      exec_value = CSR.execute_CSRRS(mi, mmIndex, insn, csrval, rs1val);
+    } else {
+      // insncode == CSRRC_code
+      exec_value = CSR.execute_CSRRC(mi, mmIndex, insn, csrval, rs1val);
+    }
+    if (rs1 != 0) {
+      if (!CSR.write_csr(mi, mmIndex, csr_address, exec_value)){
+        return raise_illegal_insn_exception(pc, insn);
+      }
+    }
+    return advance_to_next_insn(mi, mmIndex, pc);
+  }
+
+   function execute_csr_SCI(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
   public returns (execute_status){
+    uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
+
+    bool status = false;
+    uint64 csrval = 0;
+
+    (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
+
+    if (!status) {
+      return raise_illegal_insn_exception(pc, insn);
+    }
+    uint32 rs1 = RiscVDecoder.insn_rs1(insn);
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+
+    if (rd != 0) {
+      mi.write_x(mmIndex, rd, csrval);
+    }
+
+    uint64 exec_value = 0;
+    if (insncode == CSRRSI_code) {
+      exec_value = CSR.execute_CSRRS(mi, mmIndex, insn, csrval, rs1);
+    } else {
+      // insncode == CSRRCI_code
+      exec_value = CSR.execute_CSRRCI(mi, mmIndex, insn, csrval, rs1);
+    }
+
+    if (rs1 != 0) {
+      if (!CSR.write_csr(mi, mmIndex, csr_address, exec_value)){
+        return raise_illegal_insn_exception(pc, insn);
+      }
+    }
+    return advance_to_next_insn(mi, mmIndex, pc);
+  }
+
+  function execute_csr_RW(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
+  public returns (execute_status) {
     uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
 
     bool status = true;
     uint64 csrval = 0;
+    uint64 rs1val = 0;
 
-    (uint64 rs1val, bool insn_valid) = csr_env_trap_int_mm_funct3(mi, mmIndex, insn);
-
-    if(!insn_valid){
-      return raise_illegal_insn_exception(pc, insn);
+    if (insncode == CSRRW_code) {
+      rs1val = CSR.execute_CSRRW(mi, mmIndex, insn);
+    } else {
+      // insncode == CSRRWI_code
+      rs1val = CSR.execute_CSRRWI(mi, mmIndex, insn);
     }
 
     uint32 rd = RiscVDecoder.insn_rd(insn);
+
     if (rd != 0){
       (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
     }
@@ -428,39 +510,43 @@ library Execute {
   /// @notice Given csr env trap int mm funct3 insn, finds the func associated.
   //  Uses binary search for performance.
   //  @param insn for csr env trap int mm funct3 field.
-  function csr_env_trap_int_mm_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
-  public returns (uint64, bool){
+  function csr_env_trap_int_mm_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+  public returns (execute_status){
     uint32 funct3 = RiscVDecoder.insn_funct3(insn);
 
     if(funct3 < 0x0003){
       if(funct3 == 0x0000){
         /*funct3 == 0x0000*/
-        //return "env_trap_int_mm_group";
+        return env_trap_int_group(mi, mmIndex, insn, pc);
       }else if(funct3 ==  0x0002){
         /*funct3 == 0x0002*/
         //return "CSRRS";
+        return execute_csr_SC(mi, mmIndex, insn, pc, CSRRS_code);
       }else if(funct3 == 0x0001){
         /*funct3 == 0x0001*/
         //return "CSRRW";
-        return (CSR.execute_CSRRW(mi, mmIndex, insn), true);
+        return execute_csr_RW(mi, mmIndex, insn, pc, CSRRW_code);
       }
     }else if(funct3 > 0x0003){
       if(funct3 == 0x0005){
         /*funct3 == 0x0005*/
         //return "CSRRWI";
+        return execute_csr_RW(mi, mmIndex, insn, pc, CSRRWI_code);
       }else if(funct3 == 0x0007){
         /*funct3 == 0x0007*/
         //return "CSRRCI";
+        return execute_csr_SCI(mi, mmIndex, insn, pc, CSRRCI_code);
       }else if(funct3 == 0x0006){
         /*funct3 == 0x0006*/
         //return "CSRRSI";
+        return execute_csr_SCI(mi, mmIndex, insn, pc, CSRRSI_code);
       }
     }else if(funct3 == 0x0003){
       /*funct3 == 0x0003*/
       //return "CSRRC";
+      return execute_csr_SC(mi, mmIndex, insn, pc, CSRRC_code);
     }
-    //return "illegal insn";
-    return (0, false);
+    return raise_illegal_insn_exception(pc, insn);
   }
 
   /// @notice Given a store funct3 group insn, finds the function  associated.
@@ -514,7 +600,7 @@ library Execute {
   /// @notice Given a env trap int group insn, finds the func associated.
   //  Uses binary search for performance.
   //  @param insn for env trap int group field.
-  function env_trap_int_group_insn(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+  function env_trap_int_group(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
   public returns (execute_status){
     if(insn < 0x10200073){
       if(insn == 0x0073){
@@ -602,7 +688,7 @@ library Execute {
         if (opcode == 0x0033){
           /*opcode is 0x0033*/
           //return "arithmetic_group";
-          return execute_status.retired;
+          return execute_arithmetic(mi, mmIndex, insn, pc);
         }else if (opcode == 0x003b){
           /*opcode is 0x003b*/
           //return "arithmetic_32_group";
@@ -619,7 +705,7 @@ library Execute {
           return execute_status.retired;
         }else if(opcode == 0x0073){
           /*opcode == 0x0073*/
-          return execute_csr_RW(mi, mmIndex, insn, pc);
+          return csr_env_trap_int_mm_funct3(mi, mmIndex, insn, pc);
         }else if(opcode == 0x006f){
           /*opcode == 0x006f*/
           //return "JAL";
