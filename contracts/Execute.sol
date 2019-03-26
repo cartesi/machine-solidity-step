@@ -28,6 +28,7 @@ library Execute {
 
   uint256 constant arith_imm_group = 0;
   uint256 constant arith_imm_group_32 = 1;
+
   function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc)
   public returns (execute_status) {
     MemoryInteractor mi = MemoryInteractor(_miAddress);
@@ -221,6 +222,26 @@ library Execute {
     return execute_jump(mi, mmIndex, new_pc);
   }
 
+  // JALR (i.e Jump and Link Register). uses the I-type encoding. The target
+  // address is obtained by adding the 12-bit signed I-immediate to the register 
+  // rs1, then setting the least-significant bit of the result to zero. 
+  // The address of the instruction following the jump (pc+4) is written to register rd
+  // Reference: riscv-spec-v2.2.pdf -  Section 2.5 - page 16
+  function execute_jalr(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+  public returns (execute_status){
+    uint64 new_pc = uint64(int64(mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn)))) & ~uint64(1);
+
+    if((new_pc & 3) != 0){
+      return raise_misaligned_fetch_exception(mi, mmIndex, new_pc);
+    }
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+
+    if(rd != 0){
+      mi.write_x(mmIndex, rd, pc + 4);
+    }
+    return execute_jump(mi, mmIndex, new_pc);
+  }
+
   //AUIPC forms a 32-bit offset from the 20-bit U-immediate, filling in the 
   // lowest 12 bits with zeros, adds this offset to pc and store the result on rd.
   // Reference: riscv-spec-v2.2.pdf -  Page 14
@@ -230,6 +251,20 @@ library Execute {
 
     if(rd != 0){
       mi.write_x(mmIndex, rd, pc + uint64(RiscVDecoder.insn_U_imm(insn)));
+    }
+    return advance_to_next_insn(mi, mmIndex, pc);
+  }
+
+  // LUI (i.e load upper immediate). Is used to build 32-bit constants and uses 
+  // the U-type format. LUI places the U-immediate value in the top 20 bits of
+  // the destination register rd, filling in the lowest 12 bits with zeros
+  // Reference: riscv-spec-v2.2.pdf -  Section 2.5 - page 13
+  function execute_lui(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+  public returns (execute_status){
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+
+    if(rd != 0){
+      mi.write_x(mmIndex, rd, uint64(RiscVDecoder.insn_U_imm(insn)));
     }
     return advance_to_next_insn(mi, mmIndex, pc);
   }
@@ -696,13 +731,13 @@ library Execute {
         }else if(opcode == 0x0037){
           /*opcode == 0x0037*/
           //return "LUI";
-          return execute_status.retired;
+          return execute_lui(mi, mmIndex, insn, pc);
         }
       }else if (opcode > 0x0063){
         if(opcode == 0x0067){
           /*opcode == 0x0067*/
           //return "JALR";
-          return execute_status.retired;
+          return execute_jalr(mi, mmIndex, insn, pc);
         }else if(opcode == 0x0073){
           /*opcode == 0x0073*/
           return csr_env_trap_int_mm_funct3(mi, mmIndex, insn, pc);
