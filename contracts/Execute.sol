@@ -4,6 +4,7 @@ pragma solidity ^0.5.0;
 import "./ShadowAddresses.sol";
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
+import "./VirtualMemory.sol";
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/CSR.sol";
 import "./RiscVInstructions/BranchInstructions.sol";
@@ -108,6 +109,26 @@ library Execute {
       }
     }
     return advance_to_next_insn(mi, mmIndex, pc);
+  }
+
+  function execute_load(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 wordSize, bool isSigned)
+  public returns (execute_status) {
+    uint64 vaddr = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
+    int32 imm = RiscVDecoder.insn_I_imm(insn);
+    (bool succ, uint64 val) = VirtualMemory.read_virtual_memory(mi, mmIndex, wordSize, vaddr + uint64(imm));
+
+    if (succ) {
+      if (isSigned) {
+        // TO-DO: make sure this is ok
+        mi.write_x(mmIndex, RiscVDecoder.insn_rd(insn), uint64(int64(val)));
+      } else {
+        mi.write_x(mmIndex, RiscVDecoder.insn_rd(insn), val);
+      }
+      return advance_to_next_insn(mi, mmIndex, pc);
+    } else {
+      //return advance_to_raised_exception()
+      return execute_status.retired;
+    }
   }
 
   function execute_csr_SC(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
@@ -754,6 +775,51 @@ library Execute {
     return (0, false);
   }
 
+  /// @notice Given a load funct3 group instruction, finds the function
+  //  associated with it. Uses binary search for performance
+  //  @param insn for load funct3 field
+  function load_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+ public returns (execute_status){
+    uint32 funct3 = RiscVDecoder.insn_funct3(insn);
+
+    if(funct3 < 0x0003){
+      if(funct3 == 0x0000){
+        /*funct3 == 0x0000*/
+        //return "LB";
+        return execute_load(mi, mmIndex, insn, pc, 8, true);
+
+      }else if(funct3 == 0x0002){
+        /*funct3 == 0x0002*/
+        //return "LW";
+        return execute_load(mi, mmIndex, insn, pc, 32, true);
+      }else if(funct3 == 0x0001){
+        /*funct3 == 0x0001*/
+        //return "LH";
+        return execute_load(mi, mmIndex, insn, pc, 16, true);
+      }
+    }else if(funct3 > 0x0003){
+      if(funct3 == 0x0004){
+        /*funct3 == 0x0004*/
+        //return "LBU";
+        return execute_load(mi, mmIndex, insn, pc, 8, false);
+      }else if(funct3 == 0x0006){
+        /*funct3 == 0x0006*/
+        //return "LWU";
+        return execute_load(mi, mmIndex, insn, pc, 32, false);
+      }else if(funct3 == 0x0005){
+        /*funct3 == 0x0005*/
+        //return "LHU";
+        return execute_load(mi, mmIndex, insn, pc, 16, false);
+      }
+    }else if(funct3 == 0x0003){
+      /*funct3 == 0x0003*/
+      //return "LD";
+      return execute_load(mi, mmIndex, insn, pc, 64, true);
+    }
+    return raise_illegal_insn_exception(pc, insn);
+  }
+
+
   /// @notice Given an op code, finds the group of instructions it belongs to
   //  using a binary search for performance.
   //  @param insn for opcode fields.
@@ -768,8 +834,8 @@ library Execute {
       if(opcode < 0x0017){
         if(opcode == 0x0003){
           /*opcode is 0x0003*/
-         // return "load_group";
-          return execute_status.retired;
+          // return "load_group";
+          return load_funct3(mi, mmIndex, insn, pc);
         }else if(opcode == 0x000f){
           /*insn is 0x000f*/
           //return "fence_group";
