@@ -38,10 +38,9 @@ library VirtualMemory {
   // \brief Read word to virtual memory
   // \param wordsize can be uint8, uint16, uint32 or uint64
   // \param vaddr is the words virtual address 
-  // \param val is the value to be written
   // \returns True if write was succesfull, false if not.
   // \returns Word with receiveing value.
-  function read_virtual_memory(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize, uint64 vaddr, uint64 val)
+  function read_virtual_memory(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize, uint64 vaddr)
   public returns(bool, uint64) {
     uint64[5] memory uint64vars;
     if (vaddr & (wordSize - 1) != 0){
@@ -72,7 +71,7 @@ library VirtualMemory {
         if (!success) {
           Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_LOAD_ACCESS_FAULT(), vaddr);
         }
-        return (success, val);
+        return (success, uint64vars[val]);
       }
     }
   }
