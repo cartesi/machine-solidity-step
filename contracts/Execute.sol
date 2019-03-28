@@ -25,9 +25,11 @@ library Execute {
   uint256 constant CSRRSI_code = 0;
   uint256 constant CSRRCI_code = 1;
 
-
   uint256 constant arith_imm_group = 0;
   uint256 constant arith_imm_group_32 = 1;
+
+  uint256 constant arith_group = 0;
+  uint256 constant arith_group_32 = 1;
 
   function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc)
   public returns (execute_status) {
@@ -65,12 +67,20 @@ library Execute {
     return advance_to_next_insn(mi, mmIndex, pc);
   }
 
-  function execute_arithmetic(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+  function execute_arithmetic(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 groupCode)
   public returns (execute_status){
     uint32 rd = RiscVDecoder.insn_rd(insn);
 
     if(rd != 0){
-      (uint64 arith_result, bool insn_valid) = arithmetic_funct3_funct7(mi, mmIndex, insn);
+      uint64 arith_result = 0;
+      bool insn_valid = false;
+
+      if(groupCode == arith_group){
+        (arith_result, insn_valid) = arithmetic_funct3_funct7(mi, mmIndex, insn);
+      } else {
+        // groupCode == arith_32_group
+        (arith_result, insn_valid) = arithmetic_32_funct3_funct7(mi, mmIndex, insn);
+      }
 
       if(!insn_valid){
         return raise_illegal_insn_exception(pc, insn);
@@ -681,6 +691,69 @@ library Execute {
     return raise_illegal_insn_exception(pc, insn);
   }
 
+  /// @notice Given an arithmetic32 funct3 funct7 insn, finds the associated func.
+  //  Uses binary search for performance.
+  //  @param insn for arithmetic32 funct3 funct7 field.
+  function arithmetic_32_funct3_funct7(MemoryInteractor mi, uint256 mmIndex, uint32 insn) 
+  public returns (uint64, bool) {
+
+    uint32 funct3_funct7 = RiscVDecoder.insn_funct3_funct7(insn);
+
+    if(funct3_funct7 < 0x0280){
+      if(funct3_funct7 < 0x0020){
+        if(funct3_funct7 == 0x0000){
+          /*funct3_funct7 == 0x0000*/
+          //return "ADDW";
+          return (ArithmeticInstructions.execute_ADDW(mi, mmIndex, insn), true);
+        }else if(funct3_funct7 == 0x0001){
+          /*funct3_funct7 == 0x0001*/
+          //return "MULW";
+          return (ArithmeticInstructions.execute_MULW(mi, mmIndex, insn), true);
+        }
+      }else if(funct3_funct7 > 0x0020){
+        if(funct3_funct7 == 0x0080){
+          /*funct3_funct7 == 0x0080*/
+          //return "SLLW";
+          return (ArithmeticInstructions.execute_SLLW(mi, mmIndex, insn), true);
+        }else if(funct3_funct7 == 0x0201){
+          /*funct3_funct7 == 0x0201*/
+          //return "DIVUW";
+          return (ArithmeticInstructions.execute_DIVUW(mi, mmIndex, insn), true);
+        }
+      }else if(funct3_funct7 == 0x0020){
+        /*funct3_funct7 == 0x0020*/
+        //return "SUBW";
+        return (ArithmeticInstructions.execute_SUBW(mi, mmIndex, insn), true);
+      }
+    }else if(funct3_funct7 > 0x0280){
+      if(funct3_funct7 < 0x0301){
+        if(funct3_funct7 == 0x0281){
+          /*funct3_funct7 == 0x0281*/
+          //return "DIVUW";
+          return (ArithmeticInstructions.execute_DIVUW(mi, mmIndex, insn), true);
+        }else if(funct3_funct7 == 0x02a0){
+          /*funct3_funct7 == 0x02a0*/
+          //return "SRAW";
+          return (ArithmeticInstructions.execute_SRAW(mi, mmIndex, insn), true);
+        }
+      }else if(funct3_funct7 == 0x0381){
+        /*funct3_funct7 == 0x0381*/
+        //return "REMUW";
+        return (ArithmeticInstructions.execute_REMUW(mi, mmIndex, insn), true);
+      }else if(funct3_funct7 == 0x0301){
+        /*funct3_funct7 == 0x0301*/
+        //return "REMW";
+        return (ArithmeticInstructions.execute_REMW(mi, mmIndex, insn), true);
+      }
+    }else if(funct3_funct7 == 0x0280) {
+      /*funct3_funct7 == 0x0280*/
+      //return "SRLW";
+      return (ArithmeticInstructions.execute_SRLW(mi, mmIndex, insn), true);
+    }
+    //return "illegal insn";
+    return (0, false);
+  }
+
   /// @notice Given an op code, finds the group of instructions it belongs to
   //  using a binary search for performance.
   //  @param insn for opcode fields.
@@ -723,11 +796,11 @@ library Execute {
         if (opcode == 0x0033){
           /*opcode is 0x0033*/
           //return "arithmetic_group";
-          return execute_arithmetic(mi, mmIndex, insn, pc);
+          return execute_arithmetic(mi, mmIndex, insn, pc, arith_group);
         }else if (opcode == 0x003b){
           /*opcode is 0x003b*/
           //return "arithmetic_32_group";
-          return execute_status.retired;
+          return execute_arithmetic(mi, mmIndex, insn, pc, arith_group_32);
         }else if(opcode == 0x0037){
           /*opcode == 0x0037*/
           //return "LUI";
