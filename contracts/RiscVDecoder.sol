@@ -111,37 +111,4 @@ library RiscVDecoder {
   function insn_funct6(uint32 insn) public returns (uint32){
     return (insn >> 26) & 0x3F;
   }
-  /// @notice Given a load funct3 group instruction, finds the function
-  //  associated with it. Uses binary search for performance
-  //  @param insn for load funct3 field
-  function load_funct3(uint32 insn) public returns (bytes32){
-    if(insn < 0x0003){
-      if(insn == 0x0000){
-        /*insn == 0x0000*/
-        return "LB";
-      }else if(insn == 0x0002){
-        /*insn == 0x0002*/
-        return "LW";
-      }else if(insn == 0x0001){
-        /*insn == 0x0001*/
-        return "LH";
-      }
-    }else if(insn > 0x0003){
-      if(insn == 0x0004){
-        /*insn == 0x0004*/
-        return "LBU";
-      }else if(insn == 0x0006){
-        /*insn == 0x0006*/
-        return "LWU";
-      }else if(insn == 0x0005){
-        /*insn == 0x0005*/
-        return "LHU";
-      }
-    }else if(insn == 0x0003){
-      /*insn == 0x0003*/
-      return "LD";
-    }
-    return "illegal insn";
-  }
-
 }
