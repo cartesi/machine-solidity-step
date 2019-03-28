@@ -189,4 +189,111 @@ library ArithmeticInstructions {
       return rs1 % rs2;
     }
   }
+
+  function execute_ADDW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    emit Print("REMU");
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
+
+    int32 rs1w = int32(rs1);
+    int32 rs2w = int32(rs2);
+
+    return uint64(rs1w + rs2w);
+  }
+
+  function execute_SUBW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
+
+    int32 rs1w = int32(rs1);
+    int32 rs2w = int32(rs2);
+
+    return uint64(rs1w - rs2w);
+  }
+
+  function execute_SLLW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
+
+    int32 rs1w = int32(rs1) << (rs2 & 31);
+
+    return uint64(rs1w);
+  }
+
+  // TO-DO: make sure this is arithmetic shift
+  function execute_SRLW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
+
+    int32 rs1w = int32(int32(rs1) >> (rs2 & 31));
+
+    return uint64(rs1w);
+  }
+
+  function execute_SRAW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
+
+    int32 rs1w = int32(rs1) >> (rs2 & 31);
+
+    return uint64(rs1w);
+  }
+
+  function execute_MULW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
+
+    int32 rs1w = int32(rs1);
+    int32 rs2w = int32(rs2);
+
+    return uint64(rs1w * rs2w);
+  }
+
+  function execute_DIVW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
+
+    int32 rs1w = int32(rs1);
+    int32 rs2w = int32(rs2);
+    if (rs2w == 0) {
+        return uint64(-1);
+    } else if (rs1w == (int32(1) << (32 - 1)) && rs2w == -1) {
+        return uint64(rs1w);
+    } else {
+        return uint64(rs1w / rs2w);
+    }
+  }
+
+  function execute_DIVUW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
+
+    uint32 rs1w = uint32(rs1);
+    uint32 rs2w = uint32(rs2);
+    if (rs2w == 0) {
+      return uint64(-1);
+    } else {
+      return uint64(int32(rs1w / rs2w));
+    }
+  }
+
+  function execute_REMW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
+
+    int32 rs1w = int32(rs1);
+    int32 rs2w = int32(rs2);
+
+    if (rs2w == 0) {
+        return uint64(rs1w);
+    } else if (rs1w == (int32(1) << (32 - 1)) && rs2w == -1) {
+        return uint64(0);
+    } else {
+        return uint64(rs1w % rs2w);
+    }
+  }
+
+  function execute_REMUW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
+    (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
+
+    uint32 rs1w = uint32(rs1);
+    uint32 rs2w = uint32(rs2);
+
+    if (rs2w == 0) {
+        return uint64(int32(rs1w));
+    } else {
+        return uint64(int32(rs1w % rs2w));
+    }
+  }
 }
