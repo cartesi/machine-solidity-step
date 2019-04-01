@@ -11,6 +11,7 @@ import "./RiscVInstructions/BranchInstructions.sol";
 import "./RiscVInstructions/ArithmeticInstructions.sol";
 import "./RiscVInstructions/ArithmeticImmediateInstructions.sol";
 import "./RiscVInstructions/S_Instructions.sol";
+import "./RiscVInstructions/AtomicInstructions.sol";
 import "./RiscVInstructions/EnvTrapIntInstructions.sol";
 import {Exceptions} from "../contracts/Exceptions.sol";
 
@@ -819,6 +820,111 @@ library Execute {
     return raise_illegal_insn_exception(pc, insn);
   }
 
+//  @param insn for atomic funct3_funct5 field
+  function atomic_funct3_funct5(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
+ public returns (execute_status){
+    uint32 funct3_funct5 = RiscVDecoder.insn_funct3_funct5(insn);
+
+    // TO-DO: transform in binary search for performance
+    if (funct3_funct5 == 0x42) {
+//      return execute_LR_W;
+    } else if (funct3_funct5 == 0x43) {
+//      return execute_SC_W;
+    } else if (funct3_funct5 == 0x41) {
+        if (AtomicInstructions.execute_AMOSWAP_W(mi, mmIndex, pc, insn)){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
+
+    } else if (funct3_funct5 == 0x40) {
+        if (AtomicInstructions.execute_AMOADD_W(mi, mmIndex, pc, insn)) {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
+
+//      return execute_AMOADD_W;
+    } else if (funct3_funct5 == 0x44) {
+        if (AtomicInstructions.execute_AMOXOR_W(mi, mmIndex, pc, insn) ){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
+
+//      return execute_AMOXOR_W;
+    } else if (funct3_funct5 == 0x4c) {
+        if (AtomicInstructions.execute_AMOAND_W(mi, mmIndex, pc, insn) ){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
+
+//      return execute_AMOAND_W;
+    } else if (funct3_funct5 == 0x48) {
+        if (AtomicInstructions.execute_AMOOR_W(mi, mmIndex, pc, insn) ){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
+
+//      return execute_AMOOR_W;
+    } else if (funct3_funct5 == 0x50) {
+        if (AtomicInstructions.execute_AMOMIN_W(mi, mmIndex, pc, insn)){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
+
+//      return execute_AMOMIN_W;
+    } else if (funct3_funct5 == 0x54) {
+        if (AtomicInstructions.execute_AMOMAX_W(mi, mmIndex, pc, insn) ){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
+
+//      return execute_AMOMAX_W;
+    } else if (funct3_funct5 == 0x58) {
+        if (AtomicInstructions.execute_AMOMINU_W(mi, mmIndex, pc, insn)) {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
+
+//      return execute_AMOMINU_W;
+    } else if (funct3_funct5 == 0x5c) {
+        if (AtomicInstructions.execute_AMOMAXU_W(mi, mmIndex, pc, insn)) {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
+//      return execute_AMOMAXU_W;
+    } else if (funct3_funct5 == 0x62) {
+//      return execute_LR_D;
+    } else if (funct3_funct5 == 0x63) {
+//      return execute_SC_D;
+    } else if (funct3_funct5 == 0x61) {
+//      return execute_AMOSWAP_D;;
+    } else if (funct3_funct5 == 0x60) {
+//      return execute_AMOADD_D;
+    } else if (funct3_funct5 == 0x64) {
+//      return execute_AMOXOR_D;
+    } else if (funct3_funct5 == 0x6c) {
+//      return execute_AMOAND_D;
+    } else if (funct3_funct5 == 0x68) {
+//      return execute_AMOOR_D;
+    } else if (funct3_funct5 == 0x70) {
+//      return execute_AMOMIN_D;
+    } else if (funct3_funct5 == 0x74) {
+//      return execute_AMOMAX_D;
+    } else if (funct3_funct5 == 0x78) {
+//      return execute_AMOMINU_D;
+    } else if (funct3_funct5 == 0x7c) {
+//      return execute_AMOMAXU_D;
+    }
+    return raise_illegal_insn_exception(pc, insn);
+  }
 
   /// @notice Given an op code, finds the group of instructions it belongs to
   //  using a binary search for performance.
