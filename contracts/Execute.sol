@@ -1080,7 +1080,7 @@ library Execute {
     }else if(opcode == 0x002f){
       /*opcode == 0x002f*/
       //return "atomic_group";
-      return execute_status.retired;
+      return atomic_funct3_funct5(mi, mmIndex, insn, pc);
     }
     return raise_illegal_insn_exception(pc, insn);
   }
