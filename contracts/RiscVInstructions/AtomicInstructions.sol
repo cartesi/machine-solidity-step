@@ -26,6 +26,28 @@ library AtomicInstructions {
 
   }
 
+  function execute_SC(MemoryInteractor mi, uint256 mmIndex, uint64 pc, uint32 insn, uint64 wordSize)
+  public returns (bool) {
+    uint64 val = 0;
+    uint64 vaddr = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
+
+    if (mi.read_ilrsc(mmIndex) == vaddr) {
+      if (!VirtualMemory.write_virtual_memory(mi, mmIndex, wordSize, vaddr, mi.read_x(mmIndex, RiscVDecoder.insn_rs2(insn)))) {
+        //advance to raised exception
+        return false;
+      }
+      mi.write_ilrsc(mmIndex, uint64(-1));
+    } else {
+      val = 1;
+    }
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+    if (rd != 0) {
+      mi.write_x(mmIndex, rd, val);
+    }
+    //advance to next insn
+    return true;
+  }
+
   function execute_AMO_part1(MemoryInteractor mi, uint256 mmIndex, uint64 pc, uint32 insn, uint256 wordSize)
   internal returns (uint64, uint64, uint64, bool){
     uint64 vaddr = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
