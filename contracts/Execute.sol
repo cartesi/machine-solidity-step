@@ -839,6 +839,13 @@ library Execute {
       }
 //      return execute_LR_W;
     } else if (funct3_funct5 == 0x43) {
+      if (!AtomicInstructions.execute_SC(mi, mmIndex, pc, insn, 32)) {
+          //return advance_to_raised_exception()
+          return execute_status.retired;
+        } else {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        }
+
 //      return execute_SC_W;
     } else if (funct3_funct5 == 0x41) {
         if (AtomicInstructions.execute_AMOSWAP_W(mi, mmIndex, pc, insn)){
@@ -920,8 +927,14 @@ library Execute {
         }
       }
 
-      //      return execute_LR_D;
+      //return execute_LR_D;
     } else if (funct3_funct5 == 0x63) {
+      if (!AtomicInstructions.execute_SC(mi, mmIndex, pc, insn, 64)) {
+          //return advance_to_raised_exception()
+          return execute_status.retired;
+        } else {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        }
 //      return execute_SC_D;
     } else if (funct3_funct5 == 0x61) { 
       if (AtomicInstructions.execute_AMOSWAP_D(mi, mmIndex, pc, insn)) {
