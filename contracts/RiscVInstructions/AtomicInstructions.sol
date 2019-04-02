@@ -7,13 +7,32 @@ import "../../contracts/VirtualMemory.sol";
 
 library AtomicInstructions {
 
+  function execute_LR(MemoryInteractor mi, uint256 mmIndex, uint64 pc, uint32 insn, uint256 wordSize)
+  public returns (bool) {
+    uint64 vaddr = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
+    (bool succ, uint64 val) = VirtualMemory.read_virtual_memory(mi, mmIndex, wordSize, vaddr);
+    if (!succ) {
+      //execute_retired / advance to raised expection
+      return false;
+    }
+    mi.write_ilrsc(mmIndex, vaddr);
+
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+    if (rd != 0) {
+      mi.write_x(mmIndex, rd, val);
+    }
+    // advance to next instruction
+    return true;
+
+  }
+
   function execute_AMO_part1(MemoryInteractor mi, uint256 mmIndex, uint64 pc, uint32 insn, uint256 wordSize)
   internal returns (uint64, uint64, uint64, bool){
     uint64 vaddr = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
 
     (bool succ, uint64 tmp_valm) = VirtualMemory.read_virtual_memory(mi, mmIndex, wordSize, vaddr);
 
-    if(!succ){
+    if (!succ){
       return (0, 0, 0, false);
     }
     uint64 tmp_valr = mi.read_x(mmIndex, RiscVDecoder.insn_rs2(insn));
