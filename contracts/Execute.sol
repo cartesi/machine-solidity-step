@@ -827,6 +827,16 @@ library Execute {
 
     // TO-DO: transform in binary search for performance
     if (funct3_funct5 == 0x42) {
+      if ((insn & 0x1f00000) == 0 ) {
+        if (!AtomicInstructions.execute_LR(mi, mmIndex, pc, insn, 32) ){
+          //return advance_to_raised_exception()
+          return execute_status.retired;
+        } else {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        }
+      } else {
+        return raise_illegal_insn_exception(pc, insn);
+      }
 //      return execute_LR_W;
     } else if (funct3_funct5 == 0x43) {
 //      return execute_SC_W;
@@ -901,60 +911,69 @@ library Execute {
         }
 //      return execute_AMOMAXU_W;
     } else if (funct3_funct5 == 0x62) {
-//      return execute_LR_D;
+      if ((insn & 0x1f00000) == 0 ) {
+        if (!AtomicInstructions.execute_LR(mi, mmIndex, pc, insn, 64)) {
+          //return advance_to_raised_exception()
+          return execute_status.retired;
+        } else {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        }
+      }
+
+      //      return execute_LR_D;
     } else if (funct3_funct5 == 0x63) {
 //      return execute_SC_D;
     } else if (funct3_funct5 == 0x61) { 
-        if (AtomicInstructions.execute_AMOSWAP_D(mi, mmIndex, pc, insn)) {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-//      return execute_AMOSWAP_D;;
+      if (AtomicInstructions.execute_AMOSWAP_D(mi, mmIndex, pc, insn)) {
+        return advance_to_next_insn(mi, mmIndex, pc);
+      } else {
+        return execute_status.retired;
+      }
+//    return execute_AMOSWAP_D;;
     } else if (funct3_funct5 == 0x60) {
-        if (AtomicInstructions.execute_AMOADD_D(mi, mmIndex, pc, insn)) {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-//      return execute_AMOADD_D;
+      if (AtomicInstructions.execute_AMOADD_D(mi, mmIndex, pc, insn)) {
+        return advance_to_next_insn(mi, mmIndex, pc);
+      } else {
+        return execute_status.retired;
+      }
+//    return execute_AMOADD_D;
     } else if (funct3_funct5 == 0x64) {
-        if (AtomicInstructions.execute_AMOXOR_D(mi, mmIndex, pc, insn)) {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-//      return execute_AMOXOR_D;
+      if (AtomicInstructions.execute_AMOXOR_D(mi, mmIndex, pc, insn)) {
+        return advance_to_next_insn(mi, mmIndex, pc);
+      } else {
+        return execute_status.retired;
+      }
+//    return execute_AMOXOR_D;
     } else if (funct3_funct5 == 0x6c) {
-        if (AtomicInstructions.execute_AMOAND_D(mi, mmIndex, pc, insn)) {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-//      return execute_AMOAND_D;
+      if (AtomicInstructions.execute_AMOAND_D(mi, mmIndex, pc, insn)) {
+        return advance_to_next_insn(mi, mmIndex, pc);
+      } else {
+        return execute_status.retired;
+      }
+//    return execute_AMOAND_D;
     } else if (funct3_funct5 == 0x68) {
-        if (AtomicInstructions.execute_AMOOR_D(mi, mmIndex, pc, insn)) {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-//      return execute_AMOOR_D;
+      if (AtomicInstructions.execute_AMOOR_D(mi, mmIndex, pc, insn)) {
+        return advance_to_next_insn(mi, mmIndex, pc);
+      } else {
+        return execute_status.retired;
+      }
+//    return execute_AMOOR_D;
     } else if (funct3_funct5 == 0x70) {
-        if (AtomicInstructions.execute_AMOMIN_D(mi, mmIndex, pc, insn)) {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
+      if (AtomicInstructions.execute_AMOMIN_D(mi, mmIndex, pc, insn)) {
+        return advance_to_next_insn(mi, mmIndex, pc);
+      } else {
+        return execute_status.retired;
+      }
 
-//      return execute_AMOMIN_D;
+//    return execute_AMOMIN_D;
     } else if (funct3_funct5 == 0x74) {
-        if (AtomicInstructions.execute_AMOMAX_D(mi, mmIndex, pc, insn)) {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
+      if (AtomicInstructions.execute_AMOMAX_D(mi, mmIndex, pc, insn)) {
+        return advance_to_next_insn(mi, mmIndex, pc);
+      } else {
+        return execute_status.retired;
+      }
 
-//      return execute_AMOMAX_D;
+//    return execute_AMOMAX_D;
     } else if (funct3_funct5 == 0x78) {
       if (AtomicInstructions.execute_AMOMINU_D(mi, mmIndex, pc, insn)) {
         return advance_to_next_insn(mi, mmIndex, pc);
