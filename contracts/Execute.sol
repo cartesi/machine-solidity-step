@@ -904,23 +904,72 @@ library Execute {
 //      return execute_LR_D;
     } else if (funct3_funct5 == 0x63) {
 //      return execute_SC_D;
-    } else if (funct3_funct5 == 0x61) {
+    } else if (funct3_funct5 == 0x61) { 
+        if (AtomicInstructions.execute_AMOSWAP_D(mi, mmIndex, pc, insn)) {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
 //      return execute_AMOSWAP_D;;
     } else if (funct3_funct5 == 0x60) {
+        if (AtomicInstructions.execute_AMOADD_D(mi, mmIndex, pc, insn)) {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
 //      return execute_AMOADD_D;
     } else if (funct3_funct5 == 0x64) {
+        if (AtomicInstructions.execute_AMOXOR_D(mi, mmIndex, pc, insn)) {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
 //      return execute_AMOXOR_D;
     } else if (funct3_funct5 == 0x6c) {
+        if (AtomicInstructions.execute_AMOAND_D(mi, mmIndex, pc, insn)) {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
 //      return execute_AMOAND_D;
     } else if (funct3_funct5 == 0x68) {
+        if (AtomicInstructions.execute_AMOOR_D(mi, mmIndex, pc, insn)) {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
 //      return execute_AMOOR_D;
     } else if (funct3_funct5 == 0x70) {
+        if (AtomicInstructions.execute_AMOMIN_D(mi, mmIndex, pc, insn)) {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
+
 //      return execute_AMOMIN_D;
     } else if (funct3_funct5 == 0x74) {
+        if (AtomicInstructions.execute_AMOMAX_D(mi, mmIndex, pc, insn)) {
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return execute_status.retired;
+        }
+
 //      return execute_AMOMAX_D;
     } else if (funct3_funct5 == 0x78) {
+      if (AtomicInstructions.execute_AMOMINU_D(mi, mmIndex, pc, insn)) {
+        return advance_to_next_insn(mi, mmIndex, pc);
+      } else {
+        return execute_status.retired;
+      }
+
 //      return execute_AMOMINU_D;
     } else if (funct3_funct5 == 0x7c) {
+      if (AtomicInstructions.execute_AMOMAXU_D(mi, mmIndex, pc, insn)) {
+        return advance_to_next_insn(mi, mmIndex, pc);
+      } else {
+        return execute_status.retired;
+      }
+
 //      return execute_AMOMAXU_D;
     }
     return raise_illegal_insn_exception(pc, insn);
