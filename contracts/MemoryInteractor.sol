@@ -120,6 +120,9 @@ contract MemoryInteractor {
     return memoryRead(_mmIndex, ShadowAddresses.get_mtvec());
   }
 
+  function read_ilrsc(uint256 _mmIndex) public returns (uint64) {
+    return memoryRead(_mmIndex, ShadowAddresses.get_ilrsc());
+  }
   function read_pc(uint256 _mmIndex) public returns (uint64) {
     return memoryRead(_mmIndex, ShadowAddresses.get_pc());
   }
