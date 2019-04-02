@@ -21,7 +21,12 @@ contract MemoryInteractor {
     address _mmAddress = AddressTracker(_addressTrackerAddress).getMMAddress();
     mm = mmInterface(_mmAddress);
   }
-
+  
+  // Change phase
+  function finishReplayPhase(uint256 _mmIndex) public {
+    mm.finishReplayPhase(_mmIndex);
+  }
+  // Reads
   function read_x(uint256 _mmIndex, uint64 _registerIndex) public returns (uint64){
       //Address = registerIndex * sizeof(uint64)
     return memoryRead(_mmIndex, _registerIndex * 8);

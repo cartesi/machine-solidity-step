@@ -144,7 +144,7 @@ contract MMInstantiator is MMInterface, Decorated {
     uint pointer = instance[_index].historyPointer;
     ReadWrite storage  pointInHistory = instance[_index].history[pointer];
     require(pointInHistory.wasRead);
-//    require(pointInHistory.position == _position);
+    require(pointInHistory.position == _position);
     bytes8 value = pointInHistory.value;
     delete(instance[_index].history[pointer]);
     instance[_index].historyPointer++;
@@ -163,9 +163,9 @@ contract MMInstantiator is MMInterface, Decorated {
     require((_position & 7) == 0);
     uint pointer = instance[_index].historyPointer;
     ReadWrite storage pointInHistory = instance[_index].history[pointer];
-//    require(!pointInHistory.wasRead);
-//    require(pointInHistory.position == _position);
-//    require(pointInHistory.value == _value);
+    require(!pointInHistory.wasRead);
+    require(pointInHistory.position == _position);
+    require(pointInHistory.value == _value);
     delete(instance[_index].history[pointer]);
     instance[_index].historyPointer++;
     emit ValueWritten(_index, _position, _value);
@@ -174,9 +174,9 @@ contract MMInstantiator is MMInterface, Decorated {
   /// @notice Stop write (or read) phase
   function finishReplayPhase(uint256 _index) public
     onlyInstantiated(_index)
-    onlyBy(instance[_index].client)
+ //   onlyBy(instance[_index].client)
   {
-    require(instance[_index].currentState == state.WaitingReplay);
+//    require(instance[_index].currentState == state.WaitingReplay);
     require(instance[_index].historyPointer == instance[_index].history.length);
     delete(instance[_index].history);
     delete(instance[_index].historyPointer);

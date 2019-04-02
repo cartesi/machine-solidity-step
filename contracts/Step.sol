@@ -13,18 +13,28 @@ import {Interrupts} from "../contracts/Interrupts.sol";
 //TO-DO: use instantiator pattern so we can always use same instance of mm/pc etc
 contract Step {
   event Print(string message, uint value);
+  event StepGiven(uint8 exitCode);
 
   MemoryInteractor mi;
 
-  uint256 mmIndex; //this has to be removed
-  //Should not be Storage - but stack too deep
-  //this will probably be ok when we split it into a bunch of different calls
+  uint256 mmIndex; 
+  // TO-DO: this has to be removed. Should not be Storage - but stack too deep
   uint64 pc = 0;
   uint32 insn = 0;
   int priv;
   uint64 mstatus;
 
-  function step(uint _mmIndex, address _miAddress) public returns (interpreter_status){
+  // TO-DO: we dont need miAddress here.
+  function endStep(address _miAddress, uint256 _mmIndex, uint8 _exitCode)
+    internal returns (uint8) {
+    mi.finishReplayPhase(_mmIndex);
+    emit StepGiven(_exitCode);
+    return _exitCode;
+  }
+
+  function step(address _miAddress, uint _mmIndex) public 
+    returns (uint8){
+
     mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
     mi = MemoryInteractor(_miAddress);
 
@@ -43,7 +53,7 @@ contract Step {
     //emit Print("iflags", uint(iflags));
     if((iflags & 1) != 0){
       //machine is halted
-      return interpreter_status.success;
+      return endStep(_miAddress, mmIndex, 0);
     }
     //Raise the highest priority interrupt
     Interrupts.raise_interrupt_if_any(mmIndex, address(mi));
@@ -52,7 +62,7 @@ contract Step {
     Fetch.fetch_status fetchStatus;
 
     (fetchStatus, insn, pc) = Fetch.fetch_insn(mmIndex, address(mi));
- 
+
     if(fetchStatus == Fetch.fetch_status.success){
       // If fetch was successfull, tries to execute instruction
       if(Execute.execute_insn(mmIndex, address(mi), insn, pc) == Execute.execute_status.retired){
@@ -70,11 +80,6 @@ contract Step {
     uint64 mcycle = mi.memoryRead(mmIndex, ShadowAddresses.get_mcycle());
     //emit Print("mcycle", uint(mcycle));
     mi.memoryWrite(mmIndex, ShadowAddresses.get_mcycle(), mcycle + 1);
-    return interpreter_status.success;
-  }
-
-  enum interpreter_status {
-    brk, // brk is set, tigh loop was broken
-    success // mcycle reached target value
+    return endStep(_miAddress, mmIndex, 0);
   }
 }
