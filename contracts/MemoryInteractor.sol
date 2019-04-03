@@ -151,6 +151,9 @@ contract MemoryInteractor {
     return (memoryRead(_mmIndex, ShadowAddresses.get_iflags()) >> 2) & 3;
   }
 
+  function read_memory(uint256 _mmIndex, uint64 paddr) public returns (uint64){
+    return memoryRead(_mmIndex, paddr);
+  }
   // Sets
   function set_priv(uint256 _mmIndex, uint64 new_priv) public {
     write_iflags_PRV(_mmIndex, new_priv);
