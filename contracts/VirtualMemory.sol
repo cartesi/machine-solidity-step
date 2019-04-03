@@ -27,6 +27,7 @@ library VirtualMemory {
   uint256 constant mstatus = 2;
   uint256 constant satp = 3;
   uint256 constant vpn_mask = 4;
+  uint256 constant pte = 5;
 
   // Write/Read Virtual Address variable indexes
   uint256 constant offset = 0;
@@ -220,25 +221,25 @@ library VirtualMemory {
       // Add offset to find physical address of page table entry
       uint64vars[pte_addr] += vpn << intvars[pte_size_log2];
       //Read page table entry from physical memory
-      uint64 pte = 0;
+      bool read_ram_succ;
+      (read_ram_succ, uint64vars[pte]) = read_ram_uint64(mi, mmIndex, uint64vars[pte_addr]);
 
-      //TO-DO: Implement read_ram_uint64(a, pte_addr, &pte)
-      // if(!read_ram_uint64(uint64vars[pte_addr])){
-      //   return(false, 0);
-      // }
+      if(!read_ram_succ){
+        return(false, 0);
+      }
 
       // The OS can mark page table entries as invalid,
       // but these entries shouldn't be reached during page lookups
       //TO-DO: check if condition
-      if((pte & RiscVConstants.PTE_V_MASK()) == 0){
+      if((uint64vars[pte] & RiscVConstants.PTE_V_MASK()) == 0){
         return(false, 0);
       }
       // Clear all flags in least significant bits, then shift back to multiple of page size to form physical address
-      uint64 ppn = (pte >> 10) << RiscVConstants.PG_SHIFT();
+      uint64 ppn = (uint64vars[pte] >> 10) << RiscVConstants.PG_SHIFT();
       // Obtain X, W, R protection bits
       // X, W, R bits are located on bits 1 to 3 on physical address
       // Reference: riscv-priv-spec-1.10.pdf - Figure 4.18, page 63.
-      int xwr = (pte >> 1) & 7;
+      int xwr = (uint64vars[pte] >> 1) & 7;
       // xwr !=0 means we are done walking the page tables
       if(xwr !=0){
         // These protection bit combinations are reserved for future use
@@ -249,12 +250,12 @@ library VirtualMemory {
         if(intvars[priv] == RiscVConstants.PRV_S()){
           // If SUM is set, forbid S-mode code from accessing U-mode memory
           //TO-DO: check if condition
-          if((pte & RiscVConstants.PTE_U_MASK() != 0) && ((uint64vars[mstatus] & RiscVConstants.MSTATUS_SUM())) == 0){
+          if((uint64vars[pte] & RiscVConstants.PTE_U_MASK() != 0) && ((uint64vars[mstatus] & RiscVConstants.MSTATUS_SUM())) == 0){
             return (false, 0);
           }
         }else{
           // Forbid U-mode code from accessing S-mode memory
-          if((pte & RiscVConstants.PTE_U_MASK()) == 0){
+          if((uint64vars[pte] & RiscVConstants.PTE_U_MASK()) == 0){
             return (false, 0);
           }
         }
@@ -273,10 +274,10 @@ library VirtualMemory {
           return (false, 0);
         }
         // Decide if we need to update access bits in pte
-        bool update_pte = (pte & RiscVConstants.PTE_A_MASK() == 0) || ((pte & RiscVConstants.PTE_D_MASK() == 0) && xwr_shift == RiscVConstants.PTE_XWR_WRITE_SHIFT());
+        bool update_pte = (uint64vars[pte] & RiscVConstants.PTE_A_MASK() == 0) || ((uint64vars[pte] & RiscVConstants.PTE_D_MASK() == 0) && xwr_shift == RiscVConstants.PTE_XWR_WRITE_SHIFT());
 
         if(xwr_shift == RiscVConstants.PTE_XWR_WRITE_SHIFT()){
-          pte = pte | RiscVConstants.PTE_D_MASK();
+          uint64vars[pte] = uint64vars[pte] | RiscVConstants.PTE_D_MASK();
         }
         // If so, update pte
         if(update_pte){
@@ -292,4 +293,13 @@ library VirtualMemory {
     return(false, 0);
   }
 
+  function read_ram_uint64(MemoryInteractor mi, uint256 mmIndex, uint64 paddr)
+  internal returns (bool, uint64) {
+    uint64 val;
+    (uint64 pma_start, uint64 pma_length) = PMA.find_pma_entry(mi, mmIndex, paddr);
+    if (!PMA.pma_get_istart_M(pma_start) || !PMA.pma_get_istart_R(pma_start)) {
+      return (false, 0);
+    }
+    return (true, mi.read_memory(mmIndex, paddr));
+  }
 }
