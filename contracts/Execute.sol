@@ -61,7 +61,7 @@ library Execute {
       }
 
       if(!insn_valid){
-        return raise_illegal_insn_exception(pc, insn);
+        return raise_illegal_insn_exception(mi, mmIndex, insn);
       }
 
       mi.write_x(mmIndex, rd, arith_imm_result);
@@ -85,7 +85,7 @@ library Execute {
       }
 
       if(!insn_valid){
-        return raise_illegal_insn_exception(pc, insn);
+        return raise_illegal_insn_exception(mi, mmIndex, insn);
       }
       mi.write_x(mmIndex, rd, arith_result);
     }
@@ -98,7 +98,7 @@ library Execute {
     (bool branch_valuated, bool insn_valid) = branch_funct3(mi, mmIndex, insn);
 
     if(!insn_valid){
-      return raise_illegal_insn_exception(pc, insn);
+      return raise_illegal_insn_exception(mi, mmIndex, insn);
     }
 
     if(branch_valuated){
@@ -142,7 +142,7 @@ library Execute {
     (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
 
     if (!status) {
-      return raise_illegal_insn_exception(pc, insn);
+      return raise_illegal_insn_exception(mi, mmIndex, insn);
     }
     uint32 rs1 = RiscVDecoder.insn_rs1(insn);
     uint64 rs1val = mi.read_x(mmIndex, rs1);
@@ -161,7 +161,7 @@ library Execute {
     }
     if (rs1 != 0) {
       if (!CSR.write_csr(mi, mmIndex, csr_address, exec_value)){
-        return raise_illegal_insn_exception(pc, insn);
+        return raise_illegal_insn_exception(mi, mmIndex, insn);
       }
     }
     return advance_to_next_insn(mi, mmIndex, pc);
@@ -177,7 +177,7 @@ library Execute {
     (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
 
     if (!status) {
-      return raise_illegal_insn_exception(pc, insn);
+      return raise_illegal_insn_exception(mi, mmIndex, insn);
     }
     uint32 rs1 = RiscVDecoder.insn_rs1(insn);
     uint32 rd = RiscVDecoder.insn_rd(insn);
@@ -196,7 +196,7 @@ library Execute {
 
     if (rs1 != 0) {
       if (!CSR.write_csr(mi, mmIndex, csr_address, exec_value)){
-        return raise_illegal_insn_exception(pc, insn);
+        return raise_illegal_insn_exception(mi, mmIndex, insn);
       }
     }
     return advance_to_next_insn(mi, mmIndex, pc);
@@ -223,11 +223,11 @@ library Execute {
       (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
     }
     if (!status) {
-      return raise_illegal_insn_exception(pc, insn);
+      return raise_illegal_insn_exception(mi, mmIndex, insn);
     }
 
     if (!CSR.write_csr(mi, mmIndex, csr_address, rs1val)){
-      return raise_illegal_insn_exception(pc, insn);
+      return raise_illegal_insn_exception(mi, mmIndex, insn);
     }
     if (rd != 0){
       mi.write_x(mmIndex, rd, csrval);
@@ -309,12 +309,13 @@ library Execute {
   function raise_misaligned_fetch_exception(MemoryInteractor mi, uint256 mmIndex, uint64 pc)
   public returns (execute_status){
     Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_INSN_ADDRESS_MISALIGNED(), pc);
-
     return execute_status.retired;
   }
-  function raise_illegal_insn_exception(uint64 pc, uint32 insn) public returns (execute_status){
-    // TO-DO: Raise exception - illegal insn
-    return execute_status.retired;
+
+  function raise_illegal_insn_exception(MemoryInteractor mi, uint256 mmIndex, uint32 insn) 
+  public returns (execute_status){
+    Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_ILLEGAL_INSN(), insn);
+    return execute_status.illegal;
   }
 
   function advance_to_next_insn(MemoryInteractor mi, uint256 mmIndex, uint64 pc)
@@ -528,7 +529,7 @@ library Execute {
       return advance_to_next_insn(mi, mmIndex, pc);
     }else if(insn & 0xf00fff80 != 0){
       /*insn == 0x0001*/
-      return raise_illegal_insn_exception(pc, insn);
+      return raise_illegal_insn_exception(mi, mmIndex, insn);
     }
     //return "FENCE_I";
     //really do nothing
@@ -613,7 +614,7 @@ library Execute {
       //return "CSRRC";
       return execute_csr_SC(mi, mmIndex, insn, pc, CSRRC_code);
     }
-    return raise_illegal_insn_exception(pc, insn);
+    return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
 
   /// @notice Given a store funct3 group insn, finds the function  associated.
@@ -642,7 +643,7 @@ library Execute {
       //return "SH";
       return S_Instructions.SH(mi, mmIndex, pc, insn) ? advance_to_next_insn(mi, mmIndex, pc) : execute_status.retired;
     }
-    return raise_illegal_insn_exception(pc, insn);
+    return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
 
   /// @notice Given a shift right immediate32 funct3 insn, finds the associated func.
@@ -679,7 +680,7 @@ library Execute {
         /*insn == 0x200073*/
         //return "URET";
         // No U-Mode traps
-        raise_illegal_insn_exception(pc, insn);
+        raise_illegal_insn_exception(mi, mmIndex, insn);
       }else if(insn == 0x100073){
         /*insn == 0x100073*/
         //return "EBREAK"; 
@@ -691,14 +692,14 @@ library Execute {
         /*insn == 0x10500073*/
         //return "WFI";
         if (!EnvTrapIntInstructions.execute_WFI(mi, mmIndex, insn, pc)) {
-          return raise_illegal_insn_exception(pc, insn);
+          return raise_illegal_insn_exception(mi, mmIndex, insn);
         }
         return advance_to_next_insn(mi, mmIndex, pc);
       }else if(insn == 0x30200073){
         /*insn == 0x30200073*/
         //return "MRET";
         if (!EnvTrapIntInstructions.execute_MRET(mi, mmIndex, insn, pc)){
-        return raise_illegal_insn_exception(pc, insn);
+        return raise_illegal_insn_exception(mi, mmIndex, insn);
       }
         return execute_status.retired;
       }
@@ -706,11 +707,11 @@ library Execute {
       /*insn = 0x10200073*/
       //return "SRET";
       if (!EnvTrapIntInstructions.execute_SRET(mi, mmIndex, insn, pc)){
-        return raise_illegal_insn_exception(pc, insn);
+        return raise_illegal_insn_exception(mi, mmIndex, insn);
       }
       return execute_status.retired;
    }
-    return raise_illegal_insn_exception(pc, insn);
+    return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
 
   /// @notice Given an arithmetic32 funct3 funct7 insn, finds the associated func.
@@ -817,7 +818,7 @@ library Execute {
       //return "LD";
       return execute_load(mi, mmIndex, insn, pc, 64, true);
     }
-    return raise_illegal_insn_exception(pc, insn);
+    return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
 
 //  @param insn for atomic funct3_funct5 field
@@ -835,7 +836,7 @@ library Execute {
           return advance_to_next_insn(mi, mmIndex, pc);
         }
       } else {
-        return raise_illegal_insn_exception(pc, insn);
+        return raise_illegal_insn_exception(mi, mmIndex, insn);
       }
 //      return execute_LR_W;
     } else if (funct3_funct5 == 0x43) {
@@ -1004,7 +1005,7 @@ library Execute {
 
 //      return execute_AMOMAXU_D;
     }
-    return raise_illegal_insn_exception(pc, insn);
+    return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
 
   /// @notice Given an op code, finds the group of instructions it belongs to
@@ -1082,7 +1083,7 @@ library Execute {
       //return "atomic_group";
       return atomic_funct3_funct5(mi, mmIndex, insn, pc);
     }
-    return raise_illegal_insn_exception(pc, insn);
+    return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
 
   enum execute_status {
