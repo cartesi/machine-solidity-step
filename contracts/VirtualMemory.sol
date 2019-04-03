@@ -281,8 +281,7 @@ library VirtualMemory {
         }
         // If so, update pte
         if(update_pte){
-          //TO-DO: write_ram_uint64
-          //write_ram_uint64(a, uint64vars[pte_addr],pte);
+          write_ram_uint64(mi, mmIndex, uint64vars[pte_addr], uint64vars[pte]);
         }
         // Add page offset in vaddr to ppn to form physical address
         return(true, (vaddr * uint64vars[vaddr_mask]) | (ppn & ~uint64vars[vaddr_mask]));
@@ -302,4 +301,15 @@ library VirtualMemory {
     }
     return (true, mi.read_memory(mmIndex, paddr));
   }
+
+  function write_ram_uint64(MemoryInteractor mi, uint256 mmIndex, uint64 paddr, uint64 val)
+  internal returns (bool) {
+    (uint64 pma_start, uint64 pma_length) = PMA.find_pma_entry(mi, mmIndex, paddr);
+    if (!PMA.pma_get_istart_M(pma_start) || !PMA.pma_get_istart_W(pma_start)) {
+      return false;
+    }
+    mi.write_memory(mmIndex, paddr, val, 64);
+    return true;
+  }
+
 }
