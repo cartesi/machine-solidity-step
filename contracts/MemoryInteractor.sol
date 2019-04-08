@@ -160,11 +160,31 @@ contract MemoryInteractor {
     write_ilrsc(_mmIndex, uint64(-1)); // invalidate reserved address
   }
 
-  function set_iflags_I(uint256 _mmIndex) public {
+  function set_iflags_I(uint256 _mmIndex, bool idle) public {
     uint64 iflags = read_iflags(_mmIndex);
-    iflags = (iflags | 10);
+
+    if (idle) {
+      iflags = (iflags | 10);
+    } else {
+      iflags = (iflags & ~(uint64(1) << 1));
+    }
 
     memoryWrite(_mmIndex, ShadowAddresses.get_iflags(), iflags);
+  }
+
+  function set_mip(uint256 _mmIndex, uint64 mask) public {
+    uint64 mip = read_mip(_mmIndex);
+    mip |= mask;
+
+    write_mip(_mmIndex, mip);
+  
+    set_iflags_I(_mmIndex, false);
+  }
+
+  function reset_mip(uint256 _mmIndex, uint64 mask) public {
+    uint64 mip = read_mip(_mmIndex);
+    mip &= ~mask;
+    write_mip(_mmIndex, mip);
   }
 
   // Writes
