@@ -91,7 +91,7 @@ library CLINT {
   function clint_read_mtimecmp(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize)
   internal returns (bool, uint64) {
     if(wordSize == 64) {
-      return (true, mi.read_clint_mtimecmp(mmIndex);
+      return (true, mi.read_clint_mtimecmp(mmIndex));
     }
     return (false, 0);
   }
