@@ -48,11 +48,9 @@ library CLINT {
     if (offset == CLINT_MSIP0_ADDR){
       if (wordSize == 32){
         if ((val & 1) != 0){
-          // TO-DO: mi.set_mip
-          // mi.set_mip(RiscVConstants.MIP_MSIP_MASK());
+          mi.set_mip(mmIndex, RiscVConstants.MIP_MSIP_MASK());
         } else {
-          // TO-DO: mi.set_mip
-          // mi.reset_mip(RiscVConstants.MIP_MSIP_MASK());
+          mi.reset_mip(mmIndex, RiscVConstants.MIP_MSIP_MASK());
         }
         return true;
       }
@@ -61,7 +59,7 @@ library CLINT {
       if (wordSize == 64){
         // TO-DO: mi.set_mip / write_clint_mtimecmp
         // mi.write_clint_mtimecmp(val);
-        // mi.reset_mip(RiscVConstants.MIP_MSIP_MASK());
+        mi.reset_mip(mmIndex, RiscVConstants.MIP_MSIP_MASK());
         return true;
       }
       // partial mtimecmp is not supported
