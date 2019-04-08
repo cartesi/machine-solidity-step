@@ -4,6 +4,7 @@ pragma solidity ^0.5.0;
 import "../contracts/AddressTracker.sol";
 import "../contracts/ShadowAddresses.sol";
 import "../contracts/HTIF.sol";
+import "../contracts/CLINT.sol";
 import "./lib/BitsManipulationLibrary.sol";
 
 contract mmInterface {
@@ -30,6 +31,10 @@ contract MemoryInteractor {
   function read_x(uint256 _mmIndex, uint64 _registerIndex) public returns (uint64){
       //Address = registerIndex * sizeof(uint64)
     return memoryRead(_mmIndex, _registerIndex * 8);
+  }
+
+  function read_clint_mtimecmp(uint256 _mmIndex) public returns (uint64) {
+    return memoryRead(_mmIndex, CLINT.CLINT_MTIMECMP());
   }
 
   function read_htif_fromhost(uint256 _mmIndex) public returns (uint64) {
@@ -270,6 +275,10 @@ contract MemoryInteractor {
 
   function write_ilrsc(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_ilrsc(), _value);
+  }
+
+  function write_clint_mtimecmp(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, CLINT.CLINT_MTIMECMP(), _value);
   }
 
   function write_htif_fromhost(uint256 _mmIndex, uint64 _value) public {
