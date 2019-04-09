@@ -129,6 +129,7 @@ module.exports = function(deployer) {
   deployer.link(CSR, Execute);
   deployer.link(Exceptions, Execute);
   deployer.link(S_Instructions, Execute);
+  deployer.link(VirtualMemory, Execute);
   deployer.deploy(Execute);
   deployer.link(Execute, Step);
 
