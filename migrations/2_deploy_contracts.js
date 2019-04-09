@@ -6,6 +6,7 @@ var BranchInstructions = artifacts.require("./RiscVInstructions/BranchInstructio
 var RealTimeClock = artifacts.require("./RealTimeClock.sol");
 var ArithmeticInstructions = artifacts.require("./RiscVInstructions/ArithmeticInstructions.sol");
 var ArithmeticImmediateInstructions = artifacts.require("./RiscVInstructions/ArithmeticImmediateInstructions.sol");
+var AtomicInstructions = artifacts.require("./RiscVInstructions/AtomicInstructions.sol");
 var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.sol");
 var S_Instructions = artifacts.require("./RiscVInstructions/S_Instructions.sol");
 var EnvTrapInstructions = artifacts.require("./RiscVInstructions/EnvTrapIntInstructions.sol");
@@ -91,6 +92,11 @@ module.exports = function(deployer) {
   deployer.link(VirtualMemory, S_Instructions);
   deployer.deploy(S_Instructions);
 
+  //Link all libraries to AtomicInstruction
+  deployer.link(RiscVDecoder, AtomicInstructions);
+  deployer.link(VirtualMemory, AtomicInstructions);
+  deployer.deploy(AtomicInstructions);
+
   //Link all libraries to Step
   deployer.link(RiscVDecoder, Step);
   deployer.link(ShadowAddresses, Step);
@@ -124,6 +130,7 @@ module.exports = function(deployer) {
   deployer.link(BranchInstructions, Execute);
   deployer.link(ArithmeticInstructions, Execute);
   deployer.link(ArithmeticImmediateInstructions, Execute);
+  deployer.link(AtomicInstructions, Execute);
   deployer.link(EnvTrapInstructions, Execute);
   deployer.link(BitsManipulationLibrary, Execute);
   deployer.link(CSR, Execute);
