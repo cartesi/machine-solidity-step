@@ -108,12 +108,14 @@ module.exports = function(deployer) {
   deployer.link(RiscVConstants, Fetch);
   deployer.link(PMA, Fetch);
   deployer.link(VirtualMemory, Fetch);
+  deployer.link(Exceptions, Fetch);
   deployer.deploy(Fetch);
   deployer.link(Fetch, Step);
 
   //Link all libraries to Interrupts
   deployer.link(ShadowAddresses, Interrupts);
   deployer.link(RiscVConstants, Interrupts);
+  deployer.link(Exceptions, Interrupts);
   deployer.deploy(Interrupts);
   deployer.link(Interrupts, Step);
 
