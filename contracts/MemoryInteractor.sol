@@ -22,7 +22,7 @@ contract MemoryInteractor {
     address _mmAddress = AddressTracker(_addressTrackerAddress).getMMAddress();
     mm = mmInterface(_mmAddress);
   }
-  
+
   // Change phase
   function finishReplayPhase(uint256 _mmIndex) public {
     mm.finishReplayPhase(_mmIndex);
@@ -182,7 +182,7 @@ contract MemoryInteractor {
     mip |= mask;
 
     write_mip(_mmIndex, mip);
-  
+
     set_iflags_I(_mmIndex, false);
   }
 
