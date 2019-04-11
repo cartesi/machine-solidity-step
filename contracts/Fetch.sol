@@ -7,6 +7,7 @@ import "./RiscVDecoder.sol";
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/PMA.sol";
 import "../contracts/VirtualMemory.sol";
+import "../contracts/Exceptions.sol";
 
 library Fetch {
 
@@ -22,8 +23,7 @@ library Fetch {
 
     //translate_virtual_address failed
     if(!translateBool){
-      //raise_exception(CAUSE_FETCH_PAGE_FAULT)
-
+      Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_FETCH_PAGE_FAULT(), paddr);
       //returns fetch_exception and returns zero as insn and pc
       return (fetch_status.exception, 0, 0);
     }
@@ -41,9 +41,8 @@ library Fetch {
     // Reference: The Core of Cartesi, v1.02 - section 3.2 the board - page 5.
 
     if(!PMA.pma_get_istart_M(pma_start) || !PMA.pma_get_istart_X(pma_start)){
-      // TO-DO: raise exception
       //emit Print("CAUSE_FETCH_FAULT", paddr);
-      //raise_exception(CAUSE_FETCH_FAULT)
+      Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_INSN_ACCESS_FAULT(), paddr);
       return (fetch_status.exception, 0, 0);
     }
 
