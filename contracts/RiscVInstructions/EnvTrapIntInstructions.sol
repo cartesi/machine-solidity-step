@@ -85,7 +85,7 @@ library EnvTrapIntInstructions {
       uint64 mie = mi.read_mie(mmIndex);
       // Go to power down if no enable interrupts are pending
       if ((mip & mie) == 0) {
-        mi.set_iflags_I(mmIndex);
+        mi.set_iflags_I(mmIndex, true);
       }
       return true;
     }

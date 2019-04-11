@@ -4,14 +4,16 @@ pragma solidity ^0.5.0;
 import "./ShadowAddresses.sol";
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/RiscVConstants.sol";
+import "../contracts/Exceptions.sol";
 
 library Interrupts {
+  // TO-DO: change miAddress to MemoryInteractor
   function raise_interrupt_if_any(uint256 mmIndex, address miAddress) public {
-   uint32 mask = get_pending_irq_mask(mmIndex, miAddress);
-     if(mask != 0) {
-       uint64 irq_num = ilog2(mask);
-       //TO-DO: Raise_exception
-      // raise_exception()
+    MemoryInteractor mi = MemoryInteractor(miAddress);
+    uint32 mask = get_pending_irq_mask(mmIndex, miAddress);
+    if(mask != 0) {
+        uint64 irq_num = ilog2(mask);
+        Exceptions.raise_exception(mi, mmIndex, irq_num | Exceptions.MCAUSE_INTERRUPT_FLAG(), 0);
      }
   }
 

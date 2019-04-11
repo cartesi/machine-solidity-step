@@ -4,6 +4,7 @@ pragma solidity ^0.5.0;
 import "../contracts/AddressTracker.sol";
 import "../contracts/ShadowAddresses.sol";
 import "../contracts/HTIF.sol";
+import "../contracts/CLINT.sol";
 import "./lib/BitsManipulationLibrary.sol";
 
 contract mmInterface {
@@ -21,7 +22,7 @@ contract MemoryInteractor {
     address _mmAddress = AddressTracker(_addressTrackerAddress).getMMAddress();
     mm = mmInterface(_mmAddress);
   }
-  
+
   // Change phase
   function finishReplayPhase(uint256 _mmIndex) public {
     mm.finishReplayPhase(_mmIndex);
@@ -30,6 +31,10 @@ contract MemoryInteractor {
   function read_x(uint256 _mmIndex, uint64 _registerIndex) public returns (uint64){
       //Address = registerIndex * sizeof(uint64)
     return memoryRead(_mmIndex, _registerIndex * 8);
+  }
+
+  function read_clint_mtimecmp(uint256 _mmIndex) public returns (uint64) {
+    return memoryRead(_mmIndex, CLINT.CLINT_MTIMECMP());
   }
 
   function read_htif_fromhost(uint256 _mmIndex) public returns (uint64) {
@@ -151,17 +156,40 @@ contract MemoryInteractor {
     return (memoryRead(_mmIndex, ShadowAddresses.get_iflags()) >> 2) & 3;
   }
 
+  function read_memory(uint256 _mmIndex, uint64 paddr) public returns (uint64){
+    return memoryRead(_mmIndex, paddr);
+  }
   // Sets
   function set_priv(uint256 _mmIndex, uint64 new_priv) public {
     write_iflags_PRV(_mmIndex, new_priv);
     write_ilrsc(_mmIndex, uint64(-1)); // invalidate reserved address
   }
 
-  function set_iflags_I(uint256 _mmIndex) public {
+  function set_iflags_I(uint256 _mmIndex, bool idle) public {
     uint64 iflags = read_iflags(_mmIndex);
-    iflags = (iflags | 10);
+
+    if (idle) {
+      iflags = (iflags | 10);
+    } else {
+      iflags = (iflags & ~(uint64(1) << 1));
+    }
 
     memoryWrite(_mmIndex, ShadowAddresses.get_iflags(), iflags);
+  }
+
+  function set_mip(uint256 _mmIndex, uint64 mask) public {
+    uint64 mip = read_mip(_mmIndex);
+    mip |= mask;
+
+    write_mip(_mmIndex, mip);
+
+    set_iflags_I(_mmIndex, false);
+  }
+
+  function reset_mip(uint256 _mmIndex, uint64 mask) public {
+    uint64 mip = read_mip(_mmIndex);
+    mip &= ~mask;
+    write_mip(_mmIndex, mip);
   }
 
   // Writes
@@ -247,6 +275,10 @@ contract MemoryInteractor {
 
   function write_ilrsc(uint256 _mmIndex, uint64 _value) public {
     memoryWrite(_mmIndex, ShadowAddresses.get_ilrsc(), _value);
+  }
+
+  function write_clint_mtimecmp(uint256 _mmIndex, uint64 _value) public {
+    memoryWrite(_mmIndex, CLINT.CLINT_MTIMECMP(), _value);
   }
 
   function write_htif_fromhost(uint256 _mmIndex, uint64 _value) public {

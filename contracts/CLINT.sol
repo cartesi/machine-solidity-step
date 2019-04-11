@@ -48,20 +48,17 @@ library CLINT {
     if (offset == CLINT_MSIP0_ADDR){
       if (wordSize == 32){
         if ((val & 1) != 0){
-          // TO-DO: mi.set_mip
-          // mi.set_mip(RiscVConstants.MIP_MSIP_MASK());
+          mi.set_mip(mmIndex, RiscVConstants.MIP_MSIP_MASK());
         } else {
-          // TO-DO: mi.set_mip
-          // mi.reset_mip(RiscVConstants.MIP_MSIP_MASK());
+          mi.reset_mip(mmIndex, RiscVConstants.MIP_MSIP_MASK());
         }
         return true;
       }
       return false;
     } else if (offset == CLINT_MTIMECMP_ADDR) {
       if (wordSize == 64){
-        // TO-DO: mi.set_mip / write_clint_mtimecmp
-        // mi.write_clint_mtimecmp(val);
-        // mi.reset_mip(RiscVConstants.MIP_MSIP_MASK());
+        mi.write_clint_mtimecmp(mmIndex, val);
+        mi.reset_mip(mmIndex, RiscVConstants.MIP_MSIP_MASK());
         return true;
       }
       // partial mtimecmp is not supported
@@ -91,14 +88,17 @@ library CLINT {
     return (false, 0);
   }
 
-  // TO-DO: implement clint_read_mtimecmp
   function clint_read_mtimecmp(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize)
   internal returns (bool, uint64) {
     if(wordSize == 64) {
+      return (true, mi.read_clint_mtimecmp(mmIndex));
     }
     return (false, 0);
   }
-
+  // getters
+  function CLINT_MTIMECMP() public returns (uint64) {
+    return CLINT_MTIMECMP_ADDR;
+  }
 }
 
 
