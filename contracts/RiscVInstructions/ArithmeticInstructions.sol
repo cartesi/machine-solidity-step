@@ -296,4 +296,168 @@ library ArithmeticInstructions {
         return uint64(int32(rs1w % rs2w));
     }
   }
+
+  /// @notice Given a arithmetic funct3 funct7 insn, finds the func associated.
+  //  Uses binary search for performance.
+  //  @param insn for arithmetic 32 funct3 funct7 field.
+  function arithmetic_funct3_funct7(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64, bool) {
+    uint32 funct3_funct7 = RiscVDecoder.insn_funct3_funct7(insn);
+    if(funct3_funct7 < 0x0181){
+      if(funct3_funct7 < 0x0081){
+        if(funct3_funct7 < 0x0020){
+          if(funct3_funct7 == 0x0000){
+            /*funct3_funct7 == 0x0000*/
+            // return "ADD";
+            return (execute_ADD(mi, mmIndex, insn), true);
+          }else if(funct3_funct7 == 0x0001){
+            /*funct3_funct7 == 0x0001*/
+            //return "MUL";
+            return (execute_MUL(mi, mmIndex, insn), true);
+          }
+        }else if(funct3_funct7 == 0x0080){
+          /*funct3_funct7 == 0x0080*/
+          //return "SLL";
+          return (execute_SLL(mi, mmIndex, insn), true);
+        }else if(funct3_funct7 == 0x0020){
+          /*funct3_funct7 == 0x0020*/
+          //return "SUB";
+          return (execute_SUB(mi, mmIndex, insn), true);
+        }
+      }else if(funct3_funct7 > 0x0081){
+        if(funct3_funct7 == 0x0100){
+          /*funct3_funct7 == 0x0100*/
+          //return "SLT";
+          return (execute_SLT(mi, mmIndex, insn), true);
+        }else if(funct3_funct7 == 0x0180){
+          /*funct3_funct7 == 0x0180*/
+          //return "SLTU";
+          return (execute_SLTU(mi, mmIndex, insn), true);
+        }else if(funct3_funct7 == 0x0101){
+          /*funct3_funct7 == 0x0101*/
+          //return "MULHSU";
+          return (execute_MULHSU(mi, mmIndex, insn), true);
+        }
+      }else if(funct3_funct7 == 0x0081){
+        /* funct3_funct7 == 0x0081*/
+        //return "MULH";
+        return (execute_MULH(mi, mmIndex, insn), true);
+      }
+    }else if(funct3_funct7 > 0x0181){
+      if(funct3_funct7 < 0x02a0){
+        if(funct3_funct7 == 0x0200){
+          /*funct3_funct7 == 0x0200*/
+          //return "XOR";
+          return (execute_XOR(mi, mmIndex, insn), true);
+        }else if(funct3_funct7 > 0x0201){
+          if(funct3_funct7 ==  0x0280){
+            /*funct3_funct7 == 0x0280*/
+            //return "SRL";
+            return (execute_SRL(mi, mmIndex, insn), true);
+          }else if(funct3_funct7 == 0x0281){
+            /*funct3_funct7 == 0x0281*/
+            //return "DIVU";
+            return (execute_DIVU(mi, mmIndex, insn), true);
+          }
+        }else if(funct3_funct7 == 0x0201){
+          /*funct3_funct7 == 0x0201*/
+          //return "DIV";
+          return (execute_DIV(mi, mmIndex, insn), true);
+        }
+      }else if(funct3_funct7 > 0x02a0){
+        if(funct3_funct7 < 0x0380){
+          if(funct3_funct7 == 0x0300){
+            /*funct3_funct7 == 0x0300*/
+            //return "OR";
+            return (execute_OR(mi, mmIndex, insn), true);
+          }else if(funct3_funct7 == 0x0301){
+            /*funct3_funct7 == 0x0301*/
+            //return "REM";
+            return (execute_REM(mi, mmIndex, insn), true);
+          }
+        }else if(funct3_funct7 == 0x0381){
+          /*funct3_funct7 == 0x0381*/
+          //return "REMU";
+          return (execute_REMU(mi, mmIndex, insn), true);
+        }else if(funct3_funct7 == 0x380){
+          /*funct3_funct7 == 0x0380*/
+          //return "AND";
+          return (execute_AND(mi, mmIndex, insn), true);
+        }
+      }else if(funct3_funct7 == 0x02a0){
+        /*funct3_funct7 == 0x02a0*/
+        //return "SRA";
+        return (execute_SRA(mi, mmIndex, insn), true);
+      }
+    }else if(funct3_funct7 == 0x0181){
+      /*funct3_funct7 == 0x0181*/
+      //return "MULHU";
+      return (execute_MULHU(mi, mmIndex, insn), true);
+    }
+    return (0, false);
+  }
+
+  /// @notice Given an arithmetic32 funct3 funct7 insn, finds the associated func.
+  //  Uses binary search for performance.
+  //  @param insn for arithmetic32 funct3 funct7 field.
+  function arithmetic_32_funct3_funct7(MemoryInteractor mi, uint256 mmIndex, uint32 insn) 
+  public returns (uint64, bool) {
+
+    uint32 funct3_funct7 = RiscVDecoder.insn_funct3_funct7(insn);
+
+    if(funct3_funct7 < 0x0280){
+      if(funct3_funct7 < 0x0020){
+        if(funct3_funct7 == 0x0000){
+          /*funct3_funct7 == 0x0000*/
+          //return "ADDW";
+          return (execute_ADDW(mi, mmIndex, insn), true);
+        }else if(funct3_funct7 == 0x0001){
+          /*funct3_funct7 == 0x0001*/
+          //return "MULW";
+          return (execute_MULW(mi, mmIndex, insn), true);
+        }
+      }else if(funct3_funct7 > 0x0020){
+        if(funct3_funct7 == 0x0080){
+          /*funct3_funct7 == 0x0080*/
+          //return "SLLW";
+          return (execute_SLLW(mi, mmIndex, insn), true);
+        }else if(funct3_funct7 == 0x0201){
+          /*funct3_funct7 == 0x0201*/
+          //return "DIVUW";
+          return (execute_DIVUW(mi, mmIndex, insn), true);
+        }
+      }else if(funct3_funct7 == 0x0020){
+        /*funct3_funct7 == 0x0020*/
+        //return "SUBW";
+        return (execute_SUBW(mi, mmIndex, insn), true);
+      }
+    }else if(funct3_funct7 > 0x0280){
+      if(funct3_funct7 < 0x0301){
+        if(funct3_funct7 == 0x0281){
+          /*funct3_funct7 == 0x0281*/
+          //return "DIVUW";
+          return (execute_DIVUW(mi, mmIndex, insn), true);
+        }else if(funct3_funct7 == 0x02a0){
+          /*funct3_funct7 == 0x02a0*/
+          //return "SRAW";
+          return (execute_SRAW(mi, mmIndex, insn), true);
+        }
+      }else if(funct3_funct7 == 0x0381){
+        /*funct3_funct7 == 0x0381*/
+        //return "REMUW";
+        return (execute_REMUW(mi, mmIndex, insn), true);
+      }else if(funct3_funct7 == 0x0301){
+        /*funct3_funct7 == 0x0301*/
+        //return "REMW";
+        return (execute_REMW(mi, mmIndex, insn), true);
+      }
+    }else if(funct3_funct7 == 0x0280) {
+      /*funct3_funct7 == 0x0280*/
+      //return "SRLW";
+      return (execute_SRLW(mi, mmIndex, insn), true);
+    }
+    //return "illegal insn";
+    return (0, false);
+  }
+
+
 }
