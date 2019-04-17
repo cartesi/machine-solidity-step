@@ -18,15 +18,6 @@ import {Exceptions} from "../contracts/Exceptions.sol";
 library Execute {
   event  Print(string a, uint b);
 
-  uint256 constant CSRRW_code = 0;
-  uint256 constant CSRRWI_code = 1;
-
-  uint256 constant CSRRS_code = 0;
-  uint256 constant CSRRC_code = 1;
-
-  uint256 constant CSRRSI_code = 0;
-  uint256 constant CSRRCI_code = 1;
-
   uint256 constant arith_imm_group = 0;
   uint256 constant arith_imm_group_32 = 1;
 
@@ -132,108 +123,6 @@ library Execute {
     }
   }
 
-  function execute_csr_SC(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
-  public returns (execute_status) {
-    uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
-
-    bool status = false;
-    uint64 csrval = 0;
-
-    (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
-
-    if (!status) {
-      return raise_illegal_insn_exception(mi, mmIndex, insn);
-    }
-    uint32 rs1 = RiscVDecoder.insn_rs1(insn);
-    uint64 rs1val = mi.read_x(mmIndex, rs1);
-    uint32 rd = RiscVDecoder.insn_rd(insn);
-
-    if (rd != 0) {
-      mi.write_x(mmIndex, rd, csrval);
-    }
-
-    uint64 exec_value = 0;
-    if (insncode == CSRRS_code) {
-      exec_value = CSR.execute_CSRRS(mi, mmIndex, insn, csrval, rs1val);
-    } else {
-      // insncode == CSRRC_code
-      exec_value = CSR.execute_CSRRC(mi, mmIndex, insn, csrval, rs1val);
-    }
-    if (rs1 != 0) {
-      if (!CSR.write_csr(mi, mmIndex, csr_address, exec_value)){
-        return raise_illegal_insn_exception(mi, mmIndex, insn);
-      }
-    }
-    return advance_to_next_insn(mi, mmIndex, pc);
-  }
-
-   function execute_csr_SCI(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
-  public returns (execute_status){
-    uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
-
-    bool status = false;
-    uint64 csrval = 0;
-
-    (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
-
-    if (!status) {
-      return raise_illegal_insn_exception(mi, mmIndex, insn);
-    }
-    uint32 rs1 = RiscVDecoder.insn_rs1(insn);
-    uint32 rd = RiscVDecoder.insn_rd(insn);
-
-    if (rd != 0) {
-      mi.write_x(mmIndex, rd, csrval);
-    }
-
-    uint64 exec_value = 0;
-    if (insncode == CSRRSI_code) {
-      exec_value = CSR.execute_CSRRS(mi, mmIndex, insn, csrval, rs1);
-    } else {
-      // insncode == CSRRCI_code
-      exec_value = CSR.execute_CSRRCI(mi, mmIndex, insn, csrval, rs1);
-    }
-
-    if (rs1 != 0) {
-      if (!CSR.write_csr(mi, mmIndex, csr_address, exec_value)){
-        return raise_illegal_insn_exception(mi, mmIndex, insn);
-      }
-    }
-    return advance_to_next_insn(mi, mmIndex, pc);
-  }
-
-  function execute_csr_RW(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
-  public returns (execute_status) {
-    uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
-
-    bool status = true;
-    uint64 csrval = 0;
-    uint64 rs1val = 0;
-
-    if (insncode == CSRRW_code) {
-      rs1val = CSR.execute_CSRRW(mi, mmIndex, insn);
-    } else {
-      // insncode == CSRRWI_code
-      rs1val = CSR.execute_CSRRWI(mi, mmIndex, insn);
-    }
-
-    uint32 rd = RiscVDecoder.insn_rd(insn);
-
-    if (rd != 0){
-      (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
-    }
-    if (!status) {
-      return raise_illegal_insn_exception(mi, mmIndex, insn);
-    }
-
-    if (!CSR.write_csr(mi, mmIndex, csr_address, rs1val)){
-      return raise_illegal_insn_exception(mi, mmIndex, insn);
-    }
-    if (rd != 0){
-      mi.write_x(mmIndex, rd, csrval);
-    }
-    return advance_to_next_insn(mi, mmIndex, pc);
-  }
 
   // JAL (i.e Jump and Link). J_immediate encondes a signed offset in multiples
   // of 2 bytes. The offset is added to pc and JAL stores the address of the jump
@@ -589,30 +478,54 @@ library Execute {
       }else if(funct3 ==  0x0002){
         /*funct3 == 0x0002*/
         //return "CSRRS";
-        return execute_csr_SC(mi, mmIndex, insn, pc, CSRRS_code);
+        if (CSR.execute_csr_SC(mi, mmIndex, insn, pc, CSR.get_CSRRS_code())){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return raise_illegal_insn_exception(mi, mmIndex, insn);
+        }
       }else if(funct3 == 0x0001){
         /*funct3 == 0x0001*/
         //return "CSRRW";
-        return execute_csr_RW(mi, mmIndex, insn, pc, CSRRW_code);
+        if (CSR.execute_csr_RW(mi, mmIndex, insn, pc, CSR.get_CSRRW_code())){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return raise_illegal_insn_exception(mi, mmIndex, insn);
+        }
       }
     }else if(funct3 > 0x0003){
       if(funct3 == 0x0005){
         /*funct3 == 0x0005*/
         //return "CSRRWI";
-        return execute_csr_RW(mi, mmIndex, insn, pc, CSRRWI_code);
+        if (CSR.execute_csr_RW(mi, mmIndex, insn, pc, CSR.get_CSRRWI_code())){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return raise_illegal_insn_exception(mi, mmIndex, insn);
+        }
       }else if(funct3 == 0x0007){
         /*funct3 == 0x0007*/
         //return "CSRRCI";
-        return execute_csr_SCI(mi, mmIndex, insn, pc, CSRRCI_code);
+        if (CSR.execute_csr_SCI(mi, mmIndex, insn, pc, CSR.get_CSRRCI_code())){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return raise_illegal_insn_exception(mi, mmIndex, insn);
+        }
       }else if(funct3 == 0x0006){
         /*funct3 == 0x0006*/
         //return "CSRRSI";
-        return execute_csr_SCI(mi, mmIndex, insn, pc, CSRRSI_code);
+        if (CSR.execute_csr_SCI(mi, mmIndex, insn, pc, CSR.get_CSRRSI_code())){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return raise_illegal_insn_exception(mi, mmIndex, insn);
+        }
       }
     }else if(funct3 == 0x0003){
       /*funct3 == 0x0003*/
       //return "CSRRC";
-      return execute_csr_SC(mi, mmIndex, insn, pc, CSRRC_code);
+      if (CSR.execute_csr_SC(mi, mmIndex, insn, pc, CSR.get_CSRRC_code())){
+        return advance_to_next_insn(mi, mmIndex, pc);
+      } else {
+        return raise_illegal_insn_exception(mi, mmIndex, insn);
+      }
     }
     return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
