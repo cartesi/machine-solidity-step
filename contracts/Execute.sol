@@ -46,10 +46,10 @@ library Execute {
 
     if(rd != 0){
       if (imm_group == arith_imm_group){
-        (arith_imm_result, insn_valid) = arithmetic_immediate_funct3(mi, mmIndex, insn);
+        (arith_imm_result, insn_valid) = ArithmeticImmediateInstructions.arithmetic_immediate_funct3(mi, mmIndex, insn);
       } else {
         //imm_group == arith_imm_group_32
-        (arith_imm_result, insn_valid) = arithmetic_immediate_32_funct3(mi, mmIndex, insn);
+        (arith_imm_result, insn_valid) = ArithmeticImmediateInstructions.arithmetic_immediate_32_funct3(mi, mmIndex, insn);
       }
 
       if(!insn_valid){
@@ -146,99 +146,6 @@ library Execute {
     mi.memoryWrite(mmIndex, ShadowAddresses.get_pc(), pc + 4);
     //emit Print("advance_to_next", 0);
     return execute_status.retired;
-  }
-
-  /// @notice Given a arithmetic immediate32 funct3 insn, finds the associated func.
-  //  Uses binary search for performance.
-  //  @param insn for arithmetic immediate32 funct3 field.
-  function arithmetic_immediate_32_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
-  public returns (uint64, bool) {
-    uint32 funct3 = RiscVDecoder.insn_funct3(insn);
-    if(funct3 == 0x0000){
-      /*funct3 == 0x0000*/
-      //return "ADDIW";
-      return (ArithmeticImmediateInstructions.execute_ADDIW(mi, mmIndex, insn), true);
-    }else if(funct3 ==  0x0005){
-      /*funct3 == 0x0005*/
-      return shift_right_immediate_32_group(mi, mmIndex, insn);
-    }else if(funct3 == 0x0001){
-      /*funct3 == 0x0001*/
-      //return "SLLIW";
-      return (ArithmeticImmediateInstructions.execute_SLLIW(mi, mmIndex, insn), true);
-    }
-    return (0, false);
-  }
-
-  /// @notice Given a arithmetic immediate funct3 insn, finds the func associated.
-  //  Uses binary search for performance.
-  //  @param insn for arithmetic immediate funct3 field.
-  function arithmetic_immediate_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn) 
-  public returns (uint64, bool) {
-    uint32 funct3 = RiscVDecoder.insn_funct3(insn);
-    if(funct3 < 0x0003){
-      if(funct3 == 0x0000){
-        /*funct3 == 0x0000*/
-//        return "ADDI";
-        return (ArithmeticImmediateInstructions.execute_ADDI(mi, mmIndex, insn), true);
-
-      }else if(funct3 == 0x0002){
-        /*funct3 == 0x0002*/
-//        return "SLTI";
-        return (ArithmeticImmediateInstructions.execute_SLTI(mi, mmIndex, insn), true);
-      }else if(funct3 == 0x0001){
-        // Imm[11:6] must be zero for it to be SLLI.
-        // Reference: riscv-spec-v2.2.pdf - Section 2.4 -  Page 14
-        // TO-DO: change 0x3F to XLEN - 1
-        if(( insn & (0x3F << 26)) != 0){
-          return (0, false);
-        }
-        return (ArithmeticImmediateInstructions.execute_SLLI(mi, mmIndex, insn), true);
-      }
-    }else if(funct3 > 0x0003){
-      if(funct3 < 0x0006){
-        if(funct3 == 0x0004){
-          /*funct3 == 0x0004*/
-//          return "XORI";
-          return (ArithmeticImmediateInstructions.execute_XORI(mi, mmIndex, insn), true);
-        }else if(funct3 == 0x0005){
-          /*funct3 == 0x0005*/
-//          return "shift_right_immediate_group";
-          return shift_right_immediate_funct6(mi, mmIndex, insn);
-        }
-      }else if(funct3 == 0x0007){
-        /*funct3 == 0x0007*/
-//        return "ANDI";
-        return (ArithmeticImmediateInstructions.execute_ANDI(mi, mmIndex, insn), true);
-      }else if(funct3 == 0x0006){
-        /*funct3 == 0x0006*/
-//        return "ORI";
-        return (ArithmeticImmediateInstructions.execute_ORI(mi, mmIndex, insn), true);
-      }
-    }else if(funct3 == 0x0003){
-      /*funct3 == 0x0003*/
-//      return "SLTIU";
-        return (ArithmeticImmediateInstructions.execute_SLTIU(mi, mmIndex, insn), true);
-    }
-    return (0, false);
-  }
-
-  /// @notice Given a right immediate funct6 insn, finds the func associated.
-  //  Uses binary search for performance.
-  //  @param insn for right immediate funct6 field.
-  function shift_right_immediate_funct6(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
-  public returns (uint64, bool) {
-    uint32 funct6 = RiscVDecoder.insn_funct6(insn);
-    if(funct6 == 0x0000){
-      /*funct6 == 0x0000*/
-      //return "SRLI";
-      return (ArithmeticImmediateInstructions.execute_SRLI(mi, mmIndex, insn), true);
-    }else if(funct6 == 0x0010){
-      /*funct6 == 0x0010*/
-      //return "SRAI";
-      return (ArithmeticImmediateInstructions.execute_SRAI(mi, mmIndex, insn), true);
-    }
-    //return "illegal insn";
-    return (0, false);
   }
 
   /// @notice Given a fence funct3 insn, finds the func associated.
@@ -394,24 +301,6 @@ library Execute {
     return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
 
-  /// @notice Given a shift right immediate32 funct3 insn, finds the associated func.
-  //  Uses binary search for performance.
-  //  @param insn for shift right immediate32 funct3 field.
-  function shift_right_immediate_32_group(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
-  public returns (uint64, bool) {
-    uint32 funct7 = RiscVDecoder.insn_funct7(insn);
-
-    if (funct7 == 0x0000){
-      /*funct7 == 0x0000*/
-      //return "SRLIW";
-      return (ArithmeticImmediateInstructions.execute_SRLIW(mi, mmIndex, insn), true);
-    } else if (funct7 == 0x0020){
-      /*funct7 == 0x0020*/
-      //return "SRAIW";
-      return (ArithmeticImmediateInstructions.execute_SRAIW(mi, mmIndex, insn), true);
-    }
-    return (0, false);
-  }
 
   /// @notice Given a env trap int group insn, finds the func associated.
   //  Uses binary search for performance.
