@@ -360,185 +360,84 @@ library Execute {
   function atomic_funct3_funct5(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
  public returns (execute_status){
     uint32 funct3_funct5 = RiscVDecoder.insn_funct3_funct5(insn);
-
+    bool atom_succ;
     // TO-DO: transform in binary search for performance
     if (funct3_funct5 == 0x42) {
       if ((insn & 0x1f00000) == 0 ) {
-        if (!AtomicInstructions.execute_LR(mi, mmIndex, pc, insn, 32) ){
-          //return advance_to_raised_exception()
-          return execute_status.retired;
-        } else {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        }
+        atom_succ = AtomicInstructions.execute_LR(mi, mmIndex, pc, insn, 32);
       } else {
         return raise_illegal_insn_exception(mi, mmIndex, insn);
       }
 //      return execute_LR_W;
     } else if (funct3_funct5 == 0x43) {
-      if (!AtomicInstructions.execute_SC(mi, mmIndex, pc, insn, 32)) {
-          //return advance_to_raised_exception()
-          return execute_status.retired;
-        } else {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        }
-
+        atom_succ = AtomicInstructions.execute_SC(mi, mmIndex, pc, insn, 32);
 //      return execute_SC_W;
     } else if (funct3_funct5 == 0x41) {
-        if (AtomicInstructions.execute_AMOSWAP_W(mi, mmIndex, pc, insn)){
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOSWAP_W(mi, mmIndex, pc, insn);
     } else if (funct3_funct5 == 0x40) {
-        if (AtomicInstructions.execute_AMOADD_W(mi, mmIndex, pc, insn)) {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOADD_W(mi, mmIndex, pc, insn);
 //      return execute_AMOADD_W;
     } else if (funct3_funct5 == 0x44) {
-        if (AtomicInstructions.execute_AMOXOR_W(mi, mmIndex, pc, insn) ){
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOXOR_W(mi, mmIndex, pc, insn);
 //      return execute_AMOXOR_W;
     } else if (funct3_funct5 == 0x4c) {
-        if (AtomicInstructions.execute_AMOAND_W(mi, mmIndex, pc, insn) ){
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOAND_W(mi, mmIndex, pc, insn);
 //      return execute_AMOAND_W;
     } else if (funct3_funct5 == 0x48) {
-        if (AtomicInstructions.execute_AMOOR_W(mi, mmIndex, pc, insn) ){
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOOR_W(mi, mmIndex, pc, insn);
 //      return execute_AMOOR_W;
     } else if (funct3_funct5 == 0x50) {
-        if (AtomicInstructions.execute_AMOMIN_W(mi, mmIndex, pc, insn)){
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOMIN_W(mi, mmIndex, pc, insn);
 //      return execute_AMOMIN_W;
     } else if (funct3_funct5 == 0x54) {
-        if (AtomicInstructions.execute_AMOMAX_W(mi, mmIndex, pc, insn) ){
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOMAX_W(mi, mmIndex, pc, insn);
 //      return execute_AMOMAX_W;
     } else if (funct3_funct5 == 0x58) {
-        if (AtomicInstructions.execute_AMOMINU_W(mi, mmIndex, pc, insn)) {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOMINU_W(mi, mmIndex, pc, insn);
 //      return execute_AMOMINU_W;
     } else if (funct3_funct5 == 0x5c) {
-        if (AtomicInstructions.execute_AMOMAXU_W(mi, mmIndex, pc, insn)) {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
+        atom_succ = AtomicInstructions.execute_AMOMAXU_W(mi, mmIndex, pc, insn);
 //      return execute_AMOMAXU_W;
     } else if (funct3_funct5 == 0x62) {
       if ((insn & 0x1f00000) == 0 ) {
-        if (!AtomicInstructions.execute_LR(mi, mmIndex, pc, insn, 64)) {
-          //return advance_to_raised_exception()
-          return execute_status.retired;
-        } else {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        }
+        atom_succ = AtomicInstructions.execute_LR(mi, mmIndex, pc, insn, 64);
       }
-
       //return execute_LR_D;
     } else if (funct3_funct5 == 0x63) {
-      if (!AtomicInstructions.execute_SC(mi, mmIndex, pc, insn, 64)) {
-          //return advance_to_raised_exception()
-          return execute_status.retired;
-        } else {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        }
+        atom_succ = AtomicInstructions.execute_SC(mi, mmIndex, pc, insn, 64);
 //      return execute_SC_D;
     } else if (funct3_funct5 == 0x61) { 
-      if (AtomicInstructions.execute_AMOSWAP_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
+        atom_succ = AtomicInstructions.execute_AMOSWAP_D(mi, mmIndex, pc, insn);
 //    return execute_AMOSWAP_D;;
     } else if (funct3_funct5 == 0x60) {
-      if (AtomicInstructions.execute_AMOADD_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
+        atom_succ = AtomicInstructions.execute_AMOADD_D(mi, mmIndex, pc, insn);
 //    return execute_AMOADD_D;
     } else if (funct3_funct5 == 0x64) {
-      if (AtomicInstructions.execute_AMOXOR_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
+        atom_succ = AtomicInstructions.execute_AMOXOR_D(mi, mmIndex, pc, insn);
 //    return execute_AMOXOR_D;
     } else if (funct3_funct5 == 0x6c) {
-      if (AtomicInstructions.execute_AMOAND_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
+        atom_succ = AtomicInstructions.execute_AMOAND_D(mi, mmIndex, pc, insn);
 //    return execute_AMOAND_D;
     } else if (funct3_funct5 == 0x68) {
-      if (AtomicInstructions.execute_AMOOR_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
+        atom_succ = AtomicInstructions.execute_AMOOR_D(mi, mmIndex, pc, insn);
 //    return execute_AMOOR_D;
     } else if (funct3_funct5 == 0x70) {
-      if (AtomicInstructions.execute_AMOMIN_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
-
+        atom_succ = AtomicInstructions.execute_AMOMIN_D(mi, mmIndex, pc, insn);
 //    return execute_AMOMIN_D;
     } else if (funct3_funct5 == 0x74) {
-      if (AtomicInstructions.execute_AMOMAX_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
-
+        atom_succ = AtomicInstructions.execute_AMOMAX_D(mi, mmIndex, pc, insn);
 //    return execute_AMOMAX_D;
     } else if (funct3_funct5 == 0x78) {
-      if (AtomicInstructions.execute_AMOMINU_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
-
+        atom_succ = AtomicInstructions.execute_AMOMINU_D(mi, mmIndex, pc, insn);
 //      return execute_AMOMINU_D;
     } else if (funct3_funct5 == 0x7c) {
-      if (AtomicInstructions.execute_AMOMAXU_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
-
+        atom_succ = AtomicInstructions.execute_AMOMAXU_D(mi, mmIndex, pc, insn);
 //      return execute_AMOMAXU_D;
+    }
+    if (atom_succ) {
+      return advance_to_next_insn(mi, mmIndex, pc);
+    } else {
+      return execute_status.retired;
     }
     return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
