@@ -87,7 +87,7 @@ library Execute {
   function execute_branch(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
   public returns (execute_status){
 
-    (bool branch_valuated, bool insn_valid) = branch_funct3(mi, mmIndex, insn);
+    (bool branch_valuated, bool insn_valid) = BranchInstructions.branch_funct3(mi, mmIndex, insn);
 
     if(!insn_valid){
       return raise_illegal_insn_exception(mi, mmIndex, insn);
@@ -165,45 +165,6 @@ library Execute {
     //return "FENCE_I";
     //really do nothing
     return advance_to_next_insn(mi, mmIndex, pc);
-  }
-
-  /// @notice Given a branch funct3 group instruction, finds the function
-  //  associated with it. Uses binary search for performance.
-  //  @param insn for branch funct3 field.
-  function branch_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
-  public returns (bool, bool){
-    uint32 funct3 = RiscVDecoder.insn_funct3(insn);
-
-    if(funct3 < 0x0005){
-      if(funct3 == 0x0000){
-        /*funct3 == 0x0000*/
-        //return "BEQ";
-        return (BranchInstructions.execute_BEQ(mi, mmIndex, insn), true);
-      }else if(funct3 == 0x0004){
-        /*funct3 == 0x0004*/
-        //return "BLT";
-        return (BranchInstructions.execute_BLT(mi, mmIndex, insn), true);
-      }else if(funct3 == 0x0001){
-        /*funct3 == 0x0001*/
-        //return "BNE";
-        return (BranchInstructions.execute_BNE(mi, mmIndex, insn), true);
-      }
-    }else if(funct3 > 0x0005){
-      if(funct3 == 0x0007){
-        /*funct3 == 0x0007*/
-        //return "BGEU";
-        return (BranchInstructions.execute_BGEU(mi, mmIndex, insn), true);
-      }else if(funct3 == 0x0006){
-        /*funct3 == 0x0006*/
-        //return "BLTU";
-        return (BranchInstructions.execute_BLTU(mi, mmIndex, insn), true);
-      }
-    }else if(funct3 == 0x0005){
-      /*funct3==0x0005*/
-      //return "BGE";
-      return (BranchInstructions.execute_BGE(mi, mmIndex, insn), true);
-    }
-    return (false, false);
   }
 
   /// @notice Given csr env trap int mm funct3 insn, finds the func associated.
