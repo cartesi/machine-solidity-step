@@ -85,27 +85,27 @@ library CSR {
     return mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn)); 
   }
 
-  function execute_CSRRWI(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
+  function execute_CSRRWI(uint32 insn)
   public returns(uint64) {
-    return uint64(RiscVDecoder.insn_rs1(insn)); 
+    return uint64(RiscVDecoder.insn_rs1(insn));
   }
 
-  function execute_CSRRS(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 csr, uint64 rs1)
+  function execute_CSRRS(uint64 csr, uint64 rs1)
   public returns(uint64) {
     return csr | rs1;
   }
 
-  function execute_CSRRC(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 csr, uint64 rs1)
+  function execute_CSRRC(uint64 csr, uint64 rs1)
   public returns(uint64) {
     return csr & ~rs1;
   }
 
-  function execute_CSRRSI(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 csr, uint32 rs1)
+  function execute_CSRRSI(uint64 csr, uint32 rs1)
   public returns(uint64) {
     return csr | rs1;
   }
 
-  function execute_CSRRCI(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 csr, uint32 rs1)
+  function execute_CSRRCI(uint64 csr, uint32 rs1)
   public returns(uint64) {
     return csr & ~rs1;
   }
@@ -257,7 +257,7 @@ library CSR {
     return false;
   }
 
-  // Extract privilege level from CSR 
+  // Extract privilege level from CSR
   // Bits csr[9:8] encode the CSR's privilege level (i.e lowest privilege level
   // that can access that CSR.
   // Reference: riscv-privileged-v1.10 - section 2.1 - page 7.
@@ -289,7 +289,7 @@ library CSR {
     return write_csr_mstatus(mi, mmIndex, (c_mstatus & ~RiscVConstants.SSTATUS_W_MASK()) | (val * RiscVConstants.SSTATUS_W_MASK()));
   }
 
-  function write_csr_sie(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  function write_csr_sie(MemoryInteractor mi, uint256 mmIndex, uint64 val)
   internal returns(bool){
     uint64 mask = mi.read_mideleg(mmIndex);
     uint64 c_mie = mi.read_mie(mmIndex);
@@ -298,43 +298,43 @@ library CSR {
     return true;
   }
 
-  function write_csr_stvec(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  function write_csr_stvec(MemoryInteractor mi, uint256 mmIndex, uint64 val)
   internal returns(bool){
     mi.write_stvec(mmIndex, val & uint64(~3));
     return true;
   }
 
-  function write_csr_scounteren(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  function write_csr_scounteren(MemoryInteractor mi, uint256 mmIndex, uint64 val)
   internal returns(bool){
     mi.write_scounteren(mmIndex, val & RiscVConstants.SCOUNTEREN_RW_MASK());
     return true;
   }
 
-  function write_csr_sscratch(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  function write_csr_sscratch(MemoryInteractor mi, uint256 mmIndex, uint64 val)
   internal returns(bool){
     mi.write_sscratch(mmIndex, val);
     return true;
   }
 
-  function write_csr_sepc(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  function write_csr_sepc(MemoryInteractor mi, uint256 mmIndex, uint64 val)
   internal returns(bool){
     mi.write_sepc(mmIndex, val & uint64(~3));
     return true;
   }
 
-  function write_csr_scause(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  function write_csr_scause(MemoryInteractor mi, uint256 mmIndex, uint64 val)
   internal returns(bool){
     mi.write_scause(mmIndex, val);
     return true;
   }
 
-  function write_csr_stval(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  function write_csr_stval(MemoryInteractor mi, uint256 mmIndex, uint64 val)
   internal returns(bool){
     mi.write_stval(mmIndex, val);
     return true;
   }
 
-  function write_csr_sip(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  function write_csr_sip(MemoryInteractor mi, uint256 mmIndex, uint64 val)
   internal returns(bool){
     uint64 c_mask = mi.read_mideleg(mmIndex);
     uint64 c_mip = mi.read_mip(mmIndex);
@@ -344,7 +344,7 @@ library CSR {
     return true;
   }
 
-  function write_csr_satp(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  function write_csr_satp(MemoryInteractor mi, uint256 mmIndex, uint64 val)
   internal returns(bool){
     uint64 c_satp = mi.read_satp(mmIndex);
     int mode = c_satp >> 60;
@@ -416,7 +416,7 @@ library CSR {
   internal returns(bool){
     // We can't allow writes to mcycle because we use it to measure the progress in machine execution.
     // BBL enables all counters in both M- and S-modes
-    // We instead raise an exception.                                  
+    // We instead raise an exception.
     return false;
   }
   function write_csr_mscratch(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
@@ -668,10 +668,10 @@ library CSR {
 
     uint64 exec_value = 0;
     if (insncode == CSRRS_code) {
-      exec_value = execute_CSRRS(mi, mmIndex, insn, csrval, rs1val);
+      exec_value = execute_CSRRS(csrval, rs1val);
     } else {
       // insncode == CSRRC_code
-      exec_value = execute_CSRRC(mi, mmIndex, insn, csrval, rs1val);
+      exec_value = execute_CSRRC(csrval, rs1val);
     }
     if (rs1 != 0) {
       if (!write_csr(mi, mmIndex, csr_address, exec_value)){
@@ -705,10 +705,10 @@ library CSR {
 
     uint64 exec_value = 0;
     if (insncode == CSRRSI_code) {
-      exec_value = execute_CSRRS(mi, mmIndex, insn, csrval, rs1);
+      exec_value = execute_CSRRSI(csrval, rs1);
     } else {
       // insncode == CSRRCI_code
-      exec_value = execute_CSRRCI(mi, mmIndex, insn, csrval, rs1);
+      exec_value = execute_CSRRCI(csrval, rs1);
     }
 
     if (rs1 != 0) {
@@ -733,7 +733,7 @@ library CSR {
       rs1val = execute_CSRRW(mi, mmIndex, insn);
     } else {
       // insncode == CSRRWI_code
-      rs1val = execute_CSRRWI(mi, mmIndex, insn);
+      rs1val = execute_CSRRWI(insn);
     }
 
     uint32 rd = RiscVDecoder.insn_rd(insn);
