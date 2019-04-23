@@ -14,6 +14,35 @@ var AddressTracker = artifacts.require("./AddressTracker.sol");
 var Fetch = artifacts.require("./Fetch.sol");
 var Execute = artifacts.require("./Execute.sol");
 var Interrupts = artifacts.require("./Interrupts.sol");
+var CSR = artifacts.require("./CSR.sol");
+
+contract('CSR', function(accounts) {
+  it("get the size of the contract", function() {
+    return CSR.deployed().then(function(instance) {
+      var bytecode = instance.constructor._json.bytecode;
+      var deployed = instance.constructor._json.deployedBytecode;
+      var sizeOfB  = bytecode.length / 2;
+      var sizeOfD  = deployed.length / 2;
+      console.log("size of bytecode in bytes = ", sizeOfB);
+      console.log("size of deployed in bytes = ", sizeOfD);
+      console.log("initialisation and constructor code in bytes = ", sizeOfB - sizeOfD);
+    });
+  });
+});
+
+contract('Execute', function(accounts) {
+  it("get the size of the contract", function() {
+    return Execute.deployed().then(function(instance) {
+      var bytecode = instance.constructor._json.bytecode;
+      var deployed = instance.constructor._json.deployedBytecode;
+      var sizeOfB  = bytecode.length / 2;
+      var sizeOfD  = deployed.length / 2;
+      console.log("size of bytecode in bytes = ", sizeOfB);
+      console.log("size of deployed in bytes = ", sizeOfD);
+      console.log("initialisation and constructor code in bytes = ", sizeOfB - sizeOfD);
+    });
+  });
+});
 
 contract('Running data.json', function(accounts) {
   let rawdata = fs.readFileSync('data.json');
