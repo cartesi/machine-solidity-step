@@ -154,7 +154,7 @@ module.exports = function(deployer) {
       return await deployer.deploy(MemoryInteractor, AddressTracker.address);
     });
 
-    let StepContract = await Step.deployed();
+    let StepContract = await deployer.deploy(Step);
     console.log("Step: " + StepContract.address);
     //await deployer.deploy(Step);
   })
