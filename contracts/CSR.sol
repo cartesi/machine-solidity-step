@@ -70,6 +70,16 @@ library CSR {
   uint32 constant tdata2 = 0x7a2;
   uint32 constant tdata3 = 0x7a3;
 
+  uint256 constant CSRRW_code = 0;
+  uint256 constant CSRRWI_code = 1;
+
+  uint256 constant CSRRS_code = 0;
+  uint256 constant CSRRC_code = 1;
+
+  uint256 constant CSRRSI_code = 0;
+  uint256 constant CSRRCI_code = 1;
+
+
   function execute_CSRRW(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
   public returns(uint64) {
     return mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn)); 
@@ -634,5 +644,128 @@ library CSR {
   function csr_is_read_only(uint32 csr_addr) internal returns(bool){
     return ((csr_addr & 0xc00) == 0xc00);
   }
+
+  function execute_csr_SC(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
+  public returns (bool) {
+    uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
+
+    bool status = false;
+    uint64 csrval = 0;
+
+    (status, csrval) = read_csr(mi, mmIndex, csr_address);
+
+    if (!status) {
+      //return raise_illegal_insn_exception(mi, mmIndex, insn);
+      return false;
+    }
+    uint32 rs1 = RiscVDecoder.insn_rs1(insn);
+    uint64 rs1val = mi.read_x(mmIndex, rs1);
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+
+    if (rd != 0) {
+      mi.write_x(mmIndex, rd, csrval);
+    }
+
+    uint64 exec_value = 0;
+    if (insncode == CSRRS_code) {
+      exec_value = execute_CSRRS(mi, mmIndex, insn, csrval, rs1val);
+    } else {
+      // insncode == CSRRC_code
+      exec_value = execute_CSRRC(mi, mmIndex, insn, csrval, rs1val);
+    }
+    if (rs1 != 0) {
+      if (!write_csr(mi, mmIndex, csr_address, exec_value)){
+        //return raise_illegal_insn_exception(mi, mmIndex, insn);
+        return false;
+      }
+    }
+    //return advance_to_next_insn(mi, mmIndex, pc);
+    return true;
+  }
+
+   function execute_csr_SCI(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
+  public returns (bool){
+    uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
+
+    bool status = false;
+    uint64 csrval = 0;
+
+    (status, csrval) = read_csr(mi, mmIndex, csr_address);
+
+    if (!status) {
+      //return raise_illegal_insn_exception(mi, mmIndex, insn);
+      return false;
+    }
+    uint32 rs1 = RiscVDecoder.insn_rs1(insn);
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+
+    if (rd != 0) {
+      mi.write_x(mmIndex, rd, csrval);
+    }
+
+    uint64 exec_value = 0;
+    if (insncode == CSRRSI_code) {
+      exec_value = execute_CSRRS(mi, mmIndex, insn, csrval, rs1);
+    } else {
+      // insncode == CSRRCI_code
+      exec_value = execute_CSRRCI(mi, mmIndex, insn, csrval, rs1);
+    }
+
+    if (rs1 != 0) {
+      if (!write_csr(mi, mmIndex, csr_address, exec_value)){
+        //return raise_illegal_insn_exception(mi, mmIndex, insn);
+        return false;
+      }
+    }
+    //return advance_to_next_insn(mi, mmIndex, pc);
+    return true;
+  }
+
+  function execute_csr_RW(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
+  public returns (bool) {
+    uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
+
+    bool status = true;
+    uint64 csrval = 0;
+    uint64 rs1val = 0;
+
+    if (insncode == CSRRW_code) {
+      rs1val = execute_CSRRW(mi, mmIndex, insn);
+    } else {
+      // insncode == CSRRWI_code
+      rs1val = execute_CSRRWI(mi, mmIndex, insn);
+    }
+
+    uint32 rd = RiscVDecoder.insn_rd(insn);
+
+    if (rd != 0){
+      (status, csrval) = read_csr(mi, mmIndex, csr_address);
+    }
+    if (!status) {
+      //return raise_illegal_insn_exception(mi, mmIndex, insn);
+      return false;
+    }
+
+    if (!write_csr(mi, mmIndex, csr_address, rs1val)){
+      //return raise_illegal_insn_exception(mi, mmIndex, insn);
+      return false;
+    }
+    if (rd != 0){
+      mi.write_x(mmIndex, rd, csrval);
+    }
+    //return advance_to_next_insn(mi, mmIndex, pc);
+    return true;
+  }
+
+  // getters
+  function get_CSRRW_code() public returns (uint256) {return CSRRW_code;}
+  function get_CSRRWI_code() public returns (uint256) {return CSRRWI_code;}
+
+  function get_CSRRS_code() public returns (uint256) {return CSRRS_code; }
+  function get_CSRRC_code() public returns (uint256) {return CSRRC_code; }
+
+  function get_CSRRSI_code() public returns (uint256) {return CSRRSI_code;}
+  function get_CSRRCI_code() public returns (uint256) {return CSRRCI_code;}
+
 }
 

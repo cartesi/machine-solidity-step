@@ -10,6 +10,7 @@ var AtomicInstructions = artifacts.require("./RiscVInstructions/AtomicInstructio
 var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.sol");
 var S_Instructions = artifacts.require("./RiscVInstructions/S_Instructions.sol");
 var EnvTrapInstructions = artifacts.require("./RiscVInstructions/EnvTrapIntInstructions.sol");
+var StandAloneInstructions = artifacts.require("./RiscVInstructions/StandAloneInstructions.sol");
 
 var Execute = artifacts.require("./Execute.sol");
 var Exceptions = artifacts.require("./Exceptions.sol");
@@ -39,16 +40,19 @@ module.exports = function(deployer) {
   deployer.link(RiscVDecoder, BranchInstructions);
   deployer.link(RiscVDecoder, ArithmeticInstructions);
   deployer.link(RiscVDecoder, ArithmeticImmediateInstructions);
+  deployer.link(RiscVDecoder, StandAloneInstructions);
 
   deployer.link(RiscVConstants, BranchInstructions);
   deployer.link(RiscVConstants, ArithmeticInstructions);
   deployer.link(RiscVConstants, ArithmeticImmediateInstructions);
+  deployer.link(RiscVConstants, StandAloneInstructions);
   deployer.link(RiscVConstants, EnvTrapInstructions);
 
   deployer.link(BitsManipulationLibrary, ArithmeticImmediateInstructions);
 
   deployer.deploy(ArithmeticInstructions);
   deployer.deploy(ArithmeticImmediateInstructions);
+  deployer.deploy(StandAloneInstructions);
   deployer.deploy(BranchInstructions);
   deployer.deploy(PMA);
 
@@ -134,6 +138,7 @@ module.exports = function(deployer) {
   deployer.link(ArithmeticImmediateInstructions, Execute);
   deployer.link(AtomicInstructions, Execute);
   deployer.link(EnvTrapInstructions, Execute);
+  deployer.link(StandAloneInstructions, Execute);
   deployer.link(BitsManipulationLibrary, Execute);
   deployer.link(CSR, Execute);
   deployer.link(Exceptions, Execute);

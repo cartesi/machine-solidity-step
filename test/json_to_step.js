@@ -24,10 +24,11 @@ contract('Running data.json', function(accounts) {
     let miAddress;
     let riscV;
     let mm;
+    let mi;
 
     it('new MM contract', async function() {
       mm = await MMInstantiator.new({
-         from: accounts[0], gas: 2000000
+         from: accounts[0], gas: 9007199254740991
       });
       mmAddress = mm.address;
     });
@@ -40,7 +41,7 @@ contract('Running data.json', function(accounts) {
         response = await mm.instantiate(
           accounts[0], accounts[1], initialHash,{
             from: accounts[2],
-            gas: 2000000
+            gas: 9007199254740991
           });
         event = getEvent(response, 'MemoryCreated');
         expect(event._index.toNumber()).to.equal(i);
@@ -51,9 +52,9 @@ contract('Running data.json', function(accounts) {
       jsonsteps["steps"].forEach(function(entry, index) {
         entry["readwrites"].forEach(function(rwentry, rwindex) {
           if (rwentry["Access Type"] == "read") {
-            mm.proveRead(index, rwentry["Address Access"], rwentry["Value Read"], [rwentry["Access Proof"]], {from: accounts[0], gas: 2000000});
+            mm.proveRead(index, rwentry["Address Access"], rwentry["Value Read"], [rwentry["Access Proof"]], {from: accounts[0], gas: 9007199254740991});
           } else {
-            mm.proveWrite(index, rwentry["Address Access"], rwentry["Value Read"], rwentry["Value Written"], [rwentry["Access Proof"]], {from: accounts[0], gas: 2000000});
+            mm.proveWrite(index, rwentry["Address Access"], rwentry["Value Read"], rwentry["Value Written"], [rwentry["Access Proof"]], {from: accounts[0], gas: 9007199254740991});
           }
         });
       });

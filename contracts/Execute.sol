@@ -11,21 +11,13 @@ import "./RiscVInstructions/BranchInstructions.sol";
 import "./RiscVInstructions/ArithmeticInstructions.sol";
 import "./RiscVInstructions/ArithmeticImmediateInstructions.sol";
 import "./RiscVInstructions/S_Instructions.sol";
+import "./RiscVInstructions/StandAloneInstructions.sol";
 import "./RiscVInstructions/AtomicInstructions.sol";
 import "./RiscVInstructions/EnvTrapIntInstructions.sol";
 import {Exceptions} from "../contracts/Exceptions.sol";
 
 library Execute {
   event  Print(string a, uint b);
-
-  uint256 constant CSRRW_code = 0;
-  uint256 constant CSRRWI_code = 1;
-
-  uint256 constant CSRRS_code = 0;
-  uint256 constant CSRRC_code = 1;
-
-  uint256 constant CSRRSI_code = 0;
-  uint256 constant CSRRCI_code = 1;
 
   uint256 constant arith_imm_group = 0;
   uint256 constant arith_imm_group_32 = 1;
@@ -54,10 +46,10 @@ library Execute {
 
     if(rd != 0){
       if (imm_group == arith_imm_group){
-        (arith_imm_result, insn_valid) = arithmetic_immediate_funct3(mi, mmIndex, insn);
+        (arith_imm_result, insn_valid) = ArithmeticImmediateInstructions.arithmetic_immediate_funct3(mi, mmIndex, insn);
       } else {
         //imm_group == arith_imm_group_32
-        (arith_imm_result, insn_valid) = arithmetic_immediate_32_funct3(mi, mmIndex, insn);
+        (arith_imm_result, insn_valid) = ArithmeticImmediateInstructions.arithmetic_immediate_32_funct3(mi, mmIndex, insn);
       }
 
       if(!insn_valid){
@@ -78,10 +70,10 @@ library Execute {
       bool insn_valid = false;
 
       if(groupCode == arith_group){
-        (arith_result, insn_valid) = arithmetic_funct3_funct7(mi, mmIndex, insn);
+        (arith_result, insn_valid) = ArithmeticInstructions.arithmetic_funct3_funct7(mi, mmIndex, insn);
       } else {
         // groupCode == arith_32_group
-        (arith_result, insn_valid) = arithmetic_32_funct3_funct7(mi, mmIndex, insn);
+        (arith_result, insn_valid) = ArithmeticInstructions.arithmetic_32_funct3_funct7(mi, mmIndex, insn);
       }
 
       if(!insn_valid){
@@ -95,7 +87,7 @@ library Execute {
   function execute_branch(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) 
   public returns (execute_status){
 
-    (bool branch_valuated, bool insn_valid) = branch_funct3(mi, mmIndex, insn);
+    (bool branch_valuated, bool insn_valid) = BranchInstructions.branch_funct3(mi, mmIndex, insn);
 
     if(!insn_valid){
       return raise_illegal_insn_exception(mi, mmIndex, insn);
@@ -132,175 +124,6 @@ library Execute {
     }
   }
 
-  function execute_csr_SC(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
-  public returns (execute_status) {
-    uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
-
-    bool status = false;
-    uint64 csrval = 0;
-
-    (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
-
-    if (!status) {
-      return raise_illegal_insn_exception(mi, mmIndex, insn);
-    }
-    uint32 rs1 = RiscVDecoder.insn_rs1(insn);
-    uint64 rs1val = mi.read_x(mmIndex, rs1);
-    uint32 rd = RiscVDecoder.insn_rd(insn);
-
-    if (rd != 0) {
-      mi.write_x(mmIndex, rd, csrval);
-    }
-
-    uint64 exec_value = 0;
-    if (insncode == CSRRS_code) {
-      exec_value = CSR.execute_CSRRS(mi, mmIndex, insn, csrval, rs1val);
-    } else {
-      // insncode == CSRRC_code
-      exec_value = CSR.execute_CSRRC(mi, mmIndex, insn, csrval, rs1val);
-    }
-    if (rs1 != 0) {
-      if (!CSR.write_csr(mi, mmIndex, csr_address, exec_value)){
-        return raise_illegal_insn_exception(mi, mmIndex, insn);
-      }
-    }
-    return advance_to_next_insn(mi, mmIndex, pc);
-  }
-
-   function execute_csr_SCI(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
-  public returns (execute_status){
-    uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
-
-    bool status = false;
-    uint64 csrval = 0;
-
-    (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
-
-    if (!status) {
-      return raise_illegal_insn_exception(mi, mmIndex, insn);
-    }
-    uint32 rs1 = RiscVDecoder.insn_rs1(insn);
-    uint32 rd = RiscVDecoder.insn_rd(insn);
-
-    if (rd != 0) {
-      mi.write_x(mmIndex, rd, csrval);
-    }
-
-    uint64 exec_value = 0;
-    if (insncode == CSRRSI_code) {
-      exec_value = CSR.execute_CSRRS(mi, mmIndex, insn, csrval, rs1);
-    } else {
-      // insncode == CSRRCI_code
-      exec_value = CSR.execute_CSRRCI(mi, mmIndex, insn, csrval, rs1);
-    }
-
-    if (rs1 != 0) {
-      if (!CSR.write_csr(mi, mmIndex, csr_address, exec_value)){
-        return raise_illegal_insn_exception(mi, mmIndex, insn);
-      }
-    }
-    return advance_to_next_insn(mi, mmIndex, pc);
-  }
-
-  function execute_csr_RW(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
-  public returns (execute_status) {
-    uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
-
-    bool status = true;
-    uint64 csrval = 0;
-    uint64 rs1val = 0;
-
-    if (insncode == CSRRW_code) {
-      rs1val = CSR.execute_CSRRW(mi, mmIndex, insn);
-    } else {
-      // insncode == CSRRWI_code
-      rs1val = CSR.execute_CSRRWI(mi, mmIndex, insn);
-    }
-
-    uint32 rd = RiscVDecoder.insn_rd(insn);
-
-    if (rd != 0){
-      (status, csrval) = CSR.read_csr(mi, mmIndex, csr_address);
-    }
-    if (!status) {
-      return raise_illegal_insn_exception(mi, mmIndex, insn);
-    }
-
-    if (!CSR.write_csr(mi, mmIndex, csr_address, rs1val)){
-      return raise_illegal_insn_exception(mi, mmIndex, insn);
-    }
-    if (rd != 0){
-      mi.write_x(mmIndex, rd, csrval);
-    }
-    return advance_to_next_insn(mi, mmIndex, pc);
-  }
-
-  // JAL (i.e Jump and Link). J_immediate encondes a signed offset in multiples
-  // of 2 bytes. The offset is added to pc and JAL stores the address of the jump
-  // (pc + 4) to the rd register.
-  // Reference: riscv-spec-v2.2.pdf -  Section 2.5 - page 16
-  function execute_jal(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
-  public returns (execute_status){
-    uint64 new_pc = pc + uint64(RiscVDecoder.insn_J_imm(insn));
-
-    if((new_pc & 3) != 0){
-      return raise_misaligned_fetch_exception(mi, mmIndex, new_pc);
-    }
-    uint32 rd = RiscVDecoder.insn_rd(insn);
-
-    if(rd != 0){
-      mi.write_x(mmIndex, rd, pc + 4);
-    }
-    return execute_jump(mi, mmIndex, new_pc);
-  }
-
-  // JALR (i.e Jump and Link Register). uses the I-type encoding. The target
-  // address is obtained by adding the 12-bit signed I-immediate to the register 
-  // rs1, then setting the least-significant bit of the result to zero. 
-  // The address of the instruction following the jump (pc+4) is written to register rd
-  // Reference: riscv-spec-v2.2.pdf -  Section 2.5 - page 16
-  function execute_jalr(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
-  public returns (execute_status){
-    uint64 new_pc = uint64(int64(mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn)))) & ~uint64(1);
-
-    if((new_pc & 3) != 0){
-      return raise_misaligned_fetch_exception(mi, mmIndex, new_pc);
-    }
-    uint32 rd = RiscVDecoder.insn_rd(insn);
-
-    if(rd != 0){
-      mi.write_x(mmIndex, rd, pc + 4);
-    }
-    return execute_jump(mi, mmIndex, new_pc);
-  }
-
-  //AUIPC forms a 32-bit offset from the 20-bit U-immediate, filling in the 
-  // lowest 12 bits with zeros, adds this offset to pc and store the result on rd.
-  // Reference: riscv-spec-v2.2.pdf -  Page 14
-  function execute_auipc(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
-  public returns (execute_status){
-    uint32 rd = RiscVDecoder.insn_rd(insn);
-
-    if(rd != 0){
-      mi.write_x(mmIndex, rd, pc + uint64(RiscVDecoder.insn_U_imm(insn)));
-    }
-    return advance_to_next_insn(mi, mmIndex, pc);
-  }
-
-  // LUI (i.e load upper immediate). Is used to build 32-bit constants and uses 
-  // the U-type format. LUI places the U-immediate value in the top 20 bits of
-  // the destination register rd, filling in the lowest 12 bits with zeros
-  // Reference: riscv-spec-v2.2.pdf -  Section 2.5 - page 13
-  function execute_lui(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
-  public returns (execute_status){
-    uint32 rd = RiscVDecoder.insn_rd(insn);
-
-    if(rd != 0){
-      mi.write_x(mmIndex, rd, uint64(RiscVDecoder.insn_U_imm(insn)));
-    }
-    return advance_to_next_insn(mi, mmIndex, pc);
-  }
-
   function execute_jump(MemoryInteractor mi, uint256 mmIndex, uint64 new_pc) public returns (execute_status){
     mi.memoryWrite(mmIndex, ShadowAddresses.get_pc(), new_pc);
     return execute_status.retired;
@@ -325,198 +148,6 @@ library Execute {
     return execute_status.retired;
   }
 
-  /// @notice Given a arithmetic funct3 funct7 insn, finds the func associated.
-  //  Uses binary search for performance.
-  //  @param insn for arithmetic 32 funct3 funct7 field.
-  function arithmetic_funct3_funct7(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64, bool) {
-    uint32 funct3_funct7 = RiscVDecoder.insn_funct3_funct7(insn);
-    if(funct3_funct7 < 0x0181){
-      if(funct3_funct7 < 0x0081){
-        if(funct3_funct7 < 0x0020){
-          if(funct3_funct7 == 0x0000){
-            /*funct3_funct7 == 0x0000*/
-            // return "ADD";
-            return (ArithmeticInstructions.execute_ADD(mi, mmIndex, insn), true);
-          }else if(funct3_funct7 == 0x0001){
-            /*funct3_funct7 == 0x0001*/
-            //return "MUL";
-            return (ArithmeticInstructions.execute_MUL(mi, mmIndex, insn), true);
-          }
-        }else if(funct3_funct7 == 0x0080){
-          /*funct3_funct7 == 0x0080*/
-          //return "SLL";
-          return (ArithmeticInstructions.execute_SLL(mi, mmIndex, insn), true);
-        }else if(funct3_funct7 == 0x0020){
-          /*funct3_funct7 == 0x0020*/
-          //return "SUB";
-          return (ArithmeticInstructions.execute_SUB(mi, mmIndex, insn), true);
-        }
-      }else if(funct3_funct7 > 0x0081){
-        if(funct3_funct7 == 0x0100){
-          /*funct3_funct7 == 0x0100*/
-          //return "SLT";
-          return (ArithmeticInstructions.execute_SLT(mi, mmIndex, insn), true);
-        }else if(funct3_funct7 == 0x0180){
-          /*funct3_funct7 == 0x0180*/
-          //return "SLTU";
-          return (ArithmeticInstructions.execute_SLTU(mi, mmIndex, insn), true);
-        }else if(funct3_funct7 == 0x0101){
-          /*funct3_funct7 == 0x0101*/
-          //return "MULHSU";
-          return (ArithmeticInstructions.execute_MULHSU(mi, mmIndex, insn), true);
-        }
-      }else if(funct3_funct7 == 0x0081){
-        /* funct3_funct7 == 0x0081*/
-        //return "MULH";
-        return (ArithmeticInstructions.execute_MULH(mi, mmIndex, insn), true);
-      }
-    }else if(funct3_funct7 > 0x0181){
-      if(funct3_funct7 < 0x02a0){
-        if(funct3_funct7 == 0x0200){
-          /*funct3_funct7 == 0x0200*/
-          //return "XOR";
-          return (ArithmeticInstructions.execute_XOR(mi, mmIndex, insn), true);
-        }else if(funct3_funct7 > 0x0201){
-          if(funct3_funct7 ==  0x0280){
-            /*funct3_funct7 == 0x0280*/
-            //return "SRL";
-            return (ArithmeticInstructions.execute_SRL(mi, mmIndex, insn), true);
-          }else if(funct3_funct7 == 0x0281){
-            /*funct3_funct7 == 0x0281*/
-            //return "DIVU";
-            return (ArithmeticInstructions.execute_DIVU(mi, mmIndex, insn), true);
-          }
-        }else if(funct3_funct7 == 0x0201){
-          /*funct3_funct7 == 0x0201*/
-          //return "DIV";
-          return (ArithmeticInstructions.execute_DIV(mi, mmIndex, insn), true);
-        }
-      }else if(funct3_funct7 > 0x02a0){
-        if(funct3_funct7 < 0x0380){
-          if(funct3_funct7 == 0x0300){
-            /*funct3_funct7 == 0x0300*/
-            //return "OR";
-            return (ArithmeticInstructions.execute_OR(mi, mmIndex, insn), true);
-          }else if(funct3_funct7 == 0x0301){
-            /*funct3_funct7 == 0x0301*/
-            //return "REM";
-            return (ArithmeticInstructions.execute_REM(mi, mmIndex, insn), true);
-          }
-        }else if(funct3_funct7 == 0x0381){
-          /*funct3_funct7 == 0x0381*/
-          //return "REMU";
-          return (ArithmeticInstructions.execute_REMU(mi, mmIndex, insn), true);
-        }else if(funct3_funct7 == 0x380){
-          /*funct3_funct7 == 0x0380*/
-          //return "AND";
-          return (ArithmeticInstructions.execute_AND(mi, mmIndex, insn), true);
-        }
-      }else if(funct3_funct7 == 0x02a0){
-        /*funct3_funct7 == 0x02a0*/
-        //return "SRA";
-        return (ArithmeticInstructions.execute_SRA(mi, mmIndex, insn), true);
-      }
-    }else if(funct3_funct7 == 0x0181){
-      /*funct3_funct7 == 0x0181*/
-      //return "MULHU";
-      return (ArithmeticInstructions.execute_MULHU(mi, mmIndex, insn), true);
-    }
-    return (0, false);
-  }
-
-  /// @notice Given a arithmetic immediate32 funct3 insn, finds the associated func.
-  //  Uses binary search for performance.
-  //  @param insn for arithmetic immediate32 funct3 field.
-  function arithmetic_immediate_32_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
-  public returns (uint64, bool) {
-    uint32 funct3 = RiscVDecoder.insn_funct3(insn);
-    if(funct3 == 0x0000){
-      /*funct3 == 0x0000*/
-      //return "ADDIW";
-      return (ArithmeticImmediateInstructions.execute_ADDIW(mi, mmIndex, insn), true);
-    }else if(funct3 ==  0x0005){
-      /*funct3 == 0x0005*/
-      return shift_right_immediate_32_group(mi, mmIndex, insn);
-    }else if(funct3 == 0x0001){
-      /*funct3 == 0x0001*/
-      //return "SLLIW";
-      return (ArithmeticImmediateInstructions.execute_SLLIW(mi, mmIndex, insn), true);
-    }
-    return (0, false);
-  }
-
-  /// @notice Given a arithmetic immediate funct3 insn, finds the func associated.
-  //  Uses binary search for performance.
-  //  @param insn for arithmetic immediate funct3 field.
-  function arithmetic_immediate_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn) 
-  public returns (uint64, bool) {
-    uint32 funct3 = RiscVDecoder.insn_funct3(insn);
-    if(funct3 < 0x0003){
-      if(funct3 == 0x0000){
-        /*funct3 == 0x0000*/
-//        return "ADDI";
-        return (ArithmeticImmediateInstructions.execute_ADDI(mi, mmIndex, insn), true);
-
-      }else if(funct3 == 0x0002){
-        /*funct3 == 0x0002*/
-//        return "SLTI";
-        return (ArithmeticImmediateInstructions.execute_SLTI(mi, mmIndex, insn), true);
-      }else if(funct3 == 0x0001){
-        // Imm[11:6] must be zero for it to be SLLI.
-        // Reference: riscv-spec-v2.2.pdf - Section 2.4 -  Page 14
-        // TO-DO: change 0x3F to XLEN - 1
-        if(( insn & (0x3F << 26)) != 0){
-          return (0, false);
-        }
-        return (ArithmeticImmediateInstructions.execute_SLLI(mi, mmIndex, insn), true);
-      }
-    }else if(funct3 > 0x0003){
-      if(funct3 < 0x0006){
-        if(funct3 == 0x0004){
-          /*funct3 == 0x0004*/
-//          return "XORI";
-          return (ArithmeticImmediateInstructions.execute_XORI(mi, mmIndex, insn), true);
-        }else if(funct3 == 0x0005){
-          /*funct3 == 0x0005*/
-//          return "shift_right_immediate_group";
-          return shift_right_immediate_funct6(mi, mmIndex, insn);
-        }
-      }else if(funct3 == 0x0007){
-        /*funct3 == 0x0007*/
-//        return "ANDI";
-        return (ArithmeticImmediateInstructions.execute_ANDI(mi, mmIndex, insn), true);
-      }else if(funct3 == 0x0006){
-        /*funct3 == 0x0006*/
-//        return "ORI";
-        return (ArithmeticImmediateInstructions.execute_ORI(mi, mmIndex, insn), true);
-      }
-    }else if(funct3 == 0x0003){
-      /*funct3 == 0x0003*/
-//      return "SLTIU";
-        return (ArithmeticImmediateInstructions.execute_SLTIU(mi, mmIndex, insn), true);
-    }
-    return (0, false);
-  }
-
-  /// @notice Given a right immediate funct6 insn, finds the func associated.
-  //  Uses binary search for performance.
-  //  @param insn for right immediate funct6 field.
-  function shift_right_immediate_funct6(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
-  public returns (uint64, bool) {
-    uint32 funct6 = RiscVDecoder.insn_funct6(insn);
-    if(funct6 == 0x0000){
-      /*funct6 == 0x0000*/
-      //return "SRLI";
-      return (ArithmeticImmediateInstructions.execute_SRLI(mi, mmIndex, insn), true);
-    }else if(funct6 == 0x0010){
-      /*funct6 == 0x0010*/
-      //return "SRAI";
-      return (ArithmeticImmediateInstructions.execute_SRAI(mi, mmIndex, insn), true);
-    }
-    //return "illegal insn";
-    return (0, false);
-  }
-
   /// @notice Given a fence funct3 insn, finds the func associated.
   //  Uses binary search for performance.
   //  @param insn for fence funct3 field.
@@ -536,45 +167,6 @@ library Execute {
     return advance_to_next_insn(mi, mmIndex, pc);
   }
 
-  /// @notice Given a branch funct3 group instruction, finds the function
-  //  associated with it. Uses binary search for performance.
-  //  @param insn for branch funct3 field.
-  function branch_funct3(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
-  public returns (bool, bool){
-    uint32 funct3 = RiscVDecoder.insn_funct3(insn);
-
-    if(funct3 < 0x0005){
-      if(funct3 == 0x0000){
-        /*funct3 == 0x0000*/
-        //return "BEQ";
-        return (BranchInstructions.execute_BEQ(mi, mmIndex, insn), true);
-      }else if(funct3 == 0x0004){
-        /*funct3 == 0x0004*/
-        //return "BLT";
-        return (BranchInstructions.execute_BLT(mi, mmIndex, insn), true);
-      }else if(funct3 == 0x0001){
-        /*funct3 == 0x0001*/
-        //return "BNE";
-        return (BranchInstructions.execute_BNE(mi, mmIndex, insn), true);
-      }
-    }else if(funct3 > 0x0005){
-      if(funct3 == 0x0007){
-        /*funct3 == 0x0007*/
-        //return "BGEU";
-        return (BranchInstructions.execute_BGEU(mi, mmIndex, insn), true);
-      }else if(funct3 == 0x0006){
-        /*funct3 == 0x0006*/
-        //return "BLTU";
-        return (BranchInstructions.execute_BLTU(mi, mmIndex, insn), true);
-      }
-    }else if(funct3 == 0x0005){
-      /*funct3==0x0005*/
-      //return "BGE";
-      return (BranchInstructions.execute_BGE(mi, mmIndex, insn), true);
-    }
-    return (false, false);
-  }
-
   /// @notice Given csr env trap int mm funct3 insn, finds the func associated.
   //  Uses binary search for performance.
   //  @param insn for csr env trap int mm funct3 field.
@@ -589,30 +181,54 @@ library Execute {
       }else if(funct3 ==  0x0002){
         /*funct3 == 0x0002*/
         //return "CSRRS";
-        return execute_csr_SC(mi, mmIndex, insn, pc, CSRRS_code);
+        if (CSR.execute_csr_SC(mi, mmIndex, insn, pc, CSR.get_CSRRS_code())){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return raise_illegal_insn_exception(mi, mmIndex, insn);
+        }
       }else if(funct3 == 0x0001){
         /*funct3 == 0x0001*/
         //return "CSRRW";
-        return execute_csr_RW(mi, mmIndex, insn, pc, CSRRW_code);
+        if (CSR.execute_csr_RW(mi, mmIndex, insn, pc, CSR.get_CSRRW_code())){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return raise_illegal_insn_exception(mi, mmIndex, insn);
+        }
       }
     }else if(funct3 > 0x0003){
       if(funct3 == 0x0005){
         /*funct3 == 0x0005*/
         //return "CSRRWI";
-        return execute_csr_RW(mi, mmIndex, insn, pc, CSRRWI_code);
+        if (CSR.execute_csr_RW(mi, mmIndex, insn, pc, CSR.get_CSRRWI_code())){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return raise_illegal_insn_exception(mi, mmIndex, insn);
+        }
       }else if(funct3 == 0x0007){
         /*funct3 == 0x0007*/
         //return "CSRRCI";
-        return execute_csr_SCI(mi, mmIndex, insn, pc, CSRRCI_code);
+        if (CSR.execute_csr_SCI(mi, mmIndex, insn, pc, CSR.get_CSRRCI_code())){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return raise_illegal_insn_exception(mi, mmIndex, insn);
+        }
       }else if(funct3 == 0x0006){
         /*funct3 == 0x0006*/
         //return "CSRRSI";
-        return execute_csr_SCI(mi, mmIndex, insn, pc, CSRRSI_code);
+        if (CSR.execute_csr_SCI(mi, mmIndex, insn, pc, CSR.get_CSRRSI_code())){
+          return advance_to_next_insn(mi, mmIndex, pc);
+        } else {
+          return raise_illegal_insn_exception(mi, mmIndex, insn);
+        }
       }
     }else if(funct3 == 0x0003){
       /*funct3 == 0x0003*/
       //return "CSRRC";
-      return execute_csr_SC(mi, mmIndex, insn, pc, CSRRC_code);
+      if (CSR.execute_csr_SC(mi, mmIndex, insn, pc, CSR.get_CSRRC_code())){
+        return advance_to_next_insn(mi, mmIndex, pc);
+      } else {
+        return raise_illegal_insn_exception(mi, mmIndex, insn);
+      }
     }
     return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
@@ -646,24 +262,6 @@ library Execute {
     return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
 
-  /// @notice Given a shift right immediate32 funct3 insn, finds the associated func.
-  //  Uses binary search for performance.
-  //  @param insn for shift right immediate32 funct3 field.
-  function shift_right_immediate_32_group(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
-  public returns (uint64, bool) {
-    uint32 funct7 = RiscVDecoder.insn_funct7(insn);
-
-    if (funct7 == 0x0000){
-      /*funct7 == 0x0000*/
-      //return "SRLIW";
-      return (ArithmeticImmediateInstructions.execute_SRLIW(mi, mmIndex, insn), true);
-    } else if (funct7 == 0x0020){
-      /*funct7 == 0x0020*/
-      //return "SRAIW";
-      return (ArithmeticImmediateInstructions.execute_SRAIW(mi, mmIndex, insn), true);
-    }
-    return (0, false);
-  }
 
   /// @notice Given a env trap int group insn, finds the func associated.
   //  Uses binary search for performance.
@@ -714,69 +312,6 @@ library Execute {
     return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
 
-  /// @notice Given an arithmetic32 funct3 funct7 insn, finds the associated func.
-  //  Uses binary search for performance.
-  //  @param insn for arithmetic32 funct3 funct7 field.
-  function arithmetic_32_funct3_funct7(MemoryInteractor mi, uint256 mmIndex, uint32 insn) 
-  public returns (uint64, bool) {
-
-    uint32 funct3_funct7 = RiscVDecoder.insn_funct3_funct7(insn);
-
-    if(funct3_funct7 < 0x0280){
-      if(funct3_funct7 < 0x0020){
-        if(funct3_funct7 == 0x0000){
-          /*funct3_funct7 == 0x0000*/
-          //return "ADDW";
-          return (ArithmeticInstructions.execute_ADDW(mi, mmIndex, insn), true);
-        }else if(funct3_funct7 == 0x0001){
-          /*funct3_funct7 == 0x0001*/
-          //return "MULW";
-          return (ArithmeticInstructions.execute_MULW(mi, mmIndex, insn), true);
-        }
-      }else if(funct3_funct7 > 0x0020){
-        if(funct3_funct7 == 0x0080){
-          /*funct3_funct7 == 0x0080*/
-          //return "SLLW";
-          return (ArithmeticInstructions.execute_SLLW(mi, mmIndex, insn), true);
-        }else if(funct3_funct7 == 0x0201){
-          /*funct3_funct7 == 0x0201*/
-          //return "DIVUW";
-          return (ArithmeticInstructions.execute_DIVUW(mi, mmIndex, insn), true);
-        }
-      }else if(funct3_funct7 == 0x0020){
-        /*funct3_funct7 == 0x0020*/
-        //return "SUBW";
-        return (ArithmeticInstructions.execute_SUBW(mi, mmIndex, insn), true);
-      }
-    }else if(funct3_funct7 > 0x0280){
-      if(funct3_funct7 < 0x0301){
-        if(funct3_funct7 == 0x0281){
-          /*funct3_funct7 == 0x0281*/
-          //return "DIVUW";
-          return (ArithmeticInstructions.execute_DIVUW(mi, mmIndex, insn), true);
-        }else if(funct3_funct7 == 0x02a0){
-          /*funct3_funct7 == 0x02a0*/
-          //return "SRAW";
-          return (ArithmeticInstructions.execute_SRAW(mi, mmIndex, insn), true);
-        }
-      }else if(funct3_funct7 == 0x0381){
-        /*funct3_funct7 == 0x0381*/
-        //return "REMUW";
-        return (ArithmeticInstructions.execute_REMUW(mi, mmIndex, insn), true);
-      }else if(funct3_funct7 == 0x0301){
-        /*funct3_funct7 == 0x0301*/
-        //return "REMW";
-        return (ArithmeticInstructions.execute_REMW(mi, mmIndex, insn), true);
-      }
-    }else if(funct3_funct7 == 0x0280) {
-      /*funct3_funct7 == 0x0280*/
-      //return "SRLW";
-      return (ArithmeticInstructions.execute_SRLW(mi, mmIndex, insn), true);
-    }
-    //return "illegal insn";
-    return (0, false);
-  }
-
   /// @notice Given a load funct3 group instruction, finds the function
   //  associated with it. Uses binary search for performance
   //  @param insn for load funct3 field
@@ -825,185 +360,84 @@ library Execute {
   function atomic_funct3_funct5(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc)
  public returns (execute_status){
     uint32 funct3_funct5 = RiscVDecoder.insn_funct3_funct5(insn);
-
+    bool atom_succ;
     // TO-DO: transform in binary search for performance
     if (funct3_funct5 == 0x42) {
       if ((insn & 0x1f00000) == 0 ) {
-        if (!AtomicInstructions.execute_LR(mi, mmIndex, pc, insn, 32) ){
-          //return advance_to_raised_exception()
-          return execute_status.retired;
-        } else {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        }
+        atom_succ = AtomicInstructions.execute_LR(mi, mmIndex, pc, insn, 32);
       } else {
         return raise_illegal_insn_exception(mi, mmIndex, insn);
       }
 //      return execute_LR_W;
     } else if (funct3_funct5 == 0x43) {
-      if (!AtomicInstructions.execute_SC(mi, mmIndex, pc, insn, 32)) {
-          //return advance_to_raised_exception()
-          return execute_status.retired;
-        } else {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        }
-
+        atom_succ = AtomicInstructions.execute_SC(mi, mmIndex, pc, insn, 32);
 //      return execute_SC_W;
     } else if (funct3_funct5 == 0x41) {
-        if (AtomicInstructions.execute_AMOSWAP_W(mi, mmIndex, pc, insn)){
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOSWAP_W(mi, mmIndex, pc, insn);
     } else if (funct3_funct5 == 0x40) {
-        if (AtomicInstructions.execute_AMOADD_W(mi, mmIndex, pc, insn)) {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOADD_W(mi, mmIndex, pc, insn);
 //      return execute_AMOADD_W;
     } else if (funct3_funct5 == 0x44) {
-        if (AtomicInstructions.execute_AMOXOR_W(mi, mmIndex, pc, insn) ){
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOXOR_W(mi, mmIndex, pc, insn);
 //      return execute_AMOXOR_W;
     } else if (funct3_funct5 == 0x4c) {
-        if (AtomicInstructions.execute_AMOAND_W(mi, mmIndex, pc, insn) ){
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOAND_W(mi, mmIndex, pc, insn);
 //      return execute_AMOAND_W;
     } else if (funct3_funct5 == 0x48) {
-        if (AtomicInstructions.execute_AMOOR_W(mi, mmIndex, pc, insn) ){
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOOR_W(mi, mmIndex, pc, insn);
 //      return execute_AMOOR_W;
     } else if (funct3_funct5 == 0x50) {
-        if (AtomicInstructions.execute_AMOMIN_W(mi, mmIndex, pc, insn)){
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOMIN_W(mi, mmIndex, pc, insn);
 //      return execute_AMOMIN_W;
     } else if (funct3_funct5 == 0x54) {
-        if (AtomicInstructions.execute_AMOMAX_W(mi, mmIndex, pc, insn) ){
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOMAX_W(mi, mmIndex, pc, insn);
 //      return execute_AMOMAX_W;
     } else if (funct3_funct5 == 0x58) {
-        if (AtomicInstructions.execute_AMOMINU_W(mi, mmIndex, pc, insn)) {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
-
+        atom_succ = AtomicInstructions.execute_AMOMINU_W(mi, mmIndex, pc, insn);
 //      return execute_AMOMINU_W;
     } else if (funct3_funct5 == 0x5c) {
-        if (AtomicInstructions.execute_AMOMAXU_W(mi, mmIndex, pc, insn)) {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        } else {
-          return execute_status.retired;
-        }
+        atom_succ = AtomicInstructions.execute_AMOMAXU_W(mi, mmIndex, pc, insn);
 //      return execute_AMOMAXU_W;
     } else if (funct3_funct5 == 0x62) {
       if ((insn & 0x1f00000) == 0 ) {
-        if (!AtomicInstructions.execute_LR(mi, mmIndex, pc, insn, 64)) {
-          //return advance_to_raised_exception()
-          return execute_status.retired;
-        } else {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        }
+        atom_succ = AtomicInstructions.execute_LR(mi, mmIndex, pc, insn, 64);
       }
-
       //return execute_LR_D;
     } else if (funct3_funct5 == 0x63) {
-      if (!AtomicInstructions.execute_SC(mi, mmIndex, pc, insn, 64)) {
-          //return advance_to_raised_exception()
-          return execute_status.retired;
-        } else {
-          return advance_to_next_insn(mi, mmIndex, pc);
-        }
+        atom_succ = AtomicInstructions.execute_SC(mi, mmIndex, pc, insn, 64);
 //      return execute_SC_D;
     } else if (funct3_funct5 == 0x61) { 
-      if (AtomicInstructions.execute_AMOSWAP_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
+        atom_succ = AtomicInstructions.execute_AMOSWAP_D(mi, mmIndex, pc, insn);
 //    return execute_AMOSWAP_D;;
     } else if (funct3_funct5 == 0x60) {
-      if (AtomicInstructions.execute_AMOADD_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
+        atom_succ = AtomicInstructions.execute_AMOADD_D(mi, mmIndex, pc, insn);
 //    return execute_AMOADD_D;
     } else if (funct3_funct5 == 0x64) {
-      if (AtomicInstructions.execute_AMOXOR_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
+        atom_succ = AtomicInstructions.execute_AMOXOR_D(mi, mmIndex, pc, insn);
 //    return execute_AMOXOR_D;
     } else if (funct3_funct5 == 0x6c) {
-      if (AtomicInstructions.execute_AMOAND_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
+        atom_succ = AtomicInstructions.execute_AMOAND_D(mi, mmIndex, pc, insn);
 //    return execute_AMOAND_D;
     } else if (funct3_funct5 == 0x68) {
-      if (AtomicInstructions.execute_AMOOR_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
+        atom_succ = AtomicInstructions.execute_AMOOR_D(mi, mmIndex, pc, insn);
 //    return execute_AMOOR_D;
     } else if (funct3_funct5 == 0x70) {
-      if (AtomicInstructions.execute_AMOMIN_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
-
+        atom_succ = AtomicInstructions.execute_AMOMIN_D(mi, mmIndex, pc, insn);
 //    return execute_AMOMIN_D;
     } else if (funct3_funct5 == 0x74) {
-      if (AtomicInstructions.execute_AMOMAX_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
-
+        atom_succ = AtomicInstructions.execute_AMOMAX_D(mi, mmIndex, pc, insn);
 //    return execute_AMOMAX_D;
     } else if (funct3_funct5 == 0x78) {
-      if (AtomicInstructions.execute_AMOMINU_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
-
+        atom_succ = AtomicInstructions.execute_AMOMINU_D(mi, mmIndex, pc, insn);
 //      return execute_AMOMINU_D;
     } else if (funct3_funct5 == 0x7c) {
-      if (AtomicInstructions.execute_AMOMAXU_D(mi, mmIndex, pc, insn)) {
-        return advance_to_next_insn(mi, mmIndex, pc);
-      } else {
-        return execute_status.retired;
-      }
-
+        atom_succ = AtomicInstructions.execute_AMOMAXU_D(mi, mmIndex, pc, insn);
 //      return execute_AMOMAXU_D;
+    }
+    if (atom_succ) {
+      return advance_to_next_insn(mi, mmIndex, pc);
+    } else {
+      return execute_status.retired;
     }
     return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
@@ -1043,7 +477,8 @@ library Execute {
         }
       }else if(opcode == 0x0017){
         /*opcode == 0x0017*/
-        return execute_auipc(mi, mmIndex, insn, pc);
+        StandAloneInstructions.execute_auipc(mi, mmIndex, insn, pc);
+        return advance_to_next_insn(mi, mmIndex, pc);
       }
     }else if (opcode > 0x002f){
       if (opcode < 0x0063){
@@ -1058,20 +493,31 @@ library Execute {
         }else if(opcode == 0x0037){
           /*opcode == 0x0037*/
           //return "LUI";
-          return execute_lui(mi, mmIndex, insn, pc);
+          StandAloneInstructions.execute_lui(mi, mmIndex, insn, pc);
+          return advance_to_next_insn(mi, mmIndex, pc);
         }
       }else if (opcode > 0x0063){
         if(opcode == 0x0067){
           /*opcode == 0x0067*/
           //return "JALR";
-          return execute_jalr(mi, mmIndex, insn, pc);
+          (bool succ, uint64 new_pc) = StandAloneInstructions.execute_jalr(mi, mmIndex, insn, pc);
+          if (succ) {
+            return execute_jump(mi, mmIndex, new_pc);
+          } else {
+            return raise_misaligned_fetch_exception(mi, mmIndex, new_pc);
+          }
         }else if(opcode == 0x0073){
           /*opcode == 0x0073*/
           return csr_env_trap_int_mm_funct3(mi, mmIndex, insn, pc);
         }else if(opcode == 0x006f){
           /*opcode == 0x006f*/
           //return "JAL";
-          return execute_jal(mi, mmIndex, insn, pc);
+          (bool succ, uint64 new_pc) = StandAloneInstructions.execute_jal(mi, mmIndex, insn, pc);
+          if (succ) {
+            return execute_jump(mi, mmIndex, new_pc);
+          } else {
+            return raise_misaligned_fetch_exception(mi, mmIndex, new_pc);
+          }
         }
       }else if (opcode == 0x0063){
         /*opcode == 0x0063*/
