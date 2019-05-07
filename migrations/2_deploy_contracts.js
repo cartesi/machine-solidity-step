@@ -10,6 +10,7 @@ var AtomicInstructions = artifacts.require("./RiscVInstructions/AtomicInstructio
 var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.sol");
 var S_Instructions = artifacts.require("./RiscVInstructions/S_Instructions.sol");
 var EnvTrapInstructions = artifacts.require("./RiscVInstructions/EnvTrapIntInstructions.sol");
+var StandAloneInstructions = artifacts.require("./RiscVInstructions/StandAloneInstructions.sol");
 
 var Execute = artifacts.require("./Execute.sol");
 var Exceptions = artifacts.require("./Exceptions.sol");
@@ -39,16 +40,19 @@ module.exports = function(deployer) {
     await deployer.link(RiscVDecoder, BranchInstructions);
     await deployer.link(RiscVDecoder, ArithmeticInstructions);
     await deployer.link(RiscVDecoder, ArithmeticImmediateInstructions);
+    deployer.link(RiscVDecoder, StandAloneInstructions);
 
     await deployer.link(RiscVConstants, BranchInstructions);
     await deployer.link(RiscVConstants, ArithmeticInstructions);
     await deployer.link(RiscVConstants, ArithmeticImmediateInstructions);
+    deployer.link(RiscVConstants, StandAloneInstructions);
     await deployer.link(RiscVConstants, EnvTrapInstructions);
 
     await deployer.link(BitsManipulationLibrary, ArithmeticImmediateInstructions);
 
     await deployer.deploy(ArithmeticInstructions);
     await deployer.deploy(ArithmeticImmediateInstructions);
+    deployer.deploy(StandAloneInstructions);
     await deployer.deploy(BranchInstructions);
     await deployer.deploy(PMA);
 
@@ -74,7 +78,6 @@ module.exports = function(deployer) {
     //Link all libraries to Exceptions
     await deployer.link(RiscVConstants, Exceptions);
     await deployer.deploy(Exceptions);
-
     await deployer.link(Exceptions, EnvTrapInstructions);
     await deployer.deploy(EnvTrapInstructions);
     //Link libraries to Virtual Memory
@@ -132,6 +135,7 @@ module.exports = function(deployer) {
     await deployer.link(BranchInstructions, Execute);
     await deployer.link(ArithmeticInstructions, Execute);
     await deployer.link(ArithmeticImmediateInstructions, Execute);
+    deployer.link(StandAloneInstructions, Execute);
     await deployer.link(AtomicInstructions, Execute);
     await deployer.link(EnvTrapInstructions, Execute);
     await deployer.link(BitsManipulationLibrary, Execute);
@@ -154,4 +158,4 @@ module.exports = function(deployer) {
     console.log("Step: " + StepContract.address);
     //await deployer.deploy(Step);
   })
-};
+}
