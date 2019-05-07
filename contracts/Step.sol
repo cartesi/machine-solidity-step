@@ -17,7 +17,7 @@ contract Step {
 
   MemoryInteractor mi;
 
-  uint256 mmIndex; 
+  uint256 mmIndex;
   // TO-DO: this has to be removed. Should not be Storage - but stack too deep
   uint64 pc = 0;
   uint32 insn = 0;
@@ -32,13 +32,13 @@ contract Step {
     return _exitCode;
   }
 
-  function step(address _miAddress, uint _mmIndex) public 
+  function step(address _miAddress, uint _mmIndex) public
     returns (uint8){
 
     mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
     mi = MemoryInteractor(_miAddress);
 
-    // Every read performed by mi.memoryRead or mm . write should be followed by an 
+    // Every read performed by mi.memoryRead or mm . write should be followed by an
     // endianess swap from little endian to big endian. This is the case because
     // EVM is big endian but RiscV is little endian.
     // Reference: riscv-spec-v2.2.pdf - Preface to Version 2.0
