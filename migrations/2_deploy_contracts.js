@@ -21,7 +21,6 @@ var CLINT = artifacts.require("./CLINT.sol");
 var Interrupts = artifacts.require("./Interrupts.sol");
 
 //Contracts
-var AddressTracker = artifacts.require("./AddressTracker.sol");
 var MMInstantiator = artifacts.require("./MMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
 var VirtualMemory = artifacts.require("./VirtualMemory.sol");
@@ -145,9 +144,8 @@ module.exports = function(deployer) {
   deployer.link(BitsManipulationLibrary, MemoryInteractor);
   deployer.link(ShadowAddresses, MemoryInteractor);
 
-  deployer.deploy(AddressTracker);
   deployer.deploy(MMInstantiator).then(function(){
-    return deployer.deploy(MemoryInteractor, AddressTracker.address);
+    return deployer.deploy(MemoryInteractor, MMInstantiator.address);
   });
   deployer.deploy(Step);
 };
