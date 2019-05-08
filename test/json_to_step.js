@@ -64,21 +64,10 @@ contract('Running data.json', function(accounts) {
         from: accounts[0], gas: 9007199254740991
       });
 
-      let addressTracker = await AddressTracker.new({
+      mi = await MemoryInteractor.new(mmAddress, {
         from: accounts[0], gas: 9007199254740991
       });
 
-      response = await addressTracker.setMMAddress(mmAddress, {
-        from: accounts[0], gas: 9007199254740991
-      });
-
-      mi = await MemoryInteractor.new(addressTracker.address, {
-        from: accounts[0], gas: 9007199254740991
-      });
-
-      response = await addressTracker.setMemoryInteractorAddress(mi.address, {
-        from: accounts[0], gas: 9007199254740991
-      });
     });
 
     jsonsteps["steps"].forEach(function(entry, index) {
