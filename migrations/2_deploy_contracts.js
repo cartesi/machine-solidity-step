@@ -28,7 +28,6 @@ var VirtualMemory = artifacts.require("./VirtualMemory.sol");
 var Step = artifacts.require("./Step.sol");
 
 module.exports = function(deployer) {
-<<<<<<< HEAD
   deployer.then(async () => {
     //Deploy libraries
     await deployer.deploy(ShadowAddresses);
