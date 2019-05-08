@@ -22,13 +22,13 @@ var CLINT = artifacts.require("./CLINT.sol");
 var Interrupts = artifacts.require("./Interrupts.sol");
 
 //Contracts
-var AddressTracker = artifacts.require("./AddressTracker.sol");
 var MMInstantiator = artifacts.require("./MMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
 var VirtualMemory = artifacts.require("./VirtualMemory.sol");
 var Step = artifacts.require("./Step.sol");
 
 module.exports = function(deployer) {
+<<<<<<< HEAD
   deployer.then(async () => {
     //Deploy libraries
     await deployer.deploy(ShadowAddresses);
@@ -149,9 +149,8 @@ module.exports = function(deployer) {
     await deployer.link(BitsManipulationLibrary, MemoryInteractor);
     await deployer.link(ShadowAddresses, MemoryInteractor);
 
-    await deployer.deploy(AddressTracker);
     await deployer.deploy(MMInstantiator).then(async function(){
-      return await deployer.deploy(MemoryInteractor, AddressTracker.address);
+      return await deployer.deploy(MemoryInteractor, MMInstantiator.address);
     });
 
     let StepContract = await deployer.deploy(Step);
