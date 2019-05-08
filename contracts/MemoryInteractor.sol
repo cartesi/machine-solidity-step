@@ -1,7 +1,6 @@
 /// @title MemoryInteractor.sol
 pragma solidity ^0.5.0;
 
-import "../contracts/AddressTracker.sol";
 import "../contracts/ShadowAddresses.sol";
 import "../contracts/HTIF.sol";
 import "../contracts/CLINT.sol";
@@ -18,8 +17,7 @@ contract mmInterface {
 contract MemoryInteractor {
   mmInterface mm;
 
-  constructor(address _addressTrackerAddress) public {
-    address _mmAddress = AddressTracker(_addressTrackerAddress).getMMAddress();
+  constructor(address _mmAddress) public {
     mm = mmInterface(_mmAddress);
   }
 
