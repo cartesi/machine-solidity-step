@@ -18,8 +18,7 @@ contract mmInterface {
 contract MemoryInteractor {
   mmInterface mm;
 
-  constructor(address _addressTrackerAddress) public {
-    address _mmAddress = AddressTracker(_addressTrackerAddress).getMMAddress();
+  constructor(address _mmAddress) public {
     mm = mmInterface(_mmAddress);
   }
 
