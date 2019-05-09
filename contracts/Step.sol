@@ -21,15 +21,14 @@ contract Step {
     mi = MemoryInteractor(_miAddress);
   }
 
-  // TO-DO: we dont need miAddress here.
-  function endStep(address _miAddress, uint256 _mmIndex, uint8 _exitCode)
+  function endStep(uint256 _mmIndex, uint8 _exitCode)
     internal returns (uint8) {
     mi.finishReplayPhase(_mmIndex);
     emit StepGiven(_exitCode);
     return _exitCode;
   }
 
-  function step(address _miAddress, uint _mmIndex) public 
+  function step(uint _mmIndex) public 
     returns (uint8){
 
     uint256 mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
@@ -48,7 +47,7 @@ contract Step {
     //emit Print("iflags", uint(iflags));
     if((iflags & 1) != 0){
       //machine is halted
-      return endStep(_miAddress, mmIndex, 0);
+      return endStep(mmIndex, 0);
     }
     //Raise the highest priority interrupt
     Interrupts.raise_interrupt_if_any(mmIndex, address(mi));
@@ -77,6 +76,6 @@ contract Step {
     uint64 mcycle = mi.memoryRead(mmIndex, ShadowAddresses.get_mcycle());
     //emit Print("mcycle", uint(mcycle));
     mi.memoryWrite(mmIndex, ShadowAddresses.get_mcycle(), mcycle + 1);
-    return endStep(_miAddress, mmIndex, 0);
+    return endStep(mmIndex, 0);
   }
 }
