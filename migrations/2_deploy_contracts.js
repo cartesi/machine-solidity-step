@@ -150,9 +150,8 @@ module.exports = function(deployer) {
   deployer.link(BitsManipulationLibrary, MemoryInteractor);
   deployer.link(ShadowAddresses, MemoryInteractor);
 
-  deployer.deploy(AddressTracker);
   deployer.deploy(MMInstantiator).then(function(){
-    return deployer.deploy(MemoryInteractor, AddressTracker.address);
+    return deployer.deploy(MemoryInteractor, MMInstantiator.address);
   });
   deployer.deploy(Step);
 };
