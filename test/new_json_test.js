@@ -104,12 +104,12 @@ contract('Running data.json', function(accounts) {
           var siblingArray = rwentry["proof"]["sibling_hashes"];
           var siblingModified = [];
           var i = siblingArray.length - 1;
-      
+
           while (i > -1) {
             siblingModified.push("0x" + siblingArray[i]);
             i--;
           }
-      
+
           if (rwentry["type"] == "read") {
             await mm.proveRead(1, rwentry["proof"]["address"], "0x" + rwentry["read"], siblingModified, {from: accounts[0], gas: 9007199254740991});
           } else {
@@ -121,7 +121,7 @@ contract('Running data.json', function(accounts) {
 
     it('Running step: ', async function() {
 
-      response = await riscV.step(mi.address, 0, {
+      response = await riscV.step(0, {
          from: accounts[0],
          gas: 9007199254740991
       });
@@ -130,7 +130,7 @@ contract('Running data.json', function(accounts) {
 
     it('Running step 2: ', async function() {
       console.log("runnin step 2");
-      response = await riscV.step(mi.address, 1, {
+      response = await riscV.step(1, {
          from: accounts[0],
          gas: 9007199254740991
       });
