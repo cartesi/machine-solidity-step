@@ -17,6 +17,10 @@ contract Step {
 
   MemoryInteractor mi;
 
+  constructor(address _miAddress) public {
+    mi = MemoryInteractor(_miAddress);
+  }
+
   // TO-DO: we dont need miAddress here.
   function endStep(address _miAddress, uint256 _mmIndex, uint8 _exitCode)
     internal returns (uint8) {
@@ -29,8 +33,6 @@ contract Step {
     returns (uint8){
 
     uint256 mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
-    mi = MemoryInteractor(_miAddress);
-
     // Every read performed by mi.memoryRead or mm . write should be followed by an 
     // endianess swap from little endian to big endian. This is the case because
     // EVM is big endian but RiscV is little endian.
