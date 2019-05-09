@@ -17,27 +17,21 @@ contract Step {
 
   MemoryInteractor mi;
 
-  uint256 mmIndex; 
-  // TO-DO: this has to be removed. Should not be Storage - but stack too deep
-  uint64 pc = 0;
-  uint32 insn = 0;
-  int priv;
-  uint64 mstatus;
+  constructor(address _miAddress) public {
+    mi = MemoryInteractor(_miAddress);
+  }
 
-  // TO-DO: we dont need miAddress here.
-  function endStep(address _miAddress, uint256 _mmIndex, uint8 _exitCode)
+  function endStep(uint256 _mmIndex, uint8 _exitCode)
     internal returns (uint8) {
     mi.finishReplayPhase(_mmIndex);
     emit StepGiven(_exitCode);
     return _exitCode;
   }
 
-  function step(address _miAddress, uint _mmIndex) public 
+  function step(uint _mmIndex) public 
     returns (uint8){
 
-    mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
-    mi = MemoryInteractor(_miAddress);
-
+    uint256 mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
     // Every read performed by mi.memoryRead or mm . write should be followed by an 
     // endianess swap from little endian to big endian. This is the case because
     // EVM is big endian but RiscV is little endian.
@@ -53,13 +47,15 @@ contract Step {
     //emit Print("iflags", uint(iflags));
     if((iflags & 1) != 0){
       //machine is halted
-      return endStep(_miAddress, mmIndex, 0);
+      return endStep(mmIndex, 0);
     }
     //Raise the highest priority interrupt
     Interrupts.raise_interrupt_if_any(mmIndex, address(mi));
 
     //Fetch Instruction
     Fetch.fetch_status fetchStatus;
+    uint64 pc;
+    uint32 insn;
 
     (fetchStatus, insn, pc) = Fetch.fetch_insn(mmIndex, address(mi));
 
@@ -80,6 +76,6 @@ contract Step {
     uint64 mcycle = mi.memoryRead(mmIndex, ShadowAddresses.get_mcycle());
     //emit Print("mcycle", uint(mcycle));
     mi.memoryWrite(mmIndex, ShadowAddresses.get_mcycle(), mcycle + 1);
-    return endStep(_miAddress, mmIndex, 0);
+    return endStep(mmIndex, 0);
   }
 }
