@@ -17,13 +17,6 @@ contract Step {
 
   MemoryInteractor mi;
 
-  uint256 mmIndex; 
-  // TO-DO: this has to be removed. Should not be Storage - but stack too deep
-  uint64 pc = 0;
-  uint32 insn = 0;
-  int priv;
-  uint64 mstatus;
-
   // TO-DO: we dont need miAddress here.
   function endStep(address _miAddress, uint256 _mmIndex, uint8 _exitCode)
     internal returns (uint8) {
@@ -35,7 +28,7 @@ contract Step {
   function step(address _miAddress, uint _mmIndex) public 
     returns (uint8){
 
-    mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
+    uint256 mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
     mi = MemoryInteractor(_miAddress);
 
     // Every read performed by mi.memoryRead or mm . write should be followed by an 
@@ -60,6 +53,8 @@ contract Step {
 
     //Fetch Instruction
     Fetch.fetch_status fetchStatus;
+    uint64 pc;
+    uint32 insn;
 
     (fetchStatus, insn, pc) = Fetch.fetch_insn(mmIndex, address(mi));
 
