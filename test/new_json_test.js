@@ -51,46 +51,39 @@ contract('Running data.json', function(accounts) {
       });
       mmAddress = mm.address;
 
-      riscV = await Step.new({
+      mi = await MemoryInteractor.new(mmAddress, {
         from: accounts[0], gas: 9007199254740991
       });
 
-      let addressTracker = await AddressTracker.new({
-        from: accounts[0], gas: 9007199254740991
-      });
-
-      response = await addressTracker.setMMAddress(mmAddress, {
-        from: accounts[0], gas: 9007199254740991
-      });
-
-      mi = await MemoryInteractor.new(addressTracker.address, {
-        from: accounts[0], gas: 9007199254740991
-      });
-
-      response = await addressTracker.setMemoryInteractorAddress(mi.address, {
+      riscV = await Step.new(mi.address, {
         from: accounts[0], gas: 9007199254740991
       });
     });
 
     it('new MM contract', async function() {
-      jsonsteps.forEach(async function(entry, index) {
+      //jsonsteps.forEach(async function(entry, index) {
         //acount[0] is provider
         //account[1] is client
         response = await mm.instantiate(
-          accounts[0], accounts[1], "0x" + entry["accesses"][index]["proof"]["root_hash"],{
+          accounts[0], accounts[1], "0x" + jsonsteps[0]["accesses"][0]["proof"]["root_hash"],{
             from: accounts[2],
             gas: 9007199254740991
         });
-        event = getEvent(response, 'MemoryCreated');
-        expect(event._index.toNumber()).to.equal(index);
-      });
+
+        response = await mm.instantiate(
+          accounts[0], accounts[1], "0x" + jsonsteps[1]["accesses"][1]["proof"]["root_hash"],{
+            from: accounts[2],
+            gas: 9007199254740991
+        });
+        //        event = getEvent(response, 'MemoryCreated');
+        //        expect(event._index.toNumber()).to.equal(index);
+      //});
     });
-   
-    sleep(20000);
-   
+
+
     it('Writing steps to MM manager', async function() {
-      jsonsteps.forEach(async function(entry, index) {
-        entry["accesses"].forEach(async function(rwentry, rwindex) {
+      //jsonsteps.forEach(async function(entry, index) {
+        jsonsteps[0]["accesses"].forEach(async function(rwentry, rwindex) {
           var siblingArray = rwentry["proof"]["sibling_hashes"];
           var siblingModified = [];
           var i = siblingArray.length - 1;
@@ -98,46 +91,62 @@ contract('Running data.json', function(accounts) {
           while (i > -1) {
             siblingModified.push("0x" + siblingArray[i]);
             i--;
-          } 
+          }
+
           if (rwentry["type"] == "read") {
-            await mm.proveRead(index, rwentry["proof"]["address"], "0x" + rwentry["read"], siblingModified, {from: accounts[0], gas: 9007199254740991});
+            await mm.proveRead(0, rwentry["proof"]["address"], "0x" + rwentry["read"], siblingModified, {from: accounts[1], gas: 9007199254740991});
           } else {
-            await mm.proveWrite(index, rwentry["proof"]["address"], "0x" + rwentry["read"], "0x" + rwentry["written"], siblingModified, {from: accounts[0], gas: 9007199254740991});
+            await mm.proveWrite(0, rwentry["proof"]["address"], "0x" + rwentry["read"], "0x" + rwentry["written"], siblingModified, {from: accounts[1], gas: 9007199254740991});
           }
         });
-      });
-    });
 
-    sleep(20000); // TO-DO: remove this - tests could be synchronous
-    //    it('Running step: ', async function() {
-    //      console.log("running step 9");
-    //    
-    //      response = await riscV.step(mi.address, 9, {
-    //         from: accounts[1],
-    //         gas: 9007199254740991
-    //      });
-    //      expect(7).to.equal(0);
-    //    });
-    //    
-    //    it('Running step 2: ', async function() {
-    //      console.log("runnin step 2");
-    //      response = await riscV.step(mi.address, 10, {
-    //         from: accounts[1],
-    //         gas: 9007199254740991
-    //      });
-    //      expect(7).to.equal(0);
-    //    });
-
-    jsonsteps.forEach(function(entry, index) {
-      it('Running step: ' + index, async function() {
-        console.log("running step" + index);
-        response = await riscV.step(mi.address, index, {
-           from: accounts[1],
-           gas: 9007199254740991
+        jsonsteps[1]["accesses"].forEach(async function(rwentry, rwindex) {
+          var siblingArray = rwentry["proof"]["sibling_hashes"];
+          var siblingModified = [];
+          var i = siblingArray.length - 1;
+      
+          while (i > -1) {
+            siblingModified.push("0x" + siblingArray[i]);
+            i--;
+          }
+      
+          if (rwentry["type"] == "read") {
+            await mm.proveRead(1, rwentry["proof"]["address"], "0x" + rwentry["read"], siblingModified, {from: accounts[0], gas: 9007199254740991});
+          } else {
+            await mm.proveWrite(1, rwentry["proof"]["address"], "0x" + rwentry["read"], "0x" + rwentry["written"], siblingModified, {from: accounts[0], gas: 9007199254740991});
+          }
         });
-        expect(7).to.equal(0);
-      });
+      //});
     });
+
+    it('Running step: ', async function() {
+
+      response = await riscV.step(mi.address, 0, {
+         from: accounts[0],
+         gas: 9007199254740991
+      });
+      expect(7).to.equal(0);
+    });
+
+    it('Running step 2: ', async function() {
+      console.log("runnin step 2");
+      response = await riscV.step(mi.address, 1, {
+         from: accounts[0],
+         gas: 9007199254740991
+      });
+      expect(7).to.equal(0);
+    });
+
+    // jsonsteps.forEach(function(entry, index) {
+    //   it('Running step: ' + index, async function() {
+    //     console.log("running step" + index);
+    //     response = await riscV.step(mi.address, index, {
+    //        from: accounts[1],
+    //        gas: 9007199254740991
+    //     });
+    //     expect(7).to.equal(0);
+    //   });
+    // });
   });
 });
 
