@@ -1,7 +1,6 @@
 /// @title MemoryInteractor.sol
 pragma solidity ^0.5.0;
 
-import "../contracts/AddressTracker.sol";
 import "../contracts/ShadowAddresses.sol";
 import "../contracts/HTIF.sol";
 import "../contracts/CLINT.sol";
