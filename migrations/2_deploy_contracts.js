@@ -24,7 +24,6 @@ var CLINT = artifacts.require("./CLINT.sol");
 var Interrupts = artifacts.require("./Interrupts.sol");
 
 //Contracts
-var AddressTracker = artifacts.require("./AddressTracker.sol");
 var MMInstantiator = artifacts.require("./MMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
 var VirtualMemory = artifacts.require("./VirtualMemory.sol");
@@ -39,7 +38,7 @@ module.exports = function(deployer) {
     await deployer.deploy(BitsManipulationLibrary);
     await deployer.deploy(RiscVDecoder);
     await deployer.deploy(RealTimeClock);
-    await
+    
     await deployer.link(RiscVDecoder, BranchInstructions);
     await deployer.link(RiscVDecoder, ArithmeticInstructions);
     await deployer.link(RiscVDecoder, ArithmeticImmediateInstructions);
