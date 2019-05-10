@@ -5,6 +5,7 @@
   "dependencies": {
     "bignumber.js": "^6.0.0",
     "chai": "^4.2.0",
+    "dotenv": "^8.0.0",
     "ganache-cli": "^6.2.5",
     "js-yaml": "^3.12.1",
     "node-fetch": "^2.3.0",
