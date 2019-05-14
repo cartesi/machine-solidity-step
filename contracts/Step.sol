@@ -12,7 +12,7 @@ import {Interrupts} from "../contracts/Interrupts.sol";
 
 //TO-DO: use instantiator pattern so we can always use same instance of mm/pc etc
 contract Step {
-  event Print(string message, uint value);
+  // event Print(string message, uint value);
   event StepGiven(uint8 exitCode);
 
   MemoryInteractor mi;
@@ -28,11 +28,11 @@ contract Step {
     return _exitCode;
   }
 
-  function step(uint _mmIndex) public 
+  function step(uint _mmIndex) public
     returns (uint8){
 
     uint256 mmIndex = _mmIndex; //TO-DO: Remove this - should trickle down
-    // Every read performed by mi.memoryRead or mm . write should be followed by an 
+    // Every read performed by mi.memoryRead or mm . write should be followed by an
     // endianess swap from little endian to big endian. This is the case because
     // EVM is big endian but RiscV is little endian.
     // Reference: riscv-spec-v2.2.pdf - Preface to Version 2.0
@@ -77,5 +77,10 @@ contract Step {
     //emit Print("mcycle", uint(mcycle));
     mi.memoryWrite(mmIndex, ShadowAddresses.get_mcycle(), mcycle + 1);
     return endStep(mmIndex, 0);
+  }
+
+  function getMemoryInteractor() public view returns (address)
+  {
+    return address(mi);
   }
 }
