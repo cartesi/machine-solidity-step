@@ -15,7 +15,7 @@ library ArithmeticInstructions {
   // TO-DO: move XLEN to its own library
   uint constant XLEN = 64;
 
-  event Print(string message);
+  // event Print(string message);
   function get_rs1_rs2(MemoryInteractor mi, uint256 mmIndex, uint32 insn) internal 
   returns(uint64 rs1, uint64 rs2) {
     rs1 = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
@@ -23,77 +23,77 @@ library ArithmeticInstructions {
   }
 
   function execute_ADD(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("ADD");
+    // emit Print("ADD");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
     //_builtin_add_overflow(rs1, rs2, &val)
     return rs1 + rs2;
   }
 
   function execute_SUB(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("SUB");
+    // emit Print("SUB");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
     //_builtin_sub_overflow(rs1, rs2, &val)
     return rs1 - rs2;
   }
 
   function execute_SLL(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("SLL");
+    // emit Print("SLL");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
 
     return rs1 << (rs2 & (XLEN - 1));
   }
 
   function execute_SLT(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("SLT");
+    // emit Print("SLT");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
 
     return (int64(rs1) < int64(rs2))? 1:0;
   }
 
   function execute_SLTU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("SLTU");
+    // emit Print("SLTU");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
 
     return (rs1 < rs2)? 1:0;
   }
 
   function execute_XOR(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("XOR");
+    // emit Print("XOR");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
 
     return rs1 ^ rs2;
   }
 
   function execute_SRL(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("SRL");
+    // emit Print("SRL");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
 
     return rs1 >> (rs2 & (XLEN-1));
   }
 
   function execute_SRA(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("SRA");
+    // emit Print("SRA");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
 
     return uint64(int64(rs1) >> (rs2 & (XLEN-1)));
   }
 
   function execute_OR(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("OR");
+    // emit Print("OR");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
 
     return rs1 | rs2;
   }
 
   function execute_AND(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("AND");
+    // emit Print("AND");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
 
     return rs1 & rs2;
   }
 
   function execute_MUL(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("MUL");
+    // emit Print("MUL");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
     int64 srs1 = int64(rs1);
     int64 srs2 = int64(rs2);
@@ -104,7 +104,7 @@ library ArithmeticInstructions {
 
   //TO-DO: Use bitmanipulation library for shift
   function execute_MULH(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("MULH");
+    // emit Print("MULH");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
     int64 srs1 = int64(rs1);
     int64 srs2 = int64(rs2);
@@ -115,7 +115,7 @@ library ArithmeticInstructions {
 
   //TO-DO: Use bitmanipulation library for shift
   function execute_MULHSU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("MULHSU");
+    // emit Print("MULHSU");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
     int64 srs1 = int64(rs1);
 
@@ -125,7 +125,7 @@ library ArithmeticInstructions {
 
   //TO-DO: Use bitmanipulation library for shift
   function execute_MULHU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("MULHU");
+    // emit Print("MULHU");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
 
     //SHOULD BE ARITHMETIC SHIFT - >> of signed int
@@ -134,7 +134,7 @@ library ArithmeticInstructions {
 
   //TO-DO: Ask Diego if the regular cast (chooses the first working cast) is unsafe
   function execute_DIV(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("DIV");
+    // emit Print("DIV");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
     int64 srs1 = int64(rs1);
     int64 srs2 = int64(rs2);
@@ -152,7 +152,7 @@ library ArithmeticInstructions {
   }
 
   function execute_DIVU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("DIVU");
+    // emit Print("DIVU");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
 
     if(rs2 == 0){
@@ -164,7 +164,7 @@ library ArithmeticInstructions {
 
   //TO-DO: Make sure cast is not changing behaviour
   function execute_REM(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("REM");
+    // emit Print("REM");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
     int64 srs1 = int64(rs1);
     int64 srs2 = int64(rs2);
@@ -180,7 +180,7 @@ library ArithmeticInstructions {
   }
 
   function execute_REMU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("REMU");
+    // emit Print("REMU");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
 
     if(rs2 == 0){
@@ -191,7 +191,7 @@ library ArithmeticInstructions {
   }
 
   function execute_ADDW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
-    emit Print("REMU");
+    // emit Print("REMU");
     (uint64 rs1, uint64 rs2) = get_rs1_rs2(mi, mmIndex, insn);
 
     int32 rs1w = int32(rs1);
