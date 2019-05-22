@@ -43,7 +43,7 @@ library VirtualMemory {
   // \returns Word with receiveing value.
   function read_virtual_memory(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize, uint64 vaddr)
   public returns(bool, uint64) {
-    uint64[5] memory uint64vars;
+    uint64[6] memory uint64vars;
     if (vaddr & (wordSize - 1) != 0){
       // Word is not aligned - raise exception
       Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_LOAD_ADDRESS_MISALIGNED(), vaddr);
@@ -84,7 +84,7 @@ library VirtualMemory {
   // \returns True if write was succesfull, false if not.
   function write_virtual_memory(MemoryInteractor mi, uint256 mmIndex, uint64 wordSize, uint64 vaddr, uint64 val)
   public returns (bool) {
-    uint64[4] memory uint64vars;
+    uint64[6] memory uint64vars;
 
     if (vaddr & (wordSize - 1) != 0){
       // Word is not aligned - raise exception
@@ -139,7 +139,7 @@ library VirtualMemory {
 
     // Through arrays we force variables that were being put on stack to be stored
     // in memory. It is more expensive, but the stack only supports 16 variables.
-    uint64[5] memory uint64vars;
+    uint64[6] memory uint64vars;
     int[6] memory intvars;
 
     // Reads privilege level on iflags register. The privilege level is located
