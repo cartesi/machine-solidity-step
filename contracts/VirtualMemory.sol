@@ -43,7 +43,7 @@ library VirtualMemory {
   // \returns Word with receiveing value.
   function read_virtual_memory(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize, uint64 vaddr)
   public returns(bool, uint64) {
-    uint64[5] memory uint64vars;
+    uint64[6] memory uint64vars;
     if (vaddr & (wordSize - 1) != 0){
       // Word is not aligned - raise exception
       Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_LOAD_ADDRESS_MISALIGNED(), vaddr);
@@ -84,7 +84,7 @@ library VirtualMemory {
   // \returns True if write was succesfull, false if not.
   function write_virtual_memory(MemoryInteractor mi, uint256 mmIndex, uint64 wordSize, uint64 vaddr, uint64 val)
   public returns (bool) {
-    uint64[4] memory uint64vars;
+    uint64[6] memory uint64vars;
 
     if (vaddr & (wordSize - 1) != 0){
       // Word is not aligned - raise exception
@@ -139,7 +139,7 @@ library VirtualMemory {
 
     // Through arrays we force variables that were being put on stack to be stored
     // in memory. It is more expensive, but the stack only supports 16 variables.
-    uint64[5] memory uint64vars;
+    uint64[6] memory uint64vars;
     int[6] memory intvars;
 
     // Reads privilege level on iflags register. The privilege level is located
@@ -156,7 +156,7 @@ library VirtualMemory {
     // instead of the current privilege level (code access is unaffected)
     //TO-DO: Check this &/&& and shifts
     if((uint64vars[mstatus] & RiscVConstants.MSTATUS_MPRV() != 0) && (xwr_shift != RiscVConstants.PTE_XWR_CODE_SHIFT())){
-      intvars[priv] = (uint64vars[mstatus] >> RiscVConstants.MSTATUS_MPP_SHIFT()) & 3;
+      intvars[priv] = (uint64vars[mstatus] & RiscVConstants.MSTATUS_MPP_MASK())  >> RiscVConstants.MSTATUS_MPP_SHIFT();//(uint64vars[mstatus] >> RiscVConstants.MSTATUS_MPP_SHIFT()) & 3;
     }
     // Physical memory is mediated by Machine-mode so, if privilege is M-mode it 
     // does not use virtual Memory
@@ -276,6 +276,8 @@ library VirtualMemory {
         // Decide if we need to update access bits in pte
         bool update_pte = (uint64vars[pte] & RiscVConstants.PTE_A_MASK() == 0) || ((uint64vars[pte] & RiscVConstants.PTE_D_MASK() == 0) && xwr_shift == RiscVConstants.PTE_XWR_WRITE_SHIFT());
 
+        uint64vars[pte] |= RiscVConstants.PTE_A_MASK();
+
         if(xwr_shift == RiscVConstants.PTE_XWR_WRITE_SHIFT()){
           uint64vars[pte] = uint64vars[pte] | RiscVConstants.PTE_D_MASK();
         }
@@ -284,7 +286,7 @@ library VirtualMemory {
           write_ram_uint64(mi, mmIndex, uint64vars[pte_addr], uint64vars[pte]);
         }
         // Add page offset in vaddr to ppn to form physical address
-        return(true, (vaddr * uint64vars[vaddr_mask]) | (ppn & ~uint64vars[vaddr_mask]));
+        return(true, (vaddr & uint64vars[vaddr_mask]) | (ppn & ~uint64vars[vaddr_mask]));
       }else {
         uint64vars[pte_addr] = ppn;
       }
