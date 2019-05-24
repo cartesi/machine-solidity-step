@@ -6,6 +6,10 @@ from solcx import get_solc_version, set_solc_version, compile_files
 
 get_solc_version()
 
+succ_num = 0
+revert_num = 0
+
+reverted_steps = []
 #Connecting to node
 w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
 
@@ -24,9 +28,12 @@ with open('../build/contracts/Step.json') as json_file:
 with open('../build/contracts/MMInstantiator.json') as json_file:
     mm_data = json.load(json_file)
 
-step = w3.eth.contract(address="0x1129ff6c9fdBf42A354D45947D7fF882215b269a", abi=step_data['abi'])
+with open('./deployedAddresses.json') as json_file:
+    deployedAddresses = json.load(json_file)
 
-mm = w3.eth.contract(address="0xd7050EB56aD6BAB2abAB82935B3f6B5868Fe7eCC", abi=mm_data['abi'])
+step = w3.eth.contract(address=deployedAddresses["step_address"], abi=step_data['abi'])
+
+mm = w3.eth.contract(address=deployedAddresses["mm_address"], abi=mm_data['abi'])
 
 for index, entry in enumerate(jsonsteps):
     tx_hash = mm.functions.instantiate(w3.eth.accounts[0], w3.eth.accounts[1], entry["accesses"][0]["proof"]["root_hash"]).transact({'from': w3.eth.coinbase, 'gas': 9007199254740991})
@@ -41,18 +48,33 @@ for index, entry in enumerate(jsonsteps):
 
     print("Callin Step: ")
     print(index)
-    stepResult = step.functions.step(index).transact({'from': w3.eth.accounts[0], 'gas': 9007199254740991})
+    try:
+        step_tx = step.functions.step(index).transact({'from': w3.eth.accounts[0], 'gas': 9007199254740991})
+        tx_receipt = w3.eth.waitForTransactionReceipt(step_tx)
+    except ValueError as e:
+        print("REVERT")
+        revert_num += 1
+        reverted_steps.append(index)
+    else:
+        print("SUCCESS")
+        succ_num += 1
 
-    step_receipt = w3.eth.waitForTransactionReceipt(stepResult)
 
-myfilter = step.eventFilter('StepGiven', {'fromBlock': 0,'toBlock': 'latest'});
+myfilter = step.eventFilter('StepGiven', {'fromBlock': 0,'toBlock': 'latest'})
 eventlist = myfilter.get_all_entries()
 
-for index, event in enumerate(eventlist):
-    print("Index: ")
-    print(index)
-    print("StepGiven exit code:")
-    print(event['args']['exitCode'])
+print("Number of successes:")
+print(succ_num)
+print("Number of reverted transactions: ")
+print(revert_num)
+print("List of reverted indexes: ")
+print(reverted_steps)
+
+#for index, event in enumerate(eventlist):
+#    print("Index: ")
+#    print(index)
+#    print("StepGiven exit code:")
+#    print(event['args']['exitCode'])
 
 
 
