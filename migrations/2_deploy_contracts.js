@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs');
 
 //Libraries
 var RiscVDecoder = artifacts.require("./RiscVDecoder.sol");
@@ -38,7 +39,7 @@ module.exports = function(deployer) {
     await deployer.deploy(BitsManipulationLibrary);
     await deployer.deploy(RiscVDecoder);
     await deployer.deploy(RealTimeClock);
-    
+
     await deployer.link(RiscVDecoder, BranchInstructions);
     await deployer.link(RiscVDecoder, ArithmeticInstructions);
     await deployer.link(RiscVDecoder, ArithmeticImmediateInstructions);
@@ -161,5 +162,14 @@ module.exports = function(deployer) {
       await deployer.deploy(MemoryInteractor, MMInstantiator.address);
     }
     await deployer.deploy(Step, MemoryInteractor.address);
+    console.log("MM address:" + MMInstantiator.address);
+    console.log("Step address:" + Step.address);
+
+    // Write address to file
+    let addr_json = "{\"mm_address\":\"" + MMInstantiator.address + "\", \"step_address\":\"" + Step.address + "\"}";
+
+    fs.writeFile('../test/deployedAddresses.json', addr_json, (err) => {
+      if (err) console.log("couldnt write to file");
+    });
   });
 };
