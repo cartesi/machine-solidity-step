@@ -17,7 +17,8 @@ library ArithmeticImmediateInstructions {
   // Reference: riscv-spec-v2.2.pdf -  Page 13
   function execute_ADDI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64){
     (uint64 rs1, int32 imm) = get_rs1_imm(mi, mmIndex, insn);
-    return rs1 + uint64(imm);
+    int64 val = int64(rs1) + int64(imm);
+    return uint64(val);
   }
 
   // ADDIW adds the sign extended 12 bits immediate to rs1 and produces to correct
