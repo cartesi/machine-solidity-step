@@ -1,3 +1,4 @@
+import sys
 import os
 import json
 from web3 import Web3
@@ -20,7 +21,7 @@ else:
     sys.exit(1)
 
 #step_compiled = compile_files([directory + 'Step.sol'])
-with open('../test/new_data2.json') as json_file:
+with open('../test/new_data.json') as json_file:
     jsonsteps = json.load(json_file)
 with open('../build/contracts/Step.json') as json_file:
     step_data = json.load(json_file)
@@ -60,8 +61,8 @@ for index, entry in enumerate(jsonsteps):
         succ_num += 1
 
 
-myfilter = step.eventFilter('StepGiven', {'fromBlock': 0,'toBlock': 'latest'})
-eventlist = myfilter.get_all_entries()
+#myfilter = step.eventFilter('StepGiven', {'fromBlock': 0,'toBlock': 'latest'})
+#eventlist = myfilter.get_all_entries()
 
 print("Number of successes:")
 print(succ_num)
@@ -70,11 +71,12 @@ print(revert_num)
 print("List of reverted indexes: ")
 print(reverted_steps)
 
+for entry in reverted_steps:
+    print(jsonsteps[entry]["brackets"][len(jsonsteps[entry]["brackets"]) - 2])
 #for index, event in enumerate(eventlist):
 #    print("Index: ")
 #    print(index)
 #    print("StepGiven exit code:")
 #    print(event['args']['exitCode'])
-
 
 
