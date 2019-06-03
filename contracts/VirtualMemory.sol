@@ -44,7 +44,7 @@ library VirtualMemory {
   function read_virtual_memory(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize, uint64 vaddr)
   public returns(bool, uint64) {
     uint64[6] memory uint64vars;
-    if (vaddr & (wordSize - 1) != 0){
+    if (vaddr & (wordSize/8 - 1) != 0){
       // Word is not aligned - raise exception
       Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_LOAD_ADDRESS_MISALIGNED(), vaddr);
       return (false, 0);
@@ -86,7 +86,7 @@ library VirtualMemory {
   public returns (bool) {
     uint64[6] memory uint64vars;
 
-    if (vaddr & (wordSize - 1) != 0){
+    if (vaddr & ((wordSize / 8) - 1) != 0){
       // Word is not aligned - raise exception
       Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_STORE_AMO_ADDRESS_MISALIGNED(), vaddr);
       return false;
