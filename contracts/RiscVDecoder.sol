@@ -1,7 +1,8 @@
 // @title RiscVDecoder
 pragma solidity ^0.5.0;
 
-//TO-DO: Implement illegal instruction
+import "./lib/BitsManipulationLibrary.sol";
+
 library RiscVDecoder {
   // Contract responsible for decoding the riscv's instructions
   // It applies different bitwise operations and masks to reach
@@ -29,7 +30,7 @@ library RiscVDecoder {
   /// @notice Get the I-type instruction's immediate value
   //  @param insn Instruction
   function insn_I_imm(uint32 insn) public returns(int32){
-     return int32(insn >> 20);
+     return BitsManipulationLibrary.int32_arith_shift_right(int32(insn), 20);
   }
 
   /// @notice Get the I-type instruction's unsigned immediate value

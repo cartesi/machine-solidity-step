@@ -37,6 +37,8 @@ module.exports = function(deployer) {
     await deployer.deploy(ShadowAddresses);
     await deployer.deploy(RiscVConstants);
     await deployer.deploy(BitsManipulationLibrary);
+
+    await deployer.link(BitsManipulationLibrary, RiscVDecoder);
     await deployer.deploy(RiscVDecoder);
     await deployer.deploy(RealTimeClock);
 
