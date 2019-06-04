@@ -30,6 +30,7 @@ library RiscVDecoder {
   /// @notice Get the I-type instruction's immediate value
   //  @param insn Instruction
   function insn_I_imm(uint32 insn) public returns(int32){
+    // TO-DO: Use new evm assembly operator instead of  Bits library
      return BitsManipulationLibrary.int32_arith_shift_right(int32(insn), 20);
   }
 
