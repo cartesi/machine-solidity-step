@@ -123,6 +123,21 @@ library Execute {
       return execute_status.retired;
     }
   }
+  function execute_SFENCE_VMA(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc) public returns (execute_status) {
+    if ((insn & 0xFE007FFF) == 0x12000073) {
+      uint64 priv = mi.read_iflags_PRV(mmIndex);
+      uint64 mstatus = mi.read_mstatus(mmIndex);
+
+      if (priv == RiscVConstants.PRV_U() || (priv == RiscVConstants.PRV_S() && ((mstatus & RiscVConstants.MSTATUS_TVM_MASK() != 0)))) {
+        return raise_illegal_insn_exception(mi, mmIndex, insn);
+      }
+
+      return advance_to_next_insn(mi, mmIndex, pc);
+    } else {
+        return raise_illegal_insn_exception(mi, mmIndex, insn);
+    }
+  }
+
 
   function execute_jump(MemoryInteractor mi, uint256 mmIndex, uint64 new_pc) public returns (execute_status){
     mi.memoryWrite(mmIndex, ShadowAddresses.get_pc(), new_pc);
@@ -309,7 +324,8 @@ library Execute {
       }
       return execute_status.retired;
    }
-    return raise_illegal_insn_exception(mi, mmIndex, insn);
+    return execute_SFENCE_VMA(mi, mmIndex, insn, pc);
+    //return raise_illegal_insn_exception(mi, mmIndex, insn);
   }
 
   /// @notice Given a load funct3 group instruction, finds the function
