@@ -4,33 +4,17 @@ pragma solidity ^0.5.0;
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/RiscVConstants.sol";
 import "../contracts/RiscVDecoder.sol";
-import "../contracts/RealTimeClock.sol";
 import "../contracts/CSR_reads.sol";
-import "../contracts/CSR_writes.sol";
+//import "../contracts/CSR_writes.sol";
 
 library CSR {
 
   //CSR addresses
-  uint32 constant ustatus = 0x000;
-  uint32 constant uie = 0x004;
-  uint32 constant utvec = 0x005;
-
-  uint32 constant uscratch = 0x040;
-  uint32 constant uepc = 0x041;
-  uint32 constant ucause = 0x042;
-  uint32 constant utval = 0x043;
-  uint32 constant uip = 0x044;
-
   uint32 constant ucycle = 0xc00;
   uint32 constant utime = 0xc01;
   uint32 constant uinstret =  0xc02;
-  uint32 constant ucycleh = 0xc80;
-  uint32 constant utimeh = 0xc81;
-  uint32 constant uinstreth = 0xc82;
 
   uint32 constant sstatus = 0x100;
-  uint32 constant sedeleg = 0x102;
-  uint32 constant sideleg = 0x103;
   uint32 constant sie = 0x104;
   uint32 constant stvec = 0x105;
   uint32 constant scounteren = 0x106;
@@ -64,16 +48,14 @@ library CSR {
 
   uint32 constant mcycle = 0xb00;
   uint32 constant minstret = 0xb02;
-  uint32 constant mcycleh = 0xb80;
-  uint32 constant minstreth = 0xb82;
 
   uint32 constant tselect = 0x7a0;
   uint32 constant tdata1 = 0x7a1;
   uint32 constant tdata2 = 0x7a2;
   uint32 constant tdata3 = 0x7a3;
 
-  uint256 constant CSRRW_code = 0;
-  uint256 constant CSRRWI_code = 1;
+//  uint256 constant 0 = 0;
+//  uint256 constant 1 = 1;
 
   uint256 constant CSRRS_code = 0;
   uint256 constant CSRRC_code = 1;
@@ -129,59 +111,59 @@ library CSR {
     }else if(csr_addr == utime){
       return CSR_reads.read_csr_time(mi, mmIndex, csr_addr);
     }else if(csr_addr == sstatus){
-      return CSR_reads.read_csr_sstatus(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_sstatus(mi, mmIndex);
     }else if(csr_addr == sie){
-      return CSR_reads.read_csr_sie(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_sie(mi, mmIndex);
     }else if(csr_addr == stvec){
-      return CSR_reads.read_csr_stvec(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_stvec(mi, mmIndex);
     }else if(csr_addr == scounteren){
-      return CSR_reads.read_csr_scounteren(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_scounteren(mi, mmIndex);
     }else if(csr_addr == sscratch){
-      return CSR_reads.read_csr_sscratch(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_sscratch(mi, mmIndex);
     }else if(csr_addr == sepc){
-      return CSR_reads.read_csr_sepc(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_sepc(mi, mmIndex);
     }else if(csr_addr == scause){
-      return CSR_reads.read_csr_scause(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_scause(mi, mmIndex);
     }else if(csr_addr == stval){
-      return CSR_reads.read_csr_stval(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_stval(mi, mmIndex);
     }else if(csr_addr == sip){
-      return CSR_reads.read_csr_sip(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_sip(mi, mmIndex);
     }else if(csr_addr == satp){
-      return CSR_reads.read_csr_satp(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_satp(mi, mmIndex);
     }else if(csr_addr == mstatus){
-      return CSR_reads.read_csr_mstatus(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_mstatus(mi, mmIndex);
     }else if(csr_addr == misa){
-      return CSR_reads.read_csr_misa(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_misa(mi, mmIndex);
     }else if(csr_addr == medeleg){
-      return CSR_reads.read_csr_medeleg(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_medeleg(mi, mmIndex);
     }else if(csr_addr == mideleg){
-      return CSR_reads.read_csr_mideleg(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_mideleg(mi, mmIndex);
     }else if(csr_addr == mie){
-      return CSR_reads.read_csr_mie(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_mie(mi, mmIndex);
     }else if(csr_addr == mtvec){
-      return CSR_reads.read_csr_mtvec(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_mtvec(mi, mmIndex);
     }else if(csr_addr == mcounteren){
-      return CSR_reads.read_csr_mcounteren(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_mcounteren(mi, mmIndex);
     }else if(csr_addr == mscratch){
-      return CSR_reads.read_csr_mscratch(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_mscratch(mi, mmIndex);
     }else if(csr_addr == mepc){
-      return CSR_reads.read_csr_mepc(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_mepc(mi, mmIndex);
     }else if(csr_addr == mcause){
-      return CSR_reads.read_csr_mcause(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_mcause(mi, mmIndex);
     }else if(csr_addr == mtval){
-      return CSR_reads.read_csr_mtval(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_mtval(mi, mmIndex);
     }else if(csr_addr == mip){
-      return CSR_reads.read_csr_mip(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_mip(mi, mmIndex);
     }else if(csr_addr == mcycle){
-      return CSR_reads.read_csr_mcycle(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_mcycle(mi, mmIndex);
     }else if(csr_addr == minstret){
-      return CSR_reads.read_csr_minstret(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_minstret(mi, mmIndex);
     }else if(csr_addr == mvendorid){
-      return CSR_reads.read_csr_mvendorid(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_mvendorid(mi, mmIndex);
     }else if(csr_addr == marchid){
-      return CSR_reads.read_csr_marchid(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_marchid(mi, mmIndex);
     }else if(csr_addr == mimpid){
-      return CSR_reads.read_csr_mimpid(mi, mmIndex, csr_addr);
+      return CSR_reads.read_csr_mimpid(mi, mmIndex);
     }
     //All hardwired to zero
     else if(csr_addr == tselect || csr_addr == tdata1 || csr_addr == tdata2 || csr_addr == tdata3 ||  csr_addr == mhartid){
@@ -206,51 +188,121 @@ library CSR {
     // TO-DO: Change this to binary search or mapping to increase performance
     // (in the meantime, pray for solidity devs to add switch statements)
     if (csr_addr == sstatus){
-      return CSR_writes.write_csr_sstatus(mi, mmIndex, val);
+      //return CSR_writes.write_csr_sstatus(mi, mmIndex, val);
+      uint64 c_mstatus = mi.read_mstatus(mmIndex);
+      return write_csr_mstatus(mi, mmIndex, (c_mstatus & ~RiscVConstants.SSTATUS_W_MASK()) | (val * RiscVConstants.SSTATUS_W_MASK()));
+
     }else if(csr_addr == sie){
-      return CSR_writes.write_csr_sie(mi, mmIndex, val);
+      //return CSR_writes.write_csr_sie(mi, mmIndex, val);
+      uint64 mask = mi.read_mideleg(mmIndex);
+      uint64 c_mie = mi.read_mie(mmIndex);
+
+      mi.write_mie(mmIndex, (c_mie & ~mask) | (val & mask));
+      return true;
     }else if(csr_addr == stvec){
-      return CSR_writes.write_csr_stvec(mi, mmIndex, val);
+      //return CSR_writes.write_csr_stvec(mi, mmIndex, val);
+      mi.write_stvec(mmIndex, val & uint64(~3));
+      return true;
     }else if(csr_addr == scounteren){
-      return CSR_writes.write_csr_scounteren(mi, mmIndex, val);
+      //return CSR_writes.write_csr_scounteren(mi, mmIndex, val);
+      mi.write_scounteren(mmIndex, val & RiscVConstants.SCOUNTEREN_RW_MASK());
+      return true;
     }else if(csr_addr == sscratch){
-      return CSR_writes.write_csr_sscratch(mi, mmIndex, val);
+      //return CSR_writes.write_csr_sscratch(mi, mmIndex, val);
+      mi.write_sscratch(mmIndex, val);
+      return true;
     }else if(csr_addr == sepc){
-      return CSR_writes.write_csr_sepc(mi, mmIndex, val);
+      //return CSR_writes.write_csr_sepc(mi, mmIndex, val);
+      mi.write_sepc(mmIndex, val & uint64(~3));
+      return true;
     }else if(csr_addr == scause){
-      return CSR_writes.write_csr_scause(mi, mmIndex, val);
+      //return CSR_writes.write_csr_scause(mi, mmIndex, val);
+      mi.write_scause(mmIndex, val);
+      return true;
     }else if(csr_addr == stval){
-      return CSR_writes.write_csr_stval(mi, mmIndex, val);
+      //return CSR_writes.write_csr_stval(mi, mmIndex, val);
+      mi.write_stval(mmIndex, val);
+      return true;
     }else if(csr_addr == sip){
-      return CSR_writes.write_csr_sip(mi, mmIndex, val);
+      //return CSR_writes.write_csr_sip(mi, mmIndex, val);
+      uint64 c_mask = mi.read_mideleg(mmIndex);
+      uint64 c_mip = mi.read_mip(mmIndex);
+
+      c_mip = (c_mip & ~c_mask) | (val & c_mask);
+      mi.write_mip(mmIndex, c_mip);
+      return true;
     }else if(csr_addr == satp){
-      return CSR_writes.write_csr_satp(mi, mmIndex, val);
+      //return CSR_writes.write_csr_satp(mi, mmIndex, val);
+      uint64 c_satp = mi.read_satp(mmIndex);
+      int mode = c_satp >> 60;
+      int new_mode = (val >> 60) & 0xf;
+
+      if (new_mode == 0 || (new_mode >= 8 && new_mode <= 9)) {
+        mode = new_mode;
+      }
+      mi.write_satp(mmIndex, (val & ((uint64(1) << 44) - 1) | uint64(mode) << 60));
+      return true;
+
     }else if(csr_addr == mstatus){
-      return CSR_writes.write_csr_mstatus(mi, mmIndex, val);
+      return write_csr_mstatus(mi, mmIndex, val);
     }else if(csr_addr == medeleg){
-      return CSR_writes.write_csr_medeleg(mi, mmIndex, val);
+      //return CSR_writes.write_csr_medeleg(mi, mmIndex, val);
+      uint64 mask = (uint64(1) << (RiscVConstants.MCAUSE_STORE_AMO_PAGE_FAULT() + 1) - 1);
+    mi.write_medeleg(mmIndex, (mi.read_medeleg(mmIndex) & ~mask) | (val & mask));
+      return true;
     }else if(csr_addr == mideleg){
-      return CSR_writes.write_csr_mideleg(mi, mmIndex, val);
+      //return CSR_writes.write_csr_mideleg(mi, mmIndex, val);
+      uint64 mask = RiscVConstants.MIP_SSIP_MASK() | RiscVConstants.MIP_STIP_MASK() | RiscVConstants.MIP_SEIP_MASK(); 
+      mi.write_mideleg(mmIndex, ((mi.read_mideleg(mmIndex) & ~mask) | (val & mask)));
+      return true;
     }else if(csr_addr == mie){
-      return CSR_writes.write_csr_mie(mi, mmIndex, val);
+      //return CSR_writes.write_csr_mie(mi, mmIndex, val);
+      uint64 mask = RiscVConstants.MIP_MSIP_MASK() | RiscVConstants.MIP_MTIP_MASK() | RiscVConstants.MIP_SSIP_MASK() | RiscVConstants.MIP_STIP_MASK() | RiscVConstants.MIP_SEIP_MASK();
+
+      mi.write_mie(mmIndex, ((mi.read_mie(mmIndex) & ~mask) | (val & mask)));
+      return true;
     }else if(csr_addr == mtvec){
-      return CSR_writes.write_csr_mtvec(mi, mmIndex, val);
+      //return CSR_writes.write_csr_mtvec(mi, mmIndex, val);
+      mi.write_mtvec(mmIndex, val & uint64(~3));
+      return true;
     }else if(csr_addr == mcounteren){
-      return CSR_writes.write_csr_mcounteren(mi, mmIndex, val);
+      //return CSR_writes.write_csr_mcounteren(mi, mmIndex, val);
+      mi.write_mcounteren(mmIndex, val & RiscVConstants.MCOUNTEREN_RW_MASK());
+      return true;
     }else if(csr_addr == mscratch){
-      return CSR_writes.write_csr_mscratch(mi, mmIndex, val);
+      //return CSR_writes.write_csr_mscratch(mi, mmIndex, val);
+      mi.write_mscratch(mmIndex, val);
+      return true;
     }else if(csr_addr == mepc){
-      return CSR_writes.write_csr_mepc(mi, mmIndex, val);
+      //return CSR_writes.write_csr_mepc(mi, mmIndex, val);
+      mi.write_minstret(mmIndex, val & uint64(~3));
+      return true;
     }else if(csr_addr == mcause){
-      return CSR_writes.write_csr_mcause(mi, mmIndex, val);
+      //return CSR_writes.write_csr_mcause(mi, mmIndex, val);
+      mi.write_mcause(mmIndex, val);
+      return true;
     }else if(csr_addr == mtval){
-      return CSR_writes.write_csr_mtval(mi, mmIndex, val);
+      //return CSR_writes.write_csr_mtval(mi, mmIndex, val);
+      mi.write_mtval(mmIndex, val);
+      return true;
     }else if(csr_addr == mip){
-      return CSR_writes.write_csr_mip(mi, mmIndex, val);
+      //return CSR_writes.write_csr_mip(mi, mmIndex, val);
+       uint64 mask = RiscVConstants.MIP_SSIP_MASK() | RiscVConstants.MIP_STIP_MASK();
+       uint64 c_mip = mi.read_mip(mmIndex);
+
+       c_mip = (c_mip & ~mask) | (val & mask);
+
+       mi.write_mip(mmIndex, c_mip);
+       return true;
     }else if(csr_addr == mcycle){
-      return CSR_writes.write_csr_mcycle(mi, mmIndex, val);
+      //return CSR_writes.write_csr_mcycle();
+      return false;
     }else if(csr_addr == minstret){
-      return CSR_writes.write_csr_minstret(mi, mmIndex, val);
+      //return CSR_writes.write_csr_minstret(mi, mmIndex, val);
+      // In Spike, QEMU, and riscvemu, mcycle and minstret are the aliases for the same counter
+      // QEMU calls exit (!) on writes to mcycle or minstret
+      mi.write_minstret(mmIndex, val-1); // The value will be incremented after the instruction is executed
+      return true;
     }
     // Ignore writes
     else if(csr_addr == tselect || csr_addr == tdata1 || csr_addr == tdata2 || csr_addr == tdata3 ||  csr_addr == misa){
@@ -276,7 +328,7 @@ library CSR {
     return ((csr_addr & 0xc00) == 0xc00);
   }
 
-  function execute_csr_SC(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
+  function execute_csr_SC(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint256 insncode)
   public returns (bool) {
     uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
 
@@ -314,7 +366,7 @@ library CSR {
     return true;
   }
 
-   function execute_csr_SCI(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
+   function execute_csr_SCI(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint256 insncode)
   public returns (bool){
     uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
 
@@ -352,7 +404,7 @@ library CSR {
     return true;
   }
 
-  function execute_csr_RW(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 insncode)
+  function execute_csr_RW(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint256 insncode)
   public returns (bool) {
     uint32 csr_address = RiscVDecoder.insn_I_uimm(insn);
 
@@ -360,10 +412,10 @@ library CSR {
     uint64 csrval = 0;
     uint64 rs1val = 0;
 
-    if (insncode == CSRRW_code) {
+    if (insncode == 0) {
       rs1val = execute_CSRRW(mi, mmIndex, insn);
     } else {
-      // insncode == CSRRWI_code
+      // insncode == 1
       rs1val = execute_CSRRWI(insn);
     }
 
@@ -388,15 +440,28 @@ library CSR {
     return true;
   }
 
-  // getters
-  function get_CSRRW_code() public returns (uint256) {return CSRRW_code;}
-  function get_CSRRWI_code() public returns (uint256) {return CSRRWI_code;}
+  function write_csr_mstatus(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+  internal returns(bool){
+    uint64 c_mstatus = mi.read_mstatus(mmIndex) & RiscVConstants.MSTATUS_R_MASK();
+    // Modifiy only bits that can be written to
+    c_mstatus = (c_mstatus & ~RiscVConstants.MSTATUS_W_MASK()) | (val & RiscVConstants.MSTATUS_W_MASK());
+    //Update the SD bit
+    if ((c_mstatus & RiscVConstants.MSTATUS_FS_MASK()) == RiscVConstants.MSTATUS_FS_MASK()){
+      c_mstatus |= RiscVConstants.MSTATUS_SD_MASK();
+    }
+    mi.write_mstatus(mmIndex, c_mstatus);
+    return true;
+  }
 
-  function get_CSRRS_code() public returns (uint256) {return CSRRS_code; }
-  function get_CSRRC_code() public returns (uint256) {return CSRRC_code; }
-
-  function get_CSRRSI_code() public returns (uint256) {return CSRRSI_code;}
-  function get_CSRRCI_code() public returns (uint256) {return CSRRCI_code;}
+ // getters
+//  function get_0() public returns (uint256) {return 0;}
+//  function get_1() public returns (uint256) {return 1;}
+//
+//  function get_CSRRS_code() public returns (uint256) {return CSRRS_code; }
+//  function get_CSRRC_code() public returns (uint256) {return CSRRC_code; }
+//
+//  function get_CSRRSI_code() public returns (uint256) {return CSRRSI_code;}
+//  function get_CSRRCI_code() public returns (uint256) {return CSRRCI_code;}
 
 }
 
