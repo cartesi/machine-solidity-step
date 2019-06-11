@@ -25,6 +25,16 @@ library Execute {
   uint256 constant arith_group = 0;
   uint256 constant arith_group_32 = 1;
 
+  uint256 constant CSRRW_code = 0;
+  uint256 constant CSRRWI_code = 1;
+
+  uint256 constant CSRRS_code = 0;
+  uint256 constant CSRRC_code = 1;
+
+  uint256 constant CSRRSI_code = 0;
+  uint256 constant CSRRCI_code = 1;
+
+
   function execute_insn(uint256 _mmIndex, address _miAddress, uint32 insn, uint64 pc)
   public returns (execute_status) {
     MemoryInteractor mi = MemoryInteractor(_miAddress);
@@ -181,7 +191,7 @@ library Execute {
       }else if(funct3 ==  0x0002){
         /*funct3 == 0x0002*/
         //return "CSRRS";
-        if (CSR.execute_csr_SC(mi, mmIndex, insn, pc, CSR.get_CSRRS_code())){
+        if (CSR.execute_csr_SC(mi, mmIndex, insn, CSRRS_code)){
           return advance_to_next_insn(mi, mmIndex, pc);
         } else {
           return raise_illegal_insn_exception(mi, mmIndex, insn);
@@ -189,7 +199,7 @@ library Execute {
       }else if(funct3 == 0x0001){
         /*funct3 == 0x0001*/
         //return "CSRRW";
-        if (CSR.execute_csr_RW(mi, mmIndex, insn, pc, CSR.get_CSRRW_code())){
+        if (CSR.execute_csr_RW(mi, mmIndex, insn,CSRRW_code)){
           return advance_to_next_insn(mi, mmIndex, pc);
         } else {
           return raise_illegal_insn_exception(mi, mmIndex, insn);
@@ -199,7 +209,7 @@ library Execute {
       if(funct3 == 0x0005){
         /*funct3 == 0x0005*/
         //return "CSRRWI";
-        if (CSR.execute_csr_RW(mi, mmIndex, insn, pc, CSR.get_CSRRWI_code())){
+        if (CSR.execute_csr_RW(mi, mmIndex, insn, CSRRWI_code)){
           return advance_to_next_insn(mi, mmIndex, pc);
         } else {
           return raise_illegal_insn_exception(mi, mmIndex, insn);
@@ -207,7 +217,7 @@ library Execute {
       }else if(funct3 == 0x0007){
         /*funct3 == 0x0007*/
         //return "CSRRCI";
-        if (CSR.execute_csr_SCI(mi, mmIndex, insn, pc, CSR.get_CSRRCI_code())){
+        if (CSR.execute_csr_SCI(mi, mmIndex, insn, CSRRCI_code)){
           return advance_to_next_insn(mi, mmIndex, pc);
         } else {
           return raise_illegal_insn_exception(mi, mmIndex, insn);
@@ -215,7 +225,7 @@ library Execute {
       }else if(funct3 == 0x0006){
         /*funct3 == 0x0006*/
         //return "CSRRSI";
-        if (CSR.execute_csr_SCI(mi, mmIndex, insn, pc, CSR.get_CSRRSI_code())){
+        if (CSR.execute_csr_SCI(mi, mmIndex, insn, CSRRSI_code)){
           return advance_to_next_insn(mi, mmIndex, pc);
         } else {
           return raise_illegal_insn_exception(mi, mmIndex, insn);
@@ -224,7 +234,7 @@ library Execute {
     }else if(funct3 == 0x0003){
       /*funct3 == 0x0003*/
       //return "CSRRC";
-      if (CSR.execute_csr_SC(mi, mmIndex, insn, pc, CSR.get_CSRRC_code())){
+      if (CSR.execute_csr_SC(mi, mmIndex, insn, CSRRC_code)){
         return advance_to_next_insn(mi, mmIndex, pc);
       } else {
         return raise_illegal_insn_exception(mi, mmIndex, insn);
