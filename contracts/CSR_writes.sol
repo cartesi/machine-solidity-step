@@ -137,13 +137,13 @@ library CSR_writes {
     return true;
   }
 
-  function write_csr_mcycle(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
-  internal returns(bool){
-    // We can't allow writes to mcycle because we use it to measure the progress in machine execution.
-    // BBL enables all counters in both M- and S-modes
-    // We instead raise an exception.
-    return false;
-  }
+//  function write_csr_mcycle()
+//  internal returns(bool){
+//    // We can't allow writes to mcycle because we use it to measure the progress in machine execution.
+//    // BBL enables all counters in both M- and S-modes
+//    // We instead raise an exception.
+//    return false;
+//  }
   function write_csr_mscratch(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
   internal returns(bool){
     mi.write_mscratch(mmIndex, val);
@@ -167,15 +167,15 @@ library CSR_writes {
     return true;
   }
 
-  function write_csr_mip(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
-  internal returns(bool){
-    uint64 mask = RiscVConstants.MIP_SSIP_MASK() | RiscVConstants.MIP_STIP_MASK();
-    uint64 c_mip = mi.read_mip(mmIndex);
-
-    c_mip = (c_mip & ~mask) | (val & mask);
-
-    mi.write_mip(mmIndex, c_mip);
-    return true;
-  }
+//  function write_csr_mip(MemoryInteractor mi, uint256 mmIndex, uint64 val) 
+//  internal returns(bool){
+//    uint64 mask = RiscVConstants.MIP_SSIP_MASK() | RiscVConstants.MIP_STIP_MASK();
+//    uint64 c_mip = mi.read_mip(mmIndex);
+//
+//    c_mip = (c_mip & ~mask) | (val & mask);
+//
+//    mi.write_mip(mmIndex, c_mip);
+//    return true;
+//  }
 }
 
