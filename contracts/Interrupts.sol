@@ -45,7 +45,7 @@ library Interrupts {
     // Reference: The Core of Cartesi, v1.02 - figure 1.
     uint64 priv = (mi.memoryRead(mmIndex, ShadowAddresses.get_iflags()) >> 2) & 3;
     //emit Print("priv", uint(priv));
-    
+
     if(priv == RiscVConstants.PRV_M()) {
       // MSTATUS is the Machine Status Register - it controls the current
       // operating state. The MIE is an interrupt-enable bit for machine mode.
@@ -54,7 +54,7 @@ library Interrupts {
       mstatus = mi.memoryRead(mmIndex, ShadowAddresses.get_mstatus());
       //emit Print("mstatus", uint(mstatus));
 
-      if((mstatus & RiscVConstants.MSTATUS_MIE()) != 0){
+      if((mstatus & RiscVConstants.MSTATUS_MIE_MASK()) != 0){
         enabled_ints = uint32(~mi.memoryRead(mmIndex, ShadowAddresses.get_mideleg()));
       }
     }else if(priv == RiscVConstants.PRV_S()){
@@ -72,7 +72,7 @@ library Interrupts {
       // SIE: is the register contaning interrupt enabled bits for supervisor mode.
       // It is located on the first bit of mstatus register (RV64).
       // Reference: riscv-privileged-v1.10 - figure 3.7 - page 20.
-      if((mstatus & RiscVConstants.MSTATUS_SIE()) != 0){
+      if((mstatus & RiscVConstants.MSTATUS_SIE_MASK()) != 0){
         //TO-DO: make sure this is the correct cast
         enabled_ints = enabled_ints | uint32(mideleg);
       }
