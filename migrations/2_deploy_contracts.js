@@ -6,6 +6,7 @@ const fs = require('fs');
 var RiscVDecoder = artifacts.require("./RiscVDecoder.sol");
 var ShadowAddresses = artifacts.require("./ShadowAddresses.sol");
 var RiscVConstants = artifacts.require("./RiscVConstants.sol");
+var CSR_Reads = artifacts.require("./CSR_reads.sol");
 var BranchInstructions = artifacts.require("./RiscVInstructions/BranchInstructions.sol");
 var RealTimeClock = artifacts.require("./RealTimeClock.sol");
 var ArithmeticInstructions = artifacts.require("./RiscVInstructions/ArithmeticInstructions.sol");
@@ -21,6 +22,7 @@ var Exceptions = artifacts.require("./Exceptions.sol");
 var Fetch = artifacts.require("./Fetch.sol");
 var PMA = artifacts.require("./PMA.sol");
 var CSR = artifacts.require("./CSR.sol");
+var CSRExecute = artifacts.require("./CSRExecute.sol");
 var HTIF = artifacts.require("./HTIF.sol");
 var CLINT = artifacts.require("./CLINT.sol");
 var Interrupts = artifacts.require("./Interrupts.sol");
@@ -47,10 +49,12 @@ module.exports = function(deployer) {
     await deployer.link(RiscVDecoder, ArithmeticInstructions);
     await deployer.link(RiscVDecoder, ArithmeticImmediateInstructions);
     await deployer.link(RiscVDecoder, StandAloneInstructions);
+    await deployer.link(RiscVDecoder, CSR_Reads);
 
     await deployer.link(RiscVConstants, BranchInstructions);
     await deployer.link(RiscVConstants, ArithmeticInstructions);
     await deployer.link(RiscVConstants, ArithmeticImmediateInstructions);
+    await deployer.link(RiscVConstants, CSR_Reads);
     await deployer.link(RiscVConstants, StandAloneInstructions);
     await deployer.link(RiscVConstants, EnvTrapInstructions);
     await deployer.link(BitsManipulationLibrary, ArithmeticImmediateInstructions);
@@ -61,23 +65,33 @@ module.exports = function(deployer) {
     await deployer.deploy(BranchInstructions);
     await deployer.deploy(PMA);
 
+    await deployer.link(RealTimeClock, CSR_Reads);
+    await deployer.deploy(CSR_Reads);
+
     //Link all libraries to CLINT
     await deployer.link(RealTimeClock, CLINT);
     await deployer.link(RiscVConstants, CLINT);
     await deployer.deploy(CLINT);
 
-    await //Link all libraries to HTIF
+    //Link all libraries to HTIF
     await deployer.link(RealTimeClock, HTIF);
     await deployer.link(RiscVConstants, HTIF);
     await deployer.deploy(HTIF);
 
-    await //Link all libraries to CSR
+    //Link all libraries to CSR
     await deployer.link(RealTimeClock, CSR);
     await deployer.link(RiscVDecoder, CSR);
+    await deployer.link(CSR_Reads, CSR);
     await deployer.link(RiscVConstants, CSR);
     await deployer.deploy(CSR);
 
-    await deployer.deploy(RiscVDecoder);
+    //Link all libraries to CRSExecute
+    await deployer.link(RealTimeClock, CSRExecute);
+    await deployer.link(RiscVDecoder, CSRExecute);
+    await deployer.link(CSR_Reads, CSRExecute);
+    await deployer.link(RiscVConstants, CSRExecute);
+    await deployer.link(CSR, CSRExecute);
+    await deployer.deploy(CSRExecute);
 
     //Link all libraries to Exceptions
     await deployer.link(RiscVConstants, Exceptions);
@@ -145,6 +159,7 @@ module.exports = function(deployer) {
     await deployer.link(EnvTrapInstructions, Execute);
     await deployer.link(StandAloneInstructions, Execute);
     await deployer.link(BitsManipulationLibrary, Execute);
+    await deployer.link(CSRExecute, Execute);
     await deployer.link(CSR, Execute);
     await deployer.link(Exceptions, Execute);
     await deployer.link(S_Instructions, Execute);
