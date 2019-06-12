@@ -155,7 +155,7 @@ library VirtualMemory {
     // When MPRV is set, data loads and stores use privilege in MPP
     // instead of the current privilege level (code access is unaffected)
     //TO-DO: Check this &/&& and shifts
-    if((uint64vars[mstatus] & RiscVConstants.MSTATUS_MPRV() != 0) && (xwr_shift != RiscVConstants.PTE_XWR_CODE_SHIFT())){
+    if((uint64vars[mstatus] & RiscVConstants.MSTATUS_MPRV_MASK() != 0) && (xwr_shift != RiscVConstants.PTE_XWR_CODE_SHIFT())){
       intvars[priv] = (uint64vars[mstatus] & RiscVConstants.MSTATUS_MPP_MASK())  >> RiscVConstants.MSTATUS_MPP_SHIFT();//(uint64vars[mstatus] >> RiscVConstants.MSTATUS_MPP_SHIFT()) & 3;
     }
     // Physical memory is mediated by Machine-mode so, if privilege is M-mode it 
@@ -250,7 +250,7 @@ library VirtualMemory {
         if(intvars[priv] == RiscVConstants.PRV_S()){
           // If SUM is set, forbid S-mode code from accessing U-mode memory
           //TO-DO: check if condition
-          if((uint64vars[pte] & RiscVConstants.PTE_U_MASK() != 0) && ((uint64vars[mstatus] & RiscVConstants.MSTATUS_SUM())) == 0){
+          if((uint64vars[pte] & RiscVConstants.PTE_U_MASK() != 0) && ((uint64vars[mstatus] & RiscVConstants.MSTATUS_SUM_MASK())) == 0){
             return (false, 0);
           }
         }else{
@@ -260,7 +260,7 @@ library VirtualMemory {
           }
         }
         // MXR allows to read access to execute-only pages
-        if(uint64vars[mstatus] & RiscVConstants.MSTATUS_MXR() != 0){
+        if(uint64vars[mstatus] & RiscVConstants.MSTATUS_MXR_MASK() != 0){
           //Set R bit if X bit is set
           xwr = xwr | (xwr >> 2);
         }
