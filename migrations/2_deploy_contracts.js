@@ -1,3 +1,4 @@
+//const fs   = require('fs');
 require('dotenv').config();
 const fs = require('fs');
 
@@ -156,13 +157,15 @@ module.exports = function(deployer) {
 
     await deployer.deploy(MMInstantiator)
 
-    if (process.env.INTEGRATION_MM_ADDR) {
-      console.log("Deploying MemoryInteractor in integration environment, address: " + process.env.INTEGRATION_MM_ADDR);
-      await deployer.deploy(MemoryInteractor, process.env.INTEGRATION_MM_ADDR);
+    if (process.env.CARTESI_INTEGRATION_MM_ADDR) {
+      console.log("Deploying MemoryInteractor in integration environment, address: " + process.env.CARTESI_INTEGRATION_MM_ADDR);
+      await deployer.deploy(MemoryInteractor, process.env.CARTESI_INTEGRATION_MM_ADDR);
     } else {
       console.log("Deploying MemoryInteractor in test environment, address: " + MMInstantiator.address);
       await deployer.deploy(MemoryInteractor, MMInstantiator.address);
     }
+    console.log("MI: " + MemoryInteractor.address);
+    //fs.writeFileSync("/tmp/MI.address", MMContract.address);
     await deployer.deploy(Step, MemoryInteractor.address);
     console.log("MM address:" + MMInstantiator.address);
     console.log("Step address:" + Step.address);
