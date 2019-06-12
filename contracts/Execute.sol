@@ -17,7 +17,7 @@ import "./RiscVInstructions/EnvTrapIntInstructions.sol";
 import {Exceptions} from "../contracts/Exceptions.sol";
 
 library Execute {
-  event  Print(string a, uint b);
+  // event  Print(string a, uint b);
 
   uint256 constant arith_imm_group = 0;
   uint256 constant arith_imm_group_32 = 1;
