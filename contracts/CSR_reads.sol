@@ -207,4 +207,5 @@ library CSR_reads {
     }
     return (((counteren >> (csr_addr & 0x1f)) & 1) != 0);
   }
+
 }
