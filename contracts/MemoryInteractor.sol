@@ -307,11 +307,11 @@ contract MemoryInteractor {
 
   function write_memory(uint256 _mmIndex, uint64 paddr, uint64 value, uint64 wordSize) public {
     uint64 numberOfBytes = wordSize / 8;
-    uint64 oldVal = pure_memoryRead(_mmIndex, paddr);
 
     if (numberOfBytes == 8) {
       memoryWrite(_mmIndex, paddr, value);
     } else {
+      uint64 oldVal = pure_memoryRead(_mmIndex, paddr);
       uint64 closestStartAddr = paddr & uint64(~0x3F);
       uint64 relAddr = paddr - closestStartAddr;
 
