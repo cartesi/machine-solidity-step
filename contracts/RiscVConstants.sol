@@ -12,14 +12,6 @@ library RiscVConstants {
   function PRV_H() public returns(uint64) {return 2;}
   function PRV_M() public returns(uint64) {return 3;}
 
-  //mstatus flags
-  //to-do: add all constants (currently adding them as the need appears)
-  function MSTATUS_MIE()  public returns(uint64)  {return (1 << 3);}
-  function MSTATUS_SIE()  public returns(uint64)  {return (1 << 1);}
-  function MSTATUS_MPRV() public returns(uint64)  {return (1 << 17);}
-  function MSTATUS_SUM()  public returns(uint64)  {return (1 << 18);}
-  function MSTATUS_MXR()  public returns(uint64)  {return (1 << 19);}
-
   //mstatus shifts
   function MSTATUS_UIE_SHIFT()  public returns(uint64) {return 0 ;}
   function MSTATUS_SIE_SHIFT()  public returns(uint64) {return 1 ;}
@@ -136,7 +128,7 @@ library RiscVConstants {
         MSTATUS_MXR_MASK()  |
         MSTATUS_UXL_MASK()  |
         MSTATUS_SD_MASK()
-    ); 
+    );
   }
 
   // MCAUSE for exceptions
