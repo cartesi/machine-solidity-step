@@ -214,7 +214,7 @@ library Execute {
       }else if(funct3 == 0x0001){
         /*funct3 == 0x0001*/
         //return "CSRRW";
-        if (CSRExecute.execute_csr_RW(mi, mmIndex, insn,CSRRW_code)){
+        if (CSRExecute.execute_csr_RW(mi, mmIndex, insn, CSRRW_code)){
           return advance_to_next_insn(mi, mmIndex, pc);
         } else {
           return raise_illegal_insn_exception(mi, mmIndex, insn);

@@ -148,7 +148,7 @@ library CSR {
     if (csr_addr == sstatus){
       //return CSR_writes.write_csr_sstatus(mi, mmIndex, val);
       uint64 c_mstatus = mi.read_mstatus(mmIndex);
-      return write_csr_mstatus(mi, mmIndex, (c_mstatus & ~RiscVConstants.SSTATUS_W_MASK()) | (val * RiscVConstants.SSTATUS_W_MASK()));
+      return write_csr_mstatus(mi, mmIndex, (c_mstatus & ~RiscVConstants.SSTATUS_W_MASK()) | (val & RiscVConstants.SSTATUS_W_MASK()));
 
     }else if(csr_addr == sie){
       //return CSR_writes.write_csr_sie(mi, mmIndex, val);
