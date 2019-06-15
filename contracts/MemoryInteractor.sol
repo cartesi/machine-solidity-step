@@ -311,14 +311,21 @@ contract MemoryInteractor {
     if (numberOfBytes == 8) {
       memoryWrite(_mmIndex, paddr, value);
     } else {
-      uint64 oldVal = pure_memoryRead(_mmIndex, paddr);
-      uint64 closestStartAddr = paddr & uint64(~0x3F);
+      // get relative address from unaligned paddr
+      uint64 closestStartAddr = paddr & uint64(~7);
       uint64 relAddr = paddr - closestStartAddr;
 
-      uint64 mask = ((2 ** (numberOfBytes * 8)) - 1) << relAddr;
-      uint64 little_e_value = BitsManipulationLibrary.uint64_swapEndian(value);
-      uint64 newValue = (oldVal & (~mask)) | (little_e_value << relAddr);
-      pure_memoryWrite(_mmIndex, closestStartAddr, newValue);
+      // oldValue just like its on MM, without endianess swap
+      uint64 oldVal = pure_memoryRead(_mmIndex, closestStartAddr);
+
+      // Mask to clean a piece of the value that was on memory
+      uint64 new_value_mask = ((2 ** (wordSize)) - 1) << relAddr;
+
+      // Mask to clean a piece of the value to be written
+      uint64 write_value_mask = ((2 ** 64) - 1) << wordSize;
+
+      uint64 newValue = (oldVal & (new_value_mask)) | (value & (~write_value_mask));
+      memoryWrite(_mmIndex, closestStartAddr, newValue);
     }
   }
 
