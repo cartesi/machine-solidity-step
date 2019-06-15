@@ -90,13 +90,13 @@ library AtomicInstructions {
   function execute_AMOSWAP_W(MemoryInteractor mi, uint256 mmIndex, uint64 pc, uint32 insn)
   public returns(bool) {
     (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = execute_AMO_part1(mi, mmIndex, pc, insn, 32);
-    return execute_AMO_W_part2(mi, mmIndex, pc, insn, vaddr, int32(valr), int32(0), 32);
+    return execute_AMO_W_part2(mi, mmIndex, pc, insn, vaddr, int32(valr), int32(valm), 32);
   }
 
   function execute_AMOADD_W(MemoryInteractor mi, uint256 mmIndex, uint64 pc, uint32 insn)
   public returns(bool) {
     (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = execute_AMO_part1(mi, mmIndex, pc, insn, 32);
-    return execute_AMO_W_part2(mi, mmIndex, pc, insn, vaddr, int32(valm + valr), int32(valm), 32);
+    return execute_AMO_W_part2(mi, mmIndex, pc, insn, vaddr, int32(int32(valm) + int32(valr)), int32(valm), 32);
   }
 
   function execute_AMOXOR_W(MemoryInteractor mi, uint256 mmIndex, uint64 pc, uint32 insn)
