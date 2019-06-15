@@ -156,14 +156,16 @@ contract MMInstantiator is MMInterface, Decorated {
 //    require(instance[_index].currentState == state.WaitingReplay,
 //            "CurrentState is not WaitingReply, cannot read"
 //            );
-    require((_position & 7) == 0);
+    require((_position & 7) == 0,
+            "Read position is not aligned"
+            );
     uint pointer = instance[_index].historyPointer;
     ReadWrite storage  pointInHistory = instance[_index].history[pointer];
     require(pointInHistory.wasRead,
-            "PointInHistory has not been read"
+            "Read pointInHistory has not been read"
             );
     require(pointInHistory.position == _position,
-            "PointInHistory's position does not match"
+            "Read pointInHistory's position does not match"
             );
     bytes8 value = pointInHistory.value;
     delete(instance[_index].history[pointer]);
@@ -184,18 +186,18 @@ contract MMInstantiator is MMInterface, Decorated {
    //         "CurrentState is not WaitingReply, cannot write"
    //         );
     require((_position & 7) == 0,
-            "Position is not aligned"
+            "Write position is not aligned"
             );
     uint pointer = instance[_index].historyPointer;
     ReadWrite storage pointInHistory = instance[_index].history[pointer];
     require(!pointInHistory.wasRead,
-            "PointInHistory was not write"
+            "write pointInHistory was not write"
             );
     require(pointInHistory.position == _position,
-            "PointInHistory's position does not match"
+            "Write pointInHistory's position does not match"
             );
     require(pointInHistory.value == _value,
-            "PointInHistory's value does not match"
+            "Write pointInHistory's value does not match"
             );
     delete(instance[_index].history[pointer]);
     instance[_index].historyPointer++;
