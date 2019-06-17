@@ -51,7 +51,7 @@ reverted_steps = []
 
 #Connecting to node
 endpoint = "http://127.0.0.1:8545"
-w3 = Web3(Web3.HTTPProvider(endpoint))
+w3 = Web3(Web3.HTTPProvider(endpoint, request_kwargs={'timeout': 60}))
 
 if (w3.isConnected()):
     print("Connected to node\n")
