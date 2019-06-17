@@ -120,6 +120,23 @@ library Execute {
     int32 imm = RiscVDecoder.insn_I_imm(insn);
     (bool succ, uint64 val) = VirtualMemory.read_virtual_memory(mi, mmIndex, wordSize, vaddr + uint64(imm));
 
+    if(wordSize == 8)
+    {
+        val &= 0xFF;
+    }
+    else if(wordSize == 16)
+    {
+        val &= 0xFFFF;
+    }
+    else if(wordSize == 32)
+    {
+        val &= 0xFFFFFFFF;
+    }
+    else if(wordSize != 64)
+    {
+        //TO-DO: raise exception
+    }
+
     if (succ) {
       if (isSigned) {
         // TO-DO: make sure this is ok
