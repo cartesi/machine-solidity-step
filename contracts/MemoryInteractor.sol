@@ -155,7 +155,7 @@ contract MemoryInteractor {
   }
 
   function read_memory(uint256 _mmIndex, uint64 paddr) public returns (uint64){
-    return memoryRead(_mmIndex, paddr);
+    return memoryRead(_mmIndex, paddr & uint64(~7));
   }
   // Sets
   function set_priv(uint256 _mmIndex, uint64 new_priv) public {
