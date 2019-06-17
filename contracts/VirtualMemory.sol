@@ -61,7 +61,7 @@ library VirtualMemory {
         Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_LOAD_ACCESS_FAULT(), vaddr);
         return (false, 0);
       } else if (PMA.pma_get_istart_M(uint64vars[pma_start])) {
-         return (true, mi.memoryRead(mmIndex, paddr));
+         return (true, mi.read_memory(mmIndex, paddr));
       }else {
         bool success = false;
         if (PMA.pma_is_HTIF(uint64vars[pma_start])) {
