@@ -152,11 +152,22 @@ contract MemoryInteractor {
 
   function read_iflags_PRV(uint256 _mmIndex) public returns (uint64){
     return (memoryRead(_mmIndex, ShadowAddresses.get_iflags()) >> 2) & 3;
+  }  
+
+  function read_memory(uint256 _mmIndex, uint64 paddr, uint64 wordSize) public returns (uint64) {
+    // get relative address from unaligned paddr
+    uint64 closestStartAddr = paddr & uint64(~7);
+    uint64 relAddr = paddr - closestStartAddr;
+
+    // value just like its on MM, without endianess swap
+    uint64 val = pure_memoryRead(_mmIndex, closestStartAddr);
+
+    // mask to clean a piece of the value that was on memory
+    uint64 value_mask = ((2 ** wordSize) - 1) << (64 - (relAddr*8 + wordSize));
+    val = (val & value_mask) << relAddr*8;
+    return BitsManipulationLibrary.uint64_swapEndian(val);
   }
 
-  function read_memory(uint256 _mmIndex, uint64 paddr) public returns (uint64){
-    return memoryRead(_mmIndex, paddr & uint64(~7));
-  }
   // Sets
   function set_priv(uint256 _mmIndex, uint64 new_priv) public {
     write_iflags_PRV(_mmIndex, new_priv);
@@ -319,12 +330,14 @@ contract MemoryInteractor {
       uint64 oldVal = pure_memoryRead(_mmIndex, closestStartAddr);
 
       // Mask to clean a piece of the value that was on memory
-      uint64 new_value_mask = ((2 ** (wordSize)) - 1) << relAddr;
+      uint64 value_mask = ((2 ** wordSize) - 1) << (64 - (relAddr*8 + wordSize));
 
-      // Mask to clean a piece of the value to be written
-      uint64 write_value_mask = ((2 ** 64) - 1) << wordSize;
+      // value is big endian, need to swap before further operation
+      uint64 value_swap = BitsManipulationLibrary.uint64_swapEndian(value);
 
-      uint64 newValue = (oldVal & (new_value_mask)) | (value & (~write_value_mask));
+      uint64 newValue = ((oldVal & ~value_mask) | (value_swap & value_mask));
+
+      newValue = BitsManipulationLibrary.uint64_swapEndian(newValue);
       memoryWrite(_mmIndex, closestStartAddr, newValue);
     }
   }

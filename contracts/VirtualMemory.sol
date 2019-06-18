@@ -41,7 +41,7 @@ library VirtualMemory {
   // \param vaddr is the words virtual address 
   // \returns True if write was succesfull, false if not.
   // \returns Word with receiveing value.
-  function read_virtual_memory(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize, uint64 vaddr)
+  function read_virtual_memory(MemoryInteractor mi, uint256 mmIndex, uint64 wordSize, uint64 vaddr)
   public returns(bool, uint64) {
     uint64[6] memory uint64vars;
     if (vaddr & (wordSize/8 - 1) != 0){
@@ -61,7 +61,7 @@ library VirtualMemory {
         Exceptions.raise_exception(mi, mmIndex, Exceptions.MCAUSE_LOAD_ACCESS_FAULT(), vaddr);
         return (false, 0);
       } else if (PMA.pma_get_istart_M(uint64vars[pma_start])) {
-         return (true, mi.read_memory(mmIndex, paddr));
+         return (true, mi.read_memory(mmIndex, paddr, wordSize));
       }else {
         bool success = false;
         if (PMA.pma_is_HTIF(uint64vars[pma_start])) {
@@ -301,7 +301,7 @@ library VirtualMemory {
     if (!PMA.pma_get_istart_M(pma_start) || !PMA.pma_get_istart_R(pma_start)) {
       return (false, 0);
     }
-    return (true, mi.read_memory(mmIndex, paddr));
+    return (true, mi.read_memory(mmIndex, paddr, 64));
   }
 
   function write_ram_uint64(MemoryInteractor mi, uint256 mmIndex, uint64 paddr, uint64 val)

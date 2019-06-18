@@ -19,7 +19,7 @@ library HTIF {
   // \param wordsize can be uint8, uint16, uint32 or uint64
   // \return bool if read was successfull
   // \return uint64 pval
-  function htif_read(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 addr, uint256 wordSize)
+  function htif_read(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 addr, uint64 wordSize)
   public returns (bool, uint64) {
     // HTIF reads must be aligned and 8 bytes
     if(wordSize != 64 || (addr & 7) != 0) {
@@ -42,7 +42,7 @@ library HTIF {
   // \param val value to be written
   // \param wordsize can be uint8, uint16, uint32 or uint64
   // \return bool if write was successfull
-  function htif_write(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 addr, uint64 val, uint256 wordSize)
+  function htif_write(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 addr, uint64 val, uint64 wordSize)
   public returns (bool) {
     // HTIF writes must be aligned and 8 bytes
     if(wordSize != 64 || (addr & 7) != 0) {
