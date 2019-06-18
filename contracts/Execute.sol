@@ -114,13 +114,11 @@ library Execute {
     return advance_to_next_insn(mi, mmIndex, pc);
   }
 
-  function execute_load(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint256 wordSize, bool isSigned)
+  function execute_load(MemoryInteractor mi, uint256 mmIndex, uint32 insn, uint64 pc, uint64 wordSize, bool isSigned)
   public returns (execute_status) {
     uint64 vaddr = mi.read_x(mmIndex, RiscVDecoder.insn_rs1(insn));
     int32 imm = RiscVDecoder.insn_I_imm(insn);
     (bool succ, uint64 val) = VirtualMemory.read_virtual_memory(mi, mmIndex, wordSize, vaddr + uint64(imm));
-
-    val &= ((2 ** uint64(wordSize)) - 1);
 
     if (succ) {
       if (isSigned) {

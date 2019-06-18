@@ -21,7 +21,7 @@ library CLINT {
   // \param wordsize can be uint8, uint16, uint32 or uint64
   // \return bool if read was successfull
   // \return uint64 pval
-  function clint_read(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 offset, uint256 wordSize)
+  function clint_read(MemoryInteractor mi, uint256 mmIndex, uint64 pma_start_word, uint64 pma_length_word, uint64 offset, uint64 wordSize)
   public returns (bool, uint64) {
 
     if (offset == CLINT_MSIP0_ADDR){
@@ -68,7 +68,7 @@ library CLINT {
   }
 
   // internal functions
-  function clint_read_msip(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize)
+  function clint_read_msip(MemoryInteractor mi, uint256 mmIndex, uint64 wordSize)
   internal returns (bool, uint64) {
     if(wordSize == 32) {
       if ((mi.read_mip(mmIndex) & RiscVConstants.MIP_MSIP_MASK()) == RiscVConstants.MIP_MSIP_MASK()) {
@@ -80,7 +80,7 @@ library CLINT {
     return (false, 0);
   }
 
-  function clint_read_mtime(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize)
+  function clint_read_mtime(MemoryInteractor mi, uint256 mmIndex, uint64 wordSize)
   internal returns (bool, uint64) {
     if(wordSize == 64) {
       return (true, RealTimeClock.rtc_cycle_to_time(mi.read_mcycle(mmIndex)));
@@ -88,7 +88,7 @@ library CLINT {
     return (false, 0);
   }
 
-  function clint_read_mtimecmp(MemoryInteractor mi, uint256 mmIndex, uint256 wordSize)
+  function clint_read_mtimecmp(MemoryInteractor mi, uint256 mmIndex, uint64 wordSize)
   internal returns (bool, uint64) {
     if(wordSize == 64) {
       return (true, mi.read_clint_mtimecmp(mmIndex));
