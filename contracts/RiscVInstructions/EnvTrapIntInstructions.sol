@@ -68,7 +68,7 @@ library EnvTrapIntInstructions {
       if (priv != mpp){
         mi.set_priv(mmIndex, mpp);
       }
-      mi.write_pc(mmIndex, mi.read_pc(mmIndex));
+      mi.write_pc(mmIndex, mi.read_mepc(mmIndex));
       return true;
     }
   }
