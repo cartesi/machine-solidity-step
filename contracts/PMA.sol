@@ -45,6 +45,8 @@ library PMA {
         break;
       }
     }
+
+    return (0, 0);
   }
   // Both pma_start and pma_length have to be aligned to a 4KiB boundary.
   // So this leaves the lowest 12 bits for attributes. To find out the actual
