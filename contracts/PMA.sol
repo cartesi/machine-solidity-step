@@ -28,7 +28,7 @@ library PMA {
     //TO-DO: Check lastPma - this is probably wrong.
     uint64 lastPma = 62; // 0 - 31 * 2 words
 
-    for(uint64 i = 0; i < lastPma; i += 2){
+    for(uint64 i = 0; i <= lastPma; i += 2){
       uint64 start_word = mi.memoryRead(mmIndex, pmaAddress + (i * 8));
 
       uint64 length_word = mi.memoryRead(mmIndex, pmaAddress + ((i * 8 + 8)));
