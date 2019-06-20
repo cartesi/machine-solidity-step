@@ -182,8 +182,6 @@ module.exports = function(deployer) {
     console.log("MI: " + MemoryInteractor.address);
     //fs.writeFileSync("/tmp/MI.address", MMContract.address);
     await deployer.deploy(Step, MemoryInteractor.address);
-    console.log("MM address:" + MMInstantiator.address);
-    console.log("Step address:" + Step.address);
 
     // Write address to file
     let addr_json = "{\"mm_address\":\"" + MMInstantiator.address + "\", \"step_address\":\"" + Step.address + "\"}";
