@@ -1,4 +1,4 @@
-//const fs   = require('fs');
+const fs   = require('fs');
 require('dotenv').config();
 
 //Libraries
@@ -164,6 +164,7 @@ module.exports = function(deployer) {
     console.log("MI: " + MemoryInteractor.address);
     //fs.writeFileSync("/tmp/MI.address", MMContract.address);
     await deployer.deploy(Step, MemoryInteractor.address);
+    fs.writeFileSync(process.env.STEP_ADD_FILE_PATH, Step.address);
     console.log("Step: " + Step.address);
   });
 };
