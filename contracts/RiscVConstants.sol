@@ -37,29 +37,29 @@ library RiscVConstants {
     function getMstatusUxlShift()  public returns(uint64) {return 32;}
     function getMstatusSxlShift()  public returns(uint64) {return 34;}
 
-    function getMstatusSdShift()   public returns(uint64) {return xlen() - 1;}
+    function getMstatusSdShift()   public returns(uint64) {return getXlen() - 1;}
 
     //mstatus masks
-    function getMstatusUieMask()  public returns(uint64) {return (uint64(1) << mstatusUieShift());}
-    function getMstatusSieMask()  public returns(uint64) {return uint64(1) << mstatusSieShift();}
-    function getMstatusMieMask()  public returns(uint64) {return uint64(1) << mstatusMieShift();}
-    function getMstatusUpieMask() public returns(uint64) {return uint64(1) << mstatusUpieShift();}
-    function getMstatusSpieMask() public returns(uint64) {return uint64(1) << mstatusSpieShift();}
-    function getMstatusMpieMask() public returns(uint64) {return uint64(1) << mstatusMpieShift();}
-    function getMstatusSppMask()  public returns(uint64) {return uint64(1) << mstatusSppShift();}
-    function getMstatusMppMask()  public returns(uint64) {return uint64(3) << mstatusMppShift();}
-    function getMstatusFsMask()   public returns(uint64) {return uint64(3) << mstatusFsShift();}
-    function getMstatusXsMask()   public returns(uint64) {return uint64(3) << mstatusXsShift();}
-    function getMstatusMprvMask() public returns(uint64) {return uint64(1) << mstatusMprvShift();}
-    function getMstatusSumMask()  public returns(uint64) {return uint64(1) << mstatusSumShift();}
-    function getMstatusMxrMask()  public returns(uint64) {return uint64(1) << mstatusMxrShift();}
-    function getMstatusTvmMask()  public returns(uint64) {return uint64(1) << mstatusTvmShift();}
-    function getMstatusTwMask()   public returns(uint64) {return uint64(1) << mstatusTwShift();}
-    function getMstatusTsrMask()  public returns(uint64) {return uint64(1) << mstatusTsrShift();}
+    function getMstatusUieMask()  public returns(uint64) {return (uint64(1) << getMstatusUieShift());}
+    function getMstatusSieMask()  public returns(uint64) {return uint64(1) << getMstatusSieShift();}
+    function getMstatusMieMask()  public returns(uint64) {return uint64(1) << getMstatusMieShift();}
+    function getMstatusUpieMask() public returns(uint64) {return uint64(1) << getMstatusUpieShift();}
+    function getMstatusSpieMask() public returns(uint64) {return uint64(1) << getMstatusSpieShift();}
+    function getMstatusMpieMask() public returns(uint64) {return uint64(1) << getMstatusMpieShift();}
+    function getMstatusSppMask()  public returns(uint64) {return uint64(1) << getMstatusSppShift();}
+    function getMstatusMppMask()  public returns(uint64) {return uint64(3) << getMstatusMppShift();}
+    function getMstatusFsMask()   public returns(uint64) {return uint64(3) << getMstatusFsShift();}
+    function getMstatusXsMask()   public returns(uint64) {return uint64(3) << getMstatusXsShift();}
+    function getMstatusMprvMask() public returns(uint64) {return uint64(1) << getMstatusMprvShift();}
+    function getMstatusSumMask()  public returns(uint64) {return uint64(1) << getMstatusSumShift();}
+    function getMstatusMxrMask()  public returns(uint64) {return uint64(1) << getMstatusMxrShift();}
+    function getMstatusTvmMask()  public returns(uint64) {return uint64(1) << getMstatusTvmShift();}
+    function getMstatusTwMask()   public returns(uint64) {return uint64(1) << getMstatusTwShift();}
+    function getMstatusTsrMask()  public returns(uint64) {return uint64(1) << getMstatusTsrShift();}
 
-    function getMstatusUxlMask()  public returns(uint64) {return uint64(3) << mstatusUxlShift();}
-    function getMstatusSxlMask()  public returns(uint64) {return uint64(3) << mstatusSxlShift();}
-    function getMstatusSdMask()   public returns(uint64) {return uint64(1) << mstatusSdShift();}
+    function getMstatusUxlMask()  public returns(uint64) {return uint64(3) << getMstatusUxlShift();}
+    function getMstatusSxlMask()  public returns(uint64) {return uint64(3) << getMstatusSxlShift();}
+    function getMstatusSdMask()   public returns(uint64) {return uint64(1) << getMstatusSdShift();}
 
     // mstatus read/writes
     function getMstatusWMask() public returns(uint64) {
@@ -144,27 +144,27 @@ library RiscVConstants {
     function getMcauseStoreAmoAddressMisaligned() public returns(uint64) {return 0x6;} ///< store/amo address misaligned
     function getMcauseStoreAmoAccessFault() public returns(uint64) {return 0x7;} ///< store/amo access fault
     function getMcauseEcallBase() public returns(uint64) {return 0x8;} ///< environment call (+0: from u-mode, +1: from s-mode, +3: from m-mode)
-    function getMcauseFetchPageFault()            public returns(uint64) {return 0xc;} ///< instruction page fault
-    function getMcauseLoadPageFault()             public returns(uint64) {return 0xd;} ///< load page fault
-    function getMcauseStoreAmoPageFault()        public returns(uint64) {return 0xf;} ///< store/amo page fault
+    function getMcauseFetchPageFault() public returns(uint64) {return 0xc;} ///< instruction page fault
+    function getMcauseLoadPageFault() public returns(uint64) {return 0xd;} ///< load page fault
+    function getMcauseStoreAmoPageFault() public returns(uint64) {return 0xf;} ///< store/amo page fault
 
-    function getMcauseInterruptFlag()               public returns(uint64) {return uint64(1) << (xlen() - 1);} ///< interrupt flag
+    function getMcauseInterruptFlag() public returns(uint64) {return uint64(1) << (getXlen() - 1);} ///< interrupt flag
 
     // mcounteren constants
     function getMcounterenCyShift() public returns(uint64) {return 0;}
     function getMcounterenTmShift() public returns(uint64) {return 1;}
     function getMcounterenIrShift() public returns(uint64) {return 2;}
 
-    function getMcounterenCyMask() public returns(uint64) {return uint64(1) << mcounterenCyShift();}
-    function getMcounterenTmMask() public returns(uint64) {return uint64(1) << mcounterenTmShift();}
-    function getMcounterenIrMask() public returns(uint64) {return uint64(1) << mcounterenIrShift();}
+    function getMcounterenCyMask() public returns(uint64) {return uint64(1) << getMcounterenCyShift();}
+    function getMcounterenTmMask() public returns(uint64) {return uint64(1) << getMcounterenTmShift();}
+    function getMcounterenIrMask() public returns(uint64) {return uint64(1) << getMcounterenIrShift();}
 
-    function getMcounterenRwMask() public returns(uint64) {return mcounterenCyMask() | mcounterenTmMask() | mcounterenIrMask();}
-    function getScounterenRwMask() public returns(uint64) {return mcounterenRwMask();}
+    function getMcounterenRwMask() public returns(uint64) {return getMcounterenCyMask() | getMcounterenTmMask() | getMcounterenIrMask();}
+    function getScounterenRwMask() public returns(uint64) {return getMcounterenRwMask();}
 
     //paging constants
     function getPgShift() public returns(uint64) {return 12;}
-    function getPgMask()  public returns(uint64) {((1 << pgShift()) - 1);}
+    function getPgMask()  public returns(uint64) {((1 << getPgShift()) - 1);}
 
     function getPteVMask() public returns(uint64) {return (1 << 0);}
     function getPteUMask() public returns(uint64) {return (1 << 4);}
