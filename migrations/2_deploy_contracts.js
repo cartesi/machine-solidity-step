@@ -1,5 +1,6 @@
 //const fs   = require('fs');
 require('dotenv').config();
+const fs = require('fs');
 
 //Libraries
 var RiscVDecoder = artifacts.require("./RiscVDecoder.sol");
@@ -179,6 +180,13 @@ module.exports = function(deployer) {
     console.log("MI: " + MemoryInteractor.address);
     //fs.writeFileSync("/tmp/MI.address", MMContract.address);
     await deployer.deploy(Step, MemoryInteractor.address);
+
+    // Write address to file
+    let addr_json = "{\"mm_address\":\"" + MMInstantiator.address + "\", \"step_address\":\"" + Step.address + "\"}";
+
+    fs.writeFile('../test/deployedAddresses.json', addr_json, (err) => {
+      if (err) console.log("couldnt write to file");
+    });
     console.log("Step: " + Step.address);
   });
 };

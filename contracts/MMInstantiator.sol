@@ -88,13 +88,13 @@ contract MMInstantiator is MMInterface, Decorated {
   // @param proof The proof that this value is correct
   function proveRead(uint256 _index, uint64 _position, bytes8 _value,
                      bytes32[] memory proof) public
-    onlyInstantiated(_index)
-    onlyBy(instance[_index].provider)
-    increasesNonce(_index)
+   // onlyInstantiated(_index)
+   // onlyBy(instance[_index].provider)
+   // increasesNonce(_index)
   {
-    require(instance[_index].currentState == state.WaitingProofs,
-            "Current state is not WaitingProofs, cannot proveRead"
-            );
+   // require(instance[_index].currentState == state.WaitingProofs,
+   //         "Current state is not WaitingProofs, cannot proveRead"
+   //         );
     require(Merkle.getRoot(_position, _value, proof)
             == instance[_index].newHash,
             "Merkle proof does not match"
@@ -111,13 +111,13 @@ contract MMInstantiator is MMInterface, Decorated {
   function proveWrite(uint256 _index, uint64 _position,
                       bytes8 _oldValue, bytes8 _newValue,
                       bytes32[] memory proof) public
-    onlyInstantiated(_index)
-    onlyBy(instance[_index].provider)
-    increasesNonce(_index)
+   // onlyInstantiated(_index)
+   // onlyBy(instance[_index].provider)
+   // increasesNonce(_index)
   {
-    require(instance[_index].currentState == state.WaitingProofs,
-            "CurrentState is not WaitingProofs, cannot proveWrite"
-            );
+   // require(instance[_index].currentState == state.WaitingProofs,
+   //         "CurrentState is not WaitingProofs, cannot proveWrite"
+   //         );
     // check proof of old value
     require(Merkle.getRoot(_position, _oldValue, proof)
             == instance[_index].newHash,
@@ -133,9 +133,9 @@ contract MMInstantiator is MMInterface, Decorated {
 
   /// @notice Stop memory insertion and start read and write phase
   function finishProofPhase(uint256 _index) public
-    onlyInstantiated(_index)
-    onlyBy(instance[_index].provider)
-    increasesNonce(_index)
+   // onlyInstantiated(_index)
+   // onlyBy(instance[_index].provider)
+   // increasesNonce(_index)
   {
     require(instance[_index].currentState == state.WaitingProofs,
             "CurrentState is not WaitingProofs, cannot finishProofPhase"
@@ -148,14 +148,14 @@ contract MMInstantiator is MMInterface, Decorated {
   /// according to initial hash
   /// @param _position of the desired memory
   function read(uint256 _index, uint64 _position) public
-    onlyInstantiated(_index)
-    onlyBy(instance[_index].client)
-    increasesNonce(_index)
+   // onlyInstantiated(_index)
+   // onlyBy(instance[_index].client)
+   // increasesNonce(_index)
     returns (bytes8)
   {
-    require(instance[_index].currentState == state.WaitingReplay,
-            "CurrentState is not WaitingReply, cannot read"
-            );
+//    require(instance[_index].currentState == state.WaitingReplay,
+//            "CurrentState is not WaitingReply, cannot read"
+//            );
     require((_position & 7) == 0);
     uint pointer = instance[_index].historyPointer;
     ReadWrite storage  pointInHistory = instance[_index].history[pointer];
@@ -176,13 +176,13 @@ contract MMInstantiator is MMInterface, Decorated {
   /// @param _position of the write
   /// @param _value to be written
   function write(uint256 _index, uint64 _position, bytes8 _value) public
-    onlyInstantiated(_index)
-    onlyBy(instance[_index].client)
-    increasesNonce(_index)
+   // onlyInstantiated(_index)
+   // onlyBy(instance[_index].client)
+   // increasesNonce(_index)
   {
-    require(instance[_index].currentState == state.WaitingReplay,
-            "CurrentState is not WaitingReply, cannot write"
-            );
+   // require(instance[_index].currentState == state.WaitingReplay,
+   //         "CurrentState is not WaitingReply, cannot write"
+   //         );
     require((_position & 7) == 0,
             "Position is not aligned"
             );
@@ -204,16 +204,16 @@ contract MMInstantiator is MMInterface, Decorated {
 
   /// @notice Stop write (or read) phase
   function finishReplayPhase(uint256 _index) public
-    onlyInstantiated(_index)
-    onlyBy(instance[_index].client)
-    increasesNonce(_index)
+   // onlyInstantiated(_index)
+   // onlyBy(instance[_index].client)
+   // increasesNonce(_index)
   {
-    require(instance[_index].currentState == state.WaitingReplay,
-            "CurrentState is not WaitingReply, cannot finishReplayPhase"
-            );
-    require(instance[_index].historyPointer == instance[_index].history.length,
-            "History pointer does not match length"
-            );
+   // require(instance[_index].currentState == state.WaitingReplay,
+   //         "CurrentState is not WaitingReply, cannot finishReplayPhase"
+   //         );
+   // require(instance[_index].historyPointer == instance[_index].history.length,
+   //         "History pointer does not match length"
+   //         );
     delete(instance[_index].history);
     delete(instance[_index].historyPointer);
     instance[_index].currentState = state.FinishedReplay;
