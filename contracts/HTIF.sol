@@ -108,7 +108,7 @@ library HTIF {
     returns (bool)
     {
         //set iflags to halted
-        mi.writeIflags_H(mmIndex, 1);
+        mi.writeIflagsH(mmIndex, 1);
         return true;
     }
 

@@ -36,15 +36,15 @@ contract MemoryInteractor {
     }
 
     function readClintMtimecmp(uint256 mmindex) public returns (uint64) {
-        return memoryRead(mmindex, CLINT.CLINT_MTIMECMP());
+        return memoryRead(mmindex, CLINT.getClintMtimecmp());
     }
 
     function readHtifFromhost(uint256 mmindex) public returns (uint64) {
-        return memoryRead(mmindex, HTIF.HTIF_FROMHOST_ADDR());
+        return memoryRead(mmindex, HTIF.getHtifFromHostAddr());
     }
 
     function readHtifTohost(uint256 mmindex) public returns (uint64) {
-        return memoryRead(mmindex, HTIF.HTIF_TOHOST_ADDR());
+        return memoryRead(mmindex, HTIF.getHtifToHostAddr());
     }
 
     function readMie(uint256 mmindex) public returns (uint64) {
