@@ -261,7 +261,9 @@ library CSR {
             mi.writeMip(mmIndex, cMip);
             return true;
         } else if (csrAddr == MCYCLE) {
-            //return CSRWrites.writeCsrMcycle();
+            // We can't allow writes to mcycle because we use it to measure the progress in machine execution.
+            // BBL enables all counters in both M- and S-modes
+            // We instead raise an exception.
             return false;
         } else if (csrAddr == MINSTRET) {
             //return CSRWrites.writeCsrMinstret(mi, mmIndex, val);
