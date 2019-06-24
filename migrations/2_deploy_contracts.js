@@ -29,6 +29,7 @@ var Interrupts = artifacts.require("./Interrupts.sol");
 
 //Contracts
 var MMInstantiator = artifacts.require("./MMInstantiator.sol");
+var MockMMInstantiator = artifacts.require("./MockMMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
 var VirtualMemory = artifacts.require("./VirtualMemory.sol");
 var Step = artifacts.require("./Step.sol");
@@ -171,20 +172,22 @@ module.exports = function(deployer) {
     await deployer.link(ShadowAddresses, MemoryInteractor);
 
     await deployer.deploy(MMInstantiator)
+    await deployer.deploy(MockMMInstantiator)
 
+    let mmAddress;
     if (process.env.CARTESI_INTEGRATION_MM_ADDR) {
       console.log("Deploying MemoryInteractor in integration environment, address: " + process.env.CARTESI_INTEGRATION_MM_ADDR);
       await deployer.deploy(MemoryInteractor, process.env.CARTESI_INTEGRATION_MM_ADDR);
+      mmAddress = process.env.CARTESI_INTEGRATION_MM_ADDR
     } else {
-      console.log("Deploying MemoryInteractor in test environment, address: " + MMInstantiator.address);
-      await deployer.deploy(MemoryInteractor, MMInstantiator.address);
+      console.log("Deploying MemoryInteractor in test environment, with Mock MM address: " + MockMMInstantiator.address);
+      await deployer.deploy(MemoryInteractor, MockMMInstantiator.address);
+      mmAddress = MockMMInstantiator.address
     }
-    console.log("MI: " + MemoryInteractor.address);
-    //fs.writeFileSync("/tmp/MI.address", MMContract.address);
     await deployer.deploy(Step, MemoryInteractor.address);
 
     // Write address to file
-    let addr_json = "{\"mm_address\":\"" + MMInstantiator.address + "\", \"step_address\":\"" + Step.address + "\"}";
+    let addr_json = "{\"mm_address\":\"" + mmAddress + "\", \"step_address\":\"" + Step.address + "\"}";
 
     fs.writeFile('../test/deployedAddresses.json', addr_json, (err) => {
       if (err) console.log("couldnt write to file");
