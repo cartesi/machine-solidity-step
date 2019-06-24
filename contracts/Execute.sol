@@ -123,9 +123,7 @@ library Execute {
     if (succ) {
       if (isSigned) {
         // TO-DO: make sure this is ok
-        mi.write_x(mmIndex, RiscVDecoder.insn_rd(insn), uint64(int64(val)));
-      } else {
-        mi.write_x(mmIndex, RiscVDecoder.insn_rd(insn), val);
+        val = BitsManipulationLibrary.uint64_sign_extension(val, wordSize);
       }
       return advance_to_next_insn(mi, mmIndex, pc);
     } else {
