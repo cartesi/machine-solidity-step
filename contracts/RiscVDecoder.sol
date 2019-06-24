@@ -55,7 +55,8 @@ library RiscVDecoder {
                   ((insn << (11 - 7)) & (1 << 11)));
     //TO-DO: use arithmetic shift on BitManipulation library
     //int shift - cant do
-    return BitsManipulationLibrary.int32_sign_extension(imm, 13);
+    imm = (imm << 19) >> 19;
+    return imm;
   }
 
   /// @notice Get the J-type instruction's immediate value
@@ -67,14 +68,14 @@ library RiscVDecoder {
                 (insn & 0xff000));
     //TO-DO: use arithmetic shift on BitManipulation library
     //int shift - cant do
-    return BitsManipulationLibrary.int32_sign_extension(imm, 21);
+    imm = (imm << 11) >> 11;
+    return imm;
   }
 
   /// @notice Get the S-type instruction's immediate value
   //  @param insn Instruction
   function insn_S_imm(uint32 insn) public returns(int32){
-    int32 imm = int32(((insn & 0xfe000000) >> (25 - 5)) | ((insn >> 7) & 0x1F));
-    return BitsManipulationLibrary.int32_sign_extension(imm, 12);
+    return int32(((insn & 0xfe000000) >> (25 - 5)) | ((insn>> 7) & 0x1F));
   }
 
   /// @notice Get the instruction's opcode field
