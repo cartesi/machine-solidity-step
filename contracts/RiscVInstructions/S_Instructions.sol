@@ -12,7 +12,7 @@ library S_Instructions {
     internal returns(uint64 rs1, int32 imm, uint64 val)
     {
         rs1 = mi.readX(mmIndex, RiscVDecoder.insnRs1(insn));
-        imm = RiscVDecoder.insn_SImm(insn);
+        imm = RiscVDecoder.insnSImm(insn);
         val = mi.readX(mmIndex, RiscVDecoder.insnRs2(insn));
     }
 

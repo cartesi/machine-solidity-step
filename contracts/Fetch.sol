@@ -24,7 +24,7 @@ library Fetch {
             mi,
             mmIndex,
             pc,
-            RiscVConstants.PTE_XWR_CODE_SHIFT()
+            RiscVConstants.getPteXwrCodeShift()
         );
 
         //translateVirtualAddress failed
@@ -32,7 +32,7 @@ library Fetch {
             Exceptions.raiseException(
                 mi,
                 mmIndex,
-                Exceptions.MCAUSE_FETCH_PAGE_FAULT(),
+                Exceptions.getMcauseFetchPageFault(),
                 paddr
             );
             //returns fetchException and returns zero as insn and pc
@@ -43,20 +43,17 @@ library Fetch {
         // Returns start and length words from pma
         (uint64 pmaStart, uint64 pmaLength) = PMA.findPmaEntry(mi, mmIndex, paddr);
 
-        //emit Print("pmaEntry.start", pmaEntry.start);
-        //emit Print("pmaEntry.length", pmaEntry.length);
-
         // M flag defines if the pma range is in memory
         // X flag defines if the pma is executable
         // If the pma is not memory or not executable - this is a pma violation
         // Reference: The Core of Cartesi, v1.02 - section 3.2 the board - page 5.
 
-        if (!PMA.pmaGetIstart_M(pmaStart) || !PMA.pmaGetIstart_X(pmaStart)) {
+        if (!PMA.pmaGetIstartM(pmaStart) || !PMA.pmaGetIstartX(pmaStart)) {
             //emit Print("CAUSE_FETCH_FAULT", paddr);
             Exceptions.raiseException(
                 mi,
                 mmIndex,
-                Exceptions.MCAUSE_INSN_ACCESS_FAULT(),
+                Exceptions.getMcauseInsnAccessFault(),
                 paddr
             );
             return (fetchStatus.exception, 0, 0);

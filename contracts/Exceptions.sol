@@ -19,7 +19,7 @@ library Exceptions {
     function getMcauseLoadPageFault() public returns(uint64) {return 0xd;}
     function getMcauseStoreAmoPageFault() public returns(uint64) {return 0xf;}
 
-    function getMcauseInterruptFlag() public returns(uint64) {return 1 << uint64(RiscVConstants.xlen() - 1);}
+    function getMcauseInterruptFlag() public returns(uint64) {return 1 << uint64(RiscVConstants.getXlen() - 1);}
 
     function raiseException(
         MemoryInteractor mi,
@@ -37,13 +37,13 @@ library Exceptions {
         uint64 deleg = 0;
         uint64 priv = mi.readIflagsPrv(mmIndex);
 
-        if (priv <= RiscVConstants.PRV_S()) {
-            if ((cause & mcause_interrupt_flag()) != 0) {
+        if (priv <= RiscVConstants.getPrvS()) {
+            if ((cause & getMcauseInterruptFlag()) != 0) {
                 // If exception was caused by an interruption the delegated information is
                 // stored on mideleg register.
 
                 // Clear the MCAUSE_INTERRUPT_FLAG() bit before shifting
-                deleg = (mi.readMideleg(mmIndex) >> (cause & uint64(RiscVConstants.XLEN() - 1))) & 1;
+                deleg = (mi.readMideleg(mmIndex) >> (cause & uint64(RiscVConstants.getXlen() - 1))) & 1;
             } else {
                 //If not, information is in the medeleg register
                 deleg = (mi.readMedeleg(mmIndex) >> cause) & 1;
@@ -81,13 +81,13 @@ library Exceptions {
             // mode, SPIE is set to SIE, and SIE is set to 0. When an SRET instruction
             // is executed, SIE is set to SPIE, then SPIE is set to 1.
             // Reference: riscv-privileged-v1.10.pdf - Section 4.1.1, page 19.
-            mstatus = (mstatus & ~RiscVConstants.mstatus_spie_mask()) | (((mstatus >> priv) & 1) << RiscVConstants.mstatus_spie_shift());
+            mstatus = (mstatus & ~RiscVConstants.getMstatusSpieMask()) | (((mstatus >> priv) & 1) << RiscVConstants.getMstatusSpieShift());
 
             // The SPP bit indicates the privilege level at which a hart was executing
             // before entering supervisor mode. When a trap is taken, SPP is set to 0
             // if the trap originated from user mode, or 1 otherwise.
             // Reference: riscv-privileged-v1.10.pdf - Section 4.1.1, page 49.
-            mstatus = (mstatus & ~RiscVConstants.mstatus_spp_mask()) | (priv << RiscVConstants.mstatus_spp_shift());
+            mstatus = (mstatus & ~RiscVConstants.getMstatusSppMask()) | (priv << RiscVConstants.getMstatusSppShift());
 
             // The SIE bit enables or disables all interrupts in supervisor mode.
             // When SIE is clear, interrupts are not taken while in supervisor mode.
@@ -95,14 +95,14 @@ library Exceptions {
             // supervisor-level interrupts are enabled. The supervisor can disable
             // indivdual interrupt sources using the sie register.
             // Reference: riscv-privileged-v1.10.pdf - Section 4.1.1, page 50.
-            mstatus &= ~RiscVConstants.mstatus_sie_mask();
+            mstatus &= ~RiscVConstants.getMstatusSieMask();
 
             mi.writeMstatus(mmIndex, mstatus);
 
             // TO-DO: Check gas cost to delegate function to library - if its zero the
             // if check should move to setPriv()
-            if (priv != RiscVConstants.PRV_S()) {
-                mi.setPriv(mmIndex, RiscVConstants.prv_s());
+            if (priv != RiscVConstants.getPrvS()) {
+                mi.setPriv(mmIndex, RiscVConstants.getPrvS());
             }
             // SVEC - Supervisor Trap Vector Base Address Register
             mi.writePc(mmIndex, mi.readStvec(mmIndex));
@@ -113,16 +113,16 @@ library Exceptions {
             mi.writeMtval(mmIndex, tval);
             uint64 mstatus = mi.readMstatus(mmIndex);
 
-            mstatus = (mstatus & ~RiscVConstants.mstatus_mpie_mask()) | (((mstatus >> priv) & 1) << RiscVConstants.mstatus_mpie_shift());
-            mstatus = (mstatus & ~RiscVConstants.mstatus_mpp_mask()) | (priv << RiscVConstants.mstatus_mpp_shift());
+            mstatus = (mstatus & ~RiscVConstants.getMstatusMpieMask()) | (((mstatus >> priv) & 1) << RiscVConstants.getMstatusMpieShift());
+            mstatus = (mstatus & ~RiscVConstants.getMstatusMppMask()) | (priv << RiscVConstants.getMstatusMppShift());
 
-            mstatus &= ~RiscVConstants.mstatus_mie_mask();
+            mstatus &= ~RiscVConstants.getMstatusMieMask();
             mi.writeMstatus(mmIndex, mstatus);
 
             // TO-DO: Check gas cost to delegate function to library - if its zero the
             // if check should move to setPriv()
-            if (priv != RiscVConstants.prv_m()) {
-                mi.setPriv(mmIndex, RiscVConstants.prv_m());
+            if (priv != RiscVConstants.getPrvM()) {
+                mi.setPriv(mmIndex, RiscVConstants.getPrvM());
             }
             mi.writePc(mmIndex, mi.readMtvec(mmIndex));
         }

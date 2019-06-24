@@ -2,7 +2,6 @@
 pragma solidity ^0.5.0;
 
 import "../contracts/MemoryInteractor.sol";
-import "../contracts/CSR_reads.sol";
 import "../contracts/CSR.sol";
 
 
@@ -21,7 +20,7 @@ library CSRExecute {
     )
     public returns (bool)
     {
-        uint32 csrAddress = RiscVDecoder.insn_IUimm(insn);
+        uint32 csrAddress = RiscVDecoder.insnIUimm(insn);
 
         bool status = false;
         uint64 csrval = 0;
@@ -69,7 +68,7 @@ library CSRExecute {
         uint256 insncode)
     public returns (bool)
     {
-        uint32 csrAddress = RiscVDecoder.insn_IUimm(insn);
+        uint32 csrAddress = RiscVDecoder.insnIUimm(insn);
 
         bool status = false;
         uint64 csrval = 0;
@@ -118,7 +117,7 @@ library CSRExecute {
     )
     public returns (bool)
     {
-        uint32 csrAddress = RiscVDecoder.insn_IUimm(insn);
+        uint32 csrAddress = RiscVDecoder.insnIUimm(insn);
 
         bool status = true;
         uint64 csrval = 0;

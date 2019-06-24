@@ -63,7 +63,7 @@ library ArithmeticImmediateInstructions {
     function executeSRLI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64) {
         // Get imm's lower 6 bits
         (uint64 rs1, int32 imm) = getRs1Imm(mi, mmIndex, insn);
-        int32 shiftAmount = imm & int32(RiscVConstants.XLEN() - 1);
+        int32 shiftAmount = imm & int32(RiscVConstants.getXlen() - 1);
 
         return rs1 >> shiftAmount;
     }
@@ -108,7 +108,7 @@ library ArithmeticImmediateInstructions {
     function executeSRAI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64) {
         // Get imm's lower 6 bits
         (uint64 rs1, int32 imm) = getRs1Imm(mi, mmIndex, insn);
-        return uint64(int64(rs1) >> (int64(imm) & int64((RiscVConstants.XLEN() - 1))));
+        return uint64(int64(rs1) >> (int64(imm) & int64((RiscVConstants.getXlen() - 1))));
     }
 
     // XORI instructions performs XOR operation on register rs1 and hhe sign extended

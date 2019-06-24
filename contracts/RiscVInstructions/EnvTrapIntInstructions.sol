@@ -17,13 +17,13 @@ library EnvTrapIntInstructions {
         uint64 pc
     ) public
     {
-        uint64 priv = mi.readIflagsPRV(mmIndex);
+        uint64 priv = mi.readIflagsPrv(mmIndex);
         uint64 mtval = mi.readMtval(mmIndex);
         // TO-DO: Are parameter valuation order deterministic? If so, we dont need to allocate memory
         Exceptions.raiseException(
             mi,
             mmIndex,
-            Exceptions.MCAUSE_ECALL_BASE() + priv,
+            Exceptions.getMcauseEcallBase() + priv,
             mtval
         );
     }
@@ -38,7 +38,7 @@ library EnvTrapIntInstructions {
         Exceptions.raiseException(
             mi,
             mmIndex,
-            Exceptions.MCAUSE_BREAKPOINT(),
+            Exceptions.getMcauseBreakpoint(),
             mi.readMtval(mmIndex)
         );
     }
@@ -51,21 +51,21 @@ library EnvTrapIntInstructions {
     )
     public returns (bool)
     {
-        uint64 priv = mi.readIflags_PRV(mmIndex);
+        uint64 priv = mi.readIflagsPrv(mmIndex);
         uint64 mstatus = mi.readMstatus(mmIndex);
 
-        if (priv < RiscVConstants.PRV_S() || (priv == RiscVConstants.PRV_S() && (mstatus & RiscVConstants.MSTATUS_TSR_MASK() != 0))) {
+        if (priv < RiscVConstants.getPrvS() || (priv == RiscVConstants.getPrvS() && (mstatus & RiscVConstants.getMstatusTsrMask() != 0))) {
             return false;
         } else {
-            uint64 spp = (mstatus & RiscVConstants.MSTATUS_SPP_MASK()) >> RiscVConstants.MSTATUS_SPP_SHIFT();
+            uint64 spp = (mstatus & RiscVConstants.getMstatusSppMask()) >> RiscVConstants.getMstatusSppShift();
             // Set the IE state to previous IE state
-            uint64 spie = (mstatus & RiscVConstants.MSTATUS_SPIE_MASK()) >> RiscVConstants.MSTATUS_SPIE_SHIFT();
-            mstatus = (mstatus & ~RiscVConstants.MSTATUS_SIE_MASK()) | (spie << RiscVConstants.MSTATUS_SIE_SHIFT());
+            uint64 spie = (mstatus & RiscVConstants.getMstatusSpieMask()) >> RiscVConstants.getMstatusSpieShift();
+            mstatus = (mstatus & ~RiscVConstants.getMstatusSieMask()) | (spie << RiscVConstants.getMstatusSieShift());
 
             // set SPIE to 1
-            mstatus |= RiscVConstants.MSTATUS_SPIE_MASK();
+            mstatus |= RiscVConstants.getMstatusSpieMask();
             // set SPP to U
-            mstatus &= ~RiscVConstants.MSTATUS_SPP_MASK();
+            mstatus &= ~RiscVConstants.getMstatusSppMask();
             mi.writeMstatus(mmIndex, mstatus);
             if (priv != spp) {
                 mi.setPriv(mmIndex, spp);
@@ -83,21 +83,21 @@ library EnvTrapIntInstructions {
     )
     public returns(bool)
     {
-        uint64 priv = mi.readIflags_PRV(mmIndex);
+        uint64 priv = mi.readIflagsPrv(mmIndex);
 
-        if (priv < RiscVConstants.PRV_M()) {
+        if (priv < RiscVConstants.getPrvM()) {
             return false;
         } else {
             uint64 mstatus = mi.readMstatus(mmIndex);
-            uint64 mpp = (mstatus & RiscVConstants.MSTATUS_MPP_MASK()) >> RiscVConstants.MSTATUS_MPP_SHIFT();
+            uint64 mpp = (mstatus & RiscVConstants.getMstatusMppMask()) >> RiscVConstants.getMstatusMppShift();
             // set IE state to previous IE state
-            uint64 mpie = (mstatus & RiscVConstants.MSTATUS_MPIE_MASK()) >> RiscVConstants.MSTATUS_MPIE_SHIFT();
-            mstatus = (mstatus & ~RiscVConstants.MSTATUS_MIE_MASK()) | (mpie << RiscVConstants.MSTATUS_MIE_SHIFT());
+            uint64 mpie = (mstatus & RiscVConstants.getMstatusMpieMask()) >> RiscVConstants.getMstatusMpieShift();
+            mstatus = (mstatus & ~RiscVConstants.getMstatusMieMask()) | (mpie << RiscVConstants.getMstatusMieShift());
 
             // set MPIE to 1
-            mstatus |= RiscVConstants.MSTATUS_MPIE_MASK();
+            mstatus |= RiscVConstants.getMstatusMpieMask();
             // set MPP to U
-            mstatus &= ~RiscVConstants.MSTATUS_MPP_MASK();
+            mstatus &= ~RiscVConstants.getMstatusMppMask();
             mi.writeMstatus(mmIndex, mstatus);
 
             if (priv != mpp) {
@@ -116,17 +116,17 @@ library EnvTrapIntInstructions {
     )
     public returns(bool)
     {
-        uint64 priv = mi.readIflags_PRV(mmIndex);
+        uint64 priv = mi.readIflagsPrv(mmIndex);
         uint64 mstatus = mi.readMstatus(mmIndex);
 
-        if (priv == RiscVConstants.PRV_U() || (priv == RiscVConstants.PRV_S() && (mstatus & RiscVConstants.MSTATUS_TW_MASK() != 0))) {
+        if (priv == RiscVConstants.getPrvU() || (priv == RiscVConstants.getPrvS() && (mstatus & RiscVConstants.getMstatusTwMask() != 0))) {
             return false;
         } else {
             uint64 mip = mi.readMip(mmIndex);
             uint64 mie = mi.readMie(mmIndex);
             // Go to power down if no enable interrupts are pending
             if ((mip & mie) == 0) {
-                mi.setIflags_I(mmIndex, true);
+                mi.setIflagsI(mmIndex, true);
             }
             return true;
         }

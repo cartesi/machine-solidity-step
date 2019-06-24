@@ -17,8 +17,8 @@ library CLINT {
     uint64 constant CLINT_MTIME_ADDR = 0x0200bff8;
 
     // \brief reads clint
-    // \param pma_start_word first word, defines pma's start
-    // \param pma_length_word second word, defines pma's length
+    // \param pmaStartWord first word, defines pma's start
+    // \param pmaLengthWord second word, defines pma's length
     // \param offset can be uint8, uint16, uint32 or uint64
     // \param wordsize can be uint8, uint16, uint32 or uint64
     // \return bool if read was successfull
@@ -65,9 +65,9 @@ library CLINT {
         if (offset == CLINT_MSIP0_ADDR) {
             if (wordSize == 32) {
                 if ((val & 1) != 0) {
-                    mi.setMip(mmIndex, RiscVConstants.MIP_MSIP_MASK());
+                    mi.setMip(mmIndex, RiscVConstants.getMipMsipMask());
                 } else {
-                    mi.resetMip(mmIndex, RiscVConstants.MIP_MSIP_MASK());
+                    mi.resetMip(mmIndex, RiscVConstants.getMipMsipMask());
                 }
                 return true;
             }
@@ -75,7 +75,7 @@ library CLINT {
         } else if (offset == CLINT_MTIMECMP_ADDR) {
             if (wordSize == 64) {
                 mi.writeClintMtimecmp(mmIndex, val);
-                mi.resetMip(mmIndex, RiscVConstants.MIP_MSIP_MASK());
+                mi.resetMip(mmIndex, RiscVConstants.getMipMsipMask());
                 return true;
             }
             // partial mtimecmp is not supported
@@ -89,7 +89,7 @@ library CLINT {
     internal returns (bool, uint64)
     {
         if (wordSize == 32) {
-            if ((mi.readMip(mmIndex) & RiscVConstants.MIP_MSIP_MASK()) == RiscVConstants.MIP_MSIP_MASK()) {
+            if ((mi.readMip(mmIndex) & RiscVConstants.getMipMsipMask()) == RiscVConstants.getMipMsipMask()) {
                 return(true, 1);
             } else {
                 return (true, 0);

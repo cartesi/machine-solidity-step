@@ -76,7 +76,7 @@ library Execute {
                 (arithImmResult, insnValid) = ArithmeticImmediateInstructions.arithmeticImmediateFunct3(mi, mmIndex, insn);
             } else {
                 //immGroup == ARITH_IMM_GROUP_32
-                (arithImmResult, insnValid) = ArithmeticImmediateInstructions.arithmeticImmediate_32Funct3(mi, mmIndex, insn);
+                (arithImmResult, insnValid) = ArithmeticImmediateInstructions.arithmeticImmediate32Funct3(mi, mmIndex, insn);
             }
 
             if (!insnValid) {
@@ -107,7 +107,7 @@ library Execute {
                 (arithResult, insnValid) = ArithmeticInstructions.arithmeticFunct3Funct7(mi, mmIndex, insn);
             } else {
                 // groupCode == arith_32Group
-                (arithResult, insnValid) = ArithmeticInstructions.arithmetic_32Funct3Funct7(mi, mmIndex, insn);
+                (arithResult, insnValid) = ArithmeticInstructions.arithmetic32Funct3Funct7(mi, mmIndex, insn);
             }
 
             if (!insnValid) {
@@ -133,7 +133,7 @@ library Execute {
         }
 
         if (branchValuated) {
-            uint64 newPc = uint64(int64(pc) + int64(RiscVDecoder.insn_BImm(insn)));
+            uint64 newPc = uint64(int64(pc) + int64(RiscVDecoder.insnBImm(insn)));
             if ((newPc & 3) != 0) {
                 return raiseMisalignedFetchException(mi, mmIndex, newPc);
             }else {
@@ -154,7 +154,7 @@ library Execute {
     public returns (executeStatus)
     {
         uint64 vaddr = mi.readX(mmIndex, RiscVDecoder.insnRs1(insn));
-        int32 imm = RiscVDecoder.insn_IImm(insn);
+        int32 imm = RiscVDecoder.insnIImm(insn);
         (bool succ, uint64 val) = VirtualMemory.readVirtualMemory(
             mi,
             mmIndex,
@@ -185,10 +185,10 @@ library Execute {
     public returns (executeStatus)
     {
         if ((insn & 0xFE007FFF) == 0x12000073) {
-            uint64 priv = mi.readIflags_PRV(mmIndex);
+            uint64 priv = mi.readIflagsPrv(mmIndex);
             uint64 mstatus = mi.readMstatus(mmIndex);
 
-            if (priv == RiscVConstants.PRV_U() || (priv == RiscVConstants.PRV_S() && ((mstatus & RiscVConstants.MSTATUS_TVM_MASK() != 0)))) {
+            if (priv == RiscVConstants.getPrvU() || (priv == RiscVConstants.getPrvS() && ((mstatus & RiscVConstants.getMstatusTvmMask() != 0)))) {
                 return raiseIllegalInsnException(mi, mmIndex, insn);
             }
 
@@ -212,7 +212,7 @@ library Execute {
         Exceptions.raiseException(
             mi,
             mmIndex,
-            Exceptions.MCAUSE_INSN_ADDRESS_MISALIGNED(),
+            Exceptions.getMcauseInsnAddressMisaligned(),
             pc
         );
         return executeStatus.retired;
@@ -224,7 +224,7 @@ library Execute {
         Exceptions.raiseException(
             mi,
             mmIndex,
-            Exceptions.MCAUSE_ILLEGAL_INSN(),
+            Exceptions.getMcauseIllegalInsn(),
             insn
         );
         return executeStatus.illegal;
@@ -288,7 +288,7 @@ library Execute {
             } else if (funct3 == 0x0002) {
                 /*funct3 == 0x0002*/
                 //return "CSRRS";
-                if (CSRExecute.executeCsr_SC(
+                if (CSRExecute.executeCsrSC(
                     mi,
                     mmIndex,
                     insn,
@@ -301,7 +301,7 @@ library Execute {
             } else if (funct3 == 0x0001) {
                 /*funct3 == 0x0001*/
                 //return "CSRRW";
-                if (CSRExecute.executeCsr_RW(
+                if (CSRExecute.executeCsrRW(
                     mi,
                     mmIndex,
                     insn,
@@ -316,7 +316,7 @@ library Execute {
             if (funct3 == 0x0005) {
                 /*funct3 == 0x0005*/
                 //return "CSRRWI";
-                if (CSRExecute.executeCsr_RW(
+                if (CSRExecute.executeCsrRW(
                     mi,
                     mmIndex,
                     insn,
@@ -329,7 +329,7 @@ library Execute {
             } else if (funct3 == 0x0007) {
                 /*funct3 == 0x0007*/
                 //return "CSRRCI";
-                if (CSRExecute.executeCsr_SCI(
+                if (CSRExecute.executeCsrSCI(
                     mi,
                     mmIndex,
                     insn,
@@ -342,7 +342,7 @@ library Execute {
             } else if (funct3 == 0x0006) {
                 /*funct3 == 0x0006*/
                 //return "CSRRSI";
-                if (CSRExecute.executeCsr_SCI(
+                if (CSRExecute.executeCsrSCI(
                     mi,
                     mmIndex,
                     insn,
@@ -356,7 +356,7 @@ library Execute {
         } else if (funct3 == 0x0003) {
             /*funct3 == 0x0003*/
             //return "CSRRC";
-            if (CSRExecute.executeCsr_SC(
+            if (CSRExecute.executeCsrSC(
                 mi,
                 mmIndex,
                 insn,
@@ -385,7 +385,7 @@ library Execute {
         if (funct3 == 0x0000) {
             /*funct3 == 0x0000*/
             //return "SB";
-            return S_Instructions.SB(
+            return S_Instructions.sb(
                 mi,
                 mmIndex,
                 pc,
@@ -395,7 +395,7 @@ library Execute {
             if (funct3 == 0x0002) {
                 /*funct3 == 0x0002*/
                 //return "SW";
-                return S_Instructions.SW(
+                return S_Instructions.sw(
                     mi,
                     mmIndex,
                     pc,
@@ -404,7 +404,7 @@ library Execute {
             } else if (funct3 == 0x0003) {
                 /*funct3 == 0x0003*/
                 //return "SD";
-                return S_Instructions.SD(
+                return S_Instructions.sd(
                     mi,
                     mmIndex,
                     pc,
@@ -414,7 +414,7 @@ library Execute {
         } else if (funct3 == 0x0001) {
             /*funct3 == 0x0001*/
             //return "SH";
-            return S_Instructions.SH(
+            return S_Instructions.sh(
                 mi,
                 mmIndex,
                 pc,
@@ -490,7 +490,7 @@ library Execute {
             }
             return executeStatus.retired;
         }
-        return executeSFENCE_VMA(
+        return executeSfenceVma(
             mi,
             mmIndex,
             insn,
@@ -623,63 +623,63 @@ library Execute {
                 32
             );
         } else if (funct3Funct5 == 0x41) {
-            atomSucc = AtomicInstructions.executeAMOSWAP_W(
+            atomSucc = AtomicInstructions.executeAMOSWAPW(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x40) {
-            atomSucc = AtomicInstructions.executeAMOADD_W(
+            atomSucc = AtomicInstructions.executeAMOADDW(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x44) {
-            atomSucc = AtomicInstructions.executeAMOXOR_W(
+            atomSucc = AtomicInstructions.executeAMOXORW(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x4c) {
-            atomSucc = AtomicInstructions.executeAMOAND_W(
+            atomSucc = AtomicInstructions.executeAMOANDW(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x48) {
-            atomSucc = AtomicInstructions.executeAMOOR_W(
+            atomSucc = AtomicInstructions.executeAMOORW(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x50) {
-            atomSucc = AtomicInstructions.executeAMOMIN_W(
+            atomSucc = AtomicInstructions.executeAMOMINW(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x54) {
-            atomSucc = AtomicInstructions.executeAMOMAX_W(
+            atomSucc = AtomicInstructions.executeAMOMAXW(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x58) {
-            atomSucc = AtomicInstructions.executeAMOMINU_W(
+            atomSucc = AtomicInstructions.executeAMOMINUW(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x5c) {
-            atomSucc = AtomicInstructions.executeAMOMAXU_W(
+            atomSucc = AtomicInstructions.executeAMOMAXUW(
                 mi,
                 mmIndex,
                 pc,
@@ -704,63 +704,63 @@ library Execute {
                 64
             );
         } else if (funct3Funct5 == 0x61) {
-            atomSucc = AtomicInstructions.executeAMOSWAP_D(
+            atomSucc = AtomicInstructions.executeAMOSWAPD(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x60) {
-            atomSucc = AtomicInstructions.executeAMOADD_D(
+            atomSucc = AtomicInstructions.executeAMOADDD(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x64) {
-            atomSucc = AtomicInstructions.executeAMOXOR_D(
+            atomSucc = AtomicInstructions.executeAMOXORD(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x6c) {
-            atomSucc = AtomicInstructions.executeAMOAND_D(
+            atomSucc = AtomicInstructions.executeAMOANDD(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x68) {
-            atomSucc = AtomicInstructions.executeAMOOR_D(
+            atomSucc = AtomicInstructions.executeAMOORD(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x70) {
-            atomSucc = AtomicInstructions.executeAMOMIN_D(
+            atomSucc = AtomicInstructions.executeAMOMIND(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x74) {
-            atomSucc = AtomicInstructions.executeAMOMAX_D(
+            atomSucc = AtomicInstructions.executeAMOMAXD(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x78) {
-            atomSucc = AtomicInstructions.executeAMOMINU_D(
+            atomSucc = AtomicInstructions.executeAMOMINUD(
                 mi,
                 mmIndex,
                 pc,
                 insn
             );
         } else if (funct3Funct5 == 0x7c) {
-            atomSucc = AtomicInstructions.executeAMOMAXU_D(
+            atomSucc = AtomicInstructions.executeAMOMAXUD(
                 mi,
                 mmIndex,
                 pc,

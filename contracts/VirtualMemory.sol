@@ -56,7 +56,7 @@ library VirtualMemory {
             Exceptions.raiseException(
                 mi,
                 mmIndex,
-                Exceptions.MCAUSE_LOAD_ADDRESS_MISALIGNED(),
+                Exceptions.getMcauseLoadAddressMisaligned(),
                 vaddr
             );
             return (false, 0);
@@ -65,7 +65,7 @@ library VirtualMemory {
                 mi,
                 mmIndex,
                 vaddr,
-                RiscVConstants.PTE_XWR_WRITE_SHIFT()
+                RiscVConstants.getPteXwrWriteShift()
             );
 
             if (!translateSuccess) {
@@ -73,26 +73,26 @@ library VirtualMemory {
                 Exceptions.raiseException(
                     mi,
                     mmIndex,
-                    Exceptions.MCAUSE_LOAD_PAGE_FAULT(),
+                    Exceptions.getMcauseLoadPageFault(),
                     vaddr
                 );
                 return (false, 0);
             }
             (uint64vars[PMA_START], uint64vars[PMA_LENGTH]) = PMA.findPmaEntry(mi, mmIndex, paddr);
-            if (PMA.pmaGetIstart_E(uint64vars[PMA_START]) || !PMA.pmaGetIstart_R(uint64vars[PMA_START])) {
+            if (PMA.pmaGetIstartE(uint64vars[PMA_START]) || !PMA.pmaGetIstartR(uint64vars[PMA_START])) {
                 // PMA is either excluded or we dont have permission to write - raise exception
                 Exceptions.raiseException(
                     mi,
                     mmIndex,
-                    Exceptions.MCAUSE_LOAD_ACCESS_FAULT(),
+                    Exceptions.getMcauseLoadAccessFault(),
                     vaddr
                 );
                 return (false, 0);
-            } else if (PMA.pmaGetIstart_M(uint64vars[PMA_START])) {
+            } else if (PMA.pmaGetIstartM(uint64vars[PMA_START])) {
                 return (true, mi.readMemory(mmIndex, paddr, wordSize));
             }else {
                 bool success = false;
-                if (PMA.pmaIs_HTIF(uint64vars[PMA_START])) {
+                if (PMA.pmaIsHTIF(uint64vars[PMA_START])) {
                     (success, uint64vars[VAL]) = HTIF.htifRead(
                         mi,
                         mmIndex,
@@ -101,7 +101,7 @@ library VirtualMemory {
                         paddr,
                         wordSize
                     );
-                } else if (PMA.pmaIs_CLINT(uint64vars[PMA_START])) {
+                } else if (PMA.pmaIsCLINT(uint64vars[PMA_START])) {
                     (success, uint64vars[VAL]) = CLINT.clintRead(
                         mi,
                         mmIndex,
@@ -115,7 +115,7 @@ library VirtualMemory {
                     Exceptions.raiseException(
                         mi,
                         mmIndex,
-                        Exceptions.MCAUSE_LOAD_ACCESS_FAULT(),
+                        Exceptions.getMcauseLoadAccessFault(),
                         vaddr
                     );
                 }
@@ -145,7 +145,7 @@ library VirtualMemory {
             Exceptions.raiseException(
                 mi,
                 mmIndex,
-                Exceptions.MCAUSE_STORE_AMO_ADDRESS_MISALIGNED(),
+                Exceptions.getMcauseStoreAmoAddressMisaligned(),
                 vaddr
             );
             return false;
@@ -155,7 +155,7 @@ library VirtualMemory {
                 mi,
                 mmIndex,
                 vaddr,
-                RiscVConstants.PTE_XWR_WRITE_SHIFT()
+                RiscVConstants.getPteXwrWriteShift()
             );
 
             if (!translateSuccess) {
@@ -163,23 +163,23 @@ library VirtualMemory {
                 Exceptions.raiseException(
                     mi,
                     mmIndex,
-                    Exceptions.MCAUSE_STORE_AMO_PAGE_FAULT(),
+                    Exceptions.getMcauseStoreAmoPageFault(),
                     vaddr);
 
                 return false;
             }
             (uint64vars[PMA_START], uint64vars[PMA_LENGTH]) = PMA.findPmaEntry(mi, mmIndex, uint64vars[PADDR]);
 
-            if (PMA.pmaGetIstart_E(uint64vars[PMA_START]) || !PMA.pmaGetIstart_W(uint64vars[PMA_START])) {
+            if (PMA.pmaGetIstartE(uint64vars[PMA_START]) || !PMA.pmaGetIstartW(uint64vars[PMA_START])) {
                 // PMA is either excluded or we dont have permission to write - raise exception
                 Exceptions.raiseException(
                     mi,
                     mmIndex,
-                    Exceptions.MCAUSE_STORE_AMO_ACCESS_FAULT(),
+                    Exceptions.getMcauseStoreAmoAccessFault(),
                     vaddr
                 );
                 return false;
-            } else if (PMA.pmaGetIstart_M(uint64vars[PMA_START])) {
+            } else if (PMA.pmaGetIstartM(uint64vars[PMA_START])) {
                 //write to memory
                 mi.writeMemory(
                     mmIndex,
@@ -190,7 +190,7 @@ library VirtualMemory {
                 return true;
             } else {
 
-                if (PMA.pmaIs_HTIF(uint64vars[PMA_START])) {
+                if (PMA.pmaIsHTIF(uint64vars[PMA_START])) {
                     if (!HTIF.htifWrite(
                        mi,
                        mmIndex,
@@ -201,12 +201,12 @@ library VirtualMemory {
                         Exceptions.raiseException(
                             mi,
                             mmIndex,
-                            Exceptions.MCAUSE_STORE_AMO_ACCESS_FAULT(),
+                            Exceptions.getMcauseStoreAmoAccessFault(),
                             vaddr
                         );
                         return false;
                     }
-                } else if (PMA.pmaIs_CLINT(uint64vars[PMA_START])) {
+                } else if (PMA.pmaIsCLINT(uint64vars[PMA_START])) {
                     if (!CLINT.clintWrite(
                             mi,
                             mmIndex,
@@ -217,7 +217,7 @@ library VirtualMemory {
                         Exceptions.raiseException(
                             mi,
                             mmIndex,
-                            Exceptions.MCAUSE_STORE_AMO_ACCESS_FAULT(),
+                            Exceptions.getMcauseStoreAmoAccessFault(),
                             vaddr
                         );
                         return false;
@@ -262,14 +262,14 @@ library VirtualMemory {
         // When MPRV is set, data loads and stores use privilege in MPP
         // instead of the current privilege level (code access is unaffected)
         //TO-DO: Check this &/&& and shifts
-        if ((uint64vars[MSTATUS] & RiscVConstants.MSTATUS_MPRV_MASK() != 0) && (xwrShift != RiscVConstants.PTE_XWR_CODE_SHIFT())) {
-            intvars[PRIV] = (uint64vars[MSTATUS] & RiscVConstants.MSTATUS_MPP_MASK()) >> RiscVConstants.MSTATUS_MPP_SHIFT();
+        if ((uint64vars[MSTATUS] & RiscVConstants.getMstatusMprvMask() != 0) && (xwrShift != RiscVConstants.getPteXwrCodeShift())) {
+            intvars[PRIV] = (uint64vars[MSTATUS] & RiscVConstants.getMstatusMppMask()) >> RiscVConstants.getMstatusMppShift();
         }
 
         // Physical memory is mediated by Machine-mode so, if privilege is M-mode it
         // does not use virtual Memory
         // Reference: riscv-priv-spec-1.7.pdf - Section 3.3, page 32.
-        if (intvars[PRIV] == RiscVConstants.PRV_M()) {
+        if (intvars[PRIV] == RiscVConstants.getPrvM()) {
             return (true, vaddr);
         }
 
@@ -302,7 +302,7 @@ library VirtualMemory {
         // Reference: riscv-priv-spec-1.10.pdf - Figure 4.16, page 63.
 
         //TO-DO: Use bitmanipulation library for arithmetic shift
-        intvars[VADDR_SHIFT] = RiscVConstants.XLEN() - (RiscVConstants.PG_SHIFT() + levels * 9);
+        intvars[VADDR_SHIFT] = RiscVConstants.getXlen() - (RiscVConstants.getPgShift() + levels * 9);
         if (((int64(vaddr) << intvars[VADDR_SHIFT]) >> intvars[VADDR_SHIFT]) != int64(vaddr)) {
             return (false, 0);
         }
@@ -311,7 +311,7 @@ library VirtualMemory {
         // Reference: riscv-priv-spec-1.10.pdf - Figure 4.12, page 57.
         intvars[SATP_PPN_BITS] = 44;
         // Initialize pteAddr with the base address for the root page table
-        uint64vars[PTE_ADDR] = (uint64vars[SATP] & ((uint64(1) << intvars[SATP_PPN_BITS]) - 1)) << RiscVConstants.PG_SHIFT();
+        uint64vars[PTE_ADDR] = (uint64vars[SATP] & ((uint64(1) << intvars[SATP_PPN_BITS]) - 1)) << RiscVConstants.getPgShift();
         // All page table entries have 8 bytes
         // Each page table has 4k/pteSize entries
         // To index all entries, we need vpnBits
@@ -322,7 +322,7 @@ library VirtualMemory {
 
         for (int i = 0; i < levels; i++) {
             // Mask out VPN[levels -i-1]
-            intvars[VADDR_SHIFT] = RiscVConstants.PG_SHIFT() + intvars[VPN_BITS] * (levels - 1 - i);
+            intvars[VADDR_SHIFT] = RiscVConstants.getPgShift() + intvars[VPN_BITS] * (levels - 1 - i);
             uint64 vpn = (vaddr >> intvars[VADDR_SHIFT]) & uint64vars[VPN_MASK];
             // Add offset to find physical address of page table entry
             uint64vars[PTE_ADDR] += vpn << intvars[PTE_SIZE_LOG2];
@@ -337,11 +337,11 @@ library VirtualMemory {
             // The OS can mark page table entries as invalid,
             // but these entries shouldn't be reached during page lookups
             //TO-DO: check if condition
-            if ((uint64vars[PTE] & RiscVConstants.PTE_V_MASK()) == 0) {
+            if ((uint64vars[PTE] & RiscVConstants.getPteVMask()) == 0) {
                 return (false, 0);
             }
             // Clear all flags in least significant bits, then shift back to multiple of page size to form physical address
-            uint64 ppn = (uint64vars[PTE] >> 10) << RiscVConstants.PG_SHIFT();
+            uint64 ppn = (uint64vars[PTE] >> 10) << RiscVConstants.getPgShift();
             // Obtain X, W, R protection bits
             // X, W, R bits are located on bits 1 to 3 on physical address
             // Reference: riscv-priv-spec-1.10.pdf - Figure 4.18, page 63.
@@ -353,20 +353,20 @@ library VirtualMemory {
                     return (false, 0);
                 }
                 // (We know we are not PRV_M if we reached here)
-                if (intvars[PRIV] == RiscVConstants.PRV_S()) {
+                if (intvars[PRIV] == RiscVConstants.getPrvS()) {
                     // If SUM is set, forbid S-mode code from accessing U-mode memory
                     //TO-DO: check if condition
-                    if ((uint64vars[PTE] & RiscVConstants.PTE_U_MASK() != 0) && ((uint64vars[MSTATUS] & RiscVConstants.MSTATUS_SUM_MASK())) == 0) {
+                    if ((uint64vars[PTE] & RiscVConstants.getPteUMask() != 0) && ((uint64vars[MSTATUS] & RiscVConstants.getMstatusSumMask())) == 0) {
                         return (false, 0);
                     }
                 } else {
                     // Forbid U-mode code from accessing S-mode memory
-                    if ((uint64vars[PTE] & RiscVConstants.PTE_U_MASK()) == 0) {
+                    if ((uint64vars[PTE] & RiscVConstants.getPteUMask()) == 0) {
                         return (false, 0);
                     }
                 }
                 // MXR allows to read access to execute-only pages
-                if (uint64vars[MSTATUS] & RiscVConstants.MSTATUS_MXR_MASK() != 0) {
+                if (uint64vars[MSTATUS] & RiscVConstants.getMstatusMxrMask() != 0) {
                     //Set R bit if X bit is set
                     xwr = xwr | (xwr >> 2);
                 }
@@ -380,12 +380,12 @@ library VirtualMemory {
                     return (false, 0);
                 }
                 // Decide if we need to update access bits in pte
-                bool updatePte = (uint64vars[PTE] & RiscVConstants.PTE_A_MASK() == 0) || ((uint64vars[PTE] & RiscVConstants.PTE_D_MASK() == 0) && xwrShift == RiscVConstants.PTE_XWR_WRITE_SHIFT());
+                bool updatePte = (uint64vars[PTE] & RiscVConstants.getPteAMask() == 0) || ((uint64vars[PTE] & RiscVConstants.getPteDMask() == 0) && xwrShift == RiscVConstants.getPteXwrWriteShift());
 
-                uint64vars[PTE] |= RiscVConstants.PTE_A_MASK();
+                uint64vars[PTE] |= RiscVConstants.getPteAMask();
 
-                if (xwrShift == RiscVConstants.PTE_XWR_WRITE_SHIFT()) {
-                    uint64vars[PTE] = uint64vars[PTE] | RiscVConstants.PTE_D_MASK();
+                if (xwrShift == RiscVConstants.getPteXwrWriteShift()) {
+                    uint64vars[PTE] = uint64vars[PTE] | RiscVConstants.getPteDMask();
                 }
                 // If so, update pte
                 if (updatePte) {
@@ -410,7 +410,7 @@ library VirtualMemory {
     {
         uint64 val;
         (uint64 pmaStart, uint64 pmaLength) = PMA.findPmaEntry(mi, mmIndex, paddr);
-        if (!PMA.pmaGetIstart_M(pmaStart) || !PMA.pmaGetIstart_R(pmaStart)) {
+        if (!PMA.pmaGetIstartM(pmaStart) || !PMA.pmaGetIstartR(pmaStart)) {
             return (false, 0);
         }
         return (true, mi.readMemory(mmIndex, paddr, 64));
@@ -425,7 +425,7 @@ library VirtualMemory {
     internal returns (bool)
     {
         (uint64 pmaStart, uint64 pmaLength) = PMA.findPmaEntry(mi, mmIndex, paddr);
-        if (!PMA.pmaGetIstart_M(pmaStart) || !PMA.pmaGetIstart_W(pmaStart)) {
+        if (!PMA.pmaGetIstartM(pmaStart) || !PMA.pmaGetIstartW(pmaStart)) {
             return false;
         }
         mi.writeMemory(

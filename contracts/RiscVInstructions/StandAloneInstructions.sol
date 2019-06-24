@@ -19,7 +19,7 @@ library StandAloneInstructions {
         uint32 rd = RiscVDecoder.insnRd(insn);
 
         if (rd != 0) {
-            mi.writeX(mmIndex, rd, pc + uint64(RiscVDecoder.insn_UImm(insn)));
+            mi.writeX(mmIndex, rd, pc + uint64(RiscVDecoder.insnUImm(insn)));
         }
         //return advanceToNextInsn(mi, mmIndex, pc);
     }
@@ -38,7 +38,7 @@ library StandAloneInstructions {
         uint32 rd = RiscVDecoder.insnRd(insn);
 
         if (rd != 0) {
-            mi.writeX(mmIndex, rd, uint64(RiscVDecoder.insn_UImm(insn)));
+            mi.writeX(mmIndex, rd, uint64(RiscVDecoder.insnUImm(insn)));
         }
         //return advanceToNextInsn(mi, mmIndex, pc);
     }
@@ -83,7 +83,7 @@ library StandAloneInstructions {
     )
     public returns (bool, uint64)
     {
-        uint64 newPc = pc + uint64(RiscVDecoder.insn_JImm(insn));
+        uint64 newPc = pc + uint64(RiscVDecoder.insnJImm(insn));
 
         if ((newPc & 3) != 0) {
             return (false, newPc);

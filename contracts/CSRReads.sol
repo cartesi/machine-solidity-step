@@ -1,4 +1,4 @@
-// @title CSR_reads
+// @title csrreads
 pragma solidity ^0.5.0;
 
 import "../contracts/MemoryInteractor.sol";
@@ -43,7 +43,7 @@ library CSRReads {
     function readCsrSstatus(MemoryInteractor mi, uint256 mmIndex)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMstatus(mmIndex) & RiscVConstants.SSTATUS_R_MASK());
+        return (true, mi.readMstatus(mmIndex) & RiscVConstants.getSstatusRMask());
     }
 
     function readCsrSie(MemoryInteractor mi, uint256 mmIndex)
@@ -103,9 +103,9 @@ library CSRReads {
     internal returns(bool, uint64)
     {
         uint64 mstatus = mi.readMstatus(mmIndex);
-        uint64 priv = mi.readIflags_PRV(mmIndex);
+        uint64 priv = mi.readIflagsPrv(mmIndex);
 
-        if (priv == RiscVConstants.PRV_S() && (mstatus & RiscVConstants.MSTATUS_TVM_MASK() != 0)) {
+        if (priv == RiscVConstants.getPrvS() && (mstatus & RiscVConstants.getMstatusTvmMask() != 0)) {
             return (false, 0);
         } else {
             return (true, mi.readSatp(mmIndex));
@@ -115,7 +115,7 @@ library CSRReads {
     function readCsrMstatus(MemoryInteractor mi, uint256 mmIndex)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMstatus(mmIndex) & RiscVConstants.MSTATUS_R_MASK());
+        return (true, mi.readMstatus(mmIndex) & RiscVConstants.getMstatusRMask());
     }
 
     function readCsrMisa(MemoryInteractor mi, uint256 mmIndex)
@@ -228,12 +228,12 @@ library CSRReads {
     function rdcounteren(MemoryInteractor mi, uint256 mmIndex, uint32 csrAddr)
     internal returns (bool)
     {
-        uint64 counteren = RiscVConstants.MCOUNTEREN_RW_MASK();
-        uint64 priv = mi.readIflags_PRV(mmIndex);
+        uint64 counteren = RiscVConstants.getMcounterenRwMask();
+        uint64 priv = mi.readIflagsPrv(mmIndex);
 
-        if (priv < RiscVConstants.PRV_M()) {
+        if (priv < RiscVConstants.getPrvM()) {
             counteren &= mi.readMcounteren(mmIndex);
-            if (priv < RiscVConstants.PRV_S()) {
+            if (priv < RiscVConstants.getPrvS()) {
                 counteren &= mi.readScounteren(mmIndex);
             }
         }

@@ -17,7 +17,7 @@ library Interrupts {
             Exceptions.raiseException(
                 mi,
                 mmIndex,
-                irqNum | Exceptions.MCAUSE_INTERRUPT_FLAG(),
+                irqNum | Exceptions.getMcauseInterruptFlag(),
                 0
             );
         }
@@ -52,7 +52,7 @@ library Interrupts {
         uint64 priv = (mi.memoryRead(mmIndex, ShadowAddresses.getIflags()) >> 2) & 3;
         //emit Print("priv", uint(priv));
 
-        if (priv == RiscVConstants.PRV_M()) {
+        if (priv == RiscVConstants.getPrvM()) {
             // MSTATUS is the Machine Status Register - it controls the current
             // operating state. The MIE is an interrupt-enable bit for machine mode.
             // MIE for 64bit is stored on location 3 - according to:
@@ -60,10 +60,10 @@ library Interrupts {
             mstatus = mi.memoryRead(mmIndex, ShadowAddresses.getMstatus());
             //emit Print("mstatus", uint(mstatus));
 
-            if ((mstatus & RiscVConstants.MSTATUS_MIE_MASK()) != 0) {
+            if ((mstatus & RiscVConstants.getMstatusMieMask()) != 0) {
                 enabledInts = uint32(~mi.memoryRead(mmIndex, ShadowAddresses.getMideleg()));
             }
-        } else if (priv == RiscVConstants.PRV_S()) {
+        } else if (priv == RiscVConstants.getPrvS()) {
             mstatus = mi.memoryRead(mmIndex, ShadowAddresses.getMstatus());
             //emit Print("mstatus", uint(mstatus));
             // MIDELEG: Machine trap delegation register
@@ -78,7 +78,7 @@ library Interrupts {
             // SIE: is the register contaning interrupt enabled bits for supervisor mode.
             // It is located on the first bit of mstatus register (RV64).
             // Reference: riscv-privileged-v1.10 - figure 3.7 - page 20.
-            if ((mstatus & RiscVConstants.MSTATUS_SIE_MASK()) != 0) {
+            if ((mstatus & RiscVConstants.getMstatusSieMask()) != 0) {
                 //TO-DO: make sure this is the correct cast
                 enabledInts = enabledInts | uint32(mideleg);
             }

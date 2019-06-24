@@ -292,15 +292,15 @@ contract MemoryInteractor {
     }
 
     function writeClintMtimecmp(uint256 mmindex, uint64 value) public {
-        memoryWrite(mmindex, CLINT.CLINT_MTIMECMP(), value);
+        memoryWrite(mmindex, CLINT.getClintMtimecmp(), value);
     }
 
     function writeHtifFromhost(uint256 mmindex, uint64 value) public {
-        memoryWrite(mmindex, HTIF.HTIF_FROMHOST_ADDR(), value);
+        memoryWrite(mmindex, HTIF.getHtifFromHostAddr(), value);
     }
 
     function writeHtifTohost(uint256 mmindex, uint64 value) public {
-        memoryWrite(mmindex, HTIF.HTIF_TOHOST_ADDR(), value);
+        memoryWrite(mmindex, HTIF.getHtifToHostAddr(), value);
     }
 
     function writeIflagsH(uint256 mmindex, uint64 value) public {
