@@ -176,11 +176,25 @@ contract MemoryInteractor {
 
   function set_iflags_I(uint256 _mmIndex, bool idle) public {
     uint64 iflags = read_iflags(_mmIndex);
+    uint64 maskI = 2;
 
     if (idle) {
-      iflags = (iflags | 10);
+      iflags = (iflags | maskI);
     } else {
-      iflags = (iflags & ~(uint64(1) << 1));
+      iflags = (iflags & ~maskI);
+    }
+
+    memoryWrite(_mmIndex, ShadowAddresses.get_iflags(), iflags);
+  }
+
+  function set_iflags_H(uint256 _mmIndex, bool halt) public {
+    uint64 iflags = read_iflags(_mmIndex);
+    uint64 maskH = 1;
+
+    if (halt) {
+      iflags = (iflags | maskH);
+    } else {
+      iflags = (iflags & ~maskH);
     }
 
     memoryWrite(_mmIndex, ShadowAddresses.get_iflags(), iflags);
@@ -298,14 +312,6 @@ contract MemoryInteractor {
     memoryWrite(_mmIndex, HTIF.HTIF_TOHOST_ADDR(), _value);
   }
 
-  function write_iflags_H(uint256 _mmIndex, uint64 _value) public {
-    uint64 iflags = read_iflags(_mmIndex);
-    uint64 h_mask = 1;
-    iflags = (iflags & (~h_mask)) | (_value);
-
-    memoryWrite(_mmIndex, ShadowAddresses.get_iflags(), iflags);
-  }
-
   function write_iflags_PRV(uint256 _mmIndex, uint64 _new_priv) public {
     uint64 iflags = read_iflags(_mmIndex);
     uint64 priv_mask = 3 << 2;
@@ -330,14 +336,15 @@ contract MemoryInteractor {
       uint64 oldVal = pure_memoryRead(_mmIndex, closestStartAddr);
 
       // Mask to clean a piece of the value that was on memory
-      uint64 value_mask = ((2 ** wordSize) - 1) << (64 - (relAddr*8 + wordSize));
+      uint64 old_value_mask = ((2 ** wordSize) - 1) << (64 - (relAddr*8 + wordSize));
+      uint64 value_mask = ((2 ** wordSize) - 1) << (64 - wordSize);
 
       // value is big endian, need to swap before further operation
       uint64 value_swap = BitsManipulationLibrary.uint64_swapEndian(value);
 
-      uint64 newValue = ((oldVal & ~value_mask) | (value_swap & value_mask));
-
+      uint64 newValue = ((oldVal & ~old_value_mask) | ((value_swap & value_mask) >> (relAddr * 8)));
       newValue = BitsManipulationLibrary.uint64_swapEndian(newValue);
+
       memoryWrite(_mmIndex, closestStartAddr, newValue);
     }
   }

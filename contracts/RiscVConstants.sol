@@ -6,6 +6,16 @@ library RiscVConstants {
   function XLEN() public returns(uint64) {return 64;}
   function MXL()  public returns(uint64) {return 2;}
 
+  //iflags shifts
+  function IFLAGS_H_SHIFT()  public returns(uint64){return 0;}
+  function IFLAGS_I_SHIFT()  public returns(uint64){return 1;}
+  function IFLAGS_PRV_SHIFT()  public returns(uint64){return 2;}
+
+  //iflags masks
+  function IFLAGS_H_MASK()  public returns(uint64){return uint64(1) << IFLAGS_H_SHIFT();}
+  function IFLAGS_I_MASK()  public returns(uint64){return uint64(1) << IFLAGS_I_SHIFT();}
+  function IFLAGS_PRV_MASK()  public returns(uint64){return uint64(3) << IFLAGS_PRV_SHIFT();}
+
   //Privilege Levels
   function PRV_U() public returns(uint64) {return 0;}
   function PRV_S() public returns(uint64) {return 1;}
@@ -39,7 +49,7 @@ library RiscVConstants {
   function MSTATUS_SD_SHIFT()   public returns(uint64) {return XLEN() - 1;}
 
   //mstatus masks
-  function MSTATUS_UIE_MASK()  public returns(uint64){return (uint64(1) << MSTATUS_UIE_SHIFT());}
+  function MSTATUS_UIE_MASK()  public returns(uint64){return uint64(1) << MSTATUS_UIE_SHIFT();}
   function MSTATUS_SIE_MASK()  public returns(uint64){return uint64(1) << MSTATUS_SIE_SHIFT();}
   function MSTATUS_MIE_MASK()  public returns(uint64){return uint64(1) << MSTATUS_MIE_SHIFT();}
   function MSTATUS_UPIE_MASK() public returns(uint64){return uint64(1) << MSTATUS_UPIE_SHIFT();}

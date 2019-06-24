@@ -86,7 +86,7 @@ library HTIF {
   function htif_write_halt(MemoryInteractor mi, uint256 mmIndex) internal 
   returns (bool) {
     //set iflags to halted
-    mi.write_iflags_H(mmIndex, 1);
+    mi.set_iflags_H(mmIndex, true);
     return true;
   }
   function htif_write_putchar(MemoryInteractor mi, uint256 mmIndex) internal 
