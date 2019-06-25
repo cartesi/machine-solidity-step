@@ -123,13 +123,6 @@ library CSRExecute {
         uint64 csrval = 0;
         uint64 rs1val = 0;
 
-        if (insncode == 0) {
-            rs1val = executeCSRRW(mi, mmIndex, insn);
-        } else {
-            // insncode == 1
-            rs1val = executeCSRRWI(insn);
-        }
-
         uint32 rd = RiscVDecoder.insnRd(insn);
 
         if (rd != 0) {
@@ -139,6 +132,13 @@ library CSRExecute {
         if (!status) {
             //return raiseIllegalInsnException(mi, mmIndex, insn);
             return false;
+        }
+
+        if (insncode == 0) {
+            rs1val = executeCSRRW(mi, mmIndex, insn);
+        } else {
+            // insncode == 1
+            rs1val = executeCSRRWI(insn);
         }
 
         if (!CSR.writeCsr(

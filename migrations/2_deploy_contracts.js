@@ -147,6 +147,7 @@ module.exports = function(deployer) {
     await deployer.link(BitsManipulationLibrary, MemoryInteractor);
     await deployer.link(HTIF, MemoryInteractor);
     await deployer.link(CLINT, MemoryInteractor);
+    await deployer.link(RiscVConstants, MemoryInteractor);
     await deployer.link(ShadowAddresses, MemoryInteractor);
 
     //Link all libraries to Execute

@@ -165,10 +165,9 @@ library Execute {
         if (succ) {
             if (isSigned) {
                 // TO-DO: make sure this is ok
-                mi.writeX(mmIndex, RiscVDecoder.insnRd(insn), uint64(int64(val)));
-            } else {
-                mi.writeX(mmIndex, RiscVDecoder.insnRd(insn), val);
+                val = BitsManipulationLibrary.uint64SignExtension(val, wordSize);
             }
+            mi.writeX(mmIndex, RiscVDecoder.insnRd(insn), val);
             return advanceToNextInsn(mi, mmIndex, pc);
         } else {
             //return advanceToRaisedException()
@@ -197,7 +196,6 @@ library Execute {
             return raiseIllegalInsnException(mi, mmIndex, insn);
         }
     }
-
 
     function executeJump(MemoryInteractor mi, uint256 mmIndex, uint64 newPc)
     public returns (executeStatus)
@@ -423,7 +421,6 @@ library Execute {
         }
         return raiseIllegalInsnException(mi, mmIndex, insn);
     }
-
 
     /// @notice Given a env trap int group insn, finds the func associated.
     //  Uses binary search for performance.
