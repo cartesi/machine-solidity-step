@@ -6,7 +6,7 @@ const fs = require('fs');
 var RiscVDecoder = artifacts.require("./RiscVDecoder.sol");
 var ShadowAddresses = artifacts.require("./ShadowAddresses.sol");
 var RiscVConstants = artifacts.require("./RiscVConstants.sol");
-var CSR_Reads = artifacts.require("./CSR_reads.sol");
+var CSRReads = artifacts.require("./CSRReads.sol");
 var BranchInstructions = artifacts.require("./RiscVInstructions/BranchInstructions.sol");
 var RealTimeClock = artifacts.require("./RealTimeClock.sol");
 var ArithmeticInstructions = artifacts.require("./RiscVInstructions/ArithmeticInstructions.sol");
@@ -29,6 +29,7 @@ var Interrupts = artifacts.require("./Interrupts.sol");
 
 //Contracts
 var MMInstantiator = artifacts.require("./MMInstantiator.sol");
+var MockMMInstantiator = artifacts.require("./MockMMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
 var VirtualMemory = artifacts.require("./VirtualMemory.sol");
 var Step = artifacts.require("./Step.sol");
@@ -49,12 +50,12 @@ module.exports = function(deployer) {
     await deployer.link(RiscVDecoder, ArithmeticInstructions);
     await deployer.link(RiscVDecoder, ArithmeticImmediateInstructions);
     await deployer.link(RiscVDecoder, StandAloneInstructions);
-    await deployer.link(RiscVDecoder, CSR_Reads);
+    await deployer.link(RiscVDecoder, CSRReads);
 
     await deployer.link(RiscVConstants, BranchInstructions);
     await deployer.link(RiscVConstants, ArithmeticInstructions);
     await deployer.link(RiscVConstants, ArithmeticImmediateInstructions);
-    await deployer.link(RiscVConstants, CSR_Reads);
+    await deployer.link(RiscVConstants, CSRReads);
     await deployer.link(RiscVConstants, StandAloneInstructions);
     await deployer.link(RiscVConstants, EnvTrapInstructions);
     await deployer.link(BitsManipulationLibrary, ArithmeticImmediateInstructions);
@@ -65,8 +66,8 @@ module.exports = function(deployer) {
     await deployer.deploy(BranchInstructions);
     await deployer.deploy(PMA);
 
-    await deployer.link(RealTimeClock, CSR_Reads);
-    await deployer.deploy(CSR_Reads);
+    await deployer.link(RealTimeClock, CSRReads);
+    await deployer.deploy(CSRReads);
 
     //Link all libraries to CLINT
     await deployer.link(RealTimeClock, CLINT);
@@ -81,14 +82,14 @@ module.exports = function(deployer) {
     //Link all libraries to CSR
     await deployer.link(RealTimeClock, CSR);
     await deployer.link(RiscVDecoder, CSR);
-    await deployer.link(CSR_Reads, CSR);
+    await deployer.link(CSRReads, CSR);
     await deployer.link(RiscVConstants, CSR);
     await deployer.deploy(CSR);
 
     //Link all libraries to CRSExecute
     await deployer.link(RealTimeClock, CSRExecute);
     await deployer.link(RiscVDecoder, CSRExecute);
-    await deployer.link(CSR_Reads, CSRExecute);
+    await deployer.link(CSRReads, CSRExecute);
     await deployer.link(RiscVConstants, CSRExecute);
     await deployer.link(CSR, CSRExecute);
     await deployer.deploy(CSRExecute);
@@ -146,6 +147,7 @@ module.exports = function(deployer) {
     await deployer.link(BitsManipulationLibrary, MemoryInteractor);
     await deployer.link(HTIF, MemoryInteractor);
     await deployer.link(CLINT, MemoryInteractor);
+    await deployer.link(RiscVConstants, MemoryInteractor);
     await deployer.link(ShadowAddresses, MemoryInteractor);
 
     //Link all libraries to Execute
@@ -171,20 +173,22 @@ module.exports = function(deployer) {
     await deployer.link(ShadowAddresses, MemoryInteractor);
 
     await deployer.deploy(MMInstantiator)
+    await deployer.deploy(MockMMInstantiator)
 
+    let mmAddress;
     if (process.env.CARTESI_INTEGRATION_MM_ADDR) {
       console.log("Deploying MemoryInteractor in integration environment, address: " + process.env.CARTESI_INTEGRATION_MM_ADDR);
       await deployer.deploy(MemoryInteractor, process.env.CARTESI_INTEGRATION_MM_ADDR);
+      mmAddress = process.env.CARTESI_INTEGRATION_MM_ADDR
     } else {
-      console.log("Deploying MemoryInteractor in test environment, address: " + MMInstantiator.address);
-      await deployer.deploy(MemoryInteractor, MMInstantiator.address);
+      console.log("Deploying MemoryInteractor in test environment, with Mock MM address: " + MockMMInstantiator.address);
+      await deployer.deploy(MemoryInteractor, MockMMInstantiator.address);
+      mmAddress = MockMMInstantiator.address
     }
-    console.log("MI: " + MemoryInteractor.address);
-    //fs.writeFileSync("/tmp/MI.address", MMContract.address);
     await deployer.deploy(Step, MemoryInteractor.address);
 
     // Write address to file
-    let addr_json = "{\"mm_address\":\"" + MMInstantiator.address + "\", \"step_address\":\"" + Step.address + "\"}";
+    let addr_json = "{\"mm_address\":\"" + mmAddress + "\", \"step_address\":\"" + Step.address + "\"}";
 
     fs.writeFile('../test/deployedAddresses.json', addr_json, (err) => {
       if (err) console.log("couldnt write to file");
