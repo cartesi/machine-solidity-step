@@ -96,13 +96,6 @@ library CSRExecute {
     uint64 csrval = 0;
     uint64 rs1val = 0;
 
-    if (insncode == 0) {
-      rs1val = execute_CSRRW(mi, mmIndex, insn);
-    } else {
-      // insncode == 1
-      rs1val = execute_CSRRWI(insn);
-    }
-
     uint32 rd = RiscVDecoder.insn_rd(insn);
 
     if (rd != 0){
@@ -111,6 +104,13 @@ library CSRExecute {
     if (!status) {
       //return raise_illegal_insn_exception(mi, mmIndex, insn);
       return false;
+    }
+
+    if (insncode == 0) {
+      rs1val = execute_CSRRW(mi, mmIndex, insn);
+    } else {
+      // insncode == 1
+      rs1val = execute_CSRRWI(insn);
     }
 
     if (!CSR.write_csr(mi, mmIndex, csr_address, rs1val)){
