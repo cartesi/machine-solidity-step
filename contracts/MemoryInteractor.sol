@@ -4,6 +4,7 @@ pragma solidity ^0.5.0;
 import "../contracts/ShadowAddresses.sol";
 import "../contracts/HTIF.sol";
 import "../contracts/CLINT.sol";
+import "./RiscVConstants.sol";
 import "./lib/BitsManipulationLibrary.sol";
 
 
@@ -183,9 +184,9 @@ contract MemoryInteractor {
         uint64 iflags = readIflags(mmindex);
 
         if (idle) {
-            iflags = (iflags | 10);
+            iflags = (iflags | RiscVConstants.getIflagsIMask());
         } else {
-            iflags = (iflags & ~(uint64(1) << 1));
+            iflags = (iflags & ~RiscVConstants.getIflagsIMask());
         }
 
         memoryWrite(mmindex, ShadowAddresses.getIflags(), iflags);
@@ -303,20 +304,23 @@ contract MemoryInteractor {
         memoryWrite(mmindex, HTIF.getHtifToHostAddr(), value);
     }
 
-    function writeIflagsH(uint256 mmindex, uint64 value) public {
+    function setIflagsH(uint256 mmindex, bool halt) public {
         uint64 iflags = readIflags(mmindex);
-        uint64 hMask = 1;
-        iflags = (iflags & (~hMask)) | (value);
+
+        if (halt) {
+            iflags = (iflags | RiscVConstants.getIflagsHMask());
+        } else {
+            iflags = (iflags & ~RiscVConstants.getIflagsHMask());
+        }
 
         memoryWrite(mmindex, ShadowAddresses.getIflags(), iflags);
     }
 
     function writeIflagsPrv(uint256 mmindex, uint64 newPriv) public {
         uint64 iflags = readIflags(mmindex);
-        uint64 privMask = 3 << 2;
 
         // Clears bits 3 and 2 of iflags and use or to set new value
-        iflags = (iflags & (~privMask)) | (newPriv << 2);
+        iflags = (iflags & (~RiscVConstants.getIflagsPrvMask())) | (newPriv << RiscVConstants.getIflagsPrvShift());
 
         memoryWrite(mmindex, ShadowAddresses.getIflags(), iflags);
     }
