@@ -125,6 +125,7 @@ library Execute {
         // TO-DO: make sure this is ok
         val = BitsManipulationLibrary.uint64_sign_extension(val, wordSize);
       }
+      mi.write_x(mmIndex, RiscVDecoder.insn_rd(insn), val);
       return advance_to_next_insn(mi, mmIndex, pc);
     } else {
       //return advance_to_raised_exception()
