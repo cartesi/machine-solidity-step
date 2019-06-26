@@ -23,13 +23,6 @@ contract Step {
     }
 
     function step(uint mmIndex) public returns (uint8) {
-        // Every read performed by mi.memoryRead or mm . write should be followed by an
-        // endianess swap from little endian to big endian. This is the case because
-        // EVM is big endian but RiscV is little endian.
-        // Reference: riscv-spec-v2.2.pdf - Preface to Version 2.0
-        // Reference: Ethereum yellowpaper - Version 69351d5
-        //            Appendix H. Virtual Machine Specification
-
         // Read iflags register and check its H flag, to see if machine is halted.
         // If machine is halted - nothing else to do. H flag is stored on the least
         // signficant bit on iflags register.
