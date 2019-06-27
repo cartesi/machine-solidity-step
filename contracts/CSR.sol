@@ -53,6 +53,12 @@ library CSR {
     uint32 constant TDATA2 = 0x7a2;
     uint32 constant TDATA3 = 0x7a3;
 
+    /// \brief Reads the value of a CSR given its address
+    /// \param mi MemoryInteractor with which Step function is interacting.
+    /// \param mmIndex Specific index of the Memory Manager that contains this Steps logs
+    /// \param csraddr Address of CSR in file.
+    /// \returns Returns the status of the operation (true for success, false otherwise).
+    /// \returns Register value.
     function readCsr(MemoryInteractor mi, uint256 mmIndex, uint32 csrAddr)
     public returns (bool, uint64)
     {
@@ -132,6 +138,12 @@ library CSR {
         return CSRReads.readCsrFail();
     }
 
+    /// \brief Writes a value to a CSR given its address
+    /// \param mi MemoryInteractor with which Step function is interacting.
+    /// \param mmIndex Specific index of the Memory Manager that contains this Steps logs
+    /// \param csrAddr Address of CSR in file.
+    /// \param val Value to be written;
+    /// \returns The status of the operation (true for success, false otherwise).
     function writeCsr(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -154,43 +166,34 @@ library CSR {
         // TO-DO: Change this to binary search or mapping to increase performance
         // (in the meantime, pray for solidity devs to add switch statements)
         if (csrAddr == SSTATUS) {
-            //return CSRWrites.writeCsrSstatus(mi, mmIndex, val);
             uint64 cMstatus = mi.readMstatus(mmIndex);
             return writeCsrMstatus(mi, mmIndex, (cMstatus & ~RiscVConstants.getSstatusWMask()) | (val & RiscVConstants.getSstatusWMask()));
 
         } else if (csrAddr == SIE) {
-            //return CSRWrites.writeCsrSie(mi, mmIndex, val);
             uint64 mask = mi.readMideleg(mmIndex);
             uint64 cMie = mi.readMie(mmIndex);
 
             mi.writeMie(mmIndex, (cMie & ~mask) | (val & mask));
             return true;
         } else if (csrAddr == STVEC) {
-            //return CSRWrites.writeCsrStvec(mi, mmIndex, val);
             mi.writeStvec(mmIndex, val & uint64(~3));
             return true;
         } else if (csrAddr == SCOUNTEREN) {
-            //return CSRWrites.writeCsrScounteren(mi, mmIndex, val);
             mi.writeScounteren(mmIndex, val & RiscVConstants.getScounterenRwMask());
             return true;
         } else if (csrAddr == SSCRATCH) {
-            //return CSRWrites.writeCsrSscratch(mi, mmIndex, val);
             mi.writeSscratch(mmIndex, val);
             return true;
         } else if (csrAddr == SEPC) {
-            //return CSRWrites.writeCsrSepc(mi, mmIndex, val);
             mi.writeSepc(mmIndex, val & uint64(~3));
             return true;
         } else if (csrAddr == SCAUSE) {
-            //return CSRWrites.writeCsrScause(mi, mmIndex, val);
             mi.writeScause(mmIndex, val);
             return true;
         } else if (csrAddr == STVAL) {
-            //return CSRWrites.writeCsrStval(mi, mmIndex, val);
             mi.writeStval(mmIndex, val);
             return true;
         } else if (csrAddr == SIP) {
-            //return CSRWrites.writeCsrSip(mi, mmIndex, val);
             uint64 cMask = mi.readMideleg(mmIndex);
             uint64 cMip = mi.readMip(mmIndex);
 
@@ -198,7 +201,6 @@ library CSR {
             mi.writeMip(mmIndex, cMip);
             return true;
         } else if (csrAddr == SATP) {
-            //return CSRWrites.writeCsrSatp(mi, mmIndex, val);
             uint64 cSatp = mi.readSatp(mmIndex);
             int mode = cSatp >> 60;
             int newMode = (val >> 60) & 0xf;
@@ -212,47 +214,37 @@ library CSR {
         } else if (csrAddr == MSTATUS) {
             return writeCsrMstatus(mi, mmIndex, val);
         } else if (csrAddr == MEDELEG) {
-            //return CSRWrites.writeCsrMedeleg(mi, mmIndex, val);
             uint64 mask = (uint64(1) << (RiscVConstants.getMcauseStoreAmoPageFault() + 1) - 1);
             mi.writeMedeleg(mmIndex, (mi.readMedeleg(mmIndex) & ~mask) | (val & mask));
             return true;
         } else if (csrAddr == MIDELEG) {
-            //return CSRWrites.writeCsrMideleg(mi, mmIndex, val);
             uint64 mask = RiscVConstants.getMipSsipMask() | RiscVConstants.getMipStipMask() | RiscVConstants.getMipSeipMask();
             mi.writeMideleg(mmIndex, ((mi.readMideleg(mmIndex) & ~mask) | (val & mask)));
             return true;
         } else if (csrAddr == MIE) {
-            //return CSRWrites.writeCsrMie(mi, mmIndex, val);
             uint64 mask = RiscVConstants.getMipMsipMask() | RiscVConstants.getMipMtipMask() | RiscVConstants.getMipSsipMask() | RiscVConstants.getMipStipMask() | RiscVConstants.getMipSeipMask();
 
             mi.writeMie(mmIndex, ((mi.readMie(mmIndex) & ~mask) | (val & mask)));
             return true;
         } else if (csrAddr == MTVEC) {
-            //return CSRWrites.writeCsrMtvec(mi, mmIndex, val);
             mi.writeMtvec(mmIndex, val & uint64(~3));
             return true;
         } else if (csrAddr == MCOUNTEREN) {
-            //return CSRWrites.writeCsrMcounteren(mi, mmIndex, val);
             mi.writeMcounteren(mmIndex, val & RiscVConstants.getMcounterenRwMask());
             return true;
         } else if (csrAddr == MSCRATCH) {
-            //return CSRWrites.writeCsrMscratch(mi, mmIndex, val);
             mi.writeMscratch(mmIndex, val);
             return true;
         } else if (csrAddr == MEPC) {
-            //return CSRWrites.writeCsrMepc(mi, mmIndex, val);
             mi.writeMinstret(mmIndex, val & uint64(~3));
             return true;
         } else if (csrAddr == MCAUSE) {
-            //return CSRWrites.writeCsrMcause(mi, mmIndex, val);
             mi.writeMcause(mmIndex, val);
             return true;
         } else if (csrAddr == MTVAL) {
-            //return CSRWrites.writeCsrMtval(mi, mmIndex, val);
             mi.writeMtval(mmIndex, val);
             return true;
         } else if (csrAddr == MIP) {
-            //return CSRWrites.writeCsrMip(mi, mmIndex, val);
             uint64 mask = RiscVConstants.getMipSsipMask() | RiscVConstants.getMipStipMask();
             uint64 cMip = mi.readMip(mmIndex);
 
@@ -266,7 +258,6 @@ library CSR {
             // We instead raise an exception.
             return false;
         } else if (csrAddr == MINSTRET) {
-            //return CSRWrites.writeCsrMinstret(mi, mmIndex, val);
             // In Spike, QEMU, and riscvemu, mcycle and minstret are the aliases for the same counter
             // QEMU calls exit (!) on writes to mcycle or minstret
             mi.writeMinstret(mmIndex, val-1); // The value will be incremented after the instruction is executed
@@ -282,7 +273,6 @@ library CSR {
     // Bits csr[9:8] encode the CSR's privilege level (i.e lowest privilege level
     // that can access that CSR.
     // Reference: riscv-privileged-v1.10 - section 2.1 - page 7.
-
     function csrPriv(uint32 csrAddr) internal returns(uint32) {
         return (csrAddr >> 8) & 3;
     }

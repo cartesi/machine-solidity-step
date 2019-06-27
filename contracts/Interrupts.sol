@@ -8,10 +8,9 @@ import "../contracts/Exceptions.sol";
 
 library Interrupts {
 
-
     // \brief Raises an interrupt if any are enabled and pending.
     // \param mi Memory Interactor with which Step function is interacting.
-    // \param mmIndex Index corresponding to the instance of Memory Manager that
+    // \param mmIndex Index corresponding to the instance of Memory Manager that.
     function raiseInterruptIfAny(uint256 mmIndex, MemoryInteractor mi) public {
         uint32 mask = getPendingIrqMask(mmIndex, mi);
         if (mask != 0) {
