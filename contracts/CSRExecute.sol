@@ -12,6 +12,8 @@ library CSRExecute {
     uint256 constant CSRRSI_CODE = 0;
     uint256 constant CSRRCI_CODE = 1;
 
+    /// \brief Implementation of CSRRS and CSRRC instructions
+    /// \details The specific instruction is decided by insncode, which defines the value to be written.
     function executeCsrSC(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -61,6 +63,8 @@ library CSRExecute {
         return true;
     }
 
+    /// \brief Implementation of CSRRSI and CSRRCI instructions
+    /// \details The specific instruction is decided by insncode, which defines the value to be written.
     function executeCsrSCI(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -109,6 +113,8 @@ library CSRExecute {
         return true;
     }
 
+    /// \brief Implementation of CSRRW and CSRRWI instructions
+    /// \details The specific instruction is decided by insncode, which defines the value to be written.
     function executeCsrRW(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -157,29 +163,30 @@ library CSRExecute {
         return true;
     }
 
+    //internal functions
     function executeCSRRW(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
-    public returns(uint64)
+    internal returns(uint64)
     {
         return mi.readX(mmIndex, RiscVDecoder.insnRs1(insn));
     }
 
-    function executeCSRRWI(uint32 insn) public returns(uint64) {
+    function executeCSRRWI(uint32 insn) internal returns(uint64) {
         return uint64(RiscVDecoder.insnRs1(insn));
     }
 
-    function executeCSRRS(uint64 csr, uint64 rs1) public returns(uint64) {
+    function executeCSRRS(uint64 csr, uint64 rs1) internal returns(uint64) {
         return csr | rs1;
     }
 
-    function executeCSRRC(uint64 csr, uint64 rs1) public returns(uint64) {
+    function executeCSRRC(uint64 csr, uint64 rs1) internal returns(uint64) {
         return csr & ~rs1;
     }
 
-    function executeCSRRSI(uint64 csr, uint32 rs1) public returns(uint64) {
+    function executeCSRRSI(uint64 csr, uint32 rs1) internal returns(uint64) {
         return csr | rs1;
     }
 
-    function executeCSRRCI(uint64 csr, uint32 rs1) public returns(uint64) {
+    function executeCSRRCI(uint64 csr, uint32 rs1) internal returns(uint64) {
         return csr & ~rs1;
     }
 }

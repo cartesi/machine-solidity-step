@@ -6,21 +6,12 @@ import "../contracts/RiscVConstants.sol";
 
 
 library Exceptions {
-    function getMcauseInsnAddressMisaligned() public returns(uint64) {return 0x0;}
-    function getMcauseInsnAccessFault() public returns(uint64) {return 0x1;}
-    function getMcauseIllegalInsn() public returns(uint64) {return 0x2;}
-    function getMcauseBreakpoint() public returns(uint64) {return 0x3;}
-    function getMcauseLoadAddressMisaligned() public returns(uint64) {return 0x4;}
-    function getMcauseLoadAccessFault() public returns(uint64) {return 0x5;}
-    function getMcauseStoreAmoAddressMisaligned () public returns(uint64) {return 0x6;}
-    function getMcauseStoreAmoAccessFault() public returns(uint64) {return 0x7;}
-    function getMcauseEcallBase() public returns(uint64) {return 0x8;}
-    function getMcauseFetchPageFault() public returns(uint64) {return 0xc;}
-    function getMcauseLoadPageFault() public returns(uint64) {return 0xd;}
-    function getMcauseStoreAmoPageFault() public returns(uint64) {return 0xf;}
 
-    function getMcauseInterruptFlag() public returns(uint64) {return 1 << uint64(RiscVConstants.getXlen() - 1);}
-
+    /// \brief Raise an exception (or interrupt).
+    /// \param mi Memory Interactor with which Step function is interacting.
+    /// \param mmIndex Index corresponding to the instance of Memory Manager that
+    /// \param cause Exception (or interrupt) mcause (or scause).
+    /// \param tval Associated tval.
     function raiseException(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -127,4 +118,20 @@ library Exceptions {
             mi.writePc(mmIndex, mi.readMtvec(mmIndex));
         }
     }
+
+    function getMcauseInsnAddressMisaligned() public returns(uint64) {return 0x0;}
+    function getMcauseInsnAccessFault() public returns(uint64) {return 0x1;}
+    function getMcauseIllegalInsn() public returns(uint64) {return 0x2;}
+    function getMcauseBreakpoint() public returns(uint64) {return 0x3;}
+    function getMcauseLoadAddressMisaligned() public returns(uint64) {return 0x4;}
+    function getMcauseLoadAccessFault() public returns(uint64) {return 0x5;}
+    function getMcauseStoreAmoAddressMisaligned () public returns(uint64) {return 0x6;}
+    function getMcauseStoreAmoAccessFault() public returns(uint64) {return 0x7;}
+    function getMcauseEcallBase() public returns(uint64) {return 0x8;}
+    function getMcauseFetchPageFault() public returns(uint64) {return 0xc;}
+    function getMcauseLoadPageFault() public returns(uint64) {return 0xd;}
+    function getMcauseStoreAmoPageFault() public returns(uint64) {return 0xf;}
+
+    function getMcauseInterruptFlag() public returns(uint64) {return 1 << uint64(RiscVConstants.getXlen() - 1);}
+
 }
