@@ -246,6 +246,10 @@ contract MemoryInteractor {
         memoryWrite(mmindex, ShadowAddresses.getMcounteren(), value);
     }
 
+    function writeMcycle(uint256 mmindex, uint64 value) public {
+        memoryWrite(mmindex, ShadowAddresses.getMcycle(), value);
+    }
+
     function writeMinstret(uint256 mmindex, uint64 value) public {
         memoryWrite(mmindex, ShadowAddresses.getMinstret(), value);
     }
