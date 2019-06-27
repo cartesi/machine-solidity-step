@@ -1,7 +1,6 @@
 /// @title Fetch
 pragma solidity ^0.5.0;
 
-import "./ShadowAddresses.sol";
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
 import "../contracts/MemoryInteractor.sol";
@@ -12,14 +11,18 @@ import "../contracts/Exceptions.sol";
 
 library Fetch {
 
-    function fetchInsn(uint256 mmIndex, address memoryInteractorAddress) public returns (fetchStatus, uint32, uint64) {
-        MemoryInteractor mi = MemoryInteractor(memoryInteractorAddress);
-
+    // \brief Finds and loads next insn.
+    // \param mi Memory Interactor with which Step function is interacting.
+    // \param mmIndex Index corresponding to the instance of Memory Manager that
+    // \return Returns fetchStatus.success if load was successful, excpetion if not.
+    // \return Returns instructions
+    // \return Returns pc
+    function fetchInsn(uint256 mmIndex, MemoryInteractor mi) public returns (fetchStatus, uint32, uint64) {
         bool translateBool;
         uint64 paddr;
 
         //readPc
-        uint64 pc = mi.memoryRead(mmIndex, ShadowAddresses.getPc());
+        uint64 pc = mi.readPc(mmIndex);
         (translateBool, paddr) = VirtualMemory.translateVirtualAddress(
             mi,
             mmIndex,
@@ -47,9 +50,7 @@ library Fetch {
         // X flag defines if the pma is executable
         // If the pma is not memory or not executable - this is a pma violation
         // Reference: The Core of Cartesi, v1.02 - section 3.2 the board - page 5.
-
         if (!PMA.pmaGetIstartM(pmaStart) || !PMA.pmaGetIstartX(pmaStart)) {
-            //emit Print("CAUSE_FETCH_FAULT", paddr);
             Exceptions.raiseException(
                 mi,
                 mmIndex,
@@ -59,7 +60,6 @@ library Fetch {
             return (fetchStatus.exception, 0, 0);
         }
 
-        //emit Print("paddr/insn", paddr);
         uint32 insn = 0;
 
         // Check if instruction is on first 32 bits or last 32 bits
