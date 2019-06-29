@@ -352,9 +352,9 @@ contract MemoryInteractor {
             uint64 valueMask = ((2 ** wordSize) - 1) << (64 - (relAddr*8 + wordSize));
 
             // value is big endian, need to swap before further operation
-            uint64 valueSwap = BitsManipulationLibrary.uint64SwapEndian(value);
+            uint64 valueSwap = BitsManipulationLibrary.uint64SwapEndian(value & ((2 ** wordSize) - 1));
 
-            uint64 newvalue = ((oldVal & ~valueMask) | (valueSwap & valueMask));
+            uint64 newvalue = ((oldVal & ~valueMask) | (valueSwap >> relAddr*8));
 
             newvalue = BitsManipulationLibrary.uint64SwapEndian(newvalue);
             memoryWrite(mmindex, closestStartAddr, newvalue);
