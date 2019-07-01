@@ -1,7 +1,6 @@
 /// @title Step
 pragma solidity ^0.5.0;
 
-//Libraries
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
 import "../contracts/MemoryInteractor.sol";
@@ -19,6 +18,9 @@ contract Step {
         mi = MemoryInteractor(miAddress);
     }
 
+    // \brief Run step define by a MemoryManager instance.
+    // \param mmIndex Specific index of the Memory Manager that contains this Step's access logs
+    // \returns Returns an exit code.
     function step(uint mmIndex) public returns (uint8) {
         // Read iflags register and check its H flag, to see if machine is halted.
         // If machine is halted - nothing else to do. H flag is stored on the least
