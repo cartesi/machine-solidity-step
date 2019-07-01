@@ -55,7 +55,7 @@ Have an Ethereum node listening to port 8545
 
 Update data.json to match the access log of the step (or list of steps) that you would like to run.
 
-Run python test_python.py.
+    python test_python.py.
 
 
 ## Contributing
