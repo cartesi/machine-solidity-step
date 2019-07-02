@@ -5,17 +5,23 @@ Cartesi RISC-V Solidity Emulator is the on-chain host implementation of the Cart
 
 For Cartesi design to work, this implementation must have the exact transition function as the off-chain [Cartesi RISC-V Emulator](https://github.com/cartesi/core), meaning that if given the same initial state (s[i]) both implementation's step functions should reach a bit by bit consistent state s[i + 1].
 
-Since the cost of storing a full Cartesi Machine state withing the blockchain is prohibitive, all machine states are represented in the blockchain as cryptographic hashes. The content of those states and memory represented by those hashes are only known off-chain.
+Since the cost of storing a full Cartesi Machine state within the blockchain is prohibitive, all machine states are represented in the blockchain as cryptographic hashes. The content of those states and memory represented by those hashes are only known off-chain.
 
 Cartesi uses Merkle trees operations and properties to ensure blockchain's implementation ability to correctly verify a state transition without full state-access. However, RISC-V Solidity emulator abstracts those operations and acts as if it knew the full contents of a machine state - using Memory Manager interface to fetch or write any necessary word on memory.
 
 ## Memory Manager
 
-The memory manager contract is consumed by the RISC-V Solidity emulator as if the entire state content was available - since the off and on-chain emulators match down to the oorder in which accesses are logged. When a dispute arises, Alice sends her off-chain state access log referent to the disagreement step to the MemoryManager contract, which will guide the execution of a Step (i.e state transition function).
+The memory manager contract is consumed by the RISC-V Solidity emulator as if the entire state content was available - since the off and on-chain emulators match down to the order in which accesses are logged. When a dispute arises, Alice sends her off-chain state access log referent to the disagreement step to the MemoryManager contract, which will guide the execution of a Step (i.e state transition function).
 
-The MemoryManager contract offers the RISC-V Solidity emulator a very simple interface that consists of: read - reads a word in a specific address, write - writes a word in a specific address and finishReplayPhase - signals that the Step has completed. It also makes sure that all accesses performed by the Step function match the ones provided by Alice and are consistent with the Merkle proofs provided by her. If that is not the case, Alice loses the dispute.
+The MemoryManager contract offers the RISC-V Solidity emulator a very simple interface that consists of:
 
-The real Memory Manager contract can be found at [contracts repo](https://github.com/cartesi/contracts). In the present repo we have a MockMemoryManager, that still offers the same interface and makes sure all the proofs are consistent - but it doesnt comply with the Verification Game requirements. It should not be used in production, it doesnt include security measures, it doenst provide access control and so on. The MockMemoryManager is meant to be used for testing purposes, so that the state transition function can be tested without the need to play a full mock verification game.
+* read - reads a word in a specific address.
+* write - writes a word in a specific address.
+* finishReplayPhase - signals that the Step has completed.
+
+It also makes sure that all accesses performed by the Step function match the ones provided by Alice and are consistent with the Merkle proofs provided by her. If that is not the case, Alice loses the dispute.
+
+The real Memory Manager contract can be found at [contracts repo](https://github.com/cartesi/contracts). In the present repo we have a MockMemoryManager, that still offers the same interface and makes sure all the proofs are consistent - but it doesn't comply with the Verification Game requirements. It should not be used in production, it doesn't include security measures, it doesn't provide access control and so on. The MockMemoryManager is meant to be used for testing purposes, so that the state transition function can be tested without the need to play a full mock verification game.
 
 ## Step function
 
