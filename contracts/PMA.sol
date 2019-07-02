@@ -12,8 +12,9 @@ library PMA {
 
     uint64 constant MEMORY_ID = 0;
     uint64 constant SHADOW_ID = 1;
-    uint64 constant CLINT_ID = 2;
-    uint64 constant HTIF_ID = 3;
+    uint64 constant DRIVE_ID = 2;
+    uint64 constant CLINT_ID = 3;
+    uint64 constant HTIF_ID = 4;
 
     function findPmaEntry(MemoryInteractor mi, uint256 mmIndex, uint64 paddr) public returns (uint64, uint64) {
         // Hard coded ram address starts at 0x800
