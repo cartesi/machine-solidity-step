@@ -1,13 +1,13 @@
 
 # Cartesi RISC-V Solidity Emulator
 
-Cartesi RISC-V Solidity Emulator is the on-chain host implementation of the Cartesi Machine Specification. The libraries and contract are written in Solidity, the migration script in Javascript - with the help of [Truffle](https://github.com/trufflesuite/truffle) and the testing scripts in Python.
+The Cartesi RISC-V Solidity Emulator is the on-chain host implementation of the Cartesi Machine Specification. The libraries and contracts are written in Solidity, the migration script is written in Javascript (with the help of [Truffle](https://github.com/trufflesuite/truffle)), and the testing scripts are written in Python.
 
-For Cartesi design to work, this implementation must have the exact transition function as the off-chain [Cartesi RISC-V Emulator](https://github.com/cartesi/core), meaning that if given the same initial state (s[i]) both implementation's step functions should reach a bit by bit consistent state s[i + 1].
+For Cartesi's design to work, this implementation must have the exact transition function as the off-chain [Cartesi RISC-V Emulator](https://github.com/cartesi/core), meaning that if given the same initial state (s[i]) both implementation's step functions should reach a bit by bit consistent state s[i + 1].
 
-Since the cost of storing a full Cartesi Machine state within the blockchain is prohibitive, all machine states are represented in the blockchain as cryptographic hashes. The content of those states and memory represented by those hashes are only known off-chain.
+Since the cost of storing a full Cartesi Machine state within the blockchain is prohibitive, all machine states are represented in the blockchain as cryptographic hashes. The contents of those states and memory represented by those hashes are only known off-chain.
 
-Cartesi uses Merkle trees operations and properties to ensure blockchain's implementation ability to correctly verify a state transition without full state-access. However, RISC-V Solidity emulator abstracts those operations and acts as if it knew the full contents of a machine state - using Memory Manager interface to fetch or write any necessary word on memory.
+Cartesi uses Merkle tree operations and properties to ensure that the blockchain has the ability to correctly verify a state transition without having full state-access. However, the RISC-V Solidity emulator abstracts these operations away and acts as if it knows the full contents of a machine state - it uses the Memory Manager interface to fetch or write any necessary words to memory.
 
 ## Memory Manager
 
