@@ -213,7 +213,7 @@ library CSR {
             return writeCsrMstatus(mi, mmIndex, val);
         } else if (csrAddr == MEDELEG) {
             //return CSRWrites.writeCsrMedeleg(mi, mmIndex, val);
-            uint64 mask = (uint64(1) << (RiscVConstants.getMcauseStoreAmoPageFault() + 1) - 1);
+            uint64 mask = ((uint64(1) << (RiscVConstants.getMcauseStoreAmoPageFault() + 1)) - 1);
             mi.writeMedeleg(mmIndex, (mi.readMedeleg(mmIndex) & ~mask) | (val & mask));
             return true;
         } else if (csrAddr == MIDELEG) {
@@ -241,7 +241,7 @@ library CSR {
             return true;
         } else if (csrAddr == MEPC) {
             //return CSRWrites.writeCsrMepc(mi, mmIndex, val);
-            mi.writeMinstret(mmIndex, val & uint64(~3));
+            mi.writeMepc(mmIndex, val & uint64(~3));
             return true;
         } else if (csrAddr == MCAUSE) {
             //return CSRWrites.writeCsrMcause(mi, mmIndex, val);

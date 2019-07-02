@@ -14,8 +14,12 @@ contract mmInterface {
     function finishReplayPhase(uint256 _index) external;
 }
 
-// TO-DO: Rewrite this - MemoryRead/MemoryWrite should be private/internal and
-// all reads/writes should be specific.
+// Every read performed by mi.memoryRead or mm . write should be followed by an
+// endianess swap from little endian to big endian. This is the case because
+// EVM is big endian but RiscV is little endian.
+// Reference: riscv-spec-v2.2.pdf - Preface to Version 2.0
+// Reference: Ethereum yellowpaper - Version 69351d5
+//            Appendix H. Virtual Machine Specification
 
 
 contract MemoryInteractor {
@@ -348,9 +352,9 @@ contract MemoryInteractor {
             uint64 valueMask = ((2 ** wordSize) - 1) << (64 - (relAddr*8 + wordSize));
 
             // value is big endian, need to swap before further operation
-            uint64 valueSwap = BitsManipulationLibrary.uint64SwapEndian(value);
+            uint64 valueSwap = BitsManipulationLibrary.uint64SwapEndian(value & ((2 ** wordSize) - 1));
 
-            uint64 newvalue = ((oldVal & ~valueMask) | (valueSwap & valueMask));
+            uint64 newvalue = ((oldVal & ~valueMask) | (valueSwap >> relAddr*8));
 
             newvalue = BitsManipulationLibrary.uint64SwapEndian(newvalue);
             memoryWrite(mmindex, closestStartAddr, newvalue);
