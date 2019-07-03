@@ -296,7 +296,6 @@ library Execute {
 
         if (succ) {
             if (isSigned) {
-                // TO-DO: make sure this is ok
                 val = BitsManipulationLibrary.uint64SignExtension(val, wordSize);
             }
             mi.writeX(mmIndex, RiscVDecoder.insnRd(insn), val);
