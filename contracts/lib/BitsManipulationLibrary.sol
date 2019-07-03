@@ -35,6 +35,21 @@ library BitsManipulationLibrary {
         return output;
     }
 
+    /// @notice Arithmetic right shift for int128
+    //  @param number to be shifted
+    //  @param number of shifts
+    function int128ArithShiftRight(int128 number, uint shiftAmount)
+    public pure returns(int128)
+    {
+        uint128 uNumber = uint128(number);
+        uint lastPos = 63;
+        uint signBit = uNumber >> lastPos;
+
+        int128 output = int128((uNumber >> shiftAmount) | (((0 - signBit) << 1) << (lastPos - shiftAmount)));
+
+        return output;
+    }
+
     /// @notice Sign extend a shorter signed value to the full int32
     //  @param signed number to be extended
     //  @param number of bits of the signed number, ie, 8 for int8
