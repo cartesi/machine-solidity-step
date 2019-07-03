@@ -10,6 +10,7 @@ pragma solidity ^0.5.0;
 // https://solidity.readthedocs.io/en/latest/security-considerations.html?highlight=overflow#two-s-complement-underflows-overflows
 import "../../contracts/MemoryInteractor.sol";
 import "../../contracts/RiscVDecoder.sol";
+import "../../contracts/lib/BitsManipulationLibrary.sol";
 
 
 library ArithmeticInstructions {
@@ -104,37 +105,28 @@ library ArithmeticInstructions {
         return uint64(srs1 * srs2);
     }
 
-    //TO-DO: Use bitmanipulation library for shift
     function executeMULH(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
         // emit Print("MULH");
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
         int64 srs1 = int64(rs1);
         int64 srs2 = int64(rs2);
 
-        //SHOULD BE ARITHMETIC SHIFT - >> of signed int
-        return uint64((int128(srs1) * int128(srs2)) >> 64);
+        return uint64(BitsManipulationLibrary.int128ArithShiftRight((int128(srs1) * int128(srs2)), 64));
     }
 
-    //TO-DO: Use bitmanipulation library for shift
     function executeMULHSU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
-        // emit Print("MULHSU");
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
         int64 srs1 = int64(rs1);
 
-        //SHOULD BE ARITHMETIC SHIFT - >> of signed int
-        return uint64((int128(srs1) * int128(rs2)) >> 64);
+        return uint64(BitsManipulationLibrary.int128ArithShiftRight((int128(srs1) * int128(rs2)), 64));
     }
 
-    //TO-DO: Use bitmanipulation library for shift
     function executeMULHU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
-        // emit Print("MULHU");
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
 
-        //SHOULD BE ARITHMETIC SHIFT - >> of signed int
-        return uint64((int128(rs1) * int128(rs2)) >> 64);
+        return uint64(BitsManipulationLibrary.int128ArithShiftRight((int128(rs1) * int128(rs2)), 64));
     }
 
-    //TO-DO: Ask Diego if the regular cast (chooses the first working cast) is unsafe
     function executeDIV(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
         // emit Print("DIV");
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
@@ -143,9 +135,6 @@ library ArithmeticInstructions {
 
         if (srs2 == 0) {
             return uint64(-1);
-            //Why did the c++ used a regular cast vs static on int64(1)?
-            //Also, pretty sure its supposed to be int64(1 << (xlen -1))
-            //but if this is buggy - check this condition
         } else if (srs1 == (int64(1 << (XLEN - 1))) && srs2 == -1) {
             return uint64(srs1);
         } else {
@@ -154,7 +143,6 @@ library ArithmeticInstructions {
     }
 
     function executeDIVU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
-        // emit Print("DIVU");
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
 
         if (rs2 == 0) {
@@ -164,15 +152,12 @@ library ArithmeticInstructions {
         }
     }
 
-    //TO-DO: Make sure cast is not changing behaviour
     function executeREM(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
-        // emit Print("REM");
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
         int64 srs1 = int64(rs1);
         int64 srs2 = int64(rs2);
 
         if (srs2 == 0) {
-            //implicit cast on C++ version - make sure this is the expected behaviour
             return uint64(srs1);
         } else if (srs1 == (int64(1 << (XLEN - 1))) && srs2 == -1) {
             return 0;
@@ -182,7 +167,6 @@ library ArithmeticInstructions {
     }
 
     function executeREMU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
-        // emit Print("REMU");
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
 
         if (rs2 == 0) {
@@ -219,11 +203,10 @@ library ArithmeticInstructions {
         return uint64(rs1w);
     }
 
-    // TO-DO: make sure this is arithmetic shift
     function executeSRLW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
 
-        int32 rs1w = int32(int32(rs1) >> (rs2 & 31));
+        int32 rs1w = BitsManipulationLibrary.int32ArithShiftRight(int32(rs1), (rs2 & 31)); 
 
         return uint64(rs1w);
     }
