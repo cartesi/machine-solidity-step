@@ -31,7 +31,6 @@ library RiscVDecoder {
     /// brief Get the I-type instruction's immediate value
     //  param insn Instruction
     function insnIImm(uint32 insn) public pure returns(int32) {
-        // TO-DO: Use new evm assembly operator instead of  Bits library
         return BitsManipulationLibrary.int32ArithShiftRight(int32(insn), 20);
     }
 
@@ -56,8 +55,6 @@ library RiscVDecoder {
             ((insn >> (8 - 1)) & 0x1e) |
             ((insn << (11 - 7)) & (1 << 11))
         );
-        //TO-DO: use arithmetic shift on BitManipulation library
-        //int shift - cant do
         return BitsManipulationLibrary.int32SignExtension(imm, 13);
     }
 
@@ -70,8 +67,6 @@ library RiscVDecoder {
             ((insn >> (20 - 11)) & (1 << 11)) |
             (insn & 0xff000)
         );
-        //TO-DO: use arithmetic shift on BitManipulation library
-        //int shift - cant do
         return BitsManipulationLibrary.int32SignExtension(imm, 21);
     }
 
