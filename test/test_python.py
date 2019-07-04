@@ -1,6 +1,7 @@
 import sys
 import os
 import json
+import requests
 from web3 import Web3
 from solcx import install_solc
 from solcx import get_solc_version, set_solc_version, compile_files
@@ -12,7 +13,8 @@ revert_num = 0
 
 reverted_steps = []
 #Connecting to node
-w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:8545"))
+endpoint = "http://127.0.0.1:8545"
+w3 = Web3(Web3.HTTPProvider(endpoint))
 
 if (w3.isConnected()):
     print("Connected to node\n")
@@ -21,7 +23,7 @@ else:
     sys.exit(1)
 
 #step_compiled = compile_files([directory + 'Step.sol'])
-with open('../test/data.json') as json_file:
+with open('../test/p-sb.json') as json_file:
     jsonsteps = json.load(json_file)
 with open('../build/contracts/Step.json') as json_file:
     step_data = json.load(json_file)
@@ -38,27 +40,50 @@ mm = w3.eth.contract(address=deployedAddresses["mm_address"], abi=mm_data['abi']
 
 for index, entry in enumerate(jsonsteps):
     tx_hash = mm.functions.instantiate(w3.eth.accounts[0], w3.eth.accounts[1], entry["accesses"][0]["proof"]["root_hash"]).transact({'from': w3.eth.coinbase, 'gas': 9007199254740991})
+    receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+    mm_filter = mm.events.MemoryCreated.createFilter(fromBlock='latest')
+    mm_index = mm_filter.get_all_entries()[0]['args']['_index']
+    
+    # snapshot evm
+    headers = {'content-type': 'application/json'}
+    payload = {"method": "evm_snapshot", "params": [], "jsonrpc": "2.0", "id": 0}
+    response = requests.post(endpoint, data=json.dumps(payload), headers=headers).json()
+    snapshot_id = response['result']
 
     for rwentry in entry["accesses"]:
-        if rwentry["type"] == "read":
-            tx_hash2 = mm.functions.proveRead(index, rwentry["proof"]["address"], rwentry["read"], rwentry["proof"]["sibling_hashes"][::-1]).transact({'from': w3.eth.accounts[1], 'gas': 9007199254740991})
-        else:
-            tx_hash2 = mm.functions.proveWrite(index, rwentry["proof"]["address"], rwentry["read"], rwentry["written"], rwentry["proof"]["sibling_hashes"][::-1]).transact({'from': w3.eth.accounts[1], 'gas': 9007199254740991})
+            if rwentry["type"] == "read":
+                try:
+                    tx_hash2 = mm.functions.proveRead(mm_index, rwentry["proof"]["address"], rwentry["read"], rwentry["proof"]["sibling_hashes"][::-1]).transact({'from': w3.eth.accounts[1], 'gas': 9007199254740991})
+                    receipt = w3.eth.waitForTransactionReceipt(tx_hash2)
+                except ValueError as e:
+                    print("proveRead REVERT trasaction")
+                    print(e)
+            else:
+                try:
+                    tx_hash2 = mm.functions.proveWrite(mm_index, rwentry["proof"]["address"], rwentry["read"], rwentry["written"], rwentry["proof"]["sibling_hashes"][::-1]).transact({'from': w3.eth.accounts[1], 'gas': 9007199254740991})
+                    receipt = w3.eth.waitForTransactionReceipt(tx_hash2)
+                except ValueError as e:
+                    print("proveWrite REVERT trasaction")
+                    print(e)
 
-        receipt = w3.eth.waitForTransactionReceipt(tx_hash2)
 
     print("Callin Step: ")
     print(index)
     try:
-        step_tx = step.functions.step(index).transact({'from': w3.eth.accounts[0], 'gas': 9007199254740991})
+        step_tx = step.functions.step(mm_index).transact({'from': w3.eth.accounts[0], 'gas': 9007199254740991})
         tx_receipt = w3.eth.waitForTransactionReceipt(step_tx)
     except ValueError as e:
-        print("REVERT")
+        print("REVERT trasaction")
+        print(e)
         revert_num += 1
         reverted_steps.append(index)
     else:
         print("SUCCESS")
         succ_num += 1
+        
+        # revert evm
+        payload = {"method": "evm_revert", "params": [snapshot_id], "jsonrpc": "2.0", "id": 0}
+        response = requests.post(endpoint, data=json.dumps(payload), headers=headers).json()
 
 
 #myfilter = step.eventFilter('StepGiven', {'fromBlock': 0,'toBlock': 'latest'})

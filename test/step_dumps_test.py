@@ -37,6 +37,7 @@ def test_json_steps(json_steps, w3):
             tx_receipt = w3.eth.waitForTransactionReceipt(step_tx)
         except ValueError as e:
             print("REVERT")
+            print(e)
             ret = False
         else:
             print("SUCCESS")
@@ -74,7 +75,6 @@ with open('./deployedAddresses.json') as json_file:
 step = w3.eth.contract(address=deployedAddresses["step_address"], abi=step_data['abi'])
 mm = w3.eth.contract(address=deployedAddresses["mm_address"], abi=mm_data['abi'])
 
-stop = False
 single_test = False if len(sys.argv) == 1 else True
 
 if(single_test):
