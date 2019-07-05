@@ -35,7 +35,6 @@ library ShadowAddresses {
     uint64 constant IFLAGS     = 0x1d0;
 
     //getters - contracts cant access constants directly
-    //TO-DO: fix identation (this way was easier for my vim macros
     function getPc()         public returns(uint64) {return PC;}
     function getMvendorid()  public returns(uint64) {return MVENDORID;}
     function getMarchid()    public returns(uint64) {return MARCHID;}

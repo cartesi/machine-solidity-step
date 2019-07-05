@@ -21,7 +21,7 @@ else:
     sys.exit(1)
 
 #step_compiled = compile_files([directory + 'Step.sol'])
-with open('../test/new_data.json') as json_file:
+with open('../test/data.json') as json_file:
     jsonsteps = json.load(json_file)
 with open('../build/contracts/Step.json') as json_file:
     step_data = json.load(json_file)

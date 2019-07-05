@@ -4,6 +4,7 @@ pragma solidity ^0.5.0;
 import "../../contracts/MemoryInteractor.sol";
 import "../../contracts/RiscVDecoder.sol";
 import "../../contracts/RiscVConstants.sol";
+import "../../contracts/lib/BitsManipulationLibrary.sol";
 
 
 library ArithmeticImmediateInstructions {
@@ -108,7 +109,7 @@ library ArithmeticImmediateInstructions {
     function executeSRAI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64) {
         // Get imm's lower 6 bits
         (uint64 rs1, int32 imm) = getRs1Imm(mi, mmIndex, insn);
-        return uint64(int64(rs1) >> (int64(imm) & int64((RiscVConstants.getXlen() - 1))));
+        return uint64(BitsManipulationLibrary.int64ArithShiftRight(int64(rs1), uint256(int64(imm) & int64((RiscVConstants.getXlen() - 1)))));
     }
 
     // XORI instructions performs XOR operation on register rs1 and hhe sign extended
@@ -168,7 +169,6 @@ library ArithmeticImmediateInstructions {
             } else if (funct3 == 0x0001) {
                 // Imm[11:6] must be zero for it to be SLLI.
                 // Reference: riscv-spec-v2.2.pdf - Section 2.4 -  Page 14
-                // TO-DO: change 0x3F to XLEN - 1
                 if (( insn & (0x3F << 26)) != 0) {
                     return (0, false);
                 }
