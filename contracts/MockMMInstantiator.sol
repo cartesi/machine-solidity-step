@@ -142,11 +142,11 @@ contract MockMMInstantiator is MMInterface, Decorated {
     function read(uint256 _index, uint64 _position) public
         returns (bytes8)
     {
-        require((_position & 7) == 0, "Position is not aligned");
+        require((_position & 7) == 0, "Read Position is not aligned");
         uint pointer = instance[_index].historyPointer;
         ReadWrite storage  pointInHistory = instance[_index].history[pointer];
-        require(pointInHistory.wasRead, "PointInHistory has not been read");
-        require(pointInHistory.position == _position, "PointInHistory's position does not match");
+        require(pointInHistory.wasRead, "Read PointInHistory has not been read");
+        require(pointInHistory.position == _position, "Read PointInHistory's position does not match");
         bytes8 value = pointInHistory.value;
         delete(instance[_index].history[pointer]);
         instance[_index].historyPointer++;
@@ -159,12 +159,12 @@ contract MockMMInstantiator is MMInterface, Decorated {
     /// @param _value to be written
     function write(uint256 _index, uint64 _position, bytes8 _value) public
     {
-        require((_position & 7) == 0, "Position is not aligned");
+        require((_position & 7) == 0, "Write Position is not aligned");
         uint pointer = instance[_index].historyPointer;
         ReadWrite storage pointInHistory = instance[_index].history[pointer];
-        require(!pointInHistory.wasRead, "PointInHistory was not write");
-        require(pointInHistory.position == _position, "PointInHistory's position does not match");
-        require(pointInHistory.value == _value, "PointInHistory's value does not match");
+        require(!pointInHistory.wasRead, "Write PointInHistory was not write");
+        require(pointInHistory.position == _position, "Write PointInHistory's position does not match");
+        require(pointInHistory.value == _value, "Write PointInHistory's value does not match");
         delete(instance[_index].history[pointer]);
         instance[_index].historyPointer++;
         emit ValueWritten(_index, _position, _value);
