@@ -14,14 +14,13 @@ contract mmInterface {
     function finishReplayPhase(uint256 _index) external;
 }
 
-// Every read performed by mi.memoryRead or mm . write should be followed by an
+
+// Every read performed by mi.memoryRead or mi.write should be followed by an
 // endianess swap from little endian to big endian. This is the case because
 // EVM is big endian but RiscV is little endian.
 // Reference: riscv-spec-v2.2.pdf - Preface to Version 2.0
 // Reference: Ethereum yellowpaper - Version 69351d5
 //            Appendix H. Virtual Machine Specification
-
-
 contract MemoryInteractor {
     mmInterface mm;
 
@@ -36,7 +35,6 @@ contract MemoryInteractor {
 
     // Reads
     function readX(uint256 mmindex, uint64 registerIndex) public returns (uint64) {
-        //address = registerindex * sizeof(uint64)
         return memoryRead(mmindex, registerIndex * 8);
     }
 
@@ -248,6 +246,10 @@ contract MemoryInteractor {
         memoryWrite(mmindex, ShadowAddresses.getMcounteren(), value);
     }
 
+    function writeMcycle(uint256 mmindex, uint64 value) public {
+        memoryWrite(mmindex, ShadowAddresses.getMcycle(), value);
+    }
+
     function writeMinstret(uint256 mmindex, uint64 value) public {
         memoryWrite(mmindex, ShadowAddresses.getMinstret(), value);
     }
@@ -362,22 +364,14 @@ contract MemoryInteractor {
     }
 
     function writeX(uint256 mmindex, uint64 registerindex, uint64 value) public {
-        //address = registerindex * sizeof(uint64)
-        //bytes8 bytesvalue = bytes8(BitsManipulationLibrary.uint64SwapEndian(value));
         memoryWrite(mmindex, registerindex * 8, value);
     }
 
     // Internal functions
     function memoryRead(uint256 index, uint64 readAddress) public returns (uint64) {
-        //return uint64(mm.read(index, address));
         return BitsManipulationLibrary.uint64SwapEndian(
             uint64(mm.read(index, readAddress))
         );
-    }
-
-    // Memory Read endianess swap
-    function pureMemoryRead(uint256 index, uint64 readAddress) public returns (uint64) {
-        return uint64(mm.read(index, readAddress));
     }
 
     function memoryWrite(uint256 index, uint64 writeAddress, uint64 value) public {
@@ -386,8 +380,15 @@ contract MemoryInteractor {
     }
 
     // Memory Write without endianess swap
-    function pureMemoryWrite(uint256 index, uint64 writeAddress, uint64 value) public {
+    function pureMemoryWrite(uint256 index, uint64 writeAddress, uint64 value) internal {
         mm.write(index, writeAddress, bytes8(value));
     }
+
+    // Memory Read without endianess swap
+    function pureMemoryRead(uint256 index, uint64 readAddress) internal returns (uint64) {
+        return uint64(mm.read(index, readAddress));
+    }
+
+
 }
 

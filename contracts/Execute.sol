@@ -1,7 +1,6 @@
 /// @title Execute
 pragma solidity ^0.5.0;
 
-import "./ShadowAddresses.sol";
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
 import "./VirtualMemory.sol";
@@ -34,28 +33,161 @@ library Execute {
     uint256 constant CSRRCI_CODE = 1;
 
 
+    // \brief Finds associated instruction and execute it.
+    // \param mi Memory Interactor with which Step function is interacting.
+    // \param mmIndex Index corresponding to the instance of Memory Manager that.
+    // \param pc Current pc.
+    // \param insn Instruction.
+    // \return executeStatus.illegal if an illegal instruction exception was raised, or
+    // executeStatus.retired if not (even if it raises other exceptions).
     function executeInsn(
         uint256 mmIndex,
-        address miAddress,
+        MemoryInteractor mi,
         uint32 insn,
         uint64 pc
     )
     public returns (executeStatus)
     {
-        MemoryInteractor mi = MemoryInteractor(miAddress);
-
-        // Find instruction associated with that opcode
-        // Sometimes the opcode fully defines the associated instructions, but most
+        // Finds instruction associated with that opcode
+        // Sometimes the opcode fully defines the associated instruction, but most
         // of the times it only specifies which group it belongs to.
         // For example, an opcode of: 01100111 is always a LUI instruction but an
         // opcode of 1100011 might be BEQ, BNE, BLT etc
         // Reference: riscv-spec-v2.2.pdf - Table 19.2 - Page 104
-        return opinsn(
-            mi,
-            mmIndex,
-            insn,
-            pc
-        );
+
+        // OPCODE is located on bit 0 - 6 of the following types of 32bits instructions:
+        // R-Type, I-Type, S-Trype and U-Type
+        // Reference: riscv-spec-v2.2.pdf - Figure 2.2 - Page 11
+        uint32 opcode = RiscVDecoder.insnOpcode(insn);
+
+        if (opcode < 0x002f) {
+            if (opcode < 0x0017) {
+                if (opcode == 0x0003) {
+                    return loadFunct3(
+                        mi,
+                        mmIndex,
+                        insn,
+                        pc
+                    );
+                } else if (opcode == 0x000f) {
+                    return fenceGroup(
+                        mi,
+                        mmIndex,
+                        insn,
+                        pc
+                    );
+                } else if (opcode == 0x0013) {
+                    return executeArithmeticImmediate(
+                        mi,
+                        mmIndex,
+                        insn,
+                        pc,
+                        ARITH_IMM_GROUP
+                    );
+                }
+            } else if (opcode > 0x0017) {
+                if (opcode == 0x001b) {
+                    return executeArithmeticImmediate(
+                        mi,
+                        mmIndex,
+                        insn,
+                        pc,
+                        ARITH_IMM_GROUP_32
+                    );
+                } else if (opcode == 0x0023) {
+                    return storeFunct3(
+                        mi,
+                        mmIndex,
+                        insn,
+                        pc
+                    );
+                }
+            } else if (opcode == 0x0017) {
+                StandAloneInstructions.executeAuipc(
+                    mi,
+                    mmIndex,
+                    insn,
+                    pc
+                );
+                return advanceToNextInsn(mi, mmIndex, pc);
+            }
+        } else if (opcode > 0x002f) {
+            if (opcode < 0x0063) {
+                if (opcode == 0x0033) {
+                    return executeArithmetic(
+                        mi,
+                        mmIndex,
+                        insn,
+                        pc,
+                        ARITH_GROUP
+                    );
+                } else if (opcode == 0x003b) {
+                    return executeArithmetic(
+                        mi,
+                        mmIndex,
+                        insn,
+                        pc,
+                        ARITH_GROUP_32
+                    );
+                } else if (opcode == 0x0037) {
+                    StandAloneInstructions.executeLui(
+                        mi,
+                        mmIndex,
+                        insn,
+                        pc
+                    );
+                    return advanceToNextInsn(mi, mmIndex, pc);
+                }
+            } else if (opcode > 0x0063) {
+                if (opcode == 0x0067) {
+                    (bool succ, uint64 newPc) = StandAloneInstructions.executeJalr(
+                        mi,
+                        mmIndex,
+                        insn,
+                        pc
+                    );
+                    if (succ) {
+                        return executeJump(mi, mmIndex, newPc);
+                    } else {
+                        return raiseMisalignedFetchException(mi, mmIndex, newPc);
+                    }
+                } else if (opcode == 0x0073) {
+                    return csrEnvTrapIntMmFunct3(
+                        mi,
+                        mmIndex,
+                        insn,
+                        pc
+                    );
+                } else if (opcode == 0x006f) {
+                    (bool succ, uint64 newPc) = StandAloneInstructions.executeJal(
+                        mi,
+                        mmIndex,
+                        insn,
+                        pc
+                    );
+                    if (succ) {
+                        return executeJump(mi, mmIndex, newPc);
+                    } else {
+                        return raiseMisalignedFetchException(mi, mmIndex, newPc);
+                    }
+                }
+            } else if (opcode == 0x0063) {
+                return executeBranch(
+                    mi,
+                    mmIndex,
+                    insn,
+                    pc
+                );
+            }
+        } else if (opcode == 0x002f) {
+            return atomicFunct3Funct5(
+                mi,
+                mmIndex,
+                insn,
+                pc
+            );
+        }
+        return raiseIllegalInsnException(mi, mmIndex, insn);
     }
 
     function executeArithmeticImmediate(
@@ -164,7 +296,6 @@ library Execute {
 
         if (succ) {
             if (isSigned) {
-                // TO-DO: make sure this is ok
                 val = BitsManipulationLibrary.uint64SignExtension(val, wordSize);
             }
             mi.writeX(mmIndex, RiscVDecoder.insnRd(insn), val);
@@ -200,7 +331,7 @@ library Execute {
     function executeJump(MemoryInteractor mi, uint256 mmIndex, uint64 newPc)
     public returns (executeStatus)
     {
-        mi.memoryWrite(mmIndex, ShadowAddresses.getPc(), newPc);
+        mi.writePc(mmIndex, newPc);
         return executeStatus.retired;
     }
 
@@ -231,14 +362,16 @@ library Execute {
     function advanceToNextInsn(MemoryInteractor mi, uint256 mmIndex, uint64 pc)
     public returns (executeStatus)
     {
-        mi.memoryWrite(mmIndex, ShadowAddresses.getPc(), pc + 4);
-        //emit Print("advanceToNext", 0);
+        mi.writePc(mmIndex, pc + 4);
         return executeStatus.retired;
     }
 
-    /// @notice Given a fence funct3 insn, finds the func associated.
-    //  Uses binary search for performance.
-    //  @param insn for fence funct3 field.
+    // \brief Given a fence funct3 insn, finds the func associated.
+    // \param mi Memory Interactor with which Step function is interacting.
+    // \param mmIndex Index corresponding to the instance of Memory Manager that.
+    // \param insn for fence funct3 field.
+    // \param pc.
+    //  \details Uses binary search for performance.
     function fenceGroup(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -261,9 +394,12 @@ library Execute {
         return advanceToNextInsn(mi, mmIndex, pc);
     }
 
-    /// @notice Given csr env trap int mm funct3 insn, finds the func associated.
-    //  Uses binary search for performance.
-    //  @param insn for csr env trap int mm funct3 field.
+    // \brief Given csr env trap int mm funct3 insn, finds the func associated.
+    // \param mi Memory Interactor with which Step function is interacting.
+    // \param mmIndex Index corresponding to the instance of Memory Manager that.
+    // \param insn for fence funct3 field.
+    // \param pc.
+    //  \details Uses binary search for performance.
     function csrEnvTrapIntMmFunct3(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -368,9 +504,12 @@ library Execute {
         return raiseIllegalInsnException(mi, mmIndex, insn);
     }
 
-    /// @notice Given a store funct3 group insn, finds the function  associated.
-    //  Uses binary search for performance
-    //  @param insn for store funct3 field
+    // \brief Given a store funct3 group insn, finds the function  associated.
+    // \param mi Memory Interactor with which Step function is interacting.
+    // \param mmIndex Index corresponding to the instance of Memory Manager that.
+    // \param insn for store funct3 field
+    // \param pc.
+    //  \details Uses binary search for performance.
     function storeFunct3(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -422,9 +561,12 @@ library Execute {
         return raiseIllegalInsnException(mi, mmIndex, insn);
     }
 
-    /// @notice Given a env trap int group insn, finds the func associated.
-    //  Uses binary search for performance.
-    //  @param insn for env trap int group field.
+    // \brief Given a env trap int group insn, finds the func associated.
+    // \param mi Memory Interactor with which Step function is interacting.
+    // \param mmIndex Index corresponding to the instance of Memory Manager that.
+    // \param insn insn for env trap int group field.
+    // \param pc.
+    //  \details Uses binary search for performance.
     function envTrapIntGroup(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -495,9 +637,12 @@ library Execute {
         );
     }
 
-    /// @notice Given a load funct3 group instruction, finds the function
-    //  associated with it. Uses binary search for performance
-    //  @param insn for load funct3 field
+    // \brief Given a load funct3 group instruction, finds the function
+    // \param mi Memory Interactor with which Step function is interacting.
+    // \param mmIndex Index corresponding to the instance of Memory Manager that.
+    // \param insn for load funct3 field
+    // \param pc.
+    //  \details Uses binary search for performance.
     function loadFunct3(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -768,152 +913,6 @@ library Execute {
             return advanceToNextInsn(mi, mmIndex, pc);
         } else {
             return executeStatus.retired;
-        }
-        return raiseIllegalInsnException(mi, mmIndex, insn);
-    }
-
-    /// @notice Given an op code, finds the group of instructions it belongs to
-    //  using a binary search for performance.
-    //  @param insn for opcode fields.
-    function opinsn(
-        MemoryInteractor mi,
-        uint256 mmIndex,
-        uint32 insn,
-        uint64 pc
-    )
-    public returns (executeStatus)
-    {
-        // OPCODE is located on bit 0 - 6 of the following types of 32bits instructions:
-        // R-Type, I-Type, S-Trype and U-Type
-        // Reference: riscv-spec-v2.2.pdf - Figure 2.2 - Page 11
-        uint32 opcode = RiscVDecoder.insnOpcode(insn);
-
-        if (opcode < 0x002f) {
-            if (opcode < 0x0017) {
-                if (opcode == 0x0003) {
-                    return loadFunct3(
-                        mi,
-                        mmIndex,
-                        insn,
-                        pc
-                    );
-                }else if (opcode == 0x000f) {
-                    return fenceGroup(
-                        mi,
-                        mmIndex,
-                        insn,
-                        pc
-                    );
-                }else if (opcode == 0x0013) {
-                    return executeArithmeticImmediate(
-                        mi,
-                        mmIndex,
-                        insn,
-                        pc,
-                        ARITH_IMM_GROUP
-                    );
-                }
-            } else if (opcode > 0x0017) {
-                if (opcode == 0x001b) {
-                    return executeArithmeticImmediate(
-                        mi,
-                        mmIndex,
-                        insn,
-                        pc,
-                        ARITH_IMM_GROUP_32
-                    );
-                } else if (opcode == 0x0023) {
-                    return storeFunct3(
-                        mi,
-                        mmIndex,
-                        insn,
-                        pc
-                    );
-                }
-            } else if (opcode == 0x0017) {
-                StandAloneInstructions.executeAuipc(
-                    mi,
-                    mmIndex,
-                    insn,
-                    pc
-                );
-                return advanceToNextInsn(mi, mmIndex, pc);
-            }
-        } else if (opcode > 0x002f) {
-            if (opcode < 0x0063) {
-                if (opcode == 0x0033) {
-                    return executeArithmetic(
-                        mi,
-                        mmIndex,
-                        insn,
-                        pc,
-                        ARITH_GROUP
-                    );
-                } else if (opcode == 0x003b) {
-                    return executeArithmetic(
-                        mi,
-                        mmIndex,
-                        insn,
-                        pc,
-                        ARITH_GROUP_32
-                    );
-                } else if (opcode == 0x0037) {
-                    StandAloneInstructions.executeLui(
-                        mi,
-                        mmIndex,
-                        insn,
-                        pc
-                    );
-                    return advanceToNextInsn(mi, mmIndex, pc);
-                }
-            } else if (opcode > 0x0063) {
-                if (opcode == 0x0067) {
-                    (bool succ, uint64 newPc) = StandAloneInstructions.executeJalr(
-                        mi,
-                        mmIndex,
-                        insn,
-                        pc
-                    );
-                    if (succ) {
-                        return executeJump(mi, mmIndex, newPc);
-                    } else {
-                        return raiseMisalignedFetchException(mi, mmIndex, newPc);
-                    }
-                } else if (opcode == 0x0073) {
-                    return csrEnvTrapIntMmFunct3(
-                        mi,
-                        mmIndex,
-                        insn,
-                        pc
-                    );
-                } else if (opcode == 0x006f) {
-                    (bool succ, uint64 newPc) = StandAloneInstructions.executeJal(
-                        mi,
-                        mmIndex,
-                        insn,
-                        pc
-                    );
-                    if (succ) {
-                        return executeJump(mi, mmIndex, newPc);
-                    } else {
-                        return raiseMisalignedFetchException(mi, mmIndex, newPc);
-                    }
-                }
-            } else if (opcode == 0x0063) {
-                return executeBranch(
-                    mi,
-                    mmIndex,
-                    insn,
-                    pc
-                );
-            }
-        } else if (opcode == 0x002f) {
-            return atomicFunct3Funct5(
-                mi,
-                mmIndex,
-                insn,
-                pc
-            );
         }
         return raiseIllegalInsnException(mi, mmIndex, insn);
     }
