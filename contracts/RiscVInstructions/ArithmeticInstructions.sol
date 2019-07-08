@@ -387,7 +387,7 @@ library ArithmeticInstructions {
                     return (executeSLLW(mi, mmIndex, insn), true);
                 } else if (funct3Funct7 == 0x0201) {
                     /*funct3Funct7 == 0x0201*/
-                    return (executeDIVUW(mi, mmIndex, insn), true);
+                    return (executeDIVW(mi, mmIndex, insn), true);
                 }
             } else if (funct3Funct7 == 0x0020) {
                 /*funct3Funct7 == 0x0020*/
