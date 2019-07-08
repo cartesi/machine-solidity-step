@@ -60,7 +60,7 @@ contract TestRamMMInstantiator is MMInterface, Decorated {
     event ValueProved(uint256 _index, bool _wasRead, uint64 _position, bytes8 _value);
     event ValueRead(uint256 _index, uint64 _position, bytes8 _value);
     event ValueWritten(uint256 _index, uint64 _position, bytes8 _value);
-    event HTIFExit(uint256 _index, uint64 _exitCode);
+    event HTIFExit(uint256 _index, uint64 _exitCode, bool _halt);
     event FinishedProofs(uint256 _index);
     event FinishedReplay(uint256 _index);
 
@@ -89,18 +89,21 @@ contract TestRamMMInstantiator is MMInterface, Decorated {
     /// @notice Perform a read in HTIF to get the arbitrary exit code
     function htifExit(uint256 _index) public
         onlyInstantiated(_index)
-        returns (uint64 _exitCode)
+        returns (uint64, bool)
     {
         uint64 val = uint64(instance[_index].memoryMap[0x40008000]);
-        uint64 relAddr = 1;
-        uint64 wordSize = 48;
+        bool halt = false;
 
-        // mask to clean a piece of the value that was on memory
-        uint64 valueMask = BitsManipulationLibrary.uint64SwapEndian((2 ** wordSize) - 1);
-        val = BitsManipulationLibrary.uint64SwapEndian(val & valueMask) >> relAddr;
+        val = BitsManipulationLibrary.uint64SwapEndian(val);
 
-        emit HTIFExit(_index, val);
-        return val;
+        uint64 bit0 = val & 1;
+        uint64 bits48To64 = val & (((2 ** 16) - 1) << 48);
+        val = (val & ((2 ** 48) - 1)) >> 1;
+
+        halt = (bit0 == 1) && (bits48To64 == 0);
+
+        emit HTIFExit(_index, val, halt);
+        return (val, halt);
     }
 
     /// @notice Replays a read in memory that has been proved to be correct

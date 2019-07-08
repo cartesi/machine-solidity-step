@@ -11,6 +11,7 @@ import {Interrupts} from "../contracts/Interrupts.sol";
 
 contract Step {
     event StepGiven(uint8 exitCode);
+    event StepStatus(uint64 cycle, bool halt);
 
     MemoryInteractor mi;
 
@@ -30,6 +31,7 @@ contract Step {
 
         if ((iflags & 1) != 0) {
             //machine is halted
+            emit StepStatus(0, true);
             return endStep(mmIndex, 0);
         }
         //Raise the highest priority interrupt
@@ -63,6 +65,7 @@ contract Step {
         // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
         uint64 mcycle = mi.readMcycle(mmIndex);
         mi.writeMcycle(mmIndex, mcycle + 1);
+        emit StepStatus(mcycle + 1, false);
 
         return endStep(mmIndex, 0);
     }

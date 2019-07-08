@@ -30,6 +30,7 @@ var Interrupts = artifacts.require("./Interrupts.sol");
 //Contracts
 var MMInstantiator = artifacts.require("./MMInstantiator.sol");
 var MockMMInstantiator = artifacts.require("./MockMMInstantiator.sol");
+var TestRamMMInstantiator = artifacts.require("./TestRamMMInstantiator.sol");
 var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
 var VirtualMemory = artifacts.require("./VirtualMemory.sol");
 var Step = artifacts.require("./Step.sol");
@@ -173,18 +174,25 @@ module.exports = function(deployer) {
     await deployer.link(ShadowAddresses, MemoryInteractor);
 
     await deployer.deploy(MMInstantiator)
+    // use MockMMInstantiator to run test_single_step.py and test_multi_steps.py
     await deployer.deploy(MockMMInstantiator)
+    
+    await deployer.link(BitsManipulationLibrary, TestRamMMInstantiator);
+    // use TestRamMMInstantiator to run test_ram.py
+    await deployer.deploy(TestRamMMInstantiator)
 
     let mmAddress;
     if (process.env.CARTESI_INTEGRATION_MM_ADDR) {
-      console.log("Deploying MemoryInteractor in integration environment, address: " + process.env.CARTESI_INTEGRATION_MM_ADDR);
-      await deployer.deploy(MemoryInteractor, process.env.CARTESI_INTEGRATION_MM_ADDR);
       mmAddress = process.env.CARTESI_INTEGRATION_MM_ADDR
+      console.log("Deploying MemoryInteractor in integration environment, address: " + mmAddress);
+    } else if (false) {
+      mmAddress = TestRamMMInstantiator.address
+      console.log("Deploying MemoryInteractor in test environment, with Test Ram MM address: " + mmAddress);
     } else {
-      console.log("Deploying MemoryInteractor in test environment, with Mock MM address: " + MockMMInstantiator.address);
-      await deployer.deploy(MemoryInteractor, MockMMInstantiator.address);
       mmAddress = MockMMInstantiator.address
+      console.log("Deploying MemoryInteractor in test environment, with Mock MM address: " + mmAddress);
     }
+    await deployer.deploy(MemoryInteractor, mmAddress);
     await deployer.deploy(Step, MemoryInteractor.address);
 
     // Write address to file
