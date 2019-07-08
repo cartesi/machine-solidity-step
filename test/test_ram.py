@@ -80,7 +80,7 @@ with open('./deployedAddresses.json') as json_file:
 step = w3.eth.contract(address=deployedAddresses["step_address"], abi=step_data['abi'])
 mm = w3.eth.contract(address=deployedAddresses["mm_address"], abi=mm_data['abi'])
 
-tx_hash = mm.functions.instantiate(w3.eth.accounts[0], w3.eth.accounts[0], fake_hash).transact({'from': w3.eth.coinbase, 'gas': 9007199254740991})
+tx_hash = mm.functions.instantiate(w3.eth.accounts[0], w3.eth.accounts[1], fake_hash).transact({'from': w3.eth.coinbase, 'gas': 9007199254740991})
 tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 mm_filter = mm.events.MemoryCreated.createFilter(fromBlock='latest')
 mm_index = mm_filter.get_all_entries()[0]['args']['_index']
