@@ -311,7 +311,7 @@ library AtomicInstructions {
             pc,
             insn,
             vaddr,
-            int32(valm < valr? valm : valr),
+            int32(valm) < int32(valr)? int32(valm) : int32(valr),
             int32(valm),
             32
         );
@@ -338,7 +338,7 @@ library AtomicInstructions {
             pc,
             insn,
             vaddr,
-            int32(valm > valr? valm : valr),
+            int32(valm) > int32(valr)? int32(valm) : int32(valr),
             int32(valm),
             32
         );
@@ -555,7 +555,7 @@ library AtomicInstructions {
             pc,
             insn,
             vaddr,
-            int64(valm < valr? valm : valr),
+            int64(valm) < int64(valr)? int64(valm) : int64(valr),
             int64(valm),
             64
         );
@@ -582,7 +582,7 @@ library AtomicInstructions {
             pc,
             insn,
             vaddr,
-            int64(valm > valr? valm : valr),
+            int64(valm) > int64(valr)? int64(valm) : int64(valr),
             int64(valm),
             64
         );
