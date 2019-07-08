@@ -198,7 +198,7 @@ library ArithmeticInstructions {
     function executeSLLW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
 
-        int32 rs1w = int32(rs1) << (rs2 & 31);
+        int32 rs1w = int32(uint32(rs1) << (rs2 & 31));
 
         return uint64(rs1w);
     }
@@ -206,7 +206,7 @@ library ArithmeticInstructions {
     function executeSRLW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
 
-        int32 rs1w = BitsManipulationLibrary.int32ArithShiftRight(int32(rs1), (rs2 & 31));
+        int32 rs1w = int32(uint32(rs1) >> (rs2 & 31));
 
         return uint64(rs1w);
     }
