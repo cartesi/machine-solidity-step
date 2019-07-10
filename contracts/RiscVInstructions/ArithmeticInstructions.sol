@@ -111,20 +111,20 @@ library ArithmeticInstructions {
         int64 srs1 = int64(rs1);
         int64 srs2 = int64(rs2);
 
-        return uint64(BitsManipulationLibrary.int128ArithShiftRight((int128(srs1) * int128(srs2)), 64));
+        return uint64((int128(srs1) * int128(srs2)) >> 64);
     }
 
     function executeMULHSU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
         int64 srs1 = int64(rs1);
 
-        return uint64(BitsManipulationLibrary.int128ArithShiftRight((int128(srs1) * int128(rs2)), 64));
+        return uint64((int128(srs1) * int128(rs2)) >> 64);
     }
 
     function executeMULHU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
 
-        return uint64(BitsManipulationLibrary.int128ArithShiftRight((int128(rs1) * int128(rs2)), 64));
+        return uint64((int128(rs1) * int128(rs2)) >> 64);
     }
 
     function executeDIV(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
