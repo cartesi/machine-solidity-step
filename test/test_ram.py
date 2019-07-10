@@ -14,11 +14,12 @@ def bytes_from_file(filename, chunksize):
             else:
                 break
 
-def load_bytes_to_mm(filename, position, mm_index, w3):
-    print("loading file: " + filename + " to memory address: " + str(position))
+def load_bytes_to_mm(filename, position, mm_index, w3, debug):
+    if(debug):
+        print("loading file: " + filename + " to memory address: " + str(position))
     for b in bytes_from_file(filename, number_of_bytes):
         try:
-            tx_hash = mm.functions.write(mm_index, position, b).transact({'from': w3.eth.accounts[0], 'gas': 9007199254740991})
+            tx_hash = mm.functions.write(mm_index, position, b).transact({'from': w3.eth.coinbase, 'gas': 6283185})
             tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
         except ValueError as e:
             print(e)
@@ -26,14 +27,14 @@ def load_bytes_to_mm(filename, position, mm_index, w3):
             position += number_of_bytes
 
 def test_ram(step, mm, mm_index, w3):
-    print("Calling Step: ")
+    #print("Calling Step: ")
     halt = False
     cycle = 0
     htif_exit_code = 0
     
     while(True):
         try:
-            step_tx = step.functions.step(mm_index).transact({'from': w3.eth.accounts[0], 'gas': 9007199254740991})
+            step_tx = step.functions.step(mm_index).transact({'from': w3.eth.coinbase, 'gas': 6283185})
             tx_receipt = w3.eth.waitForTransactionReceipt(step_tx)
             step_filter = step.events.StepStatus.createFilter(fromBlock='latest')
             halt = step_filter.get_all_entries()[0]['args']['halt']
@@ -45,7 +46,7 @@ def test_ram(step, mm, mm_index, w3):
             print("REVERT")
             print(e)
 
-    mm_tx = mm.functions.htifExit(mm_index).transact({'from': w3.eth.accounts[0], 'gas': 9007199254740991})
+    mm_tx = mm.functions.htifExit(mm_index).transact({'from': w3.eth.coinbase, 'gas': 6283185})
     tx_receipt = w3.eth.waitForTransactionReceipt(mm_tx)
     mm_filter = mm.events.HTIFExit.createFilter(fromBlock='latest')
     htif_exit_code = mm_filter.get_all_entries()[0]['args']['_exitCode']
@@ -58,6 +59,7 @@ if len(sys.argv) != 2:
     sys.exit(1)
 
 fake_hash = bytes(32)
+fake_address = Web3.toChecksumAddress("0000000000000000000000000000000000000001")
 number_of_bytes = 8
 
 #Connecting to node
@@ -80,22 +82,22 @@ with open('./deployedAddresses.json') as json_file:
 step = w3.eth.contract(address=deployedAddresses["step_address"], abi=step_data['abi'])
 mm = w3.eth.contract(address=deployedAddresses["mm_address"], abi=mm_data['abi'])
 
-tx_hash = mm.functions.instantiate(w3.eth.accounts[0], w3.eth.accounts[1], fake_hash).transact({'from': w3.eth.coinbase, 'gas': 9007199254740991})
+tx_hash = mm.functions.instantiate(w3.eth.coinbase, fake_address, fake_hash).transact({'from': w3.eth.coinbase, 'gas': 6283185})
 tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
 mm_filter = mm.events.MemoryCreated.createFilter(fromBlock='latest')
 mm_index = mm_filter.get_all_entries()[0]['args']['_index']
 
 # load shadows
 position = 0
-load_bytes_to_mm("./test_ram/shadow-tests.bin", position, mm_index, w3)
+load_bytes_to_mm("./test_ram/shadow-tests.bin", position, mm_index, w3, False)
 
 # load rom
 position = 0x1000
-load_bytes_to_mm("./test_ram/jump-to-ram.bin", position, mm_index, w3)
+load_bytes_to_mm("./test_ram/jump-to-ram.bin", position, mm_index, w3, False)
 
 # load ram
 position = 0x80000000
-load_bytes_to_mm(sys.argv[1], position, mm_index, w3)
+load_bytes_to_mm(sys.argv[1], position, mm_index, w3, True)
 
 # run test program from ram
 test_ram(step, mm, mm_index, w3)

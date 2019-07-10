@@ -29,5 +29,21 @@ $ python install_solc.py
 
 ## Single Step ##
 
-run prepare_python_tests.sh  
-run run_python_tests.sh  
+```shell
+$ ./prepare_python_tests.sh  
+$ python test_single_step.py <path to single step .json file>  
+```
+
+## Multiple Steps ##
+
+```shell
+$ ./prepare_python_tests.sh  
+$ python test_single_step.py <path to multiple steps .json file>  
+```
+
+## Test Ram ##
+
+```shell
+$ ./prepare_python_tests.sh  
+$ python test_ram.py <path to test program .bin file>  
+```
