@@ -8,7 +8,9 @@ from solcx import get_solc_version, set_solc_version, compile_files
 
 def test_json_steps(json_steps, w3):
 
-    tx_hash = mm.functions.instantiate(w3.eth.accounts[0], w3.eth.accounts[1], jsonsteps[0]["accesses"][0]["proof"]["root_hash"]).transact({'from': w3.eth.coinbase, 'gas': 9007199254740991})
+    fake_address = Web3.toChecksumAddress("0000000000000000000000000000000000000001")
+
+    tx_hash = mm.functions.instantiate(w3.eth.coinbase, fake_address, jsonsteps[0]["accesses"][0]["proof"]["root_hash"]).transact({'from': w3.eth.coinbase, 'gas': 6283185})
     tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
     mm_filter = mm.events.MemoryCreated.createFilter(fromBlock='latest')
     mm_index = mm_filter.get_all_entries()[0]['args']['_index']
@@ -17,23 +19,29 @@ def test_json_steps(json_steps, w3):
         for rwentry in entry["accesses"]:
             if rwentry["operation"] == "READ":
                 try:
-                    tx_hash2 = mm.functions.proveRead(mm_index, rwentry["proof"]["address"], rwentry["read"], rwentry["proof"]["sibling_hashes"][::-1]).transact({'from': w3.eth.accounts[1], 'gas': 9007199254740991})
+                    tx_hash2 = mm.functions.proveRead(mm_index, rwentry["proof"]["address"], rwentry["read"], rwentry["proof"]["sibling_hashes"][::-1]).transact({'from': w3.eth.coinbase, 'gas': 6283185})
                     receipt = w3.eth.waitForTransactionReceipt(tx_hash2)
+                    if receipt['status'] == 0:
+                        raise ValueError(receipt['transactionHash'].hex())
                 except ValueError as e:
-                    print("READ REVERT")
+                    print("proveRead REVERT transaction")
             else:
                 try:
-                    tx_hash2 = mm.functions.proveWrite(mm_index, rwentry["proof"]["address"], rwentry["read"], rwentry["written"], rwentry["proof"]["sibling_hashes"][::-1]).transact({'from': w3.eth.accounts[1], 'gas': 9007199254740991})
+                    tx_hash2 = mm.functions.proveWrite(mm_index, rwentry["proof"]["address"], rwentry["read"], rwentry["written"], rwentry["proof"]["sibling_hashes"][::-1]).transact({'from': w3.eth.coinbase, 'gas': 6283185})
                     receipt = w3.eth.waitForTransactionReceipt(tx_hash2)
+                    if receipt['status'] == 0:
+                        raise ValueError(receipt['transactionHash'].hex())
                 except ValueError as e:
-                    print("WRITE REVERT")
+                    print("proveWrite REVERT transaction")
 
         print("Callin Step: ")
         try:
-            step_tx = step.functions.step(mm_index).transact({'from': w3.eth.accounts[0], 'gas': 9007199254740991})
+            step_tx = step.functions.step(mm_index).transact({'from': w3.eth.coinbase, 'gas': 6283185})
             tx_receipt = w3.eth.waitForTransactionReceipt(step_tx)
+            if receipt['status'] == 0:
+                raise ValueError(receipt['transactionHash'].hex())
         except ValueError as e:
-            print("REVERT")
+            print("REVERT step")
             print(e)
         else:
             print("SUCCESS")

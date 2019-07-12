@@ -31,14 +31,48 @@ def test_ram(step, mm, mm_index, w3):
     halt = False
     cycle = 0
     htif_exit_code = 0
+
+    log = []
     
     while(True):
         try:
             step_tx = step.functions.step(mm_index).transact({'from': w3.eth.coinbase, 'gas': 6283185})
             tx_receipt = w3.eth.waitForTransactionReceipt(step_tx)
+
+            # log the reads and writes via events
+            log_index = 0
+            step_log = {}
+            step_log['init_cycles'] = cycle
+            step_log['final_cycles'] = cycle + 1
+            step_log['accesses'] = []
+
+            mm_logs = mm.events.ValueReplay().processReceipt(tx_receipt)
+            while(log_index < len(mm_logs)):
+                replay_log = {}
+                is_read = mm_logs[log_index]['args']['_isRead']
+                position = mm_logs[log_index]['args']['_position']
+                read_value = mm_logs[log_index]['args']['_readValue']
+                written_value = mm_logs[log_index]['args']['_writtenValue']
+                log_index += 1
+
+                if (is_read):
+                    replay_log['type'] = 'read'
+                else:
+                    replay_log['type'] = 'write'
+                replay_log['read'] = read_value.hex()
+                replay_log['written'] = written_value.hex()
+                replay_log['proof'] = {}
+                replay_log['proof']['address'] = position
+
+                step_log['accesses'].append(replay_log)
+
+            log.append(step_log)
+
             step_filter = step.events.StepStatus.createFilter(fromBlock='latest')
             halt = step_filter.get_all_entries()[0]['args']['halt']
             if(halt):
+                # remove the last read checking halt flag
+                log.pop(len(log) - 1)
                 break
             cycle = step_filter.get_all_entries()[0]['args']['cycle']
 
@@ -51,6 +85,9 @@ def test_ram(step, mm, mm_index, w3):
     mm_filter = mm.events.HTIFExit.createFilter(fromBlock='latest')
     htif_exit_code = mm_filter.get_all_entries()[0]['args']['_exitCode']
     print("cycles: " + str(cycle) + ", exit code: " + str(htif_exit_code))
+
+    with open('ram_replay.json', 'w') as outfile:  
+        json.dump(log, outfile)
 
 # start of main test
 
