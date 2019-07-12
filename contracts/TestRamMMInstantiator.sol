@@ -57,9 +57,7 @@ contract TestRamMMInstantiator is MMInterface, Decorated {
     //
 
     event MemoryCreated(uint256 _index, bytes32 _initialHash);
-    event ValueProved(uint256 _index, bool _wasRead, uint64 _position, bytes8 _value);
-    event ValueRead(uint256 _index, uint64 _position, bytes8 _value);
-    event ValueWritten(uint256 _index, uint64 _position, bytes8 _value);
+    event ValueReplay(bool _isRead, uint256 _index, uint64 _position, bytes8 _readValue, bytes8 _writtenValue);
     event HTIFExit(uint256 _index, uint64 _exitCode, bool _halt);
     event FinishedProofs(uint256 _index);
     event FinishedReplay(uint256 _index);
@@ -76,6 +74,34 @@ contract TestRamMMInstantiator is MMInterface, Decorated {
 
         active[currentIndex] = true;
         return currentIndex++;
+    }
+
+    /// @notice Proves that a certain value in current memory is correct
+    // @param _position The address of the value to be confirmed
+    // @param _value The value in that address to be confirmed
+    // @param proof The proof that this value is correct
+    function proveRead(
+        uint256 _index,
+        uint64 _position,
+        bytes8 _value,
+        bytes32[] memory proof) public
+    {
+        revert("ProveRead shall not be called in TestRamMMInstantiator");
+    }
+
+    /// @notice Register a write operation and update newHash
+    /// @param _position to be written
+    /// @param _oldValue before write
+    /// @param _newValue to be written
+    /// @param proof The proof that the old value was correct
+    function proveWrite(
+        uint256 _index,
+        uint64 _position,
+        bytes8 _oldValue,
+        bytes8 _newValue,
+        bytes32[] memory proof) public
+    {
+        revert("ProveWrite shall not be called in TestRamMMInstantiator");
     }
 
     /// @notice Stop memory insertion and start read and write phase
@@ -106,6 +132,16 @@ contract TestRamMMInstantiator is MMInterface, Decorated {
         return (val, halt);
     }
 
+    /// @notice initialize the memory with value
+    /// @param _position of the memory
+    /// @param _value to be written
+    function initMemory(uint256 _index, uint64 _position, bytes8 _value) public
+        onlyInstantiated(_index)
+    {
+        require((_position & 7) == 0, "Position is not aligned");
+        instance[_index].memoryMap[_position] = _value;
+    }
+
     /// @notice Replays a read in memory that has been proved to be correct
     /// according to initial hash
     /// @param _position of the desired memory
@@ -115,7 +151,12 @@ contract TestRamMMInstantiator is MMInterface, Decorated {
     {
         require((_position & 7) == 0, "Position is not aligned");
         bytes8 value = instance[_index].memoryMap[_position];
-        emit ValueRead(_index, _position, value);
+        emit ValueReplay(
+            true,
+            _index,
+            _position,
+            value,
+            0);
         return value;
     }
 
@@ -126,8 +167,14 @@ contract TestRamMMInstantiator is MMInterface, Decorated {
         onlyInstantiated(_index)
     {
         require((_position & 7) == 0, "Position is not aligned");
+        bytes8 oldValue = instance[_index].memoryMap[_position];
         instance[_index].memoryMap[_position] = _value;
-        emit ValueWritten(_index, _position, _value);
+        emit ValueReplay(
+            false,
+            _index,
+            _position,
+            oldValue,
+            _value);
     }
 
     /// @notice Stop write (or read) phase
