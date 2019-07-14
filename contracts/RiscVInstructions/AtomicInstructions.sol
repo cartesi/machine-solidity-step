@@ -172,6 +172,8 @@ library AtomicInstructions {
             insn,
             32
         );
+        if (!succ)
+            return succ;
         return executeAMOWPart2(
             mi,
             mmIndex,
@@ -198,6 +200,8 @@ library AtomicInstructions {
             insn,
             32
         );
+        if (!succ)
+            return succ;
         return executeAMOWPart2(
             mi,
             mmIndex,
@@ -224,6 +228,8 @@ library AtomicInstructions {
             insn,
             32
         );
+        if (!succ)
+            return succ;
         return executeAMOWPart2(
             mi,
             mmIndex,
@@ -250,6 +256,8 @@ library AtomicInstructions {
             insn,
             32
         );
+        if (!succ)
+            return succ;
         return executeAMOWPart2(
             mi,
             mmIndex,
@@ -277,6 +285,8 @@ library AtomicInstructions {
             insn,
             32
         );
+        if (!succ)
+            return succ;
         return executeAMOWPart2(
             mi,
             mmIndex,
@@ -305,6 +315,8 @@ library AtomicInstructions {
             insn,
             32
         );
+        if (!succ)
+            return succ;
         return executeAMOWPart2(
             mi,
             mmIndex,
@@ -332,6 +344,8 @@ library AtomicInstructions {
             insn,
             32
         );
+        if (!succ)
+            return succ;
         return executeAMOWPart2(
             mi,
             mmIndex,
@@ -359,6 +373,8 @@ library AtomicInstructions {
             insn,
             32
         );
+        if (!succ)
+            return succ;
         return executeAMOWPart2(
             mi,
             mmIndex,
@@ -386,6 +402,8 @@ library AtomicInstructions {
             insn,
             32
         );
+        if (!succ)
+            return succ;
         return executeAMOWPart2(
             mi,
             mmIndex,
@@ -413,6 +431,8 @@ library AtomicInstructions {
             insn,
             64
         );
+        if (!succ)
+            return succ;
         return executeAMODPart2(
             mi,
             mmIndex,
@@ -440,6 +460,8 @@ library AtomicInstructions {
             insn,
             64
         );
+        if (!succ)
+            return succ;
         return executeAMODPart2(
             mi,
             mmIndex,
@@ -467,6 +489,8 @@ library AtomicInstructions {
             insn,
             64
         );
+        if (!succ)
+            return succ;
         return executeAMODPart2(
             mi,
             mmIndex,
@@ -494,6 +518,8 @@ library AtomicInstructions {
             insn,
             64
         );
+        if (!succ)
+            return succ;
         return executeAMODPart2(
             mi,
             mmIndex,
@@ -521,6 +547,8 @@ library AtomicInstructions {
             insn,
             64
         );
+        if (!succ)
+            return succ;
         return executeAMODPart2(
             mi,
             mmIndex,
@@ -549,6 +577,8 @@ library AtomicInstructions {
             insn,
             64
         );
+        if (!succ)
+            return succ;
         return executeAMODPart2(
             mi,
             mmIndex,
@@ -576,6 +606,8 @@ library AtomicInstructions {
             insn,
             64
         );
+        if (!succ)
+            return succ;
         return executeAMODPart2(
             mi,
             mmIndex,
@@ -603,6 +635,8 @@ library AtomicInstructions {
             insn,
             64
         );
+        if (!succ)
+            return succ;
         // TO-DO: this is uint not int
         return executeAMODPart2(
             mi,
@@ -632,6 +666,8 @@ library AtomicInstructions {
             insn,
             64
         );
+        if (!succ)
+            return succ;
         return executeAMODPart2(
             mi,
             mmIndex,
