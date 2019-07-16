@@ -36,7 +36,7 @@ library Fetch {
                 mi,
                 mmIndex,
                 Exceptions.getMcauseFetchPageFault(),
-                paddr
+                pc
             );
             //returns fetchException and returns zero as insn and pc
             return (fetchStatus.exception, 0, 0);

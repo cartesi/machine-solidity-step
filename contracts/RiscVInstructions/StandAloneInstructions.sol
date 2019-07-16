@@ -56,7 +56,7 @@ library StandAloneInstructions {
     )
     public returns (bool, uint64)
     {
-        uint64 newPc = uint64(int64(mi.readX(mmIndex, RiscVDecoder.insnRs1(insn)))) & ~uint64(1);
+        uint64 newPc = uint64(int64(mi.readX(mmIndex, RiscVDecoder.insnRs1(insn))) + int64(RiscVDecoder.insnIImm(insn))) & ~uint64(1);
 
         if ((newPc & 3) != 0) {
             return (false, newPc);

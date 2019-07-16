@@ -31,7 +31,7 @@ library RiscVDecoder {
     /// brief Get the I-type instruction's immediate value
     //  param insn Instruction
     function insnIImm(uint32 insn) public pure returns(int32) {
-        return BitsManipulationLibrary.int32ArithShiftRight(int32(insn), 20);
+        return int32(insn) >> 20;
     }
 
     /// brief Get the I-type instruction's unsigned immediate value

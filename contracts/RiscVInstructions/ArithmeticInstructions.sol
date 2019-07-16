@@ -111,20 +111,20 @@ library ArithmeticInstructions {
         int64 srs1 = int64(rs1);
         int64 srs2 = int64(rs2);
 
-        return uint64(BitsManipulationLibrary.int128ArithShiftRight((int128(srs1) * int128(srs2)), 64));
+        return uint64((int128(srs1) * int128(srs2)) >> 64);
     }
 
     function executeMULHSU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
         int64 srs1 = int64(rs1);
 
-        return uint64(BitsManipulationLibrary.int128ArithShiftRight((int128(srs1) * int128(rs2)), 64));
+        return uint64((int128(srs1) * int128(rs2)) >> 64);
     }
 
     function executeMULHU(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
 
-        return uint64(BitsManipulationLibrary.int128ArithShiftRight((int128(rs1) * int128(rs2)), 64));
+        return uint64((int128(rs1) * int128(rs2)) >> 64);
     }
 
     function executeDIV(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
@@ -198,7 +198,7 @@ library ArithmeticInstructions {
     function executeSLLW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
 
-        int32 rs1w = int32(rs1) << (rs2 & 31);
+        int32 rs1w = int32(uint32(rs1) << (rs2 & 31));
 
         return uint64(rs1w);
     }
@@ -206,7 +206,7 @@ library ArithmeticInstructions {
     function executeSRLW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
 
-        int32 rs1w = BitsManipulationLibrary.int32ArithShiftRight(int32(rs1), (rs2 & 31)); 
+        int32 rs1w = int32(uint32(rs1) >> (rs2 & 31));
 
         return uint64(rs1w);
     }
@@ -387,7 +387,7 @@ library ArithmeticInstructions {
                     return (executeSLLW(mi, mmIndex, insn), true);
                 } else if (funct3Funct7 == 0x0201) {
                     /*funct3Funct7 == 0x0201*/
-                    return (executeDIVUW(mi, mmIndex, insn), true);
+                    return (executeDIVW(mi, mmIndex, insn), true);
                 }
             } else if (funct3Funct7 == 0x0020) {
                 /*funct3Funct7 == 0x0020*/
