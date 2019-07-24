@@ -1,4 +1,3 @@
-//const fs   = require('fs');
 require('dotenv').config();
 const fs = require('fs');
 
@@ -176,7 +175,7 @@ module.exports = function(deployer) {
     await deployer.deploy(MMInstantiator)
     // use MockMMInstantiator to run test_single_step.py and test_multi_steps.py
     await deployer.deploy(MockMMInstantiator)
-    
+
     await deployer.link(BitsManipulationLibrary, TestRamMMInstantiator);
     // use TestRamMMInstantiator to run test_ram.py
     await deployer.deploy(TestRamMMInstantiator)
@@ -201,5 +200,9 @@ module.exports = function(deployer) {
     fs.writeFile('../test/deployedAddresses.json', addr_json, (err) => {
       if (err) console.log("couldnt write to file");
     });
+
+    if (process.env.STEP_ADD_FILE_PATH) {
+        fs.writeFileSync(process.env.STEP_ADD_FILE_PATH, Step.address);
+    }
   });
 };
