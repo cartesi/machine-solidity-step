@@ -1,9 +1,10 @@
-/// @title PMA
 pragma solidity ^0.5.0;
 
 import "../contracts/MemoryInteractor.sol";
 
-
+/// @title PMA
+/// @author Felipe Argento
+/// @notice Implements PMA behaviour
 library PMA {
 
     uint64 constant MEMORY_ID = 0; ///< DID for memory
@@ -12,12 +13,12 @@ library PMA {
     uint64 constant CLINT_ID = 3;  ///< DID for CLINT device
     uint64 constant HTIF_ID = 4;   ///< DID for HTIF device
 
-    /// \brief Finds PMA that contains target physical address.
-    /// \param mi Memory Interactor with which Step function is interacting.
-    /// \param mmIndex Index corresponding to the instance of Memory Manager that
+    /// @notice Finds PMA that contains target physical address.
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that
     //contains the logs for this Step execution.
-    /// \param paddr Target physical address.
-    /// \returns start and length word of pma if found. If not, returns (0,0)
+    /// @param paddr Target physical address.
+    /// @return start and length word of pma if found. If not, returns (0,0)
     function findPmaEntry(MemoryInteractor mi, uint256 mmIndex, uint64 paddr) public returns (uint64, uint64) {
         // Hard coded ram address starts at 0x800
         // In total there are 32 PMAs from processor shadow to Flash disk 7.

@@ -1,17 +1,18 @@
-/// @title Exceptions
 pragma solidity ^0.5.0;
 
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/RiscVConstants.sol";
 
-
+/// @title Exceptions
+/// @author Felipe Argento
+/// @notice Implements raise exception behavior and mcause getters
 library Exceptions {
 
-    /// \brief Raise an exception (or interrupt).
-    /// \param mi Memory Interactor with which Step function is interacting.
-    /// \param mmIndex Index corresponding to the instance of Memory Manager that
-    /// \param cause Exception (or interrupt) mcause (or scause).
-    /// \param tval Associated tval.
+    /// @notice Raise an exception (or interrupt).
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that
+    /// @param cause Exception (or interrupt) mcause (or scause).
+    /// @param tval Associated tval.
     function raiseException(
         MemoryInteractor mi,
         uint256 mmIndex,

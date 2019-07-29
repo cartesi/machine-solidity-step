@@ -1,4 +1,3 @@
-// @title Virtual Memory
 pragma solidity ^0.5.0;
 
 import "./ShadowAddresses.sol";
@@ -10,7 +9,9 @@ import "../contracts/CLINT.sol";
 import "../contracts/HTIF.sol";
 import "../contracts/Exceptions.sol";
 
-
+/// @title Virtual Memory
+/// @author Felipe Argento
+/// @notice Defines Virtual Memory behaviour
 library VirtualMemory {
 
     // Variable positions on their respective array.
@@ -37,11 +38,11 @@ library VirtualMemory {
     uint256 constant PADDR = 3;
     uint256 constant VAL = 4;
 
-    // \brief Read word to virtual memory
-    // \param wordsize can be uint8, uint16, uint32 or uint64
-    // \param vaddr is the words virtual address
-    // \returns True if write was succesfull, false if not.
-    // \returns Word with receiveing value.
+    /// @notice Read word to virtual memory
+    /// @param wordSize can be uint8, uint16, uint32 or uint64
+    /// @param vaddr is the words virtual address
+    /// @return True if write was succesfull, false if not.
+    /// @return Word with receiveing value.
     function readVirtualMemory(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -124,11 +125,11 @@ library VirtualMemory {
         }
     }
 
-    // \brief Writes word to virtual memory
-    // \param wordsize can be uint8, uint16, uint32 or uint64
-    // \param vaddr is the words virtual address
-    // \param val is the value to be written
-    // \returns True if write was succesfull, false if not.
+    /// @notice Writes word to virtual memory
+    /// @param wordSize can be uint8, uint16, uint32 or uint64
+    /// @param vaddr is the words virtual address
+    /// @param val is the value to be written
+    /// @return True if write was succesfull, false if not.
     function writeVirtualMemory(
         MemoryInteractor mi,
         uint256 mmIndex,

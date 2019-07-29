@@ -1,4 +1,3 @@
-// @title csrreads
 pragma solidity ^0.5.0;
 
 import "../contracts/MemoryInteractor.sol";
@@ -6,9 +5,10 @@ import "../contracts/RiscVConstants.sol";
 import "../contracts/RiscVDecoder.sol";
 import "../contracts/RealTimeClock.sol";
 
-
+/// @title CSRReads
+/// @author Felipe Argento
+/// @notice Implements CSR read logic
 library CSRReads {
-    // csr reads
     function readCsrCycle(MemoryInteractor mi, uint256 mmIndex, uint32 csrAddr)
     internal returns(bool, uint64)
     {
@@ -214,10 +214,6 @@ library CSRReads {
         return (true, mi.readMimpid(mmIndex));
     }
 
-    // readCsrSuccess/fail make it easier to change behaviour if necessary.
-    //  function readCsrSuccess(uint64 val) internal returns(bool, uint64){
-    //    return (true, val);
-    //  }
     function readCsrFail() internal returns(bool, uint64) {
         return (false, 0);
     }
@@ -239,5 +235,4 @@ library CSRReads {
         }
         return (((counteren >> (csrAddr & 0x1f)) & 1) != 0);
     }
-
 }

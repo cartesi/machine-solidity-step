@@ -1,4 +1,3 @@
-/// @title Fetch
 pragma solidity ^0.5.0;
 
 import "./RiscVConstants.sol";
@@ -8,15 +7,17 @@ import "../contracts/PMA.sol";
 import "../contracts/VirtualMemory.sol";
 import "../contracts/Exceptions.sol";
 
-
+/// @title Fetch
+/// @author Felipe Argento
+/// @notice Implements main CSR read and write logic
 library Fetch {
 
-    // \brief Finds and loads next insn.
-    // \param mi Memory Interactor with which Step function is interacting.
-    // \param mmIndex Index corresponding to the instance of Memory Manager that
-    // \return Returns fetchStatus.success if load was successful, excpetion if not.
-    // \return Returns instructions
-    // \return Returns pc
+    /// @notice Finds and loads next insn.
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that
+    /// @return Returns fetchStatus.success if load was successful, excpetion if not.
+    /// @return Returns instructions
+    /// @return Returns pc
     function fetchInsn(uint256 mmIndex, MemoryInteractor mi) public returns (fetchStatus, uint32, uint64) {
         bool translateBool;
         uint64 paddr;

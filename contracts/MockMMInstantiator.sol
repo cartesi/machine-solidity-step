@@ -1,10 +1,3 @@
-// This is a Mock Memory Manager Instantantiator. This should never be deployed
-// on Main Net. Its only purpose is to enable testing of the riscV - solidity
-// contracts without the need to run a verification game with all the necessary
-// steps. This contract is unsafe.
-
-
-/// @title Mock Memory Manager Instantiator.
 pragma solidity ^0.5.0;
 
 import "./Decorated.sol";
@@ -12,8 +5,13 @@ import "./MMInterface.sol";
 import "./Merkle.sol";
 
 
+/// @title Mock Memory Manager Instantiator.
+/// @author Felipe Argento
+/// @notice A mock Memory Manager for testing purposes
+/// @dev This should never be deployed to Main net.
+/// @dev This contract is unsafe.
 contract MockMMInstantiator is MMInterface, Decorated {
-  // the privider will fill the memory for the client to read and write
+  // the provider will fill the memory for the client to read and write
   // memory starts with hash and all values that are inserted are first verified
   // then client can read inserted values and write some more
   // finally the provider has to update the hash to account for writes

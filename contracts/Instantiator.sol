@@ -1,7 +1,9 @@
-/// @title Interface for memory manager instantiator
 pragma solidity ^0.5.0;
 
 
+/// @title Instantiator
+/// @author Augusto Teixeira
+/// @notice Interface for memory manager instantiator
 contract Instantiator {
     uint256 public currentIndex = 0;
 

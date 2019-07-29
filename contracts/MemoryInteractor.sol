@@ -15,12 +15,15 @@ contract mmInterface {
 }
 
 
-// Every read performed by mi.memoryRead or mi.write should be followed by an
-// endianess swap from little endian to big endian. This is the case because
-// EVM is big endian but RiscV is little endian.
-// Reference: riscv-spec-v2.2.pdf - Preface to Version 2.0
-// Reference: Ethereum yellowpaper - Version 69351d5
-//            Appendix H. Virtual Machine Specification
+/// @title MemoryInteractor
+/// @author Felipe Argento
+/// @notice Bridge between Memory Manager and Step
+/// @dev Every read performed by mi.memoryRead or mi.write should be followed by an
+/// @dev endianess swap from little endian to big endian. This is the case because
+/// @dev EVM is big endian but RiscV is little endian.
+/// @dev Reference: riscv-spec-v2.2.pdf - Preface to Version 2.0
+/// @dev Reference: Ethereum yellowpaper - Version 69351d5
+/// @dev    Appendix H. Virtual Machine Specification
 contract MemoryInteractor {
     mmInterface mm;
 
@@ -388,7 +391,6 @@ contract MemoryInteractor {
     function pureMemoryRead(uint256 index, uint64 readAddress) internal returns (uint64) {
         return uint64(mm.read(index, readAddress));
     }
-
 
 }
 

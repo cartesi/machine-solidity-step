@@ -1,11 +1,12 @@
-/// @title ShadowAddresses
 pragma solidity ^0.5.0;
 
 
+/// @title ShadowAddresses
+/// @author Felipe Argento
+/// @notice Defines the processor state. Memory-mapped to the lowest 512 bytes in pm
+/// @dev Defined on Cartesi techpaper version 1.02 - Section 3 - table 2 
+/// Source: https://cartesi.io/cartesi_whitepaper.pdf 
 library ShadowAddresses {
-    // The processor state. Memory-mapped to the lowest 512 bytes in pm
-    // Defined on Cartesi techpaper version 1.02 - Section 3 - table 2
-    // Source: https://cartesi.io/cartesi_whitepaper.pdf 
     uint64 constant PC         = 0x100;
     uint64 constant MVENDORID  = 0x108;
     uint64 constant MARCHID    = 0x110;

@@ -1,10 +1,11 @@
-// @title CSR_2
 pragma solidity ^0.5.0;
 
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/CSR.sol";
 
-
+/// @title CSRExecute
+/// @author Felipe Argento
+/// @notice Implements CSR execute logic
 library CSRExecute {
     uint256 constant CSRRS_CODE = 0;
     uint256 constant CSRRC_CODE = 1;
@@ -12,8 +13,13 @@ library CSRExecute {
     uint256 constant CSRRSI_CODE = 0;
     uint256 constant CSRRCI_CODE = 1;
 
-    /// \brief Implementation of CSRRS and CSRRC instructions
-    /// \details The specific instruction is decided by insncode, which defines the value to be written.
+    /// @notice Implementation of CSRRS and CSRRC instructions
+    /// @dev The specific instruction is decided by insncode, which defines the value to be written
+    /// @param mi MemoryInteractor with which Step function is interacting
+    /// @param mmIndex Specific index of the Memory Manager that contains this Steps logs
+    /// @param insn Instruction
+    /// @param insncode Specific instruction code
+    /// @return true if instruction was executed successfuly and false if its an illegal insn exception
     function executeCsrSC(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -63,8 +69,13 @@ library CSRExecute {
         return true;
     }
 
-    /// \brief Implementation of CSRRSI and CSRRCI instructions
-    /// \details The specific instruction is decided by insncode, which defines the value to be written.
+    /// @notice Implementation of CSRRSI and CSRRCI instructions
+    /// @dev The specific instruction is decided by insncode, which defines the value to be written.
+    /// @param mi MemoryInteractor with which Step function is interacting
+    /// @param mmIndex Specific index of the Memory Manager that contains this Steps logs
+    /// @param insn Instruction
+    /// @param insncode Specific instruction code
+    /// @return true if instruction was executed successfuly and false if its an illegal insn exception
     function executeCsrSCI(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -113,8 +124,13 @@ library CSRExecute {
         return true;
     }
 
-    /// \brief Implementation of CSRRW and CSRRWI instructions
-    /// \details The specific instruction is decided by insncode, which defines the value to be written.
+    /// @notice Implementation of CSRRW and CSRRWI instructions
+    /// @dev The specific instruction is decided by insncode, which defines the value to be written.
+    /// @param mi MemoryInteractor with which Step function is interacting
+    /// @param mmIndex Specific index of the Memory Manager that contains this Steps logs
+    /// @param insn Instruction
+    /// @param insncode Specific instruction code
+    /// @return true if instruction was executed successfuly and false if its an illegal insn exception
     function executeCsrRW(
         MemoryInteractor mi,
         uint256 mmIndex,

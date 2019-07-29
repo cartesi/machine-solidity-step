@@ -1,7 +1,8 @@
-/// @title riscvconstants
 pragma solidity ^0.5.0;
 
-
+/// @title RiscVConstants
+/// @author Felipe Argento
+/// @notice Defines getters for important constants
 library RiscVConstants {
     //iflags shifts
     function getIflagsHShift()  public pure returns(uint64) {return 0;}
