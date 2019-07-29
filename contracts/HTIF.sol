@@ -125,11 +125,11 @@ library HTIF {
     }
 
     // getters
-    function getHtifToHostAddr() public returns (uint64) {
+    function getHtifToHostAddr() public pure returns (uint64) {
         return HTIF_TOHOST_ADDR_CONST;
     }
 
-    function getHtifFromHostAddr() public returns (uint64) {
+    function getHtifFromHostAddr() public pure returns (uint64) {
         return HTIF_FROMHOST_ADDR_CONST;
     }
 }
