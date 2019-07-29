@@ -132,6 +132,6 @@ library Exceptions {
     function getMcauseLoadPageFault() public pure returns(uint64) {return 0xd;}
     function getMcauseStoreAmoPageFault() public pure returns(uint64) {return 0xf;}
 
-    function getMcauseInterruptFlag() public pure returns(uint64) {return 1 << uint64(RiscVConstants.getXlen() - 1);}
+    function getMcauseInterruptFlag() public pure returns(uint64) {return uint64(1) << uint64(RiscVConstants.getXlen() - 1);}
 
 }
