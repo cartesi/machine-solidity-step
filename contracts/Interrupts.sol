@@ -78,7 +78,7 @@ library Interrupts {
     }
 
     //TO-DO: optmize log2 function
-    function ilog2(uint32 v) public returns(uint64) {
+    function ilog2(uint32 v) public pure returns(uint64) {
         //cpp emulator code:
         //return 31 - _BuiltinClz(v)
 
