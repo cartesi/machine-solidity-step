@@ -170,23 +170,23 @@ library CSRExecute {
         return mi.readX(mmIndex, RiscVDecoder.insnRs1(insn));
     }
 
-    function executeCSRRWI(uint32 insn) internal returns(uint64) {
+    function executeCSRRWI(uint32 insn) internal pure returns(uint64) {
         return uint64(RiscVDecoder.insnRs1(insn));
     }
 
-    function executeCSRRS(uint64 csr, uint64 rs1) internal returns(uint64) {
+    function executeCSRRS(uint64 csr, uint64 rs1) internal pure returns(uint64) {
         return csr | rs1;
     }
 
-    function executeCSRRC(uint64 csr, uint64 rs1) internal returns(uint64) {
+    function executeCSRRC(uint64 csr, uint64 rs1) internal pure returns(uint64) {
         return csr & ~rs1;
     }
 
-    function executeCSRRSI(uint64 csr, uint32 rs1) internal returns(uint64) {
+    function executeCSRRSI(uint64 csr, uint32 rs1) internal pure returns(uint64) {
         return csr | rs1;
     }
 
-    function executeCSRRCI(uint64 csr, uint32 rs1) internal returns(uint64) {
+    function executeCSRRCI(uint64 csr, uint32 rs1) internal pure returns(uint64) {
         return csr & ~rs1;
     }
 }
