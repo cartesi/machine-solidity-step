@@ -218,7 +218,7 @@ library CSRReads {
     //  function readCsrSuccess(uint64 val) internal returns(bool, uint64){
     //    return (true, val);
     //  }
-    function readCsrFail() internal returns(bool, uint64) {
+    function readCsrFail() internal pure returns(bool, uint64) {
         return (false, 0);
     }
 

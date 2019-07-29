@@ -112,7 +112,7 @@ library CLINT {
     }
 
     // getters
-    function getClintMtimecmp() public returns (uint64) {
+    function getClintMtimecmp() public pure returns (uint64) {
         return CLINT_MTIMECMP_ADDR;
     }
 }
