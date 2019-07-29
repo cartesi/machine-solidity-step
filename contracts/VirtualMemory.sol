@@ -96,8 +96,6 @@ library VirtualMemory {
                     (success, uint64vars[VAL]) = HTIF.htifRead(
                         mi,
                         mmIndex,
-                        uint64vars[PMA_START],
-                        uint64vars[PMA_LENGTH],
                         paddr,
                         wordSize
                     );
@@ -105,8 +103,6 @@ library VirtualMemory {
                     (success, uint64vars[VAL]) = CLINT.clintRead(
                         mi,
                         mmIndex,
-                        uint64vars[PMA_START],
-                        uint64vars[PMA_LENGTH],
                         paddr,
                         wordSize
                     );
@@ -194,8 +190,6 @@ library VirtualMemory {
                     if (!HTIF.htifWrite(
                        mi,
                        mmIndex,
-                       uint64vars[PMA_START],
-                       uint64vars[PMA_LENGTH],
                        PMA.pmaGetStart(uint64vars[PMA_START]), val, wordSize
                     )) {
                         Exceptions.raiseException(
@@ -210,8 +204,6 @@ library VirtualMemory {
                     if (!CLINT.clintWrite(
                             mi,
                             mmIndex,
-                            uint64vars[PMA_START],
-                            uint64vars[PMA_LENGTH],
                             PMA.pmaGetStart(uint64vars[PMA_START]), val, wordSize
                     )) {
                         Exceptions.raiseException(
@@ -408,7 +400,6 @@ library VirtualMemory {
     function readRamUint64(MemoryInteractor mi, uint256 mmIndex, uint64 paddr)
     internal returns (bool, uint64)
     {
-        uint64 val;
         (uint64 pmaStart, uint64 pmaLength) = PMA.findPmaEntry(mi, mmIndex, paddr);
         if (!PMA.pmaGetIstartM(pmaStart) || !PMA.pmaGetIstartR(pmaStart)) {
             return (false, 0);
