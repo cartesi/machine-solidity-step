@@ -31,8 +31,7 @@ library StandAloneInstructions {
     function executeLui(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint32 insn,
-        uint64 pc
+        uint32 insn
     ) public
     {
         uint32 rd = RiscVDecoder.insnRd(insn);
