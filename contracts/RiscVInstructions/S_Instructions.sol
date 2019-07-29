@@ -7,7 +7,6 @@ import "../../contracts/VirtualMemory.sol";
 
 
 library S_Instructions {
-    // event Print(string a, uint64 b);
     function getRs1ImmRs2(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
     internal returns(uint64 rs1, int32 imm, uint64 val)
     {
@@ -19,7 +18,6 @@ library S_Instructions {
     function sb(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -38,7 +36,6 @@ library S_Instructions {
     function sh(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
         )
     public returns(bool)
@@ -57,7 +54,6 @@ library S_Instructions {
     function sw(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -76,7 +72,6 @@ library S_Instructions {
     function sd(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
