@@ -11,7 +11,6 @@ library AtomicInstructions {
     function executeLR(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn,
         uint64 wordSize
     )
@@ -43,7 +42,6 @@ library AtomicInstructions {
     function executeSC(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn,
         uint64 wordSize
     )
@@ -78,7 +76,6 @@ library AtomicInstructions {
     function executeAMOPart1(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn,
         uint64 wordSize
     )
@@ -104,7 +101,6 @@ library AtomicInstructions {
     function executeAMODPart2(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn,
         uint64 vaddr,
         int64 valr,
@@ -132,7 +128,6 @@ library AtomicInstructions {
     function executeAMOWPart2(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn,
         uint64 vaddr,
         int32 valr,
@@ -160,7 +155,6 @@ library AtomicInstructions {
     function executeAMOSWAPW(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -168,7 +162,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             32
         );
@@ -177,7 +170,6 @@ library AtomicInstructions {
         return executeAMOWPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int32(valr),
@@ -188,7 +180,6 @@ library AtomicInstructions {
     function executeAMOADDW(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -196,7 +187,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             32
         );
@@ -205,7 +195,6 @@ library AtomicInstructions {
         return executeAMOWPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int32(int32(valm) + int32(valr)),
@@ -216,7 +205,6 @@ library AtomicInstructions {
     function executeAMOXORW(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -224,7 +212,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             32
         );
@@ -233,7 +220,6 @@ library AtomicInstructions {
         return executeAMOWPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int32(valm ^ valr),
@@ -244,7 +230,6 @@ library AtomicInstructions {
     function executeAMOANDW(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -252,7 +237,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             32
         );
@@ -261,7 +245,6 @@ library AtomicInstructions {
         return executeAMOWPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int32(valm & valr),
@@ -273,7 +256,6 @@ library AtomicInstructions {
     function executeAMOORW(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -281,7 +263,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             32
         );
@@ -290,7 +271,6 @@ library AtomicInstructions {
         return executeAMOWPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int32(valm | valr),
@@ -303,7 +283,6 @@ library AtomicInstructions {
     function executeAMOMINW(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -311,7 +290,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             32
         );
@@ -320,7 +298,6 @@ library AtomicInstructions {
         return executeAMOWPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int32(valm) < int32(valr)? int32(valm) : int32(valr),
@@ -332,7 +309,6 @@ library AtomicInstructions {
     function executeAMOMAXW(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -340,7 +316,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             32
         );
@@ -349,7 +324,6 @@ library AtomicInstructions {
         return executeAMOWPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int32(valm) > int32(valr)? int32(valm) : int32(valr),
@@ -361,7 +335,6 @@ library AtomicInstructions {
     function executeAMOMINUW(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -369,7 +342,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             32
         );
@@ -378,7 +350,6 @@ library AtomicInstructions {
         return executeAMOWPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int32(uint32(valm) < uint32(valr)? valm : valr),
@@ -390,7 +361,6 @@ library AtomicInstructions {
     function executeAMOMAXUW(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -398,7 +368,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             32
         );
@@ -407,7 +376,6 @@ library AtomicInstructions {
         return executeAMOWPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int32(uint32(valm) > uint32(valr)? valm : valr),
@@ -419,7 +387,6 @@ library AtomicInstructions {
     function executeAMOSWAPD(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -427,7 +394,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             64
         );
@@ -436,7 +402,6 @@ library AtomicInstructions {
         return executeAMODPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int64(valr),
@@ -448,7 +413,6 @@ library AtomicInstructions {
     function executeAMOADDD(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -456,7 +420,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             64
         );
@@ -465,7 +428,6 @@ library AtomicInstructions {
         return executeAMODPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int64(valm + valr),
@@ -477,7 +439,6 @@ library AtomicInstructions {
     function executeAMOXORD(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -485,7 +446,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             64
         );
@@ -494,7 +454,6 @@ library AtomicInstructions {
         return executeAMODPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int64(valm ^ valr),
@@ -506,7 +465,6 @@ library AtomicInstructions {
     function executeAMOANDD(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -514,7 +472,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             64
         );
@@ -523,7 +480,6 @@ library AtomicInstructions {
         return executeAMODPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int64(valm & valr),
@@ -535,7 +491,6 @@ library AtomicInstructions {
     function executeAMOORD(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -543,7 +498,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             64
         );
@@ -552,7 +506,6 @@ library AtomicInstructions {
         return executeAMODPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int64(valm | valr),
@@ -565,7 +518,6 @@ library AtomicInstructions {
     function executeAMOMIND(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -573,7 +525,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             64
         );
@@ -582,7 +533,6 @@ library AtomicInstructions {
         return executeAMODPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int64(valm) < int64(valr)? int64(valm) : int64(valr),
@@ -594,7 +544,6 @@ library AtomicInstructions {
     function executeAMOMAXD(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -602,7 +551,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             64
         );
@@ -611,7 +559,6 @@ library AtomicInstructions {
         return executeAMODPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int64(valm) > int64(valr)? int64(valm) : int64(valr),
@@ -623,7 +570,6 @@ library AtomicInstructions {
     function executeAMOMINUD(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -631,7 +577,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             64
         );
@@ -641,7 +586,6 @@ library AtomicInstructions {
         return executeAMODPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int64(uint64(valm) < uint64(valr)? valm : valr),
@@ -654,7 +598,6 @@ library AtomicInstructions {
     function executeAMOMAXUD(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pc,
         uint32 insn
     )
     public returns(bool)
@@ -662,7 +605,6 @@ library AtomicInstructions {
         (uint64 valm, uint64 valr, uint64 vaddr, bool succ) = executeAMOPart1(
             mi,
             mmIndex,
-            pc,
             insn,
             64
         );
@@ -671,7 +613,6 @@ library AtomicInstructions {
         return executeAMODPart2(
             mi,
             mmIndex,
-            pc,
             insn,
             vaddr,
             int64(uint64(valm) > uint64(valr)? valm : valr),
