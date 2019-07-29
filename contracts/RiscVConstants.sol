@@ -175,7 +175,7 @@ library RiscVConstants {
 
     //paging constants
     function getPgShift() public pure returns(uint64) {return 12;}
-    function getPgMask()  public pure returns(uint64) {((1 << getPgShift()) - 1);}
+    function getPgMask()  public pure returns(uint64) {((uint64(1) << getPgShift()) - 1);}
 
     function getPteVMask() public pure returns(uint64) {return (1 << 0);}
     function getPteUMask() public pure returns(uint64) {return (1 << 4);}
