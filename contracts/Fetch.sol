@@ -44,7 +44,7 @@ library Fetch {
 
         // Finds the range in memory in which the physical address is located
         // Returns start and length words from pma
-        (uint64 pmaStart, uint64 pmaLength) = PMA.findPmaEntry(mi, mmIndex, paddr);
+        uint64 pmaStart = PMA.findPmaEntry(mi, mmIndex, paddr);
 
         // M flag defines if the pma range is in memory
         // X flag defines if the pma is executable

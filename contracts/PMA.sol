@@ -18,7 +18,7 @@ library PMA {
     //contains the logs for this Step execution.
     /// \param paddr Target physical address.
     /// \returns start and length word of pma if found. If not, returns (0,0)
-    function findPmaEntry(MemoryInteractor mi, uint256 mmIndex, uint64 paddr) public returns (uint64, uint64) {
+    function findPmaEntry(MemoryInteractor mi, uint256 mmIndex, uint64 paddr) public returns (uint64) {
         // Hard coded ram address starts at 0x800
         // In total there are 32 PMAs from processor shadow to Flash disk 7.
         // PMA 0 - describes RAM and is hardcoded to address 0x800
@@ -38,7 +38,7 @@ library PMA {
 
             // TO-DO: fix overflow possibility
             if (paddr >= pmaStart && paddr <= (pmaStart + pmaLength)) {
-                return (startWord, lengthWord);
+                return startWord;
             }
 
             if (pmaLength == 0) {
@@ -46,7 +46,7 @@ library PMA {
             }
         }
 
-        return (0, 0);
+        return 0;
     }
 
     // M bit defines if the range is memory
