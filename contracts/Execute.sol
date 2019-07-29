@@ -133,8 +133,7 @@ library Execute {
                     StandAloneInstructions.executeLui(
                         mi,
                         mmIndex,
-                        insn,
-                        pc
+                        insn
                     );
                     return advanceToNextInsn(mi, mmIndex, pc);
                 }
