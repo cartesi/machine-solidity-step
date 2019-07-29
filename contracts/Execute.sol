@@ -565,7 +565,6 @@ library Execute {
     // \param mi Memory Interactor with which Step function is interacting.
     // \param mmIndex Index corresponding to the instance of Memory Manager that.
     // \param insn insn for env trap int group field.
-    // \param pc.
     //  \details Uses binary search for performance.
     function envTrapIntGroup(
         MemoryInteractor mi,
@@ -579,9 +578,7 @@ library Execute {
             if (insn == 0x0073) {
                 EnvTrapIntInstructions.executeECALL(
                     mi,
-                    mmIndex,
-                    insn,
-                    pc
+                    mmIndex
                 );
                 return executeStatus.retired;
             } else if (insn == 0x200073) {
@@ -590,9 +587,7 @@ library Execute {
             } else if (insn == 0x100073) {
                 EnvTrapIntInstructions.executeEBREAK(
                     mi,
-                    mmIndex,
-                    insn,
-                    pc
+                    mmIndex
                 );
                 return executeStatus.retired;
             }
@@ -600,9 +595,7 @@ library Execute {
             if (insn == 0x10500073) {
                 if (!EnvTrapIntInstructions.executeWFI(
                     mi,
-                    mmIndex,
-                    insn,
-                    pc
+                    mmIndex
                 )) {
                     return raiseIllegalInsnException(mi, mmIndex, insn);
                 }
@@ -610,9 +603,7 @@ library Execute {
             } else if (insn == 0x30200073) {
                 if (!EnvTrapIntInstructions.executeMRET(
                     mi,
-                    mmIndex,
-                    insn,
-                    pc
+                    mmIndex
                 )) {
                     return raiseIllegalInsnException(mi, mmIndex, insn);
                 }
@@ -621,9 +612,8 @@ library Execute {
         } else if (insn == 0x10200073) {
             if (!EnvTrapIntInstructions.executeSRET(
                 mi,
-                mmIndex,
-                insn,
-                pc)
+                mmIndex
+                )
                ) {
                 return raiseIllegalInsnException(mi, mmIndex, insn);
             }
