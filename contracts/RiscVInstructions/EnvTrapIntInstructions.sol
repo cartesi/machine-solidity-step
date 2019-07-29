@@ -12,9 +12,7 @@ import "../../contracts/Exceptions.sol";
 library EnvTrapIntInstructions {
     function executeECALL(
         MemoryInteractor mi,
-        uint256 mmIndex,
-        uint32 insn,
-        uint64 pc
+        uint256 mmIndex
     ) public
     {
         uint64 priv = mi.readIflagsPrv(mmIndex);
@@ -30,9 +28,7 @@ library EnvTrapIntInstructions {
 
     function executeEBREAK(
         MemoryInteractor mi,
-        uint256 mmIndex,
-        uint32 insn,
-        uint64 pc
+        uint256 mmIndex
     ) public
     {
         Exceptions.raiseException(
@@ -45,9 +41,7 @@ library EnvTrapIntInstructions {
 
     function executeSRET(
         MemoryInteractor mi,
-        uint256 mmIndex,
-        uint32 insn,
-        uint64 pc
+        uint256 mmIndex
     )
     public returns (bool)
     {
@@ -77,9 +71,7 @@ library EnvTrapIntInstructions {
 
     function executeMRET(
         MemoryInteractor mi,
-        uint256 mmIndex,
-        uint32 insn,
-        uint64 pc
+        uint256 mmIndex
     )
     public returns(bool)
     {
@@ -110,9 +102,7 @@ library EnvTrapIntInstructions {
 
     function executeWFI(
         MemoryInteractor mi,
-        uint256 mmIndex,
-        uint32 insn,
-        uint64 pc
+        uint256 mmIndex
     )
     public returns(bool)
     {
