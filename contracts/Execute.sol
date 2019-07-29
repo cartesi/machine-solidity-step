@@ -525,7 +525,6 @@ library Execute {
             return S_Instructions.sb(
                 mi,
                 mmIndex,
-                pc,
                 insn
             ) ? advanceToNextInsn(mi, mmIndex, pc) : executeStatus.retired;
         } else if (funct3 > 0x0001) {
@@ -535,7 +534,6 @@ library Execute {
                 return S_Instructions.sw(
                     mi,
                     mmIndex,
-                    pc,
                     insn
                 ) ? advanceToNextInsn(mi, mmIndex, pc) : executeStatus.retired;
             } else if (funct3 == 0x0003) {
@@ -544,7 +542,6 @@ library Execute {
                 return S_Instructions.sd(
                     mi,
                     mmIndex,
-                    pc,
                     insn
                 ) ? advanceToNextInsn(mi, mmIndex, pc) : executeStatus.retired;
             }
@@ -554,7 +551,6 @@ library Execute {
             return S_Instructions.sh(
                 mi,
                 mmIndex,
-                pc,
                 insn
             ) ? advanceToNextInsn(mi, mmIndex, pc) : executeStatus.retired;
         }
