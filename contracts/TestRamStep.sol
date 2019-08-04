@@ -1,4 +1,3 @@
-/// @title TestRamStep
 pragma solidity ^0.5.0;
 
 //Libraries
@@ -6,7 +5,11 @@ import "../contracts/Step.sol";
 import "../contracts/TestRamMMInstantiator.sol";
 
 
-//TO-DO: use instantiator pattern so we can always use same instance of mm/pc etc
+/// @title TestRamStep
+/// @author Stephen Chen
+/// @notice A mock Step contract to test RAM
+/// @dev This should never be deployed to Main net.
+/// @dev This contract is unsafe.
 contract TestRamStep {
     // event Print(string message, uint value);
     Step step;

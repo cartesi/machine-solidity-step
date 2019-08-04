@@ -1,4 +1,3 @@
-/// @title An instantiator of memory managers (specially for running test_ram.py)
 pragma solidity ^0.5.0;
 
 import "./Decorated.sol";
@@ -6,9 +5,13 @@ import "./MMInterface.sol";
 import "./Merkle.sol";
 import "./lib/BitsManipulationLibrary.sol";
 
-
+/// @title Test RAM MM Instantiator
+/// @author Stephen Chen
+/// @notice A mock memory manager for running test_ram.py
+/// @dev This should never be deployed to Main net.
+/// @dev This contract is unsafe.
 contract TestRamMMInstantiator is MMInterface, Decorated {
-  // the privider will fill the memory for the client to read and write
+  // the provider will fill the memory for the client to read and write
   // memory starts with hash and all values that are inserted are first verified
   // then client can read inserted values and write some more
   // finally the provider has to update the hash to account for writes

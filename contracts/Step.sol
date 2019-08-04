@@ -8,7 +8,9 @@ import {Fetch} from "../contracts/Fetch.sol";
 import {Execute} from "../contracts/Execute.sol";
 import {Interrupts} from "../contracts/Interrupts.sol";
 
-
+/// @title Step
+/// @author Felipe Argento
+/// @notice State transiction function that takes the machine from state s[i] to s[i + 1]
 contract Step {
     event StepGiven(uint8 exitCode);
     event StepStatus(uint64 cycle, bool halt);
@@ -19,9 +21,9 @@ contract Step {
         mi = MemoryInteractor(miAddress);
     }
 
-    // \brief Run step define by a MemoryManager instance.
-    // \param mmIndex Specific index of the Memory Manager that contains this Step's access logs
-    // \returns Returns an exit code.
+    /// @notice Run step define by a MemoryManager instance.
+    /// @param mmIndex Specific index of the Memory Manager that contains this Step's access logs
+    /// @return Returns an exit code.
     function step(uint mmIndex) public returns (uint8) {
         // Read iflags register and check its H flag, to see if machine is halted.
         // If machine is halted - nothing else to do. H flag is stored on the least

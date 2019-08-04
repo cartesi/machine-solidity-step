@@ -1,4 +1,3 @@
-/// @title Execute
 pragma solidity ^0.5.0;
 
 import "./RiscVConstants.sol";
@@ -15,7 +14,9 @@ import "./RiscVInstructions/AtomicInstructions.sol";
 import "./RiscVInstructions/EnvTrapIntInstructions.sol";
 import {Exceptions} from "../contracts/Exceptions.sol";
 
-
+/// @title Execute
+/// @author Felipe Argento
+/// @notice Finds instructions and execute them or delegate their execution to another library
 library Execute {
     uint256 constant ARITH_IMM_GROUP = 0;
     uint256 constant ARITH_IMM_GROUP_32 = 1;
@@ -33,13 +34,12 @@ library Execute {
     uint256 constant CSRRCI_CODE = 1;
 
 
-    // \brief Finds associated instruction and execute it.
-    // \param mi Memory Interactor with which Step function is interacting.
-    // \param mmIndex Index corresponding to the instance of Memory Manager that.
-    // \param pc Current pc.
-    // \param insn Instruction.
-    // \return executeStatus.illegal if an illegal instruction exception was raised, or
-    // executeStatus.retired if not (even if it raises other exceptions).
+    /// @notice Finds associated instruction and execute it.
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param pc Current pc
+    /// @param insn Instruction.
+    /// @return executeStatus.illegal if an illegal instruction exception was raised, or executeStatus.retired if not (even if it raises other exceptions).
     function executeInsn(
         uint256 mmIndex,
         MemoryInteractor mi,
@@ -189,6 +189,12 @@ library Execute {
         return raiseIllegalInsnException(mi, mmIndex, insn);
     }
 
+    /// @notice Finds and execute Arithmetic Immediate instruction
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param pc Current pc
+    /// @param insn Instruction.
+    /// @return executeStatus.illegal if an illegal instruction exception was raised, or executeStatus.retired if not (even if it raises other exceptions).
     function executeArithmeticImmediate(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -219,6 +225,12 @@ library Execute {
         return advanceToNextInsn(mi, mmIndex, pc);
     }
 
+    /// @notice Finds and execute Arithmetic instruction
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param pc Current pc
+    /// @param insn Instruction.
+    /// @return executeStatus.illegal if an illegal instruction exception was raised, or executeStatus.retired if not (even if it raises other exceptions).
     function executeArithmetic(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -249,6 +261,12 @@ library Execute {
         return advanceToNextInsn(mi, mmIndex, pc);
     }
 
+    /// @notice Finds and execute Branch instruction
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param pc Current pc
+    /// @param insn Instruction.
+    /// @return executeStatus.illegal if an illegal instruction exception was raised, or executeStatus.retired if not (even if it raises other exceptions).
     function executeBranch(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -274,7 +292,13 @@ library Execute {
         return advanceToNextInsn(mi, mmIndex, pc);
     }
 
-    function executeLoad(
+    /// @notice Finds and execute Load instruction
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param pc Current pc
+    /// @param insn Instruction.
+    /// @return executeStatus.illegal if an illegal instruction exception was raised, or executeStatus.retired if not (even if it raises other exceptions).
+   function executeLoad(
         MemoryInteractor mi,
         uint256 mmIndex,
         uint32 insn,
@@ -305,6 +329,12 @@ library Execute {
         }
     }
 
+    /// @notice Execute S_fence_VMA instruction
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param pc Current pc
+    /// @param insn Instruction.
+    /// @return executeStatus.illegal if an illegal instruction exception was raised, or executeStatus.retired if not (even if it raises other exceptions).
     function executeSfenceVma(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -327,6 +357,11 @@ library Execute {
         }
     }
 
+    /// @notice Execute jump - writes a new pc
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param newPc pc to be written
+    /// @return executeStatus.illegal if an illegal instruction exception was raised, or executeStatus.retired if not (even if it raises other exceptions).
     function executeJump(MemoryInteractor mi, uint256 mmIndex, uint64 newPc)
     public returns (executeStatus)
     {
@@ -334,6 +369,11 @@ library Execute {
         return executeStatus.retired;
     }
 
+    /// @notice Raises Misaligned Fetch Exception
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param pc current pc
+    /// @return executeStatus.illegal if an illegal instruction exception was raised, or executeStatus.retired if not (even if it raises other exceptions).
     function raiseMisalignedFetchException(MemoryInteractor mi, uint256 mmIndex, uint64 pc)
     public returns (executeStatus)
     {
@@ -346,6 +386,11 @@ library Execute {
         return executeStatus.retired;
     }
 
+    /// @notice Raises Illegal Instruction Exception
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param insn instruction that was deemed illegal
+    /// @return executeStatus.illegal if an illegal instruction exception was raised, or executeStatus.retired if not (even if it raises other exceptions).
     function raiseIllegalInsnException(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
     public returns (executeStatus)
     {
@@ -358,6 +403,11 @@ library Execute {
         return executeStatus.illegal;
     }
 
+    /// @notice Advances to next instruction by increasing pc
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param pc current pc
+    /// @return executeStatus.illegal if an illegal instruction exception was raised, or executeStatus.retired if not (even if it raises other exceptions).
     function advanceToNextInsn(MemoryInteractor mi, uint256 mmIndex, uint64 pc)
     public returns (executeStatus)
     {
@@ -365,12 +415,12 @@ library Execute {
         return executeStatus.retired;
     }
 
-    // \brief Given a fence funct3 insn, finds the func associated.
-    // \param mi Memory Interactor with which Step function is interacting.
-    // \param mmIndex Index corresponding to the instance of Memory Manager that.
-    // \param insn for fence funct3 field.
-    // \param pc.
-    //  \details Uses binary search for performance.
+    /// @notice Given a fence funct3 insn, finds the func associated.
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param insn for fence funct3 field.
+    /// @param pc Current pc
+    /// @dev Uses binary search for performance.
     function fenceGroup(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -393,12 +443,12 @@ library Execute {
         return advanceToNextInsn(mi, mmIndex, pc);
     }
 
-    // \brief Given csr env trap int mm funct3 insn, finds the func associated.
-    // \param mi Memory Interactor with which Step function is interacting.
-    // \param mmIndex Index corresponding to the instance of Memory Manager that.
-    // \param insn for fence funct3 field.
-    // \param pc.
-    //  \details Uses binary search for performance.
+    /// @notice Given csr env trap int mm funct3 insn, finds the func associated.
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param insn for fence funct3 field.
+    /// @param pc Current pc
+    /// @dev Uses binary search for performance.
     function csrEnvTrapIntMmFunct3(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -503,12 +553,12 @@ library Execute {
         return raiseIllegalInsnException(mi, mmIndex, insn);
     }
 
-    // \brief Given a store funct3 group insn, finds the function  associated.
-    // \param mi Memory Interactor with which Step function is interacting.
-    // \param mmIndex Index corresponding to the instance of Memory Manager that.
-    // \param insn for store funct3 field
-    // \param pc.
-    //  \details Uses binary search for performance.
+    /// @notice Given a store funct3 group insn, finds the function  associated.
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param insn for store funct3 field
+    /// @param pc Current pc
+    /// @dev Uses binary search for performance.
     function storeFunct3(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -556,11 +606,12 @@ library Execute {
         return raiseIllegalInsnException(mi, mmIndex, insn);
     }
 
-    // \brief Given a env trap int group insn, finds the func associated.
-    // \param mi Memory Interactor with which Step function is interacting.
-    // \param mmIndex Index corresponding to the instance of Memory Manager that.
-    // \param insn insn for env trap int group field.
-    //  \details Uses binary search for performance.
+    /// @notice Given a env trap int group insn, finds the func associated.
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param insn insn for env trap int group field.
+    /// @param pc Current pc
+    /// @dev Uses binary search for performance.
     function envTrapIntGroup(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -622,12 +673,12 @@ library Execute {
         );
     }
 
-    // \brief Given a load funct3 group instruction, finds the function
-    // \param mi Memory Interactor with which Step function is interacting.
-    // \param mmIndex Index corresponding to the instance of Memory Manager that.
-    // \param insn for load funct3 field
-    // \param pc.
-    //  \details Uses binary search for performance.
+    /// @notice Given a load funct3 group instruction, finds the function
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
+    /// @param insn for load funct3 field
+    /// @param pc Current pc
+    /// @dev Uses binary search for performance.
     function loadFunct3(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -717,7 +768,6 @@ library Execute {
         return raiseIllegalInsnException(mi, mmIndex, insn);
     }
 
-    //  @param insn for atomic funct3Funct5 field
     function atomicFunct3Funct5(
         MemoryInteractor mi,
         uint256 mmIndex,

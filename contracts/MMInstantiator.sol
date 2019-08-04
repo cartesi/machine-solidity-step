@@ -5,9 +5,11 @@ import "./Decorated.sol";
 import "./MMInterface.sol";
 import "./Merkle.sol";
 
-
+/// @title MMInstantiator
+/// @author Augusto Teixeira
+/// @notice Implements the memory manager, that manages the access log of an emulator
 contract MMInstantiator is MMInterface, Decorated {
-  // the privider will fill the memory for the client to read and write
+  // the provider will fill the memory for the client to read and write
   // memory starts with hash and all values that are inserted are first verified
   // then client can read inserted values and write some more
   // finally the provider has to update the hash to account for writes
@@ -79,9 +81,9 @@ contract MMInstantiator is MMInterface, Decorated {
     }
 
     /// @notice Proves that a certain value in current memory is correct
-    // @param _position The address of the value to be confirmed
-    // @param _value The value in that address to be confirmed
-    // @param proof The proof that this value is correct
+    /// @param _position The address of the value to be confirmed
+    /// @param _value The value in that address to be confirmed
+    /// @param proof The proof that this value is correct
     function proveRead(
         uint256 _index,
         uint64 _position,
