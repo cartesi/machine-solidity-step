@@ -34,9 +34,8 @@ library VirtualMemory {
     // Write/Read Virtual Address variable indexes
     uint256 constant OFFSET = 0;
     uint256 constant PMA_START = 1;
-    uint256 constant PMA_LENGTH = 2;
-    uint256 constant PADDR = 3;
-    uint256 constant VAL = 4;
+    uint256 constant PADDR = 2;
+    uint256 constant VAL = 3;
 
     /// @notice Read word to virtual memory
     /// @param wordSize can be uint8, uint16, uint32 or uint64
@@ -79,7 +78,7 @@ library VirtualMemory {
                 );
                 return (false, 0);
             }
-            (uint64vars[PMA_START], uint64vars[PMA_LENGTH]) = PMA.findPmaEntry(mi, mmIndex, paddr);
+            uint64vars[PMA_START] = PMA.findPmaEntry(mi, mmIndex, paddr);
             if (PMA.pmaGetIstartE(uint64vars[PMA_START]) || !PMA.pmaGetIstartR(uint64vars[PMA_START])) {
                 // PMA is either excluded or we dont have permission to write - raise exception
                 Exceptions.raiseException(
@@ -97,8 +96,6 @@ library VirtualMemory {
                     (success, uint64vars[VAL]) = HTIF.htifRead(
                         mi,
                         mmIndex,
-                        uint64vars[PMA_START],
-                        uint64vars[PMA_LENGTH],
                         paddr,
                         wordSize
                     );
@@ -106,8 +103,6 @@ library VirtualMemory {
                     (success, uint64vars[VAL]) = CLINT.clintRead(
                         mi,
                         mmIndex,
-                        uint64vars[PMA_START],
-                        uint64vars[PMA_LENGTH],
                         paddr,
                         wordSize
                     );
@@ -169,7 +164,7 @@ library VirtualMemory {
 
                 return false;
             }
-            (uint64vars[PMA_START], uint64vars[PMA_LENGTH]) = PMA.findPmaEntry(mi, mmIndex, uint64vars[PADDR]);
+            uint64vars[PMA_START] = PMA.findPmaEntry(mi, mmIndex, uint64vars[PADDR]);
 
             if (PMA.pmaGetIstartE(uint64vars[PMA_START]) || !PMA.pmaGetIstartW(uint64vars[PMA_START])) {
                 // PMA is either excluded or we dont have permission to write - raise exception
@@ -195,8 +190,6 @@ library VirtualMemory {
                     if (!HTIF.htifWrite(
                        mi,
                        mmIndex,
-                       uint64vars[PMA_START],
-                       uint64vars[PMA_LENGTH],
                        PMA.pmaGetStart(uint64vars[PMA_START]), val, wordSize
                     )) {
                         Exceptions.raiseException(
@@ -211,8 +204,6 @@ library VirtualMemory {
                     if (!CLINT.clintWrite(
                             mi,
                             mmIndex,
-                            uint64vars[PMA_START],
-                            uint64vars[PMA_LENGTH],
                             PMA.pmaGetStart(uint64vars[PMA_START]), val, wordSize
                     )) {
                         Exceptions.raiseException(
@@ -409,8 +400,7 @@ library VirtualMemory {
     function readRamUint64(MemoryInteractor mi, uint256 mmIndex, uint64 paddr)
     internal returns (bool, uint64)
     {
-        uint64 val;
-        (uint64 pmaStart, uint64 pmaLength) = PMA.findPmaEntry(mi, mmIndex, paddr);
+        uint64 pmaStart = PMA.findPmaEntry(mi, mmIndex, paddr);
         if (!PMA.pmaGetIstartM(pmaStart) || !PMA.pmaGetIstartR(pmaStart)) {
             return (false, 0);
         }
@@ -425,7 +415,7 @@ library VirtualMemory {
     )
     internal returns (bool)
     {
-        (uint64 pmaStart, uint64 pmaLength) = PMA.findPmaEntry(mi, mmIndex, paddr);
+        uint64 pmaStart = PMA.findPmaEntry(mi, mmIndex, paddr);
         if (!PMA.pmaGetIstartM(pmaStart) || !PMA.pmaGetIstartW(pmaStart)) {
             return false;
         }

@@ -12,8 +12,8 @@ library BitsManipulationLibrary {
     public pure returns(int32)
     {
         uint32 uNumber = uint32(number);
-        bool isNegative = ((1 << (wordSize - 1)) & uNumber) > 0;
-        uint32 mask = ((2 ** wordSize) - 1);
+        bool isNegative = ((uint64(1) << (wordSize - 1)) & uNumber) > 0;
+        uint32 mask = ((uint32(2) ** wordSize) - 1);
 
         if (isNegative) {
             uNumber = uNumber | ~mask;
@@ -29,8 +29,8 @@ library BitsManipulationLibrary {
     public pure returns(uint64)
     {
         uint64 uNumber = number;
-        bool isNegative = ((1 << (wordSize - 1)) & uNumber) > 0;
-        uint64 mask = ((2 ** wordSize) - 1);
+        bool isNegative = ((uint64(1) << (wordSize - 1)) & uNumber) > 0;
+        uint64 mask = ((uint64(2) ** wordSize) - 1);
 
         if (isNegative) {
             uNumber = uNumber | ~mask;

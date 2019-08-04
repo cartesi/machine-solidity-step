@@ -18,9 +18,7 @@ library CLINT {
 
     /// @notice reads clint
     /// @param mi Memory Interactor with which Step function is interacting.
-    /// @param mmIndex Index corresponding to the instance of Memory Manager that
-    /// @param pmaStartWord first word, defines pma's start
-    /// @param pmaLengthWord second word, defines pma's length
+    /// @param mmIndex Index corresponding to the instance of Memory Manager
     /// @param offset can be uint8, uint16, uint32 or uint64
     /// @param wordSize can be uint8, uint16, uint32 or uint64
     /// @return bool if read was successfull
@@ -28,8 +26,6 @@ library CLINT {
     function clintRead(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pmaStartWord,
-        uint64 pmaLengthWord,
         uint64 offset,
         uint64 wordSize
     )
@@ -49,9 +45,7 @@ library CLINT {
 
     /// @notice write to clint
     /// @param mi Memory Interactor with which Step function is interacting.
-    /// @param mmIndex Index corresponding to the instance of Memory Manager that
-    /// @param pmaStartWord first word, defines pma's start
-    /// @param pmaLengthWord second word, defines pma's length
+    /// @param mmIndex Index corresponding to the instance of Memory Manager
     /// @param offset can be uint8, uint16, uint32 or uint64
     /// @param val to be written
     /// @param wordSize can be uint8, uint16, uint32 or uint64
@@ -59,8 +53,6 @@ library CLINT {
     function clintWrite(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pmaStartWord,
-        uint64 pmaLengthWord,
         uint64 offset,
         uint64 val,
         uint64 wordSize)
@@ -121,7 +113,7 @@ library CLINT {
     }
 
     // getters
-    function getClintMtimecmp() public returns (uint64) {
+    function getClintMtimecmp() public pure returns (uint64) {
         return CLINT_MTIMECMP_ADDR;
     }
 }

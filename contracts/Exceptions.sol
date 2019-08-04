@@ -120,19 +120,19 @@ library Exceptions {
         }
     }
 
-    function getMcauseInsnAddressMisaligned() public returns(uint64) {return 0x0;}
-    function getMcauseInsnAccessFault() public returns(uint64) {return 0x1;}
-    function getMcauseIllegalInsn() public returns(uint64) {return 0x2;}
-    function getMcauseBreakpoint() public returns(uint64) {return 0x3;}
-    function getMcauseLoadAddressMisaligned() public returns(uint64) {return 0x4;}
-    function getMcauseLoadAccessFault() public returns(uint64) {return 0x5;}
-    function getMcauseStoreAmoAddressMisaligned () public returns(uint64) {return 0x6;}
-    function getMcauseStoreAmoAccessFault() public returns(uint64) {return 0x7;}
-    function getMcauseEcallBase() public returns(uint64) {return 0x8;}
-    function getMcauseFetchPageFault() public returns(uint64) {return 0xc;}
-    function getMcauseLoadPageFault() public returns(uint64) {return 0xd;}
-    function getMcauseStoreAmoPageFault() public returns(uint64) {return 0xf;}
+    function getMcauseInsnAddressMisaligned() public pure returns(uint64) {return 0x0;}
+    function getMcauseInsnAccessFault() public pure returns(uint64) {return 0x1;}
+    function getMcauseIllegalInsn() public pure returns(uint64) {return 0x2;}
+    function getMcauseBreakpoint() public pure returns(uint64) {return 0x3;}
+    function getMcauseLoadAddressMisaligned() public pure returns(uint64) {return 0x4;}
+    function getMcauseLoadAccessFault() public pure returns(uint64) {return 0x5;}
+    function getMcauseStoreAmoAddressMisaligned () public pure returns(uint64) {return 0x6;}
+    function getMcauseStoreAmoAccessFault() public pure returns(uint64) {return 0x7;}
+    function getMcauseEcallBase() public pure returns(uint64) {return 0x8;}
+    function getMcauseFetchPageFault() public pure returns(uint64) {return 0xc;}
+    function getMcauseLoadPageFault() public pure returns(uint64) {return 0xd;}
+    function getMcauseStoreAmoPageFault() public pure returns(uint64) {return 0xf;}
 
-    function getMcauseInterruptFlag() public returns(uint64) {return 1 << uint64(RiscVConstants.getXlen() - 1);}
+    function getMcauseInterruptFlag() public pure returns(uint64) {return uint64(1) << uint64(RiscVConstants.getXlen() - 1);}
 
 }

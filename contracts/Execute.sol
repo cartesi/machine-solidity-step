@@ -133,8 +133,7 @@ library Execute {
                     StandAloneInstructions.executeLui(
                         mi,
                         mmIndex,
-                        insn,
-                        pc
+                        insn
                     );
                     return advanceToNextInsn(mi, mmIndex, pc);
                 }
@@ -575,7 +574,6 @@ library Execute {
             return S_Instructions.sb(
                 mi,
                 mmIndex,
-                pc,
                 insn
             ) ? advanceToNextInsn(mi, mmIndex, pc) : executeStatus.retired;
         } else if (funct3 > 0x0001) {
@@ -585,7 +583,6 @@ library Execute {
                 return S_Instructions.sw(
                     mi,
                     mmIndex,
-                    pc,
                     insn
                 ) ? advanceToNextInsn(mi, mmIndex, pc) : executeStatus.retired;
             } else if (funct3 == 0x0003) {
@@ -594,7 +591,6 @@ library Execute {
                 return S_Instructions.sd(
                     mi,
                     mmIndex,
-                    pc,
                     insn
                 ) ? advanceToNextInsn(mi, mmIndex, pc) : executeStatus.retired;
             }
@@ -604,7 +600,6 @@ library Execute {
             return S_Instructions.sh(
                 mi,
                 mmIndex,
-                pc,
                 insn
             ) ? advanceToNextInsn(mi, mmIndex, pc) : executeStatus.retired;
         }
@@ -629,9 +624,7 @@ library Execute {
             if (insn == 0x0073) {
                 EnvTrapIntInstructions.executeECALL(
                     mi,
-                    mmIndex,
-                    insn,
-                    pc
+                    mmIndex
                 );
                 return executeStatus.retired;
             } else if (insn == 0x200073) {
@@ -640,9 +633,7 @@ library Execute {
             } else if (insn == 0x100073) {
                 EnvTrapIntInstructions.executeEBREAK(
                     mi,
-                    mmIndex,
-                    insn,
-                    pc
+                    mmIndex
                 );
                 return executeStatus.retired;
             }
@@ -650,9 +641,7 @@ library Execute {
             if (insn == 0x10500073) {
                 if (!EnvTrapIntInstructions.executeWFI(
                     mi,
-                    mmIndex,
-                    insn,
-                    pc
+                    mmIndex
                 )) {
                     return raiseIllegalInsnException(mi, mmIndex, insn);
                 }
@@ -660,9 +649,7 @@ library Execute {
             } else if (insn == 0x30200073) {
                 if (!EnvTrapIntInstructions.executeMRET(
                     mi,
-                    mmIndex,
-                    insn,
-                    pc
+                    mmIndex
                 )) {
                     return raiseIllegalInsnException(mi, mmIndex, insn);
                 }
@@ -671,9 +658,8 @@ library Execute {
         } else if (insn == 0x10200073) {
             if (!EnvTrapIntInstructions.executeSRET(
                 mi,
-                mmIndex,
-                insn,
-                pc)
+                mmIndex
+                )
                ) {
                 return raiseIllegalInsnException(mi, mmIndex, insn);
             }
@@ -798,7 +784,6 @@ library Execute {
                 atomSucc = AtomicInstructions.executeLR(
                     mi,
                     mmIndex,
-                    pc,
                     insn,
                     32
                 );
@@ -809,7 +794,6 @@ library Execute {
             atomSucc = AtomicInstructions.executeSC(
                 mi,
                 mmIndex,
-                pc,
                 insn,
                 32
             );
@@ -817,63 +801,54 @@ library Execute {
             atomSucc = AtomicInstructions.executeAMOSWAPW(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x40) {
             atomSucc = AtomicInstructions.executeAMOADDW(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x44) {
             atomSucc = AtomicInstructions.executeAMOXORW(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x4c) {
             atomSucc = AtomicInstructions.executeAMOANDW(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x48) {
             atomSucc = AtomicInstructions.executeAMOORW(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x50) {
             atomSucc = AtomicInstructions.executeAMOMINW(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x54) {
             atomSucc = AtomicInstructions.executeAMOMAXW(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x58) {
             atomSucc = AtomicInstructions.executeAMOMINUW(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x5c) {
             atomSucc = AtomicInstructions.executeAMOMAXUW(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x62) {
@@ -881,7 +856,6 @@ library Execute {
                 atomSucc = AtomicInstructions.executeLR(
                     mi,
                     mmIndex,
-                    pc,
                     insn,
                     64
                 );
@@ -890,7 +864,6 @@ library Execute {
             atomSucc = AtomicInstructions.executeSC(
                 mi,
                 mmIndex,
-                pc,
                 insn,
                 64
             );
@@ -898,63 +871,54 @@ library Execute {
             atomSucc = AtomicInstructions.executeAMOSWAPD(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x60) {
             atomSucc = AtomicInstructions.executeAMOADDD(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x64) {
             atomSucc = AtomicInstructions.executeAMOXORD(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x6c) {
             atomSucc = AtomicInstructions.executeAMOANDD(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x68) {
             atomSucc = AtomicInstructions.executeAMOORD(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x70) {
             atomSucc = AtomicInstructions.executeAMOMIND(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x74) {
             atomSucc = AtomicInstructions.executeAMOMAXD(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x78) {
             atomSucc = AtomicInstructions.executeAMOMINUD(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         } else if (funct3Funct5 == 0x7c) {
             atomSucc = AtomicInstructions.executeAMOMAXUD(
                 mi,
                 mmIndex,
-                pc,
                 insn
             );
         }

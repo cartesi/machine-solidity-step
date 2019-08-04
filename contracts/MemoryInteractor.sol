@@ -174,7 +174,7 @@ contract MemoryInteractor {
         uint64 val = pureMemoryRead(mmindex, closestStartAddr);
 
         // mask to clean a piece of the value that was on memory
-        uint64 valueMask = BitsManipulationLibrary.uint64SwapEndian(((2 ** wordSize) - 1) << relAddr*8);
+        uint64 valueMask = BitsManipulationLibrary.uint64SwapEndian(((uint64(2) ** wordSize) - 1) << relAddr*8);
         val = BitsManipulationLibrary.uint64SwapEndian(val & valueMask) >> relAddr*8;
         return val;
     }
@@ -354,10 +354,10 @@ contract MemoryInteractor {
             uint64 oldVal = pureMemoryRead(mmindex, closestStartAddr);
 
             // Mask to clean a piece of the value that was on memory
-            uint64 valueMask = BitsManipulationLibrary.uint64SwapEndian(((2 ** wordSize) - 1) << relAddr*8);
+            uint64 valueMask = BitsManipulationLibrary.uint64SwapEndian(((uint64(2) ** wordSize) - 1) << relAddr*8);
 
             // value is big endian, need to swap before further operation
-            uint64 valueSwap = BitsManipulationLibrary.uint64SwapEndian(value & ((2 ** wordSize) - 1));
+            uint64 valueSwap = BitsManipulationLibrary.uint64SwapEndian(value & ((uint64(2) ** wordSize) - 1));
 
             uint64 newvalue = ((oldVal & ~valueMask) | (valueSwap >> relAddr*8));
 

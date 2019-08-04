@@ -272,7 +272,7 @@ library CSR {
     // Bits csr[9:8] encode the CSR's privilege level (i.e lowest privilege level
     // that can access that CSR.
     // Reference: riscv-privileged-v1.10 - section 2.1 - page 7.
-    function csrPriv(uint32 csrAddr) internal returns(uint32) {
+    function csrPriv(uint32 csrAddr) internal pure returns(uint32) {
         return (csrAddr >> 8) & 3;
     }
 
@@ -280,7 +280,7 @@ library CSR {
     // The top two bits (csr[11:10]) indicate whether the register is
     // read/write (00, 01, or 10) or read-only (11)
     // Reference: riscv-privileged-v1.10 - section 2.1 - page 7.
-    function csrIsReadOnly(uint32 csrAddr) internal returns(bool) {
+    function csrIsReadOnly(uint32 csrAddr) internal pure returns(bool) {
         return ((csrAddr & 0xc00) == 0xc00);
     }
 

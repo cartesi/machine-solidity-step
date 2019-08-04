@@ -36,31 +36,31 @@ library ShadowAddresses {
     uint64 constant IFLAGS     = 0x1d0;
 
     //getters - contracts cant access constants directly
-    function getPc()         public returns(uint64) {return PC;}
-    function getMvendorid()  public returns(uint64) {return MVENDORID;}
-    function getMarchid()    public returns(uint64) {return MARCHID;}
-    function getMimpid()     public returns(uint64) {return MIMPID;}
-    function getMcycle()     public returns(uint64) {return MCYCLE;}
-    function getMinstret()   public returns(uint64) {return MINSTRET;}
-    function getMstatus()    public returns(uint64) {return MSTATUS;}
-    function getMtvec()      public returns(uint64) {return MTVEC;}
-    function getMscratch()   public returns(uint64) {return MSCRATCH;}
-    function getMepc()       public returns(uint64) {return MEPC;}
-    function getMcause()     public returns(uint64) {return MCAUSE;}
-    function getMtval()      public returns(uint64) {return MTVAL;}
-    function getMisa()       public returns(uint64) {return MISA;}
-    function getMie()        public returns(uint64) {return MIE;}
-    function getMip()        public returns(uint64) {return MIP;}
-    function getMedeleg()    public returns(uint64) {return MEDELEG;}
-    function getMideleg()    public returns(uint64) {return MIDELEG;}
-    function getMcounteren() public returns(uint64) {return MCOUNTEREN;}
-    function getStvec()      public returns(uint64) {return STVEC;}
-    function getSscratch()   public returns(uint64) {return SSCRATCH;}
-    function getSepc()       public returns(uint64) {return SEPC;}
-    function getScause()     public returns(uint64) {return SCAUSE;}
-    function getStval()      public returns(uint64) {return STVAL;}
-    function getSatp()       public returns(uint64) {return SATP;}
-    function getScounteren() public returns(uint64) {return SCOUNTEREN;}
-    function getIlrsc()      public returns(uint64) {return ILRSC;}
-    function getIflags()     public returns(uint64) {return IFLAGS;}
+    function getPc()         public pure returns(uint64) {return PC;}
+    function getMvendorid()  public pure returns(uint64) {return MVENDORID;}
+    function getMarchid()    public pure returns(uint64) {return MARCHID;}
+    function getMimpid()     public pure returns(uint64) {return MIMPID;}
+    function getMcycle()     public pure returns(uint64) {return MCYCLE;}
+    function getMinstret()   public pure returns(uint64) {return MINSTRET;}
+    function getMstatus()    public pure returns(uint64) {return MSTATUS;}
+    function getMtvec()      public pure returns(uint64) {return MTVEC;}
+    function getMscratch()   public pure returns(uint64) {return MSCRATCH;}
+    function getMepc()       public pure returns(uint64) {return MEPC;}
+    function getMcause()     public pure returns(uint64) {return MCAUSE;}
+    function getMtval()      public pure returns(uint64) {return MTVAL;}
+    function getMisa()       public pure returns(uint64) {return MISA;}
+    function getMie()        public pure returns(uint64) {return MIE;}
+    function getMip()        public pure returns(uint64) {return MIP;}
+    function getMedeleg()    public pure returns(uint64) {return MEDELEG;}
+    function getMideleg()    public pure returns(uint64) {return MIDELEG;}
+    function getMcounteren() public pure returns(uint64) {return MCOUNTEREN;}
+    function getStvec()      public pure returns(uint64) {return STVEC;}
+    function getSscratch()   public pure returns(uint64) {return SSCRATCH;}
+    function getSepc()       public pure returns(uint64) {return SEPC;}
+    function getScause()     public pure returns(uint64) {return SCAUSE;}
+    function getStval()      public pure returns(uint64) {return STVAL;}
+    function getSatp()       public pure returns(uint64) {return SATP;}
+    function getScounteren() public pure returns(uint64) {return SCOUNTEREN;}
+    function getIlrsc()      public pure returns(uint64) {return ILRSC;}
+    function getIflags()     public pure returns(uint64) {return IFLAGS;}
 }

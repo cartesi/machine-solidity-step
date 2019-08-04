@@ -214,7 +214,7 @@ library CSRReads {
         return (true, mi.readMimpid(mmIndex));
     }
 
-    function readCsrFail() internal returns(bool, uint64) {
+    function readCsrFail() internal pure returns(bool, uint64) {
         return (false, 0);
     }
 

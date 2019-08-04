@@ -16,9 +16,7 @@ library HTIF {
 
     /// @notice reads htif
     /// @param mi Memory Interactor with which Step function is interacting.
-    /// @param mmIndex Index corresponding to the instance of Memory Manager that
-    /// @param pmaStartWord first word, defines pma's start
-    /// @param pmaLengthWord second word, defines pma's length
+    /// @param mmIndex Index corresponding to the instance of Memory Manager
     /// @param addr address to read from
     /// @param wordSize can be uint8, uint16, uint32 or uint64
     /// @return bool if read was successfull
@@ -26,8 +24,6 @@ library HTIF {
     function htifRead(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pmaStartWord,
-        uint64 pmaLengthWord,
         uint64 addr,
         uint64 wordSize
     )
@@ -59,8 +55,6 @@ library HTIF {
     function htifWrite(
         MemoryInteractor mi,
         uint256 mmIndex,
-        uint64 pmaStartWord,
-        uint64 pmaLengthWord,
         uint64 addr,
         uint64 val,
         uint64 wordSize
@@ -133,11 +127,11 @@ library HTIF {
     }
 
     // getters
-    function getHtifToHostAddr() public returns (uint64) {
+    function getHtifToHostAddr() public pure returns (uint64) {
         return HTIF_TOHOST_ADDR_CONST;
     }
 
-    function getHtifFromHostAddr() public returns (uint64) {
+    function getHtifFromHostAddr() public pure returns (uint64) {
         return HTIF_FROMHOST_ADDR_CONST;
     }
 }
