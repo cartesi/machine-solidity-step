@@ -1,11 +1,12 @@
-// @title CSR
 pragma solidity ^0.5.0;
 
 import "../contracts/MemoryInteractor.sol";
 import "../contracts/RiscVConstants.sol";
 import "../contracts/CSRReads.sol";
 
-
+/// @title CSR
+/// @author Felipe Argento
+/// @notice Implements main CSR read and write logic
 library CSR {
 
     //CSR addresses
@@ -53,12 +54,13 @@ library CSR {
     uint32 constant TDATA2 = 0x7a2;
     uint32 constant TDATA3 = 0x7a3;
 
-    /// \brief Reads the value of a CSR given its address
-    /// \param mi MemoryInteractor with which Step function is interacting.
-    /// \param mmIndex Specific index of the Memory Manager that contains this Steps logs
-    /// \param csraddr Address of CSR in file.
-    /// \returns Returns the status of the operation (true for success, false otherwise).
-    /// \returns Register value.
+    /// @notice Reads the value of a CSR given its address
+    /// @dev If/else should change to binary search to increase performance
+    /// @param mi MemoryInteractor with which Step function is interacting.
+    /// @param mmIndex Specific index of the Memory Manager that contains this Steps logs
+    /// @param csrAddr Address of CSR in file.
+    /// @return Returns the status of the operation (true for success, false otherwise).
+    /// @return Register value.
     function readCsr(MemoryInteractor mi, uint256 mmIndex, uint32 csrAddr)
     public returns (bool, uint64)
     {
@@ -68,8 +70,6 @@ library CSR {
         if (csrPriv(csrAddr) > mi.readIflagsPrv(mmIndex)) {
             return(false, 0);
         }
-        // TO-DO: Change this to binary search or mapping to increase performance
-        // (in the meantime, pray for solidity devs to add switch statements)
         if (csrAddr == UCYCLE) {
             return CSRReads.readCsrCycle(mi, mmIndex, csrAddr);
         } else if (csrAddr == UINSTRET) {
@@ -138,12 +138,13 @@ library CSR {
         return CSRReads.readCsrFail();
     }
 
-    /// \brief Writes a value to a CSR given its address
-    /// \param mi MemoryInteractor with which Step function is interacting.
-    /// \param mmIndex Specific index of the Memory Manager that contains this Steps logs
-    /// \param csrAddr Address of CSR in file.
-    /// \param val Value to be written;
-    /// \returns The status of the operation (true for success, false otherwise).
+    /// @notice Writes a value to a CSR given its address
+    /// @dev If/else should change to binary search to increase performance
+    /// @param mi MemoryInteractor with which Step function is interacting.
+    /// @param mmIndex Specific index of the Memory Manager that contains this Steps logs
+    /// @param csrAddr Address of CSR in file.
+    /// @param val Value to be written;
+    /// @return The status of the operation (true for success, false otherwise).
     function writeCsr(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -163,8 +164,6 @@ library CSR {
             return false;
         }
 
-        // TO-DO: Change this to binary search or mapping to increase performance
-        // (in the meantime, pray for solidity devs to add switch statements)
         if (csrAddr == SSTATUS) {
             uint64 cMstatus = mi.readMstatus(mmIndex);
             return writeCsrMstatus(mi, mmIndex, (cMstatus & ~RiscVConstants.getSstatusWMask()) | (val & RiscVConstants.getSstatusWMask()));

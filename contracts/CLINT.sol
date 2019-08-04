@@ -1,4 +1,3 @@
-// @title CLINT
 pragma solidity ^0.5.0;
 
 import "../contracts/MemoryInteractor.sol";
@@ -6,22 +5,24 @@ import "../contracts/RiscVConstants.sol";
 import "../contracts/RealTimeClock.sol";
 
 
-// Core Local Interruptor (CLINT_ controls the timer interrupt.
-// Its active addresses are 0x0200bff8(mtime) and 0x02004000(mtimecmp)
-// Reference: The Core of Cartesi, v1.02 - Section 3.2 - The Board
+/// @title CLINT
+/// @author Felipe Argento
+/// @notice Implements the Core Local Interruptor functionalities
+/// @dev CLINT active addresses are 0x0200bff8(mtime) and 0x02004000(mtimecmp)
+/// Reference: The Core of Cartesi, v1.02 - Section 3.2 - The Board
 library CLINT {
 
     uint64 constant CLINT_MSIP0_ADDR = 0x02000000;
     uint64 constant CLINT_MTIMECMP_ADDR = 0x02004000;
     uint64 constant CLINT_MTIME_ADDR = 0x0200bff8;
 
-    // \brief reads clint
-    /// \param mi Memory Interactor with which Step function is interacting.
-    /// \param mmIndex Index corresponding to the instance of Memory Manager that
-    // \param offset can be uint8, uint16, uint32 or uint64
-    // \param wordsize can be uint8, uint16, uint32 or uint64
-    // \return bool if read was successfull
-    // \return uint64 pval
+    /// @notice reads clint
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager
+    /// @param offset can be uint8, uint16, uint32 or uint64
+    /// @param wordSize can be uint8, uint16, uint32 or uint64
+    /// @return bool if read was successfull
+    /// @return uint64 pval
     function clintRead(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -42,13 +43,13 @@ library CLINT {
         }
     }
 
-    // \brief write to clint
-    // \param mi Memory Interactor with which Step function is interacting.
-    // \param mmIndex Index corresponding to the instance of Memory Manager that
-    // \param offset can be uint8, uint16, uint32 or uint64
-    // \param val to be written
-    // \param wordsize can be uint8, uint16, uint32 or uint64
-    // \return bool if write was successfull
+    /// @notice write to clint
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager
+    /// @param offset can be uint8, uint16, uint32 or uint64
+    /// @param val to be written
+    /// @param wordSize can be uint8, uint16, uint32 or uint64
+    /// @return bool if write was successfull
     function clintWrite(
         MemoryInteractor mi,
         uint256 mmIndex,

@@ -3,7 +3,9 @@ pragma solidity ^0.5.0;
 
 import "./Instantiator.sol";
 
-
+/// @title MMInterface
+/// @author Augusto Teixeira
+/// @notice Defines the Machine Manager interface
 contract MMInterface is Instantiator {
     enum state {
         WaitingProofs,

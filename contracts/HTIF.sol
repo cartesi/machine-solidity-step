@@ -4,21 +4,23 @@ pragma solidity ^0.5.0;
 import "../contracts/MemoryInteractor.sol";
 
 
-// Host-Target-Interface (HTIF) mediates communcation with external world.
-// Its active addresses are 0x40000000(tohost) and 0x40000008(from host)
-// Reference: The Core of Cartesi, v1.02 - Section 3.2 - The Board
+/// @title HTIF
+/// @author Felipe Argento
+/// @notice Host-Target-Interface (HTIF) mediates communcation with external world.
+/// @dev Its active addresses are 0x40000000(tohost) and 0x40000008(from host)
+/// Reference: The Core of Cartesi, v1.02 - Section 3.2 - The Board
 library HTIF {
 
     uint64 constant HTIF_TOHOST_ADDR_CONST = 0x40008000;
     uint64 constant HTIF_FROMHOST_ADDR_CONST = 0x40008008;
 
-    // \brief reads htif
-    /// \param mi Memory Interactor with which Step function is interacting.
-    /// \param mmIndex Index corresponding to the instance of Memory Manager that
-    // \param offset can be uint8, uint16, uint32 or uint64
-    // \param wordsize can be uint8, uint16, uint32 or uint64
-    // \return bool if read was successfull
-    // \return uint64 pval
+    /// @notice reads htif
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager
+    /// @param addr address to read from
+    /// @param wordSize can be uint8, uint16, uint32 or uint64
+    /// @return bool if read was successfull
+    /// @return uint64 pval
     function htifRead(
         MemoryInteractor mi,
         uint256 mmIndex,
@@ -41,15 +43,13 @@ library HTIF {
         }
     }
 
-    // \brief write htif
-    // \param mi Memory Interactor with which Step function is interacting.
-    // \param mmIndex Index corresponding to the instance of Memory Manager that
-    // \param pmaStartWord first word, defines pma's start
-    // \param pmaLengthWord second word, defines pma's length
-    // \param offset can be uint8, uint16, uint32 or uint64
-    // \param val value to be written
-    // \param wordsize can be uint8, uint16, uint32 or uint64
-    // \return bool if write was successfull
+    /// @notice write htif
+    /// @param mi Memory Interactor with which Step function is interacting.
+    /// @param mmIndex Index corresponding to the instance of Memory Manager that
+    /// @param addr address to read from
+    /// @param val value to be written
+    /// @param wordSize can be uint8, uint16, uint32 or uint64
+    /// @return bool if write was successfull
     function htifWrite(
         MemoryInteractor mi,
         uint256 mmIndex,

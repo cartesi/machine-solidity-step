@@ -1,7 +1,9 @@
 /// @title Library for Merkle proofs
 pragma solidity ^0.5.0;
 
-
+/// @title Merkle
+/// @author Augusto Teixeira
+/// @notice Implements the getRoot function for a Merkle tree
 library Merkle {
     function getRoot(uint64 _position, bytes8 _value, bytes32[] memory proof) internal pure returns (bytes32) {
         require((_position & 7) == 0, "Position is not aligned");
