@@ -46,8 +46,6 @@ library HTIF {
     /// @notice write htif
     /// @param mi Memory Interactor with which Step function is interacting.
     /// @param mmIndex Index corresponding to the instance of Memory Manager that
-    /// @param pmaStartWord first word, defines pma's start
-    /// @param pmaLengthWord second word, defines pma's length
     /// @param addr address to read from
     /// @param val value to be written
     /// @param wordSize can be uint8, uint16, uint32 or uint64
