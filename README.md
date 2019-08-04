@@ -3,7 +3,7 @@
 
 The Cartesi RISC-V Solidity Emulator is the on-chain host implementation of the Cartesi Machine Specification. The libraries and contracts are written in Solidity, the migration script is written in Javascript (with the help of [Truffle](https://github.com/trufflesuite/truffle)), and the testing scripts are written in Python.
 
-For Cartesi's design to work, this implementation must have the exact transition function as the off-chain [Cartesi RISC-V Emulator](https://github.com/cartesi/core), meaning that if given the same initial state (s[i]) both implementation's step functions should reach a bit by bit consistent state s[i + 1].
+For Cartesi's design to work, this implementation must have the exact transition function as the off-chain [Cartesi RISC-V Emulator](https://github.com/cartesi/machine-emulator), meaning that if given the same initial state (s[i]) both implementation's step functions should reach a bit by bit consistent state s[i + 1].
 
 Since the cost of storing a full Cartesi Machine state within the blockchain is prohibitive, all machine states are represented in the blockchain as cryptographic hashes. The contents of those states and memory represented by those hashes are only known off-chain.
 
@@ -21,7 +21,7 @@ The MemoryManager contract offers the RISC-V Solidity emulator a very simple int
 
 It also makes sure that all accesses performed by the Step function match the ones provided by Alice and are consistent with the Merkle proofs provided by her. If that is not the case, Alice loses the dispute.
 
-The real Memory Manager contract can be found at [contracts repo](https://github.com/cartesi/contracts). In the present repo we have a MockMemoryManager, that still offers the same interface and makes sure all the proofs are consistent - but it doesn't comply with the Verification Game requirements. It should not be used in production, it doesn't include security measures, it doesn't provide access control and so on. The MockMemoryManager is meant to be used for testing purposes, so that the state transition function can be tested without the need to play a full mock verification game.
+The real Memory Manager contract can be found at [Arbitration DLib](https://github.com/cartesi/arbitration-dlib). In the present repo we have a MockMemoryManager, that still offers the same interface and makes sure all the proofs are consistent - but it doesn't comply with the Verification Game requirements. It should not be used in production, it doesn't include security measures, it doesn't provide access control and so on. The MockMemoryManager is meant to be used for testing purposes, so that the state transition function can be tested without the need to play a full mock verification game.
 
 ## Step function
 
@@ -80,5 +80,5 @@ Please note we have a code of conduct, please follow it in all your interactions
 * *Felipe Argento*
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[APACHE2](https://www.apache.org/licenses/LICENSE-2.0)
 
