@@ -71,7 +71,7 @@ Update data.json to match the access log of the step (or list of steps) that you
 
 ## Contributing
 
-Pull requests are welcome. When contributing to this repository, please first discuss the change you wish to make via issue, email, or any other method with the owners of this repository before making a change.
+Thank you for your interest in Cartesi! Head over to our [Contributing Guidelines](https://github.com/cartesi/machine-solidity-step/blob/Add-Contributing-Agreement/CONTRIBUTING.md) for instructions on how to sign our Contributors Agreement and get started with Cartesi!
 
 Please note we have a code of conduct, please follow it in all your interactions with the project.
 
