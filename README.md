@@ -80,5 +80,7 @@ Please note we have a code of conduct, please follow it in all your interactions
 * *Felipe Argento*
 
 ## License
-[APACHE2](https://www.apache.org/licenses/LICENSE-2.0)
+The machine-solidity-step repository and all contributions are licensed under
+[APACHE 2.0](https://www.apache.org/licenses/LICENSE-2.0). Please review our [LICENSE](https://github.com/cartesi/machine-solidity-step/blob/master/LICENSE) file.
+
 
