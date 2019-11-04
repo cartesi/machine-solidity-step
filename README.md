@@ -1,3 +1,4 @@
+> :warning: The Cartesi team keeps working internally on the next version of this repository, following its regular development roadmap. Whenever there's a new version ready or important fix, these are published to the public source tree as new releases.
 
 # Cartesi RISC-V Solidity Emulator
 
