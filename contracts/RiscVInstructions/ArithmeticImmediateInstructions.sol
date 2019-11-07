@@ -14,10 +14,10 @@
 /// @title ArithmeticImmediateInstructions
 pragma solidity ^0.5.0;
 
-import "../../contracts/MemoryInteractor.sol";
-import "../../contracts/RiscVDecoder.sol";
-import "../../contracts/RiscVConstants.sol";
-import "../../contracts/lib/BitsManipulationLibrary.sol";
+import "../MemoryInteractor.sol";
+import "../RiscVDecoder.sol";
+import "../RiscVConstants.sol";
+import "@cartesi/util/contracts/BitsManipulationLibrary.sol";
 
 
 library ArithmeticImmediateInstructions {

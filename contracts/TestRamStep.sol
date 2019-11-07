@@ -14,8 +14,8 @@
 pragma solidity ^0.5.0;
 
 //Libraries
-import "../contracts/Step.sol";
-import "../contracts/TestRamMMInstantiator.sol";
+import "./Step.sol";
+import "./TestRamMMInstantiator.sol";
 
 
 /// @title TestRamStep

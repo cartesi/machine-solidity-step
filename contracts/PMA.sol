@@ -13,7 +13,7 @@
 
 pragma solidity ^0.5.0;
 
-import "../contracts/MemoryInteractor.sol";
+import "./MemoryInteractor.sol";
 
 /// @title PMA
 /// @author Felipe Argento

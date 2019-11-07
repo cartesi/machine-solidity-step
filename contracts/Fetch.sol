@@ -15,10 +15,10 @@ pragma solidity ^0.5.0;
 
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
-import "../contracts/MemoryInteractor.sol";
-import "../contracts/PMA.sol";
-import "../contracts/VirtualMemory.sol";
-import "../contracts/Exceptions.sol";
+import "./MemoryInteractor.sol";
+import "./PMA.sol";
+import "./VirtualMemory.sol";
+import "./Exceptions.sol";
 
 /// @title Fetch
 /// @author Felipe Argento

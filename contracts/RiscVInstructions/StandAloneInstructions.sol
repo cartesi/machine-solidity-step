@@ -14,8 +14,8 @@
 /// @title StandAloneInstructions
 pragma solidity ^0.5.0;
 
-import "../../contracts/MemoryInteractor.sol";
-import "../../contracts/RiscVDecoder.sol";
+import "../MemoryInteractor.sol";
+import "../RiscVDecoder.sol";
 
 
 library StandAloneInstructions {

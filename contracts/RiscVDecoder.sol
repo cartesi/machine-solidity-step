@@ -14,7 +14,7 @@
 // @title RiscVDecoder
 pragma solidity ^0.5.0;
 
-import "./lib/BitsManipulationLibrary.sol";
+import "@cartesi/util/contracts/BitsManipulationLibrary.sol";
 
 /// @title RiscVDecoder
 /// @author Felipe Argento

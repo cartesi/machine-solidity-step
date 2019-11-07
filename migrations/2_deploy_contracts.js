@@ -1,38 +1,37 @@
-require('dotenv').config();
 const fs = require('fs');
 
 //Libraries
-var RiscVDecoder = artifacts.require("./RiscVDecoder.sol");
-var ShadowAddresses = artifacts.require("./ShadowAddresses.sol");
-var RiscVConstants = artifacts.require("./RiscVConstants.sol");
-var CSRReads = artifacts.require("./CSRReads.sol");
-var BranchInstructions = artifacts.require("./RiscVInstructions/BranchInstructions.sol");
-var RealTimeClock = artifacts.require("./RealTimeClock.sol");
-var ArithmeticInstructions = artifacts.require("./RiscVInstructions/ArithmeticInstructions.sol");
-var ArithmeticImmediateInstructions = artifacts.require("./RiscVInstructions/ArithmeticImmediateInstructions.sol");
-var AtomicInstructions = artifacts.require("./RiscVInstructions/AtomicInstructions.sol");
-var BitsManipulationLibrary = artifacts.require("./lib/BitsManipulationLibrary.sol");
-var S_Instructions = artifacts.require("./RiscVInstructions/S_Instructions.sol");
-var EnvTrapInstructions = artifacts.require("./RiscVInstructions/EnvTrapIntInstructions.sol");
-var StandAloneInstructions = artifacts.require("./RiscVInstructions/StandAloneInstructions.sol");
+var RiscVDecoder = artifacts.require("RiscVDecoder");
+var ShadowAddresses = artifacts.require("ShadowAddresses");
+var RiscVConstants = artifacts.require("RiscVConstants");
+var CSRReads = artifacts.require("CSRReads");
+var BranchInstructions = artifacts.require("BranchInstructions");
+var RealTimeClock = artifacts.require("RealTimeClock");
+var ArithmeticInstructions = artifacts.require("ArithmeticInstructions");
+var ArithmeticImmediateInstructions = artifacts.require("ArithmeticImmediateInstructions");
+var AtomicInstructions = artifacts.require("AtomicInstructions");
+var BitsManipulationLibrary = artifacts.require("@cartesi/util/BitsManipulationLibrary");
+var S_Instructions = artifacts.require("S_Instructions");
+var EnvTrapInstructions = artifacts.require("EnvTrapIntInstructions");
+var StandAloneInstructions = artifacts.require("StandAloneInstructions");
 
-var Execute = artifacts.require("./Execute.sol");
-var Exceptions = artifacts.require("./Exceptions.sol");
-var Fetch = artifacts.require("./Fetch.sol");
-var PMA = artifacts.require("./PMA.sol");
-var CSR = artifacts.require("./CSR.sol");
-var CSRExecute = artifacts.require("./CSRExecute.sol");
-var HTIF = artifacts.require("./HTIF.sol");
-var CLINT = artifacts.require("./CLINT.sol");
-var Interrupts = artifacts.require("./Interrupts.sol");
+var Execute = artifacts.require("Execute");
+var Exceptions = artifacts.require("Exceptions");
+var Fetch = artifacts.require("Fetch");
+var PMA = artifacts.require("PMA");
+var CSR = artifacts.require("CSR");
+var CSRExecute = artifacts.require("CSRExecute");
+var HTIF = artifacts.require("HTIF");
+var CLINT = artifacts.require("CLINT");
+var Interrupts = artifacts.require("Interrupts");
 
 //Contracts
-var MMInstantiator = artifacts.require("./MMInstantiator.sol");
-var MockMMInstantiator = artifacts.require("./MockMMInstantiator.sol");
-var TestRamMMInstantiator = artifacts.require("./TestRamMMInstantiator.sol");
-var MemoryInteractor = artifacts.require("./MemoryInteractor.sol");
-var VirtualMemory = artifacts.require("./VirtualMemory.sol");
-var Step = artifacts.require("./Step.sol");
+var MMInstantiator = artifacts.require("@cartesi/arbitration/MMInstantiator");
+var MockMMInstantiator = artifacts.require("MockMMInstantiator");
+var TestRamMMInstantiator = artifacts.require("TestRamMMInstantiator");
+var MemoryInteractor = artifacts.require("MemoryInteractor");
+var VirtualMemory = artifacts.require("VirtualMemory");
+var Step = artifacts.require("Step");
 
 // Read environment variable to decide if it should instantiate MM or get the address
 module.exports = function(deployer) {

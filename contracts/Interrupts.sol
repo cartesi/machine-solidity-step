@@ -13,9 +13,9 @@
 
 pragma solidity ^0.5.0;
 
-import "../contracts/MemoryInteractor.sol";
-import "../contracts/RiscVConstants.sol";
-import "../contracts/Exceptions.sol";
+import "./MemoryInteractor.sol";
+import "./RiscVConstants.sol";
+import "./Exceptions.sol";
 
 /// @title Interrupts
 /// @author Felipe Argento

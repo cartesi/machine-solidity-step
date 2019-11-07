@@ -14,11 +14,11 @@
 /// @title MemoryInteractor.sol
 pragma solidity ^0.5.0;
 
-import "../contracts/ShadowAddresses.sol";
-import "../contracts/HTIF.sol";
-import "../contracts/CLINT.sol";
+import "./ShadowAddresses.sol";
+import "./HTIF.sol";
+import "./CLINT.sol";
 import "./RiscVConstants.sol";
-import "./lib/BitsManipulationLibrary.sol";
+import "@cartesi/util/contracts/BitsManipulationLibrary.sol";
 
 
 contract mmInterface {

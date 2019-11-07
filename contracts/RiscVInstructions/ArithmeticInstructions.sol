@@ -21,9 +21,9 @@ pragma solidity ^0.5.0;
 // https://content.riscv.org/wp-content/uploads/2017/05/riscv-spec-v2.2.pdf
 // Solidity docs Twos Complement/Underflow/Overflow:
 // https://solidity.readthedocs.io/en/latest/security-considerations.html?highlight=overflow#two-s-complement-underflows-overflows
-import "../../contracts/MemoryInteractor.sol";
-import "../../contracts/RiscVDecoder.sol";
-import "../../contracts/lib/BitsManipulationLibrary.sol";
+import "../MemoryInteractor.sol";
+import "../RiscVDecoder.sol";
+import "@cartesi/util/contracts/BitsManipulationLibrary.sol";
 
 
 library ArithmeticInstructions {

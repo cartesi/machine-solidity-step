@@ -14,9 +14,9 @@
 /// @title Atomic instructions
 pragma solidity ^0.5.0;
 
-import "../../contracts/MemoryInteractor.sol";
-import "../../contracts/RiscVDecoder.sol";
-import "../../contracts/VirtualMemory.sol";
+import "../MemoryInteractor.sol";
+import "../RiscVDecoder.sol";
+import "../VirtualMemory.sol";
 
 
 library AtomicInstructions {

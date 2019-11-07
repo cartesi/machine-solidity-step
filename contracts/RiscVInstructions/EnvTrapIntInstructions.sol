@@ -16,10 +16,10 @@
 /// @title EnvTrapIntInstruction
 pragma solidity ^0.5.0;
 
-import "../../contracts/MemoryInteractor.sol";
-import "../../contracts/RiscVDecoder.sol";
-import "../../contracts/RiscVConstants.sol";
-import "../../contracts/Exceptions.sol";
+import "../MemoryInteractor.sol";
+import "../RiscVDecoder.sol";
+import "../RiscVConstants.sol";
+import "../Exceptions.sol";
 
 
 library EnvTrapIntInstructions {

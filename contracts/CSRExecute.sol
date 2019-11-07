@@ -13,8 +13,8 @@
 
 pragma solidity ^0.5.0;
 
-import "../contracts/MemoryInteractor.sol";
-import "../contracts/CSR.sol";
+import "./MemoryInteractor.sol";
+import "./CSR.sol";
 
 /// @title CSRExecute
 /// @author Felipe Argento

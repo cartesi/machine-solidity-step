@@ -13,8 +13,8 @@
 
 pragma solidity ^0.5.0;
 
-import "../contracts/MemoryInteractor.sol";
-import "../contracts/RiscVConstants.sol";
+import "./MemoryInteractor.sol";
+import "./RiscVConstants.sol";
 
 /// @title Exceptions
 /// @author Felipe Argento

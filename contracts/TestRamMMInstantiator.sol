@@ -13,10 +13,10 @@
 
 pragma solidity ^0.5.0;
 
-import "./Decorated.sol";
-import "./MMInterface.sol";
-import "./Merkle.sol";
-import "./lib/BitsManipulationLibrary.sol";
+import "@cartesi/util/contracts/Decorated.sol";
+import "@cartesi/util/contracts/Merkle.sol";
+import "@cartesi/arbitration/contracts/MMInterface.sol";
+import "@cartesi/util/contracts/BitsManipulationLibrary.sol";
 
 /// @title Test RAM MM Instantiator
 /// @author Stephen Chen

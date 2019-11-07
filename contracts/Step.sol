@@ -16,10 +16,10 @@ pragma solidity ^0.5.0;
 
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
-import "../contracts/MemoryInteractor.sol";
-import {Fetch} from "../contracts/Fetch.sol";
-import {Execute} from "../contracts/Execute.sol";
-import {Interrupts} from "../contracts/Interrupts.sol";
+import "./MemoryInteractor.sol";
+import {Fetch} from "./Fetch.sol";
+import {Execute} from "./Execute.sol";
+import {Interrupts} from "./Interrupts.sol";
 
 /// @title Step
 /// @author Felipe Argento

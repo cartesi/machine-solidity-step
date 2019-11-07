@@ -13,9 +13,9 @@
 
 pragma solidity ^0.5.0;
 
-import "../contracts/MemoryInteractor.sol";
-import "../contracts/RiscVConstants.sol";
-import "../contracts/RealTimeClock.sol";
+import "./MemoryInteractor.sol";
+import "./RiscVConstants.sol";
+import "./RealTimeClock.sol";
 
 
 /// @title CLINT

@@ -16,11 +16,11 @@ pragma solidity ^0.5.0;
 import "./ShadowAddresses.sol";
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
-import "../contracts/MemoryInteractor.sol";
-import "../contracts/PMA.sol";
-import "../contracts/CLINT.sol";
-import "../contracts/HTIF.sol";
-import "../contracts/Exceptions.sol";
+import "./MemoryInteractor.sol";
+import "./PMA.sol";
+import "./CLINT.sol";
+import "./HTIF.sol";
+import "./Exceptions.sol";
 
 /// @title Virtual Memory
 /// @author Felipe Argento

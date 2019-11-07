@@ -16,8 +16,8 @@ pragma solidity ^0.5.0;
 import "./RiscVConstants.sol";
 import "./RiscVDecoder.sol";
 import "./VirtualMemory.sol";
-import "../contracts/MemoryInteractor.sol";
-import "../contracts/CSRExecute.sol";
+import "./MemoryInteractor.sol";
+import "./CSRExecute.sol";
 import "./RiscVInstructions/BranchInstructions.sol";
 import "./RiscVInstructions/ArithmeticInstructions.sol";
 import "./RiscVInstructions/ArithmeticImmediateInstructions.sol";
@@ -25,7 +25,7 @@ import "./RiscVInstructions/S_Instructions.sol";
 import "./RiscVInstructions/StandAloneInstructions.sol";
 import "./RiscVInstructions/AtomicInstructions.sol";
 import "./RiscVInstructions/EnvTrapIntInstructions.sol";
-import {Exceptions} from "../contracts/Exceptions.sol";
+import {Exceptions} from "./Exceptions.sol";
 
 /// @title Execute
 /// @author Felipe Argento
