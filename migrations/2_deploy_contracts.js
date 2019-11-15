@@ -1,37 +1,36 @@
-const fs = require('fs');
 
-//Libraries
-var RiscVDecoder = artifacts.require("RiscVDecoder");
-var ShadowAddresses = artifacts.require("ShadowAddresses");
-var RiscVConstants = artifacts.require("RiscVConstants");
-var CSRReads = artifacts.require("CSRReads");
-var BranchInstructions = artifacts.require("BranchInstructions");
-var RealTimeClock = artifacts.require("RealTimeClock");
-var ArithmeticInstructions = artifacts.require("ArithmeticInstructions");
-var ArithmeticImmediateInstructions = artifacts.require("ArithmeticImmediateInstructions");
-var AtomicInstructions = artifacts.require("AtomicInstructions");
-var BitsManipulationLibrary = artifacts.require("@cartesi/util/BitsManipulationLibrary");
-var S_Instructions = artifacts.require("S_Instructions");
-var EnvTrapInstructions = artifacts.require("EnvTrapIntInstructions");
-var StandAloneInstructions = artifacts.require("StandAloneInstructions");
+// Libraries
+const RiscVDecoder = artifacts.require("RiscVDecoder");
+const ShadowAddresses = artifacts.require("ShadowAddresses");
+const RiscVConstants = artifacts.require("RiscVConstants");
+const CSRReads = artifacts.require("CSRReads");
+const BranchInstructions = artifacts.require("BranchInstructions");
+const RealTimeClock = artifacts.require("RealTimeClock");
+const ArithmeticInstructions = artifacts.require("ArithmeticInstructions");
+const ArithmeticImmediateInstructions = artifacts.require("ArithmeticImmediateInstructions");
+const AtomicInstructions = artifacts.require("AtomicInstructions");
+const BitsManipulationLibrary = artifacts.require("@cartesi/util/BitsManipulationLibrary");
+const S_Instructions = artifacts.require("S_Instructions");
+const EnvTrapInstructions = artifacts.require("EnvTrapIntInstructions");
+const StandAloneInstructions = artifacts.require("StandAloneInstructions");
 
-var Execute = artifacts.require("Execute");
-var Exceptions = artifacts.require("Exceptions");
-var Fetch = artifacts.require("Fetch");
-var PMA = artifacts.require("PMA");
-var CSR = artifacts.require("CSR");
-var CSRExecute = artifacts.require("CSRExecute");
-var HTIF = artifacts.require("HTIF");
-var CLINT = artifacts.require("CLINT");
-var Interrupts = artifacts.require("Interrupts");
+const Execute = artifacts.require("Execute");
+const Exceptions = artifacts.require("Exceptions");
+const Fetch = artifacts.require("Fetch");
+const PMA = artifacts.require("PMA");
+const CSR = artifacts.require("CSR");
+const CSRExecute = artifacts.require("CSRExecute");
+const HTIF = artifacts.require("HTIF");
+const CLINT = artifacts.require("CLINT");
+const Interrupts = artifacts.require("Interrupts");
 
-//Contracts
-var MMInstantiator = artifacts.require("@cartesi/arbitration/MMInstantiator");
-var MockMMInstantiator = artifacts.require("MockMMInstantiator");
-var TestRamMMInstantiator = artifacts.require("TestRamMMInstantiator");
-var MemoryInteractor = artifacts.require("MemoryInteractor");
-var VirtualMemory = artifacts.require("VirtualMemory");
-var Step = artifacts.require("Step");
+// Contracts
+const MMInstantiator = artifacts.require("@cartesi/arbitration/MMInstantiator");
+const MockMMInstantiator = artifacts.require("MockMMInstantiator");
+const TestRamMMInstantiator = artifacts.require("TestRamMMInstantiator");
+const MemoryInteractor = artifacts.require("MemoryInteractor");
+const VirtualMemory = artifacts.require("VirtualMemory");
+const Step = artifacts.require("Step");
 
 // Read environment variable to decide if it should instantiate MM or get the address
 module.exports = function(deployer) {
@@ -39,7 +38,6 @@ module.exports = function(deployer) {
   deployer.then(async () => {
     await deployer.deploy(ShadowAddresses);
     await deployer.deploy(RiscVConstants);
-    await deployer.deploy(BitsManipulationLibrary);
 
     await deployer.link(BitsManipulationLibrary, RiscVDecoder);
     await deployer.deploy(RiscVDecoder);
@@ -171,37 +169,15 @@ module.exports = function(deployer) {
     await deployer.link(BitsManipulationLibrary, MemoryInteractor);
     await deployer.link(ShadowAddresses, MemoryInteractor);
 
-    await deployer.deploy(MMInstantiator)
     // use MockMMInstantiator to run test_single_step.py and test_multi_steps.py
     await deployer.deploy(MockMMInstantiator)
-
     await deployer.link(BitsManipulationLibrary, TestRamMMInstantiator);
     // use TestRamMMInstantiator to run test_ram.py
     await deployer.deploy(TestRamMMInstantiator)
 
-    let mmAddress;
-    if (process.env.CARTESI_INTEGRATION_MM_ADDR) {
-      mmAddress = process.env.CARTESI_INTEGRATION_MM_ADDR
-      console.log("Deploying MemoryInteractor in integration environment, address: " + mmAddress);
-    } else if (false) {
-      mmAddress = TestRamMMInstantiator.address
-      console.log("Deploying MemoryInteractor in test environment, with Test Ram MM address: " + mmAddress);
-    } else {
-      mmAddress = MockMMInstantiator.address
-      console.log("Deploying MemoryInteractor in test environment, with Mock MM address: " + mmAddress);
-    }
-    await deployer.deploy(MemoryInteractor, mmAddress);
+    // await deployer.deploy(MemoryInteractor, TestRamMMInstantiator.address);
+    // await deployer.deploy(MemoryInteractor, MockMMInstantiator.address);
+    await deployer.deploy(MemoryInteractor, MMInstantiator.address);
     await deployer.deploy(Step, MemoryInteractor.address);
-
-    // Write address to file
-    let addr_json = "{\"mm_address\":\"" + mmAddress + "\", \"step_address\":\"" + Step.address + "\"}";
-
-    fs.writeFile('../test/deployedAddresses.json', addr_json, (err) => {
-      if (err) console.log("couldnt write to file");
-    });
-
-    if (process.env.STEP_ADD_FILE_PATH) {
-        fs.writeFileSync(process.env.STEP_ADD_FILE_PATH, Step.address);
-    }
   });
 };

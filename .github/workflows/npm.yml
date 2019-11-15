@@ -1,23 +1,12 @@
-name: publish
-on:
-  release:
-    types: [published]
+name: Build
+on: [push]
 jobs:
   publish:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
-      
-      - uses: tuler/validate-semver-release@feature/alpha-rc
-        id: validate
-
       - run: echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
-      
-      - run: npm ci
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
-      - run: npm publish --tag ${{ steps.validate.outputs.release-workflow-tag }}
+      - run: npm install
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
