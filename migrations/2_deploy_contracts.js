@@ -1,4 +1,8 @@
 
+const contract = require("@truffle/contract");
+const BitsManipulationLibrary = contract(require("@cartesi/util/build/contracts/BitsManipulationLibrary.json"));
+const MMInstantiator = contract(require("@cartesi/arbitration/build/contracts/MMInstantiator.json"));
+
 // Libraries
 const RiscVDecoder = artifacts.require("RiscVDecoder");
 const ShadowAddresses = artifacts.require("ShadowAddresses");
@@ -9,7 +13,6 @@ const RealTimeClock = artifacts.require("RealTimeClock");
 const ArithmeticInstructions = artifacts.require("ArithmeticInstructions");
 const ArithmeticImmediateInstructions = artifacts.require("ArithmeticImmediateInstructions");
 const AtomicInstructions = artifacts.require("AtomicInstructions");
-const BitsManipulationLibrary = artifacts.require("@cartesi/util/BitsManipulationLibrary");
 const S_Instructions = artifacts.require("S_Instructions");
 const EnvTrapInstructions = artifacts.require("EnvTrapIntInstructions");
 const StandAloneInstructions = artifacts.require("StandAloneInstructions");
@@ -25,17 +28,15 @@ const CLINT = artifacts.require("CLINT");
 const Interrupts = artifacts.require("Interrupts");
 
 // Contracts
-const MMInstantiator = artifacts.require("@cartesi/arbitration/MMInstantiator");
-const MockMMInstantiator = artifacts.require("MockMMInstantiator");
-const TestRamMMInstantiator = artifacts.require("TestRamMMInstantiator");
 const MemoryInteractor = artifacts.require("MemoryInteractor");
 const VirtualMemory = artifacts.require("VirtualMemory");
 const Step = artifacts.require("Step");
 
-// Read environment variable to decide if it should instantiate MM or get the address
 module.exports = function(deployer) {
-  //Deploy libraries
   deployer.then(async () => {
+    BitsManipulationLibrary.setNetwork(deployer.network_id);
+    MMInstantiator.setNetwork(deployer.network_id);
+
     await deployer.deploy(ShadowAddresses);
     await deployer.deploy(RiscVConstants);
 
@@ -169,14 +170,6 @@ module.exports = function(deployer) {
     await deployer.link(BitsManipulationLibrary, MemoryInteractor);
     await deployer.link(ShadowAddresses, MemoryInteractor);
 
-    // use MockMMInstantiator to run test_single_step.py and test_multi_steps.py
-    await deployer.deploy(MockMMInstantiator)
-    await deployer.link(BitsManipulationLibrary, TestRamMMInstantiator);
-    // use TestRamMMInstantiator to run test_ram.py
-    await deployer.deploy(TestRamMMInstantiator)
-
-    // await deployer.deploy(MemoryInteractor, TestRamMMInstantiator.address);
-    // await deployer.deploy(MemoryInteractor, MockMMInstantiator.address);
     await deployer.deploy(MemoryInteractor, MMInstantiator.address);
     await deployer.deploy(Step, MemoryInteractor.address);
   });

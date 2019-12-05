@@ -1,22 +1,23 @@
 {
   "name": "@cartesi/machine-solidity-step",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.3",
   "description": "Machine Solidity Step",
   "scripts": {
     "prepare": "truffle compile",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@cartesi/arbitration": "^0.1.0-alpha.1",
-    "@cartesi/util": "^0.1.0-alpha.7",
-    "@truffle/hdwallet-provider": "^1.0.25"
+    "@cartesi/util": "^0.1.0",
+    "@cartesi/arbitration": "^0.1.0-alpha.3"
   },
   "devDependencies": {
-    "truffle": "^5.1.0"
+    "@truffle/contract": "^4.1.1",
+    "@truffle/hdwallet-provider": "^1.0.26",
+    "truffle": "^5.1.3"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/cartesi-corp/machine-solidity-step.git"
+    "url": "git://github.com/cartesi/machine-solidity-step.git"
   },
   "keywords": [
     "cartesi"
@@ -24,7 +25,8 @@
   "files": [
     "contracts",
     "migrations",
-    "build"
+    "build",
+    "truffle-config.js"
   ],
   "author": "Danilo Tuler <danilo@cartesi.io>",
   "license": "Apache-2.0"
