@@ -1,24 +1,21 @@
 {
   "name": "@cartesi/machine-solidity-step",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.4",
   "lockfileVersion": 1,
   "requires": true,
   "dependencies": {
     "@cartesi/arbitration": {
-      "version": "0.1.0-alpha.3",
-      "resolved": "https://registry.npmjs.org/@cartesi/arbitration/-/arbitration-0.1.0-alpha.3.tgz",
-      "integrity": "sha512-w7COz3hQQM9Z8qvDUsOgF6178t39Z/ANh2TXabqOy/JOLUaRcUigCCbHVnUcWochy/ujDndV2vI0yk/g8cw68A==",
+      "version": "0.1.0-alpha.4",
+      "resolved": "https://registry.npmjs.org/@cartesi/arbitration/-/arbitration-0.1.0-alpha.4.tgz",
+      "integrity": "sha512-2rhwE04SSgA2P1ToQxC+Vk/lSI7SFRXqYYVtUT6c7UEbgWkMPp3thkb1zagKlvAujCTkEYkV9+t6ImQ5jSFntw==",
       "requires": {
-        "@cartesi/util": "^0.1.0"
+        "@cartesi/util": "^0.1.1"
       },
       "dependencies": {
         "@cartesi/util": {
-          "version": "0.1.0",
-          "resolved": "https://registry.npmjs.org/@cartesi/util/-/util-0.1.0.tgz",
-          "integrity": "sha512-OxFQn+NxkBbXyOYxF2kmqz7doOQBbPW0BxX846oF9avlViP0vbbkXtUfDdjgL3+81QaP59tWDA4R/4u1uZjjIg==",
-          "requires": {
-            "@truffle/hdwallet-provider": "^1.0.26"
-          },
+          "version": "0.1.1",
+          "resolved": "https://registry.npmjs.org/@cartesi/util/-/util-0.1.1.tgz",
+          "integrity": "sha512-dAIj9i32DKRLeFF9fmpP9LafZQ/PvMrlJuEG0b9pepZkNiDUZBNMEnHvD9y38P7aQWl+Q/REHgaOQE4LYN0OmA==",
           "dependencies": {
             "@sindresorhus/is": {
               "version": "0.14.0",
@@ -10039,12 +10036,9 @@
       }
     },
     "@cartesi/util": {
-      "version": "0.1.0",
-      "resolved": "https://registry.npmjs.org/@cartesi/util/-/util-0.1.0.tgz",
-      "integrity": "sha512-OxFQn+NxkBbXyOYxF2kmqz7doOQBbPW0BxX846oF9avlViP0vbbkXtUfDdjgL3+81QaP59tWDA4R/4u1uZjjIg==",
-      "requires": {
-        "@truffle/hdwallet-provider": "^1.0.26"
-      },
+      "version": "0.1.1",
+      "resolved": "https://registry.npmjs.org/@cartesi/util/-/util-0.1.1.tgz",
+      "integrity": "sha512-dAIj9i32DKRLeFF9fmpP9LafZQ/PvMrlJuEG0b9pepZkNiDUZBNMEnHvD9y38P7aQWl+Q/REHgaOQE4LYN0OmA==",
       "dependencies": {
         "@sindresorhus/is": {
           "version": "0.14.0",
