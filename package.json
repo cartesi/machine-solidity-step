@@ -1,6 +1,6 @@
 {
   "name": "@cartesi/machine-solidity-step",
-  "version": "0.1.0-alpha.4",
+  "version": "0.1.0",
   "description": "Machine Solidity Step",
   "scripts": {
     "prepare": "truffle compile",
@@ -8,12 +8,12 @@
   },
   "dependencies": {
     "@cartesi/util": "^0.1.1",
-    "@cartesi/arbitration": "^0.1.0-alpha.4"
+    "@cartesi/arbitration": "^0.1.0"
   },
   "devDependencies": {
-    "@truffle/contract": "^4.1.1",
-    "@truffle/hdwallet-provider": "^1.0.26",
-    "truffle": "^5.1.3"
+    "@truffle/contract": "^4.1.4",
+    "@truffle/hdwallet-provider": "^1.0.28",
+    "truffle": "^5.1.8"
   },
   "repository": {
     "type": "git",
