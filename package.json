@@ -1,6 +1,6 @@
 {
   "name": "@cartesi/machine-solidity-step",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Machine Solidity Step",
   "scripts": {
     "prepare": "truffle compile",
@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@cartesi/util": "^0.1.1",
-    "@cartesi/arbitration": "^0.1.0"
+    "@cartesi/arbitration": "^0.1.3"
   },
   "devDependencies": {
     "@truffle/contract": "^4.1.4",
