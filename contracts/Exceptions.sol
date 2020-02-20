@@ -86,7 +86,7 @@ library Exceptions {
             // mode, SPIE is set to SIE, and SIE is set to 0. When an SRET instruction
             // is executed, SIE is set to SPIE, then SPIE is set to 1.
             // Reference: riscv-privileged-v1.10.pdf - Section 4.1.1, page 19.
-            mstatus = (mstatus & ~RiscVConstants.getMstatusSpieMask()) | (((mstatus >> priv) & 1) << RiscVConstants.getMstatusSpieShift());
+            mstatus = (mstatus & ~RiscVConstants.getMstatusSpieMask()) | (((mstatus >> RiscVConstants.getPrvS()) & 1) << RiscVConstants.getMstatusSpieShift());
 
             // The SPP bit indicates the privilege level at which a hart was executing
             // before entering supervisor mode. When a trap is taken, SPP is set to 0
@@ -118,7 +118,7 @@ library Exceptions {
             mi.writeMtval(mmIndex, tval);
             uint64 mstatus = mi.readMstatus(mmIndex);
 
-            mstatus = (mstatus & ~RiscVConstants.getMstatusMpieMask()) | (((mstatus >> priv) & 1) << RiscVConstants.getMstatusMpieShift());
+            mstatus = (mstatus & ~RiscVConstants.getMstatusMpieMask()) | (((mstatus >> RiscVConstants.getPrvM()) & 1) << RiscVConstants.getMstatusMpieShift());
             mstatus = (mstatus & ~RiscVConstants.getMstatusMppMask()) | (priv << RiscVConstants.getMstatusMppShift());
 
             mstatus &= ~RiscVConstants.getMstatusMieMask();
