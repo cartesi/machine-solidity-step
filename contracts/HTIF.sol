@@ -79,7 +79,8 @@ library HTIF {
         if (addr == HTIF_TOHOST_ADDR_CONST) {
             return htifWriteTohost(mi, mmIndex, val);
         } else if (addr == HTIF_FROMHOST_ADDR_CONST) {
-            return htifWriteFromhost(mi, mmIndex, val);
+            mi.writeHtifFromhost(mmIndex, val);
+            return true;
         } else {
             return false;
         }
@@ -103,37 +104,85 @@ library HTIF {
 
         mi.writeHtifTohost(mmIndex, tohost);
 
-        if (device == 0 && cmd == 0 && (payload & 1) != 0) {
-            return htifWriteHalt(mi, mmIndex);
-        } else if (device == 1 && cmd == 1) {
-            return htifWritePutchar(mi, mmIndex);
-        } else if (device == 1 && cmd == 0) {
-            return htifWriteGetchar(mi, mmIndex);
+        if (device == 0) {
+            return htifHalt(
+                mi,
+                mmIndex,
+                cmd,
+                payload);
+        } else if (device == 1) {
+            return htifConsole(
+                mi,
+                mmIndex,
+                cmd,
+                payload);
+        } else if (device == 2) {
+            return htifYield(
+                mi,
+                mmIndex,
+                cmd,
+                payload);
+        } else {
+            return true;
+        }
+    }
+
+    function htifHalt(
+        MemoryInteractor mi,
+        uint256 mmIndex,
+        uint64 cmd,
+        uint64 payload)
+    internal returns (bool)
+    {
+        if (cmd == 0 && ((payload & 1) == 1) ) {
+            //set iflags to halted
+            mi.setIflagsH(mmIndex, true);
         }
         return true;
     }
 
-    function htifWriteHalt(MemoryInteractor mi, uint256 mmIndex) internal
-    returns (bool)
+    function htifYield(
+        MemoryInteractor mi,
+        uint256 mmIndex,
+        uint64 cmd,
+        uint64 payload)
+    internal returns (bool)
     {
-        //set iflags to halted
-        mi.setIflagsH(mmIndex, true);
+        // TO-DO: check if h is yieldable?
+        mi.setIflagsY(mmIndex, true);
+        mi.writeHtifFromhost(mmIndex, (uint64(2) << 56) | cmd << 48);
         return true;
     }
 
-    function htifWritePutchar(MemoryInteractor mi, uint256 mmIndex) internal
+    function htifConsole(
+        MemoryInteractor mi,
+        uint256 mmIndex,
+        uint64 cmd,
+        uint64 payload)
+    internal returns (bool)
+    {
+        if (cmd == 1) {
+            htifPutchar(mi, mmIndex);
+        } else if (cmd == 0) {
+            htifGetchar(mi, mmIndex);
+        } else {
+            // Unknown HTIF console commands are silently ignored
+            return true;
+        }
+    }
+
+    function htifPutchar(MemoryInteractor mi, uint256 mmIndex) internal
     returns (bool)
     {
-        mi.writeHtifTohost(mmIndex, 0); // Acknowledge command (?)
         // TO-DO: what to do in the blockchain? Generate event?
-        mi.writeHtifFromhost(mmIndex, (uint64(1) << 56) | uint64(1) << 48);
+        mi.writeHtifFromhost(mmIndex, (uint64(1) << 56) | uint64(0) << 48);
         return true;
     }
 
-    function htifWriteGetchar(MemoryInteractor mi, uint256 mmIndex) internal
+    function htifGetchar(MemoryInteractor mi, uint256 mmIndex) internal
     returns (bool)
     {
-        mi.writeHtifTohost(mmIndex, 0); // Acknowledge command (?)
+        mi.writeHtifFromhost(mmIndex, (uint64(1) << 56) | uint64(1) << 48);
         return true;
     }
 
