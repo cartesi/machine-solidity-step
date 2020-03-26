@@ -16,17 +16,19 @@ import json
 from web3 import Web3
 from web3.auto import w3
 
-def test_json_steps(json_steps, w3):
+def test_json_steps(json_steps, w3, start):
 
     succ_num = 0
-    revert_num = 0
     reverted_steps = []
+    total = len(jsonsteps)
 
     provider = w3.eth.coinbase
     client = w3.eth.accounts[1]
 
-
     for index, entry in enumerate(jsonsteps):
+        if index < start:
+            continue
+        snapshot_id = w3.testing.snapshot()
         tx_hash = mm.functions.instantiate(provider, client, jsonsteps[index]["accesses"][0]["proof"]["root_hash"]).transact({'from': provider, 'gas': 6283185})
         tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
         mm_filter = mm.events.MemoryCreated.createFilter(fromBlock='latest')
@@ -63,7 +65,7 @@ def test_json_steps(json_steps, w3):
             print(e)
 
 
-        print("Calling Step {}:".format(index))
+        print("Calling Step ({}/{}):".format(index + 1, total))
         try:
             step_tx = step.functions.step(mm_index).transact({'from': client, 'gas': 6283185})
             tx_receipt = w3.eth.waitForTransactionReceipt(step_tx)
@@ -72,41 +74,45 @@ def test_json_steps(json_steps, w3):
         except ValueError as e:
             print("REVERT step")
             print(e)
-            revert_num += 1
             reverted_steps.append(index)
             break
         else:
             print("SUCCESS")
             succ_num += 1
+        finally:
+            w3.testing.revert(snapshot_id)
 
-    print("Number of successes:")
-    print(succ_num)
-    print("Number of reverted transactions: ")
-    print(revert_num)
-    print("List of reverted indexes: ")
-    print(reverted_steps)
+    print("Number of successful steps: {}".format(succ_num))
 
-    for entry in reverted_steps:
-        print(jsonsteps[entry]["brackets"][len(jsonsteps[entry]["brackets"]) - 2])
+    revert_num = len(reverted_steps)
+    if revert_num > 0:
+        print("Number of reverted steps: {}".format(revert_num))
+        print("List of reverted steps: {}".format(reverted_steps))
+        for entry in reverted_steps:
+            print(jsonsteps[entry]["brackets"][len(jsonsteps[entry]["brackets"]) - 2])
+        return False
 
-    return False if revert_num > 0 else True
+    return True
 
 # start of main test
 
-if len(sys.argv) != 2:
-    print("Usage: python test_steps.py <step file path or directory containing step files>")
+if len(sys.argv) < 2 or len(sys.argv) > 3:
+    print("Usage: python test_steps.py <step file path or directory containing step files> <number of steps to skip>(optional)")
     sys.exit(1)
+
+start = 0
+if len(sys.argv) == 3:
+    start = int(sys.argv[2])
 
 #Connecting to node
 endpoint = "http://127.0.0.1:8545"
-w3 = Web3(Web3.HTTPProvider(endpoint, request_kwargs={"timeout": 60}))
+w3 = Web3(Web3.HTTPProvider(endpoint, request_kwargs={"timeout": 240}))
 
-if (not w3.isConnected()):
+if not w3.isConnected():
     print("Couldn't connect to node, exiting")
     sys.exit(1)
 
 networkId = w3.net.version
-snapshot_id = w3.testing.snapshot()
 
 with open('../build/contracts/Step.json') as json_file:
     step_data = json.load(json_file)
@@ -133,9 +139,7 @@ for f in test_files:
     print("Testing file {}({}/{}): ".format(f, count, total))
     with open(f) as json_file:
         jsonsteps = json.load(json_file)
-    if not test_json_steps(jsonsteps, w3):
+    if not test_json_steps(jsonsteps, w3, start):
         failed_tests.append(f)
-
-    w3.testing.revert(snapshot_id)
-
-print("Failed tests: {}".format(failed_tests))
+if len(failed_tests) > 0:
+    print("Failed tests: {}".format(failed_tests))
