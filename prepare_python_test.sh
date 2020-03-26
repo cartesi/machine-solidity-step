@@ -6,4 +6,5 @@
 rm ./build/ -rf
 cd node_modules/@cartesi/util && truffle migrate --network development && cd ../../../
 cd node_modules/@cartesi/arbitration && truffle migrate --network development && cd ../../../
+export TEST_RAM_DEPLOYMENT=y
 truffle migrate --network development

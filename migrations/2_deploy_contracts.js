@@ -1,4 +1,4 @@
-
+require('dotenv').config()
 const contract = require("@truffle/contract");
 const BitsManipulationLibrary = contract(require("@cartesi/util/build/contracts/BitsManipulationLibrary.json"));
 const MMInstantiator = contract(require("@cartesi/arbitration/build/contracts/MMInstantiator.json"));
@@ -31,6 +31,9 @@ const Interrupts = artifacts.require("Interrupts");
 const MemoryInteractor = artifacts.require("MemoryInteractor");
 const VirtualMemory = artifacts.require("VirtualMemory");
 const Step = artifacts.require("Step");
+
+// TestRam Contract
+const TestRamMMInstantiator = artifacts.require("TestRamMMInstantiator");
 
 module.exports = function(deployer) {
   deployer.then(async () => {
@@ -168,7 +171,17 @@ module.exports = function(deployer) {
 
     await deployer.link(ShadowAddresses, MemoryInteractor);
 
-    await deployer.deploy(MemoryInteractor, MMInstantiator.address);
+    if("TEST_RAM_DEPLOYMENT" in process.env) {
+        console.log("Deploying TestRam contracts...");
+        await deployer.link(BitsManipulationLibrary, TestRamMMInstantiator);
+	await deployer.link(MMInstantiator, TestRamMMInstantiator);
+
+    	await deployer.deploy(TestRamMMInstantiator);
+    	await deployer.deploy(MemoryInteractor, TestRamMMInstantiator.address);
+
+    } else {
+        await deployer.deploy(MemoryInteractor, MMInstantiator.address);
+    }
     await deployer.deploy(Step, MemoryInteractor.address);
   });
 };
