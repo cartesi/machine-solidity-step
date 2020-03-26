@@ -40,6 +40,7 @@ def load_bytes_to_mm(filename, position, mm_index, w3, debug):
         loaded_bytes += number_of_bytes
         sys.stdout.write("\rBytes loaded is: %d/%d" % (loaded_bytes, total_bytes))
         sys.stdout.flush()
+    print("")
 
 def test_ram(step, mm, mm_index, w3):
     halt = False
@@ -48,7 +49,6 @@ def test_ram(step, mm, mm_index, w3):
 
     log = []
    
-    print("\nRunning Step")
     while(True):
         try:
             step_tx = step.functions.step(mm_index).transact({'from': w3.eth.coinbase, 'gas': 6283185})
@@ -92,13 +92,14 @@ def test_ram(step, mm, mm_index, w3):
             #    log.pop(len(log) - 1)
                 break
             cycle = int(step_filter.get_all_entries()[0]['args']['cycle'])
-            sys.stdout.write("\rCurrent cycles is: %d" % cycle)
+            sys.stdout.write("\rCurrent stepping cycles is: %d" % cycle)
             sys.stdout.flush()
 
         except ValueError as e:
             print("REVERT")
             print(e)
-
+    
+    print("")
     mm_tx = mm.functions.htifExit(mm_index).transact({'from': w3.eth.coinbase, 'gas': 6283185})
     tx_receipt = w3.eth.waitForTransactionReceipt(mm_tx)
     if tx_receipt['status'] == 0:
@@ -106,7 +107,7 @@ def test_ram(step, mm, mm_index, w3):
 
     mm_filter = mm.events.HTIFExit.createFilter(fromBlock='latest')
     htif_exit_code = mm_filter.get_all_entries()[0]['args']['_exitCode']
-    print("\n Result cycles: " + str(cycle) + ", exit code: " + str(htif_exit_code))
+    print("Result cycles: " + str(cycle) + ", exit code: " + str(htif_exit_code))
 
     #with open('ram_replay.json', 'w') as outfile:  
         #json.dump(log, outfile)
