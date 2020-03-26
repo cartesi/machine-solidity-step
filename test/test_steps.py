@@ -13,24 +13,28 @@
 import os
 import sys
 import json
-import requests
 from web3 import Web3
 from web3.auto import w3
 
 def test_json_steps(json_steps, w3):
 
+    succ_num = 0
+    revert_num = 0
+    reverted_steps = []
+
     provider = w3.eth.coinbase
     client = w3.eth.accounts[1]
+
 
     for index, entry in enumerate(jsonsteps):
         tx_hash = mm.functions.instantiate(provider, client, jsonsteps[index]["accesses"][0]["proof"]["root_hash"]).transact({'from': provider, 'gas': 6283185})
         tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
         mm_filter = mm.events.MemoryCreated.createFilter(fromBlock='latest')
         mm_index = mm_filter.get_all_entries()[0]['args']['_index']
-        print("mm_index is: {}".format(mm_index))
 
         for rwentry in entry["accesses"]:
-            if rwentry["operation"] == "READ":
+            op_type = rwentry.get("operation", None) or rwentry["type"]
+            if op_type.upper() == "READ":
                 try:
                     tx_hash2 = mm.functions.proveRead(mm_index, rwentry["proof"]["address"], rwentry["read"], rwentry["proof"]["sibling_hashes"][::-1]).transact({'from': provider, 'gas': 6283185})
                     receipt = w3.eth.waitForTransactionReceipt(tx_hash2)
@@ -59,7 +63,7 @@ def test_json_steps(json_steps, w3):
             print(e)
 
 
-        print("Calling Step: ")
+        print("Calling Step {}:".format(index))
         try:
             step_tx = step.functions.step(mm_index).transact({'from': client, 'gas': 6283185})
             tx_receipt = w3.eth.waitForTransactionReceipt(step_tx)
@@ -68,26 +72,42 @@ def test_json_steps(json_steps, w3):
         except ValueError as e:
             print("REVERT step")
             print(e)
+            revert_num += 1
+            reverted_steps.append(index)
+            break
         else:
             print("SUCCESS")
+            succ_num += 1
+
+    print("Number of successes:")
+    print(succ_num)
+    print("Number of reverted transactions: ")
+    print(revert_num)
+    print("List of reverted indexes: ")
+    print(reverted_steps)
+
+    for entry in reverted_steps:
+        print(jsonsteps[entry]["brackets"][len(jsonsteps[entry]["brackets"]) - 2])
+
+    return False if revert_num > 0 else True
 
 # start of main test
 
 if len(sys.argv) != 2:
-    print("Usage: python test_single_steps.py <step file path OR directory path containing step files>")
+    print("Usage: python test_steps.py <step file path or directory containing step files>")
     sys.exit(1)
 
 #Connecting to node
+endpoint = "http://127.0.0.1:8545"
+w3 = Web3(Web3.HTTPProvider(endpoint, request_kwargs={"timeout": 60}))
 
 if (not w3.isConnected()):
     print("Couldn't connect to node, exiting")
     sys.exit(1)
 
 networkId = w3.net.version
+snapshot_id = w3.testing.snapshot()
 
-#step_compiled = compile_files([directory + 'Step.sol'])
-#with open('../test/step_dumps/add_instruction_step.json') as json_file:
-#    jsonsteps = json.load(json_file)
 with open('../build/contracts/Step.json') as json_file:
     step_data = json.load(json_file)
 
@@ -97,6 +117,25 @@ with open('../node_modules/@cartesi/arbitration/build/contracts/MMInstantiator.j
 step = w3.eth.contract(address=step_data['networks'][networkId]['address'], abi=step_data['abi'])
 mm = w3.eth.contract(address=mm_data['networks'][networkId]['address'], abi=mm_data['abi'])
 
-with open(sys.argv[1]) as json_file:
-    jsonsteps = json.load(json_file)
-test_json_steps(jsonsteps, w3)
+test_files = []
+my_path = sys.argv[1]
+if os.path.isdir(my_path):
+    test_files = [os.path.join(my_path, f) for f in os.listdir(my_path) if os.path.isfile(os.path.join(my_path, f))]
+else:
+    test_files.append(my_path)
+
+failed_tests = []
+total = len(test_files)
+count = 0
+
+for f in test_files:
+    count += 1
+    print("Testing file {}({}/{}): ".format(f, count, total))
+    with open(f) as json_file:
+        jsonsteps = json.load(json_file)
+    if not test_json_steps(jsonsteps, w3):
+        failed_tests.append(f)
+
+    w3.testing.revert(snapshot_id)
+
+print("Failed tests: {}".format(failed_tests))
