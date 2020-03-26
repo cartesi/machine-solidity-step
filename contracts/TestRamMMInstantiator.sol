@@ -34,7 +34,7 @@ contract TestRamMMInstantiator is MMInstantiator {
     mapping(uint256 => MemoryMap) internal ramInstance;
     event HTIFExit(uint256 _index, uint64 _exitCode, bool _halt);
 
-        /// @notice Stop memory insertion and start read and write phase
+    /// @notice Stop memory insertion and start read and write phase
     function finishProofPhase(uint256 _index) public
         onlyInstantiated(_index)
         //onlyBy(instance[_index].provider)
@@ -50,7 +50,7 @@ contract TestRamMMInstantiator is MMInstantiator {
     /// @param _position of the desired memory
     function read(uint256 _index, uint64 _position) public
         onlyInstantiated(_index)
-        onlyBy(instance[_index].client)
+        //onlyBy(instance[_index].client)
         increasesNonce(_index)
         returns (bytes8)
     {
@@ -68,7 +68,7 @@ contract TestRamMMInstantiator is MMInstantiator {
     /// @param _position of the write
     /// @param _value to be written
     function write(uint256 _index, uint64 _position, bytes8 _value) public
-        onlyBy(instance[_index].client)
+        //onlyBy(instance[_index].client)
         increasesNonce(_index)
         onlyInstantiated(_index)
     {
