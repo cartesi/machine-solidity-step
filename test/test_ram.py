@@ -14,8 +14,6 @@ import os
 import sys
 import json
 from web3 import Web3
-from solcx import install_solc
-from solcx import get_solc_version, set_solc_version, compile_files
 
 def bytes_from_file(filename, chunksize):
     with open(filename, "rb") as f:
@@ -27,66 +25,75 @@ def bytes_from_file(filename, chunksize):
                 break
 
 def load_bytes_to_mm(filename, position, mm_index, w3, debug):
+    number_of_bytes = 8
+    loaded_bytes = 0
+    total_bytes = os.path.getsize(filename)
     if(debug):
-        print("loading file: " + filename + " to memory address: " + str(position))
+        print("\nloading file: " + filename + " to memory address: " + str(position))
     for b in bytes_from_file(filename, number_of_bytes):
-        try:
-            tx_hash = mm.functions.write(mm_index, position, b).transact({'from': w3.eth.coinbase, 'gas': 6283185})
-            tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
-        except ValueError as e:
-            print(e)
-        else:
-            position += number_of_bytes
+        tx_hash = mm.functions.write(mm_index, position, b).transact({'from': w3.eth.coinbase, 'gas': 6283185})
+        tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+
+        if tx_receipt['status'] == 0:
+            raise ValueError(receipt['transactionHash'].hex())
+        position += number_of_bytes
+        loaded_bytes += number_of_bytes
+        sys.stdout.write("\rBytes loaded is: %d/%d" % (loaded_bytes, total_bytes))
+        sys.stdout.flush()
 
 def test_ram(step, mm, mm_index, w3):
-    #print("Calling Step: ")
     halt = False
     cycle = 0
     htif_exit_code = 0
 
     log = []
-    
+   
+    print("\nRunning Step")
     while(True):
         try:
             step_tx = step.functions.step(mm_index).transact({'from': w3.eth.coinbase, 'gas': 6283185})
             tx_receipt = w3.eth.waitForTransactionReceipt(step_tx)
 
+            if tx_receipt['status'] == 0:
+                raise ValueError(tx_receipt['transactionHash'].hex())
             # log the reads and writes via events
-            log_index = 0
-            step_log = {}
-            step_log['init_cycles'] = cycle
-            step_log['final_cycles'] = cycle + 1
-            step_log['accesses'] = []
+            #log_index = 0
+            #step_log = {}
+            #step_log['init_cycles'] = cycle
+            #step_log['final_cycles'] = cycle + 1
+            #step_log['accesses'] = []
+            
+            #mm_logs = mm.events.ValueReplay().processReceipt(tx_receipt)
+            #while(log_index < len(mm_logs)):
+            #    replay_log = {}
+            #    is_read = mm_logs[log_index]['args']['_isRead']
+            #    position = mm_logs[log_index]['args']['_position']
+            #    read_value = mm_logs[log_index]['args']['_readValue']
+            #    written_value = mm_logs[log_index]['args']['_writtenValue']
+            #    log_index += 1
 
-            mm_logs = mm.events.ValueReplay().processReceipt(tx_receipt)
-            while(log_index < len(mm_logs)):
-                replay_log = {}
-                is_read = mm_logs[log_index]['args']['_isRead']
-                position = mm_logs[log_index]['args']['_position']
-                read_value = mm_logs[log_index]['args']['_readValue']
-                written_value = mm_logs[log_index]['args']['_writtenValue']
-                log_index += 1
+            #    if (is_read):
+            #        replay_log['type'] = 'read'
+            #    else:
+            #        replay_log['type'] = 'write'
+            #    replay_log['read'] = read_value.hex()
+            #    replay_log['written'] = written_value.hex()
+            #    replay_log['proof'] = {}
+            #    replay_log['proof']['address'] = position
 
-                if (is_read):
-                    replay_log['type'] = 'read'
-                else:
-                    replay_log['type'] = 'write'
-                replay_log['read'] = read_value.hex()
-                replay_log['written'] = written_value.hex()
-                replay_log['proof'] = {}
-                replay_log['proof']['address'] = position
+            #    step_log['accesses'].append(replay_log)
 
-                step_log['accesses'].append(replay_log)
-
-            log.append(step_log)
-
+            #log.append(step_log)
+            
             step_filter = step.events.StepStatus.createFilter(fromBlock='latest')
             halt = step_filter.get_all_entries()[0]['args']['halt']
-            if(halt):
+            if halt:
                 # remove the last read checking halt flag
-                log.pop(len(log) - 1)
+            #    log.pop(len(log) - 1)
                 break
-            cycle = step_filter.get_all_entries()[0]['args']['cycle']
+            cycle = int(step_filter.get_all_entries()[0]['args']['cycle'])
+            sys.stdout.write("\rCurrent cycles is: %d" % cycle)
+            sys.stdout.flush()
 
         except ValueError as e:
             print("REVERT")
@@ -94,30 +101,34 @@ def test_ram(step, mm, mm_index, w3):
 
     mm_tx = mm.functions.htifExit(mm_index).transact({'from': w3.eth.coinbase, 'gas': 6283185})
     tx_receipt = w3.eth.waitForTransactionReceipt(mm_tx)
+    if tx_receipt['status'] == 0:
+        raise ValueError(receipt['transactionHash'].hex())
+
     mm_filter = mm.events.HTIFExit.createFilter(fromBlock='latest')
     htif_exit_code = mm_filter.get_all_entries()[0]['args']['_exitCode']
-    print("cycles: " + str(cycle) + ", exit code: " + str(htif_exit_code))
+    print("\n Result cycles: " + str(cycle) + ", exit code: " + str(htif_exit_code))
 
-    with open('ram_replay.json', 'w') as outfile:  
-        json.dump(log, outfile)
+    #with open('ram_replay.json', 'w') as outfile:  
+        #json.dump(log, outfile)
 
 # start of main test
 
 if len(sys.argv) != 2:
-    print("Usage: python test_ram.py <.bin file path OR directory path containing .bin files>")
+    print("Usage: python test_ram.py <.bin file path>")
     sys.exit(1)
 
 fake_hash = bytes(32)
 fake_address = Web3.toChecksumAddress("0000000000000000000000000000000000000001")
-number_of_bytes = 8
 
 #Connecting to node
 endpoint = "http://127.0.0.1:8545"
 w3 = Web3(Web3.HTTPProvider(endpoint, request_kwargs={'timeout': 60}))
 
-if (not w3.isConnected()):
+if not w3.isConnected():
     print("Couldn't connect to node, exiting")
     sys.exit(1)
+
+networkId = w3.net.version
 
 with open('../build/contracts/Step.json') as json_file:
     step_data = json.load(json_file)
@@ -125,24 +136,30 @@ with open('../build/contracts/Step.json') as json_file:
 with open('../build/contracts/TestRamMMInstantiator.json') as json_file:
     mm_data = json.load(json_file)
 
-with open('./deployedAddresses.json') as json_file:
-    deployedAddresses = json.load(json_file)
+step = w3.eth.contract(address=step_data['networks'][networkId]['address'], abi=step_data['abi'])
+mm = w3.eth.contract(address=mm_data['networks'][networkId]['address'], abi=mm_data['abi'])
 
-step = w3.eth.contract(address=deployedAddresses["step_address"], abi=step_data['abi'])
-mm = w3.eth.contract(address=deployedAddresses["mm_address"], abi=mm_data['abi'])
-
-tx_hash = mm.functions.instantiate(w3.eth.coinbase, fake_address, fake_hash).transact({'from': w3.eth.coinbase, 'gas': 6283185})
+tx_hash = mm.functions.instantiate(fake_address, w3.eth.coinbase, fake_hash).transact({'from': w3.eth.coinbase, 'gas': 6283185})
 tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+if tx_receipt['status'] == 0:
+    raise ValueError(receipt['transactionHash'].hex())
+
 mm_filter = mm.events.MemoryCreated.createFilter(fromBlock='latest')
 mm_index = mm_filter.get_all_entries()[0]['args']['_index']
 
+tx_hash = mm.functions.finishProofPhase(mm_index).transact({'from': w3.eth.coinbase, 'gas': 6283185})
+tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+if tx_receipt['status'] == 0:
+    raise ValueError(tx_receipt['transactionHash'].hex())
+
+
 # load shadows
 position = 0
-load_bytes_to_mm("./test_ram/shadow-tests.bin", position, mm_index, w3, False)
+load_bytes_to_mm("./test_ram/shadow-tests.bin", position, mm_index, w3, True)
 
 # load rom
 position = 0x1000
-load_bytes_to_mm("./test_ram/jump-to-ram.bin", position, mm_index, w3, False)
+load_bytes_to_mm("./test_ram/jump-to-ram.bin", position, mm_index, w3, True)
 
 # load ram
 position = 0x80000000
