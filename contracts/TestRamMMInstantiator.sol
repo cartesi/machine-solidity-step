@@ -82,6 +82,22 @@ contract TestRamMMInstantiator is MMInstantiator {
             _value);
     }
 
+    /// @notice Stop write (or read) phase
+    function finishReplayPhase(uint256 _index) public
+        onlyInstantiated(_index)
+        //onlyBy(instance[_index].client)
+        increasesNonce(_index)
+    {
+        require(instance[_index].currentState == state.WaitingReplay, "CurrentState is not WaitingReplay, cannot finishReplayPhase");
+        //require(instance[_index].historyPointer == instance[_index].history.length, "History pointer does not match length");
+        //delete(instance[_index].history);
+        //delete(instance[_index].historyPointer);
+        //instance[_index].currentState = state.FinishedReplay;
+
+        //deactivate(_index);
+        //emit FinishedReplay(_index);
+    }
+
     /// @notice Perform a read in HTIF to get the arbitrary exit code
     function htifExit(uint256 _index) public
         onlyInstantiated(_index)
