@@ -24,12 +24,11 @@ def bytes_from_file(filename, chunksize):
             else:
                 break
 
-def load_bytes_to_mm(filename, position, mm_index, w3, debug):
+def load_bytes_to_mm(filename, position, mm_index, w3):
     number_of_bytes = 8
+    initial_position = position
     loaded_bytes = 0
     total_bytes = os.path.getsize(filename)
-    if(debug):
-        print("\nloading file: " + filename + " to memory address: " + str(position))
     for b in bytes_from_file(filename, number_of_bytes):
         tx_hash = mm.functions.write(mm_index, position, b).transact({'from': w3.eth.coinbase, 'gas': 6283185})
         tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
@@ -37,8 +36,8 @@ def load_bytes_to_mm(filename, position, mm_index, w3, debug):
         if tx_receipt['status'] == 0:
             raise ValueError(receipt['transactionHash'].hex())
         position += number_of_bytes
-        loaded_bytes += number_of_bytes
-        sys.stdout.write("\rBytes loaded is: %d/%d" % (loaded_bytes, total_bytes))
+        loaded_bytes += len(b)
+        sys.stdout.write("\rLoading file %s to address %d, bytes loaded: %d/%d" % (filename, initial_position, loaded_bytes, total_bytes))
         sys.stdout.flush()
     print("")
 
@@ -91,7 +90,7 @@ def test_ram(step, mm, mm_index, w3):
                 # remove the last read checking halt flag
             #    log.pop(len(log) - 1)
                 break
-            cycle = int(step_filter.get_all_entries()[0]['args']['cycle'])
+            cycle = step_filter.get_all_entries()[0]['args']['cycle']
             sys.stdout.write("\rCurrent stepping cycles is: %d" % cycle)
             sys.stdout.flush()
 
@@ -99,7 +98,6 @@ def test_ram(step, mm, mm_index, w3):
             print("REVERT")
             print(e)
     
-    print("")
     mm_tx = mm.functions.htifExit(mm_index).transact({'from': w3.eth.coinbase, 'gas': 6283185})
     tx_receipt = w3.eth.waitForTransactionReceipt(mm_tx)
     if tx_receipt['status'] == 0:
@@ -107,7 +105,9 @@ def test_ram(step, mm, mm_index, w3):
 
     mm_filter = mm.events.HTIFExit.createFilter(fromBlock='latest')
     htif_exit_code = mm_filter.get_all_entries()[0]['args']['_exitCode']
-    print("Result cycles: " + str(cycle) + ", exit code: " + str(htif_exit_code))
+    sys.stdout.write("\rResult cycles: %d, exit code: %d\n" % (cycle, htif_exit_code))
+    sys.stdout.flush()
+    return True
 
     #with open('ram_replay.json', 'w') as outfile:  
         #json.dump(log, outfile)
@@ -156,15 +156,15 @@ if tx_receipt['status'] == 0:
 
 # load shadows
 position = 0
-load_bytes_to_mm("./test_ram/shadow-tests.bin", position, mm_index, w3, True)
+load_bytes_to_mm("./test_ram/shadow-tests.bin", position, mm_index, w3)
 
 # load rom
 position = 0x1000
-load_bytes_to_mm("./test_ram/jump-to-ram.bin", position, mm_index, w3, True)
+load_bytes_to_mm("./test_ram/jump-to-ram.bin", position, mm_index, w3)
 
 # load ram
 position = 0x80000000
-load_bytes_to_mm(sys.argv[1], position, mm_index, w3, True)
+load_bytes_to_mm(sys.argv[1], position, mm_index, w3)
 
 # run test program from ram
 test_ram(step, mm, mm_index, w3)

@@ -97,7 +97,7 @@ def test_json_steps(json_steps, w3, start):
 # start of main test
 
 if len(sys.argv) < 2 or len(sys.argv) > 3:
-    print("Usage: python test_steps.py <step file path or directory containing step files> <number of steps to skip>(optional)")
+    print("Usage: python test_steps.py <step file path> <number of steps to skip>(optional)")
     sys.exit(1)
 
 start = 0
@@ -123,23 +123,6 @@ with open('../node_modules/@cartesi/arbitration/build/contracts/MMInstantiator.j
 step = w3.eth.contract(address=step_data['networks'][networkId]['address'], abi=step_data['abi'])
 mm = w3.eth.contract(address=mm_data['networks'][networkId]['address'], abi=mm_data['abi'])
 
-test_files = []
-my_path = sys.argv[1]
-if os.path.isdir(my_path):
-    test_files = [os.path.join(my_path, f) for f in os.listdir(my_path) if os.path.isfile(os.path.join(my_path, f))]
-else:
-    test_files.append(my_path)
-
-failed_tests = []
-total = len(test_files)
-count = 0
-
-for f in test_files:
-    count += 1
-    print("Testing file {}({}/{}): ".format(f, count, total))
-    with open(f) as json_file:
-        jsonsteps = json.load(json_file)
-    if not test_json_steps(jsonsteps, w3, start):
-        failed_tests.append(f)
-if len(failed_tests) > 0:
-    print("Failed tests: {}".format(failed_tests))
+with open(sys.argv[1]) as json_file:
+    jsonsteps = json.load(json_file)
+test_json_steps(jsonsteps, w3, start)
