@@ -1,0 +1,39 @@
+FROM node:12-alpine
+
+ENV BASE /opt/cartesi
+
+RUN apk add --no-cache \
+    build-base \
+    git \
+    openssl \
+    python3 \
+    python3-dev \
+    py3-pip
+
+RUN yarn global add truffle@5.1.8
+RUN yarn add @truffle/hdwallet-provider@1.0.28
+RUN yarn add @truffle/contract@4.1.3
+
+COPY ./package.json .
+COPY ./truffle-config.js .
+
+ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
+USER node
+
+RUN npm install -g ganache-cli
+
+USER root
+COPY ./yarn.lock .
+RUN yarn install --flat --production --frozen-lockfile
+
+COPY ./requirements.txt .
+RUN pip3 install -r requirements.txt
+
+COPY ./contracts ./contracts
+COPY ./migrations ./migrations
+
+WORKDIR $BASE/test
+COPY ./test/run_step_test.sh .
+COPY ./test/test_step.py .
+
+ENTRYPOINT ["/opt/cartesi/test/run_step_test.sh"]
