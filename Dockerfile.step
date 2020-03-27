@@ -41,5 +41,5 @@ COPY ./test/test_multiple_step ./test_multiple_step
 COPY ./test/run_step_test.sh .
 COPY ./test/test_step.py .
 
-#ENTRYPOINT ["/opt/cartesi/test/run_step_test.sh"]
-#CMD ["/opt/cartesi/test/test_single_step/tests"]
+ENTRYPOINT ["/opt/cartesi/test/run_step_test.sh"]
+CMD ["/opt/cartesi/test/test_single_step/tests"]
