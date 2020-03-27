@@ -1,4 +1,3 @@
-require('dotenv').config()
 const contract = require("@truffle/contract");
 const BitsManipulationLibrary = contract(require("@cartesi/util/build/contracts/BitsManipulationLibrary.json"));
 const MMInstantiator = contract(require("@cartesi/arbitration/build/contracts/MMInstantiator.json"));
@@ -35,7 +34,7 @@ const Step = artifacts.require("Step");
 // TestRam Contract
 const TestRamMMInstantiator = artifacts.require("TestRamMMInstantiator");
 
-module.exports = function(deployer) {
+module.exports = function(deployer, network) {
   deployer.then(async () => {
     BitsManipulationLibrary.setNetwork(deployer.network_id);
     MMInstantiator.setNetwork(deployer.network_id);
@@ -171,8 +170,8 @@ module.exports = function(deployer) {
 
     await deployer.link(ShadowAddresses, MemoryInteractor);
 
-    if("TEST_RAM_DEPLOYMENT" in process.env) {
-        console.log("Deploying TestRam contracts...");
+    if (network == 'ramtest') {
+        console.log("    Deploying TestRam contracts...");
         await deployer.link(BitsManipulationLibrary, TestRamMMInstantiator);
 	await deployer.link(MMInstantiator, TestRamMMInstantiator);
 

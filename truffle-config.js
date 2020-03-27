@@ -10,6 +10,12 @@ const network = (name, network_id, gas) => ({
 
 module.exports = {
   networks: {
+    ramtest: {
+      host: "localhost",
+      port: 8545,
+      network_id: "*", // Match any network id
+      gas: 6283185
+    },
     development: {
       host: "localhost",
       port: 8545,

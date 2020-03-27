@@ -8,8 +8,7 @@
   },
   "dependencies": {
     "@cartesi/arbitration": "^0.2.0",
-    "@cartesi/util": "^0.2.0",
-    "dotenv": "^8.2.0"
+    "@cartesi/util": "^0.2.0"
   },
   "devDependencies": {
     "@truffle/contract": "^4.1.4",
