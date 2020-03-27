@@ -3,5 +3,6 @@ node_modules
 .node*
 *.bin
 *.abi
+*.log
 /out
 build
