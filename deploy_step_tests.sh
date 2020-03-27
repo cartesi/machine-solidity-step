@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # this script will compile and migrate the contracts using truffle
 

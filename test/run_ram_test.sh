@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 help()
 {
     echo "must pass .bin file path or directory path containing .bin files"
@@ -41,7 +41,7 @@ for f in $files_to_process; do
     nohup geth --dev --rpc --rpcapi admin,debug,web3,eth,personal,miner,net,txpool > geth.log 2>&1 &
     cd ../ && ./deploy_ram_tests.sh > /dev/null 2>&1 && cd test/
 
-    ((count+=1))
+    count=$((count+1))
     echo "Testing file ${f}(${count}/${number_of_files})"
     python3 test_ram.py $f | tee -a test_ram_result.log
    

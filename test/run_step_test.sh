@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 help()
 {
     echo "must pass .json file path or directory path containing .json files"
@@ -42,7 +42,7 @@ ganache-cli > ganache.log 2>&1 &
 cd ../ && ./deploy_step_tests.sh > /dev/null 2>&1 && cd test/
 
 for f in $files_to_process; do
-    ((count+=1))
+    count=$((count+1))
     echo "Testing file ${f}(${count}/${number_of_files})"
     python3 -u test_step.py $f | tee -a test_step_result.log
 done
