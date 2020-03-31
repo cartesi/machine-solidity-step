@@ -62,13 +62,18 @@ Having a node listening to 8545, you can deploy using
 
 
 ### Run tests
-Have an Ethereum node listening to port 8545
-    ./node_modules/.bin/truffle deploy
 
-Update data.json to match the access log of the step (or list of steps) that you would like to run.
+Run step tests with docker
 
-    python test_python.py.
+    docker build -t cartesi/step-test -f Dockerfile.step
+    
+    docker run cartesi/step-test
 
+Run ram tests with docker
+
+    docker build -t cartesi/step-ram -f Dockerfile.ram
+    
+    docker run cartesi/step-ram
 
 ## Contributing
 
