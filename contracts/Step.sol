@@ -49,7 +49,10 @@ contract Step {
             emit StepStatus(0, true);
             return endStep(mmIndex, 0);
         }
-        //Raise the highest priority interrupt
+        
+	mi.setIflagsY(mmIndex, false);       
+ 
+	//Raise the highest priority interrupt
         Interrupts.raiseInterruptIfAny(mmIndex, mi);
 
         //Fetch Instruction
