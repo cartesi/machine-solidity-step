@@ -42,9 +42,9 @@ contract Step {
         // If machine is halted - nothing else to do. H flag is stored on the least
         // signficant bit on iflags register.
         // Reference: The Core of Cartesi, v1.02 - figure 1.
-        uint64 iflags = mi.readIflags(mmIndex);
+        uint64 halt = mi.readIflagsH(mmIndex);
 
-        if ((iflags & 1) != 0) {
+        if (halt != 0) {
             //machine is halted
             emit StepStatus(0, true);
             return endStep(mmIndex, 0);

@@ -259,7 +259,7 @@ library VirtualMemory {
         // Reads privilege level on iflags register. The privilege level is located
         // on bits 2 and 3.
         // Reference: The Core of Cartesi, v1.02 - figure 1.
-        intvars[PRIV] = (mi.memoryRead(mmIndex, ShadowAddresses.getIflags()) >> 2) & 3;
+        intvars[PRIV] = mi.readIflagsPrv(mmIndex);
 
         //readMstatus
         uint64vars[MSTATUS] = mi.memoryRead(mmIndex, ShadowAddresses.getMstatus());
