@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@cartesi/arbitration": "^0.2.0",
-    "@cartesi/util": "^0.2.0"
+    "@cartesi/arbitration": "^0.2.1",
+    "@cartesi/util": "^0.2.1"
   },
   "devDependencies": {
     "@truffle/contract": "^4.1.4",
