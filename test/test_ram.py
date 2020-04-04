@@ -156,11 +156,19 @@ if tx_receipt['status'] == 0:
 
 # load shadows
 position = 0
-load_bytes_to_mm("./test_ram/shadow-tests.bin", position, mm_index, w3)
+load_bytes_to_mm("./rv64-tests/0000000000000000--0000000000001000-shadow.bin", position, mm_index, w3)
 
-# load rom
+# load bootstrap
 position = 0x1000
-load_bytes_to_mm("./test_ram/jump-to-ram.bin", position, mm_index, w3)
+load_bytes_to_mm("./rv64-tests/0000000000001000--000000000000f000-bootstrap.bin", position, mm_index, w3)
+
+# load clint
+position = 0x2000000
+load_bytes_to_mm("./rv64-tests/0000000002000000--00000000000c0000-clint.bin", position, mm_index, w3)
+
+# load htif
+position = 0x40008000
+load_bytes_to_mm("./rv64-tests/0000000040008000--0000000000001000-htif.bin", position, mm_index, w3)
 
 # load ram
 position = 0x80000000
