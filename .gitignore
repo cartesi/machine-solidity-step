@@ -6,3 +6,5 @@ node_modules
 *.log
 /out
 build
+res
+target

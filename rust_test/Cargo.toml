@@ -1,0 +1,16 @@
+[package]
+name = "machine-solidity-test"
+version = "0.1.0"
+authors = ["Stephen Chen <stephen@cartesi.io>"]
+
+[dependencies]
+ethabi = "12.0"
+ethabi-derive = "12.0"
+ethabi-contract = "11.0"
+solaris = { git = "https://github.com/606simps/sol-rs.git", branch = "feature/enable-tests" }
+solc = { git = "https://github.com/606simps/sol-rs.git", branch = "feature/enable-tests" } 
+ethereum-types = "0.9.0"
+rustc-hex = "1.0"
+
+[build-dependencies]
+solc = { git = "https://github.com/606simps/sol-rs.git", branch = "feature/enable-tests" } 
