@@ -337,10 +337,10 @@ contract MemoryInteractor {
         memoryWrite(mmindex, ShadowAddresses.getIflags(), iflags);
     }
 
-    function setIflagsY(uint256 mmindex, bool yield) public {
+    function setIflagsY(uint256 mmindex, bool isYield) public {
         uint64 iflags = readIflags(mmindex);
 
-        if (yield) {
+        if (isYield) {
             iflags = (iflags | RiscVConstants.getIflagsYMask());
         } else {
             iflags = (iflags & ~RiscVConstants.getIflagsYMask());
