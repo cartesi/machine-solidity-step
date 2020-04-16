@@ -19,14 +19,7 @@ import "./HTIF.sol";
 import "./CLINT.sol";
 import "./RiscVConstants.sol";
 import "@cartesi/util/contracts/BitsManipulationLibrary.sol";
-
-
-contract mmInterface {
-    function read(uint256 _index, uint64 _address) external returns (bytes8);
-    function write(uint256 _index, uint64 _address, bytes8 _value) external;
-    function finishReplayPhase(uint256 _index) external;
-}
-
+import "@cartesi/arbitration/contracts/MMInterface.sol";
 
 /// @title MemoryInteractor
 /// @author Felipe Argento
@@ -38,10 +31,10 @@ contract mmInterface {
 /// @dev Reference: Ethereum yellowpaper - Version 69351d5
 /// @dev    Appendix H. Virtual Machine Specification
 contract MemoryInteractor {
-    mmInterface mm;
+    MMInterface mm;
 
     constructor(address mmAddress) public {
-        mm = mmInterface(mmAddress);
+        mm = MMInterface(mmAddress);
     }
 
     // Change phase
