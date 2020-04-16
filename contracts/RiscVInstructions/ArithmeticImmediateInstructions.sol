@@ -17,8 +17,6 @@ pragma solidity ^0.5.0;
 import "../MemoryInteractor.sol";
 import "../RiscVDecoder.sol";
 import "../RiscVConstants.sol";
-import "@cartesi/util/contracts/BitsManipulationLibrary.sol";
-
 
 library ArithmeticImmediateInstructions {
 

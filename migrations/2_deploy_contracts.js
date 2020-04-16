@@ -56,7 +56,6 @@ module.exports = function(deployer) {
     await deployer.link(RiscVConstants, CSRReads);
     await deployer.link(RiscVConstants, StandAloneInstructions);
     await deployer.link(RiscVConstants, EnvTrapInstructions);
-    await deployer.link(BitsManipulationLibrary, ArithmeticImmediateInstructions);
 
     await deployer.deploy(ArithmeticInstructions);
     await deployer.deploy(ArithmeticImmediateInstructions);
@@ -167,7 +166,6 @@ module.exports = function(deployer) {
     await deployer.deploy(Execute);
     await deployer.link(Execute, Step);
 
-    await deployer.link(BitsManipulationLibrary, MemoryInteractor);
     await deployer.link(ShadowAddresses, MemoryInteractor);
 
     await deployer.deploy(MemoryInteractor, MMInstantiator.address);
