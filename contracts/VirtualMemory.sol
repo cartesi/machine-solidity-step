@@ -78,7 +78,7 @@ library VirtualMemory {
                 mi,
                 mmIndex,
                 vaddr,
-                RiscVConstants.getPteXwrWriteShift()
+                RiscVConstants.getPteXwrReadShift()
             );
 
             if (!translateSuccess) {
