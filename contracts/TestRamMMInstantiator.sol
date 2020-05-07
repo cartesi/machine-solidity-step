@@ -131,7 +131,7 @@ contract TestRamMMInstantiator is MMInterface, Decorated {
     /// @notice Perform a read in HTIF to get the arbitrary exit code
     function htifExit(uint256 _index) public
         onlyInstantiated(_index)
-        returns (uint64, bool)
+        returns (uint64)
     {
         uint64 val = uint64(instance[_index].memoryMap[0x40008000]);
         bool halt = false;
@@ -139,13 +139,12 @@ contract TestRamMMInstantiator is MMInterface, Decorated {
         val = BitsManipulationLibrary.uint64SwapEndian(val);
 
         uint64 bit0 = val & 1;
-        uint64 bits48To64 = val & (((2 ** 16) - 1) << 48);
-        val = (val & ((2 ** 48) - 1)) >> 1;
+        uint64 payload = val << 16 >> 17;
 
-        halt = (bit0 == 1) && (bits48To64 == 0);
+        halt = (bit0 == 1);
 
         emit HTIFExit(_index, val, halt);
-        return (val, halt);
+        return (payload);
     }
 
     /// @notice initialize the memory with value
