@@ -143,8 +143,8 @@ contract TestRamMMInstantiator is MMInterface, Decorated {
 
         halt = (bit0 == 1);
 
-        emit HTIFExit(_index, val, halt);
-        return (payload);
+        emit HTIFExit(_index, payload, halt);
+        return payload;
     }
 
     /// @notice initialize the memory with value
