@@ -103,7 +103,7 @@ contract TestRamMMInstantiator is MMInstantiator {
         onlyInstantiated(_index)
         returns (uint64)
     {
-        uint64 val = uint64(instance[_index].memoryMap[0x40008000]);
+        uint64 val = uint64(ramInstance[_index].map[0x40008000]);
         bool halt = false;
 
         val = BitsManipulationLibrary.uint64SwapEndian(val);
