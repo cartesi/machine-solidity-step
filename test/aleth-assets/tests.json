@@ -1,0 +1,738 @@
+{
+    "path": "/usr/src/app/rv64-tests/",
+    "tests": [
+        {
+            "file": "rv64mi-p-access.bin",
+            "cycle": 110
+        },
+        {
+            "file": "rv64mi-p-breakpoint.bin",
+            "cycle": 61
+        },
+        {
+            "file": "rv64mi-p-csr.bin",
+            "cycle": 173
+        },
+        {
+            "file": "rv64mi-p-illegal.bin",
+            "cycle": 410
+        },
+        {
+            "file": "rv64mi-p-ma_addr.bin",
+            "cycle": 682
+        },
+        {
+            "file": "rv64mi-p-ma_fetch.bin",
+            "cycle": 196
+        },
+        {
+            "file": "rv64mi-p-mcsr.bin",
+            "cycle": 69
+        },
+        {
+            "file": "rv64mi-p-sbreak.bin",
+            "cycle": 74
+        },
+        {
+            "file": "rv64mi-p-scall.bin",
+            "cycle": 63
+        },
+        {
+            "file": "rv64si-p-csr.bin",
+            "cycle": 126
+        },
+        {
+            "file": "rv64si-p-dirty.bin",
+            "cycle": 143
+        },
+        {
+            "file": "rv64si-p-ma_fetch.bin",
+            "cycle": 154
+        },
+        {
+            "file": "rv64si-p-sbreak.bin",
+            "cycle": 69
+        },
+        {
+            "file": "rv64si-p-scall.bin",
+            "cycle": 76
+        },
+        {
+            "file": "rv64si-p-wfi.bin",
+            "cycle": 57
+        },
+        {
+            "file": "rv64ua-p-amoadd_d.bin",
+            "cycle": 74
+        },
+        {
+            "file": "rv64ua-p-amoadd_w.bin",
+            "cycle": 71
+        },
+        {
+            "file": "rv64ua-p-amoand_d.bin",
+            "cycle": 71
+        },
+        {
+            "file": "rv64ua-p-amoand_w.bin",
+            "cycle": 70
+        },
+        {
+            "file": "rv64ua-p-amomax_d.bin",
+            "cycle": 70
+        },
+        {
+            "file": "rv64ua-p-amomax_w.bin",
+            "cycle": 70
+        },
+        {
+            "file": "rv64ua-p-amomaxu_d.bin",
+            "cycle": 70
+        },
+        {
+            "file": "rv64ua-p-amomaxu_w.bin",
+            "cycle": 70
+        },
+        {
+            "file": "rv64ua-p-amomin_d.bin",
+            "cycle": 70
+        },
+        {
+            "file": "rv64ua-p-amomin_w.bin",
+            "cycle": 70
+        },
+        {
+            "file": "rv64ua-p-amominu_d.bin",
+            "cycle": 70
+        },
+        {
+            "file": "rv64ua-p-amominu_w.bin",
+            "cycle": 70
+        },
+        {
+            "file": "rv64ua-p-amoor_d.bin",
+            "cycle": 69
+        },
+        {
+            "file": "rv64ua-p-amoor_w.bin",
+            "cycle": 69
+        },
+        {
+            "file": "rv64ua-p-amoswap_d.bin",
+            "cycle": 71
+        },
+        {
+            "file": "rv64ua-p-amoswap_w.bin",
+            "cycle": 70
+        },
+        {
+            "file": "rv64ua-p-amoxor_d.bin",
+            "cycle": 72
+        },
+        {
+            "file": "rv64ua-p-amoxor_w.bin",
+            "cycle": 74
+        },
+        {
+            "file": "rv64ua-p-lrsc.bin",
+            "cycle": 6246
+        },
+        {
+            "file": "rv64ua-v-amoadd_d.bin",
+            "cycle": 10731
+        },
+        {
+            "file": "rv64ua-v-amoadd_w.bin",
+            "cycle": 10728
+        },
+        {
+            "file": "rv64ua-v-amoand_d.bin",
+            "cycle": 10740
+        },
+        {
+            "file": "rv64ua-v-amoand_w.bin",
+            "cycle": 10739
+        },
+        {
+            "file": "rv64ua-v-amomax_d.bin",
+            "cycle": 10721
+        },
+        {
+            "file": "rv64ua-v-amomax_w.bin",
+            "cycle": 10721
+        },
+        {
+            "file": "rv64ua-v-amomaxu_d.bin",
+            "cycle": 10721
+        },
+        {
+            "file": "rv64ua-v-amomaxu_w.bin",
+            "cycle": 10721
+        },
+        {
+            "file": "rv64ua-v-amomin_d.bin",
+            "cycle": 10721
+        },
+        {
+            "file": "rv64ua-v-amomin_w.bin",
+            "cycle": 10721
+        },
+        {
+            "file": "rv64ua-v-amominu_d.bin",
+            "cycle": 11211
+        },
+        {
+            "file": "rv64ua-v-amominu_w.bin",
+            "cycle": 11211
+        },
+        {
+            "file": "rv64ua-v-amoor_d.bin",
+            "cycle": 10720
+        },
+        {
+            "file": "rv64ua-v-amoor_w.bin",
+            "cycle": 10720
+        },
+        {
+            "file": "rv64ua-v-amoswap_d.bin",
+            "cycle": 10740
+        },
+        {
+            "file": "rv64ua-v-amoswap_w.bin",
+            "cycle": 10739
+        },
+        {
+            "file": "rv64ua-v-amoxor_d.bin",
+            "cycle": 10723
+        },
+        {
+            "file": "rv64ua-v-amoxor_w.bin",
+            "cycle": 10725
+        },
+        {
+            "file": "rv64ua-v-lrsc.bin",
+            "cycle": 16895
+        },
+        {
+            "file": "rv64ui-p-add.bin",
+            "cycle": 475
+        },
+        {
+            "file": "rv64ui-p-addi.bin",
+            "cycle": 250
+        },
+        {
+            "file": "rv64ui-p-addiw.bin",
+            "cycle": 247
+        },
+        {
+            "file": "rv64ui-p-addw.bin",
+            "cycle": 470
+        },
+        {
+            "file": "rv64ui-p-and.bin",
+            "cycle": 550
+        },
+        {
+            "file": "rv64ui-p-andi.bin",
+            "cycle": 221
+        },
+        {
+            "file": "rv64ui-p-auipc.bin",
+            "cycle": 64
+        },
+        {
+            "file": "rv64ui-p-beq.bin",
+            "cycle": 296
+        },
+        {
+            "file": "rv64ui-p-bge.bin",
+            "cycle": 314
+        },
+        {
+            "file": "rv64ui-p-bgeu.bin",
+            "cycle": 404
+        },
+        {
+            "file": "rv64ui-p-blt.bin",
+            "cycle": 296
+        },
+        {
+            "file": "rv64ui-p-bltu.bin",
+            "cycle": 382
+        },
+        {
+            "file": "rv64ui-p-bne.bin",
+            "cycle": 296
+        },
+        {
+            "file": "rv64ui-p-fence_i.bin",
+            "cycle": 299
+        },
+        {
+            "file": "rv64ui-p-jal.bin",
+            "cycle": 60
+        },
+        {
+            "file": "rv64ui-p-jalr.bin",
+            "cycle": 113
+        },
+        {
+            "file": "rv64ui-p-lb.bin",
+            "cycle": 250
+        },
+        {
+            "file": "rv64ui-p-lbu.bin",
+            "cycle": 250
+        },
+        {
+            "file": "rv64ui-p-ld.bin",
+            "cycle": 384
+        },
+        {
+            "file": "rv64ui-p-lh.bin",
+            "cycle": 262
+        },
+        {
+            "file": "rv64ui-p-lhu.bin",
+            "cycle": 269
+        },
+        {
+            "file": "rv64ui-p-lui.bin",
+            "cycle": 70
+        },
+        {
+            "file": "rv64ui-p-lw.bin",
+            "cycle": 272
+        },
+        {
+            "file": "rv64ui-p-lwu.bin",
+            "cycle": 298
+        },
+        {
+            "file": "rv64ui-p-or.bin",
+            "cycle": 583
+        },
+        {
+            "file": "rv64ui-p-ori.bin",
+            "cycle": 214
+        },
+        {
+            "file": "rv64ui-p-sb.bin",
+            "cycle": 435
+        },
+        {
+            "file": "rv64ui-p-sh.bin",
+            "cycle": 488
+        },
+        {
+            "file": "rv64ui-p-sw.bin",
+            "cycle": 495
+        },
+        {
+            "file": "rv64ui-p-sd.bin",
+            "cycle": 607
+        },
+        {
+            "file": "rv64ui-p-simple.bin",
+            "cycle": 46
+        },
+        {
+            "file": "rv64ui-p-sll.bin",
+            "cycle": 545
+        },
+        {
+            "file": "rv64ui-p-slli.bin",
+            "cycle": 275
+        },
+        {
+            "file": "rv64ui-p-slliw.bin",
+            "cycle": 246
+        },
+        {
+            "file": "rv64ui-p-sllw.bin",
+            "cycle": 505
+        },
+        {
+            "file": "rv64ui-p-slt.bin",
+            "cycle": 464
+        },
+        {
+            "file": "rv64ui-p-slti.bin",
+            "cycle": 242
+        },
+        {
+            "file": "rv64ui-p-sltiu.bin",
+            "cycle": 242
+        },
+        {
+            "file": "rv64ui-p-sltu.bin",
+            "cycle": 481
+        },
+        {
+            "file": "rv64ui-p-sra.bin",
+            "cycle": 517
+        },
+        {
+            "file": "rv64ui-p-srai.bin",
+            "cycle": 263
+        },
+        {
+            "file": "rv64ui-p-sraiw.bin",
+            "cycle": 273
+        },
+        {
+            "file": "rv64ui-p-sraw.bin",
+            "cycle": 517
+        },
+        {
+            "file": "rv64ui-p-srl.bin",
+            "cycle": 559
+        },
+        {
+            "file": "rv64ui-p-srli.bin",
+            "cycle": 284
+        },
+        {
+            "file": "rv64ui-p-srliw.bin",
+            "cycle": 255
+        },
+        {
+            "file": "rv64ui-p-srlw.bin",
+            "cycle": 511
+        },
+        {
+            "file": "rv64ui-p-sub.bin",
+            "cycle": 466
+        },
+        {
+            "file": "rv64ui-p-subw.bin",
+            "cycle": 462
+        },
+        {
+            "file": "rv64ui-p-xor.bin",
+            "cycle": 578
+        },
+        {
+            "file": "rv64ui-p-xori.bin",
+            "cycle": 212
+        },
+        {
+            "file": "rv64ui-v-add.bin",
+            "cycle": 6915
+        },
+        {
+            "file": "rv64ui-v-addi.bin",
+            "cycle": 6690
+        },
+        {
+            "file": "rv64ui-v-addiw.bin",
+            "cycle": 6687
+        },
+        {
+            "file": "rv64ui-v-addw.bin",
+            "cycle": 6910
+        },
+        {
+            "file": "rv64ui-v-and.bin",
+            "cycle": 11689
+        },
+        {
+            "file": "rv64ui-v-andi.bin",
+            "cycle": 6661
+        },
+        {
+            "file": "rv64ui-v-auipc.bin",
+            "cycle": 6503
+        },
+        {
+            "file": "rv64ui-v-beq.bin",
+            "cycle": 6736
+        },
+        {
+            "file": "rv64ui-v-bge.bin",
+            "cycle": 6754
+        },
+        {
+            "file": "rv64ui-v-bgeu.bin",
+            "cycle": 6844
+        },
+        {
+            "file": "rv64ui-v-blt.bin",
+            "cycle": 6736
+        },
+        {
+            "file": "rv64ui-v-bltu.bin",
+            "cycle": 6822
+        },
+        {
+            "file": "rv64ui-v-bne.bin",
+            "cycle": 6736
+        },
+        {
+            "file": "rv64ui-v-fence_i.bin",
+            "cycle": 13155
+        },
+        {
+            "file": "rv64ui-v-jal.bin",
+            "cycle": 6500
+        },
+        {
+            "file": "rv64ui-v-jalr.bin",
+            "cycle": 6553
+        },
+        {
+            "file": "rv64ui-v-lb.bin",
+            "cycle": 11389
+        },
+        {
+            "file": "rv64ui-v-lbu.bin",
+            "cycle": 11389
+        },
+        {
+            "file": "rv64ui-v-ld.bin",
+            "cycle": 11523
+        },
+        {
+            "file": "rv64ui-v-lh.bin",
+            "cycle": 11401
+        },
+        {
+            "file": "rv64ui-v-lhu.bin",
+            "cycle": 11408
+        },
+        {
+            "file": "rv64ui-v-lui.bin",
+            "cycle": 6510
+        },
+        {
+            "file": "rv64ui-v-lw.bin",
+            "cycle": 11411
+        },
+        {
+            "file": "rv64ui-v-lwu.bin",
+            "cycle": 11437
+        },
+        {
+            "file": "rv64ui-v-or.bin",
+            "cycle": 11722
+        },
+        {
+            "file": "rv64ui-v-ori.bin",
+            "cycle": 6654
+        },
+        {
+            "file": "rv64ui-v-sb.bin",
+            "cycle": 11086
+        },
+        {
+            "file": "rv64ui-v-sd.bin",
+            "cycle": 15957
+        },
+        {
+            "file": "rv64ui-v-sh.bin",
+            "cycle": 11139
+        },
+        {
+            "file": "rv64ui-v-simple.bin",
+            "cycle": 6486
+        },
+        {
+            "file": "rv64ui-v-sll.bin",
+            "cycle": 11684
+        },
+        {
+            "file": "rv64ui-v-slli.bin",
+            "cycle": 6715
+        },
+        {
+            "file": "rv64ui-v-slliw.bin",
+            "cycle": 6686
+        },
+        {
+            "file": "rv64ui-v-sllw.bin",
+            "cycle": 11644
+        },
+        {
+            "file": "rv64ui-v-slt.bin",
+            "cycle": 6904
+        },
+        {
+            "file": "rv64ui-v-slti.bin",
+            "cycle": 6682
+        },
+        {
+            "file": "rv64ui-v-sltiu.bin",
+            "cycle": 6682
+        },
+        {
+            "file": "rv64ui-v-sltu.bin",
+            "cycle": 11620
+        },
+        {
+            "file": "rv64ui-v-sra.bin",
+            "cycle": 11656
+        },
+        {
+            "file": "rv64ui-v-srai.bin",
+            "cycle": 6703
+        },
+        {
+            "file": "rv64ui-v-sraiw.bin",
+            "cycle": 6713
+        },
+        {
+            "file": "rv64ui-v-sraw.bin",
+            "cycle": 11656
+        },
+        {
+            "file": "rv64ui-v-srl.bin",
+            "cycle": 11698
+        },
+        {
+            "file": "rv64ui-v-srli.bin",
+            "cycle": 6724
+        },
+        {
+            "file": "rv64ui-v-srliw.bin",
+            "cycle": 6695
+        },
+        {
+            "file": "rv64ui-v-srlw.bin",
+            "cycle": 11650
+        },
+        {
+            "file": "rv64ui-v-sub.bin",
+            "cycle": 6906
+        },
+        {
+            "file": "rv64ui-v-subw.bin",
+            "cycle": 6902
+        },
+        {
+            "file": "rv64ui-v-sw.bin",
+            "cycle": 11146
+        },
+        {
+            "file": "rv64ui-v-xor.bin",
+            "cycle": 11717
+        },
+        {
+            "file": "rv64ui-v-xori.bin",
+            "cycle": 6652
+        },
+        {
+            "file": "rv64um-p-div.bin",
+            "cycle": 106
+        },
+        {
+            "file": "rv64um-p-divu.bin",
+            "cycle": 112
+        },
+        {
+            "file": "rv64um-p-divuw.bin",
+            "cycle": 104
+        },
+        {
+            "file": "rv64um-p-divw.bin",
+            "cycle": 101
+        },
+        {
+            "file": "rv64um-p-mul.bin",
+            "cycle": 465
+        },
+        {
+            "file": "rv64um-p-mulh.bin",
+            "cycle": 473
+        },
+        {
+            "file": "rv64um-p-mulhsu.bin",
+            "cycle": 473
+        },
+        {
+            "file": "rv64um-p-mulhu.bin",
+            "cycle": 505
+        },
+        {
+            "file": "rv64um-p-mulw.bin",
+            "cycle": 404
+        },
+        {
+            "file": "rv64um-p-rem.bin",
+            "cycle": 105
+        },
+        {
+            "file": "rv64um-p-remu.bin",
+            "cycle": 106
+        },
+        {
+            "file": "rv64um-p-remuw.bin",
+            "cycle": 101
+        },
+        {
+            "file": "rv64um-p-remw.bin",
+            "cycle": 107
+        },
+        {
+            "file": "rv64um-v-div.bin",
+            "cycle": 6546
+        },
+        {
+            "file": "rv64um-v-divu.bin",
+            "cycle": 6552
+        },
+        {
+            "file": "rv64um-v-divuw.bin",
+            "cycle": 6544
+        },
+        {
+            "file": "rv64um-v-divw.bin",
+            "cycle": 6541
+        },
+        {
+            "file": "rv64um-v-mul.bin",
+            "cycle": 6905
+        },
+        {
+            "file": "rv64um-v-mulh.bin",
+            "cycle": 6913
+        },
+        {
+            "file": "rv64um-v-mulhsu.bin",
+            "cycle": 6913
+        },
+        {
+            "file": "rv64um-v-mulhu.bin",
+            "cycle": 6945
+        },
+        {
+            "file": "rv64um-v-mulw.bin",
+            "cycle": 6844
+        },
+        {
+            "file": "rv64um-v-rem.bin",
+            "cycle": 6545
+        },
+        {
+            "file": "rv64um-v-remu.bin",
+            "cycle": 6546
+        },
+        {
+            "file": "rv64um-v-remuw.bin",
+            "cycle": 6541
+        },
+        {
+            "file": "rv64um-v-remw.bin",
+            "cycle": 6547
+        },
+        {
+            "file": "sd_pma_overflow.bin",
+            "cycle": 16
+        },
+        {
+            "file": "xpie_exceptions.bin",
+            "cycle": 51
+        }
+    ]
+}
+
