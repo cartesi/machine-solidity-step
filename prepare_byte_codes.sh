@@ -4,9 +4,17 @@
 # using pre-calculated contract addresses. Also filled in the constructor
 # arguments for Step and MemoryInteractor contracts
 
-cartesi_modules=$(pwd)/node_modules/@cartesi/
-cd contracts
-solc @cartesi/=${cartesi_modules} --bin --optimize --overwrite -o $(pwd) *.sol
+
+mkdir -p ./build/@cartesi/util/contracts/
+mkdir -p ./build/@cartesi/arbitration/contracts/
+cd build
+
+# copy dependent contracts from node_modules
+cp ../node_modules/@cartesi/util/contracts/* -r @cartesi/util/contracts/
+cp ../node_modules/@cartesi/arbitration/contracts/* -r @cartesi/arbitration/contracts/
+cp ../contracts/* ./ -r
+
+solc --bin --optimize --overwrite -o $(pwd) *.sol
 
 # These addresses are generated with sender = 69, nounce starting from 0,
 # incrememt by 1 in the following order
