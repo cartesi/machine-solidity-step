@@ -1,0 +1,13 @@
+name: Test
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Build test image
+        run: docker build . -t cartesi/test
+      
+      - name: Run tests
+        run: docker run cartesi/test

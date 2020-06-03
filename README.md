@@ -65,21 +65,21 @@ Having a node listening to 8545, you can deploy using
 
 Run step tests with docker
 
-    docker build -t cartesi/step-test -f Dockerfile.step
+    docker build . -t cartesi/step-test -f Dockerfile.step
     
     docker run cartesi/step-test
 
 Run ram tests with docker
 
-    docker build -t cartesi/step-ram -f Dockerfile.ram
+    docker build . -t cartesi/ram-test -f Dockerfile.ram
     
-    docker run cartesi/step-ram
+    docker run cartesi/ram-test
 
 Run step test with docker + aleth
 
-    docker build . -t cartesi/tests 
+    docker build . -t cartesi/tests
 
-    docker run cartesi/tests 
+    docker run cartesi/tests
 
 
 ## Contributing
