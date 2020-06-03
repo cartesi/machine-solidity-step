@@ -61,7 +61,7 @@ FROM scratch as bin-files
 COPY --from=bin-builder /usr/src/app/rv64-tests/ /usr/src/app/rv64-tests/
 
 # ======================= test runner ============
-FROM cartesi/aleth-test
+FROM cartesi/aleth-test:0.1.0
 WORKDIR /usr/src/app/
 COPY --from=bin-files /usr/src/app/rv64-tests/ /usr/src/app/rv64-tests/
 COPY --from=builder /usr/src/app/ . 
