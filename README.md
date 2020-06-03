@@ -75,6 +75,13 @@ Run ram tests with docker
     
     docker run cartesi/step-ram
 
+Run step test with docker + aleth
+
+    docker build . -t cartesi/tests 
+
+    docker run cartesi/tests 
+
+
 ## Contributing
 
 Thank you for your interest in Cartesi! Head over to our [Contributing Guidelines](CONTRIBUTING.md) for instructions on how to sign our Contributors Agreement and get started with Cartesi!
