@@ -81,6 +81,13 @@ Run step test with docker + aleth
 
     docker run cartesi/tests
 
+Run sequence test with all files
+
+    docker run -v <hostpath>:/usr/src/app/proofs/ --entrypoint ./machine-test cartesi/tests sequence --network Istanbul --contracts-config sequence_contracts.json
+
+Run sequence test with standar input
+
+    cat <jsonfile> | docker run -i --entrypoint ./machine-test cartesi/tests sequence --network Istanbul --contracts-config sequence_contracts.json --cin
 
 ## Contributing
 

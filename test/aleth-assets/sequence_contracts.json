@@ -1,0 +1,32 @@
+{
+    "path": "/usr/src/app/build/",
+    "contracts": [
+        "BitsManipulationLibrary.bin",
+        "TestNoMerkleMM.bin",
+        "ShadowAddresses.bin",
+        "RiscVConstants.bin",
+        "RiscVDecoder.bin",
+        "RealTimeClock.bin",
+        "BranchInstructions.bin",
+        "ArithmeticInstructions.bin",
+        "ArithmeticImmediateInstructions.bin",
+        "StandAloneInstructions.bin",
+        "PMA.bin",
+        "CSRReads.bin",
+        "CLINT.bin",
+        "HTIF.bin",
+        "CSR.bin",
+        "CSRExecute.bin",
+        "Exceptions.bin",
+        "EnvTrapIntInstructions.bin",
+        "VirtualMemory.bin",
+        "S_Instructions.bin",
+        "AtomicInstructions.bin",
+        "Fetch.bin",
+        "Interrupts.bin",
+        "Execute.bin",
+        "MemoryInteractor.bin",
+        "Step.bin"
+    ]
+}
+
