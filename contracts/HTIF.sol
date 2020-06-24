@@ -187,21 +187,14 @@ library HTIF {
     returns (bool)
     {
         // TO-DO: what to do in the blockchain? Generate event?
-
-        // @NOTICE: C++ version diverge
-        // a->write_htif_fromhost(((uint64_t)HTIF_DEVICE_CONSOLE << 56) | ((uint64_t)1 << 48));
-        mi.writeHtifFromhost(mmIndex, (HTIF_DEVICE_CONSOLE << 56) | uint64(0) << 48);
+        mi.writeHtifFromhost(mmIndex, (HTIF_DEVICE_CONSOLE << 56) | uint64(HTIF_CONSOLE_PUTCHAR) << 48);
         return true;
     }
 
     function htifGetchar(MemoryInteractor mi, uint256 mmIndex) internal
     returns (bool)
     {
-        // @NOTICE: C++ version possibly diverge 
-        // int c = h? h->console_get_char(): 0;
-        // a->write_htif_fromhost(((uint64_t)HTIF_DEVICE_CONSOLE << 56) |
-        // ((uint64_t)HTIF_CONSOLE_GETCHAR << 48) | c);
-        mi.writeHtifFromhost(mmIndex, (HTIF_DEVICE_CONSOLE << 56) | uint64(1) << 48);
+        mi.writeHtifFromhost(mmIndex, (HTIF_DEVICE_CONSOLE << 56) | uint64(HTIF_CONSOLE_GETCHAR) << 48);
         return true;
     }
 
