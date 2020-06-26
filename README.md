@@ -75,9 +75,12 @@ Run ram tests with docker
     
     docker run cartesi/ram-test
 
-Run step test with docker + aleth
+
+Build main test docker image with aleth
 
     docker build . -t cartesi/tests
+
+Run step test with docker + aleth
 
     docker run cartesi/tests
 
