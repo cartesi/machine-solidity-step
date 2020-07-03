@@ -6,6 +6,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - name: Download rv64 JSON test files
+        run: aws s3 sync s3://cartesi-ci/${GITHUB_REPOSITORY}/test/rv64 test/rv64/
+        env:
+          AWS_REGION: 'us-east-1'
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
       - name: Build test image
         run: docker build . -t cartesi/test
       
