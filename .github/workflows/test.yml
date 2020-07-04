@@ -15,6 +15,13 @@ jobs:
 
       - name: Build test image
         run: docker build . -t cartesi/test
+
+      - name: Add brotli to the system
+        run: sudo apt-get install brotli -y
       
-      - name: Run tests
+      - name: Run sequence tests
+        run: ./test/test_sequence.sh ./test/rv64
+      
+      - name: Run bin tests
         run: docker run cartesi/test
+      
