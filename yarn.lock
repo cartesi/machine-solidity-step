@@ -45,10 +45,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cartesi/arbitration@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@cartesi/arbitration/-/arbitration-0.3.0.tgz#0e9e02b4b70293e78bbe66cd2793273ec5f23e4f"
-  integrity sha512-DVOYotbedsqUuri6U/HCC8Pqso4A8OFFCo3OOqzCVY5gqHAvebKuZjeE3u1hrXLDHbGxf+fPVS9KM6GLL+4p1g==
+"@cartesi/arbitration@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@cartesi/arbitration/-/arbitration-0.4.0.tgz#ed44d66483cb4c36457f46d215a377b0cf0ede6c"
+  integrity sha512-zYXqzxh+BkAgDdb4i5EWzNPuQ3IUH+6FBn4J+S30OWYjwEU+iC7g1MJlxZaKd59f60dsFM8CMyDzCBs3badUjg==
   dependencies:
     "@cartesi/util" "^0.2.1"
 

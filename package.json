@@ -1,13 +1,13 @@
 {
   "name": "@cartesi/machine-solidity-step",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Machine Solidity Step",
   "scripts": {
     "prepare": "truffle compile",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@cartesi/arbitration": "^0.3.0",
+    "@cartesi/arbitration": "^0.4.0",
     "@cartesi/util": "^0.2.1"
   },
   "devDependencies": {
