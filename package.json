@@ -12,8 +12,8 @@
   },
   "devDependencies": {
     "@truffle/contract": "^4.2.10",
-    "@truffle/hdwallet-provider": "^1.0.36",
-    "truffle": "^5.1.32"
+    "@truffle/hdwallet-provider": "^1.0.40",
+    "truffle": "^5.1.37"
   },
   "repository": {
     "type": "git",
