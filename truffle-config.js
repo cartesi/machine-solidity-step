@@ -49,6 +49,7 @@ module.exports = {
   },
   compilers: {
     solc: {
+      version: "0.7.0",
       optimizer: { // Turning on compiler optimization that removes some local variables during compilation
         enabled: true,
         runs: 200

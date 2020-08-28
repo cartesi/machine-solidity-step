@@ -1,5 +1,6 @@
 // Copyright 2019 Cartesi Pte. Ltd.
 
+// SPDX-License-Identifier: Apache-2.0
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 // this file except in compliance with the License. You may obtain a copy of the
 // License at http://www.apache.org/licenses/LICENSE-2.0
@@ -13,7 +14,7 @@
 
 /// @title ArithmeticInstructions
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.7.0;
 
 // Overflow/Underflow behaviour in solidity is to allow them to happen freely.
 // This mimics the RiscV behaviour, so we can use the arithmetic operators normally.

@@ -1,5 +1,6 @@
 // Copyright 2019 Cartesi Pte. Ltd.
 
+// SPDX-License-Identifier: Apache-2.0
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 // this file except in compliance with the License. You may obtain a copy of the
 // License at http://www.apache.org/licenses/LICENSE-2.0
@@ -11,7 +12,7 @@
 
 
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.7.0;
 
 import "@cartesi/arbitration/contracts/MMInstantiator.sol";
 import "@cartesi/util/contracts/BitsManipulationLibrary.sol";
@@ -35,7 +36,7 @@ contract TestRamMMInstantiator is MMInstantiator {
     event HTIFExit(uint256 _index, uint64 _exitCode, bool _halt);
 
     /// @notice Stop memory insertion and start read and write phase
-    function finishProofPhase(uint256 _index) public
+    function finishProofPhase(uint256 _index) public override
         onlyInstantiated(_index)
         //onlyBy(instance[_index].provider)
         increasesNonce(_index)
@@ -48,7 +49,7 @@ contract TestRamMMInstantiator is MMInstantiator {
     /// @notice Replays a read in memory that has been proved to be correct
     /// according to initial hash
     /// @param _position of the desired memory
-    function read(uint256 _index, uint64 _position) public
+    function read(uint256 _index, uint64 _position) public override
         onlyInstantiated(_index)
         //onlyBy(instance[_index].client)
         increasesNonce(_index)
@@ -67,7 +68,7 @@ contract TestRamMMInstantiator is MMInstantiator {
     /// @notice Replays a write in memory that was proved correct
     /// @param _position of the write
     /// @param _value to be written
-    function write(uint256 _index, uint64 _position, bytes8 _value) public
+    function write(uint256 _index, uint64 _position, bytes8 _value) public override
         //onlyBy(instance[_index].client)
         increasesNonce(_index)
         onlyInstantiated(_index)
@@ -83,7 +84,7 @@ contract TestRamMMInstantiator is MMInstantiator {
     }
 
     /// @notice Stop write (or read) phase
-    function finishReplayPhase(uint256 _index) public
+    function finishReplayPhase(uint256 _index) public override
         onlyInstantiated(_index)
         //onlyBy(instance[_index].client)
         increasesNonce(_index)

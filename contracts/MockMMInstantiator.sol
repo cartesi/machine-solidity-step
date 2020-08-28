@@ -1,5 +1,6 @@
 // Copyright 2019 Cartesi Pte. Ltd.
 
+// SPDX-License-Identifier: Apache-2.0
 // Licensed under the Apache License, Version 2.0 (the "License"); you may not use
 // this file except in compliance with the License. You may obtain a copy of the
 // License at http://www.apache.org/licenses/LICENSE-2.0
@@ -11,9 +12,10 @@
 
 
 
-pragma solidity ^0.5.0;
+pragma solidity ^0.7.0;
 
 import "@cartesi/util/contracts/Decorated.sol";
+import "@cartesi/util/contracts/InstantiatorImpl.sol";
 import "@cartesi/util/contracts/Merkle.sol";
 import "@cartesi/arbitration/contracts/MMInterface.sol";
 
@@ -23,7 +25,7 @@ import "@cartesi/arbitration/contracts/MMInterface.sol";
 /// @notice A mock Memory Manager for testing purposes
 /// @dev This should never be deployed to Main net.
 /// @dev This contract is unsafe.
-contract MockMMInstantiator is MMInterface, Decorated {
+contract MockMMInstantiator is InstantiatorImpl, MMInterface, Decorated {
   // the provider will fill the memory for the client to read and write
   // memory starts with hash and all values that are inserted are first verified
   // then client can read inserted values and write some more
@@ -80,7 +82,7 @@ contract MockMMInstantiator is MMInterface, Decorated {
     event FinishedProofs(uint256 _index);
     event FinishedReplay(uint256 _index);
 
-    function instantiate(address _provider, address _client, bytes32 _initialHash) public returns (uint256) {
+    function instantiate(address _provider, address _client, bytes32 _initialHash) public override returns (uint256) {
         require(_provider != _client, "Provider and client need to differ");
         MMCtx storage currentInstance = instance[currentIndex];
         currentInstance.provider = _provider;
@@ -141,7 +143,7 @@ contract MockMMInstantiator is MMInterface, Decorated {
     }
 
     /// @notice Stop memory insertion and start read and write phase
-    function finishProofPhase(uint256 _index) public
+    function finishProofPhase(uint256 _index) public override
     {
         instance[_index].currentState = state.WaitingReplay;
         emit FinishedProofs(_index);
@@ -150,7 +152,7 @@ contract MockMMInstantiator is MMInterface, Decorated {
     /// @notice Replays a read in memory that has been proved to be correct
     /// according to initial hash
     /// @param _position of the desired memory
-    function read(uint256 _index, uint64 _position) public
+    function read(uint256 _index, uint64 _position) public override
         returns (bytes8)
     {
         require((_position & 7) == 0, "Read Position is not aligned");
@@ -168,7 +170,7 @@ contract MockMMInstantiator is MMInterface, Decorated {
     /// @notice Replays a write in memory that was proved correct
     /// @param _position of the write
     /// @param _value to be written
-    function write(uint256 _index, uint64 _position, bytes8 _value) public
+    function write(uint256 _index, uint64 _position, bytes8 _value) public override
     {
         require((_position & 7) == 0, "Write Position is not aligned");
         uint pointer = instance[_index].historyPointer;
@@ -182,7 +184,7 @@ contract MockMMInstantiator is MMInterface, Decorated {
     }
 
     /// @notice Stop write (or read) phase
-    function finishReplayPhase(uint256 _index) public
+    function finishReplayPhase(uint256 _index) public override
     {
         delete(instance[_index].history);
         delete(instance[_index].historyPointer);
@@ -193,7 +195,7 @@ contract MockMMInstantiator is MMInterface, Decorated {
     }
 
     // getter methods
-    function isConcerned(uint256 _index, address _user) public view returns (bool) {
+    function isConcerned(uint256 _index, address _user) public override view returns (bool) {
         return ((instance[_index].provider == _user) || (instance[_index].client == _user));
     }
 
@@ -241,14 +243,14 @@ contract MockMMInstantiator is MMInterface, Decorated {
         returns (bytes32)
     { return instance[_index].initialHash; }
 
-    function newHash(uint256 _index) public view
+    function newHash(uint256 _index) public override view
         onlyInstantiated(_index)
         returns (bytes32)
     { return instance[_index].newHash; }
 
     // state getters
 
-    function getCurrentState(uint256 _index) public view
+    function getCurrentState(uint256 _index) public override view
         onlyInstantiated(_index)
         returns (bytes32)
     {
@@ -265,17 +267,17 @@ contract MockMMInstantiator is MMInterface, Decorated {
     }
 
     // remove these functions and change tests accordingly
-    function stateIsWaitingProofs(uint256 _index) public view
+    function stateIsWaitingProofs(uint256 _index) public override view
         onlyInstantiated(_index)
         returns (bool)
     { return instance[_index].currentState == state.WaitingProofs; }
 
-    function stateIsWaitingReplay(uint256 _index) public view
+    function stateIsWaitingReplay(uint256 _index) public override view
         onlyInstantiated(_index)
         returns (bool)
     { return instance[_index].currentState == state.WaitingReplay; }
 
-    function stateIsFinishedReplay(uint256 _index) public view
+    function stateIsFinishedReplay(uint256 _index) public override view
         onlyInstantiated(_index)
         returns (bool)
     { return instance[_index].currentState == state.FinishedReplay; }
