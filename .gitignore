@@ -7,3 +7,7 @@ node_modules
 build
 res
 target
+artifacts
+cache
+deployments
+dist
