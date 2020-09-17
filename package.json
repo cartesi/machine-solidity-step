@@ -16,7 +16,7 @@
     "deploy:goerli": "buidler deploy --network goerli",
     "deploy:matic_testnet": "buidler deploy --network matic_testnet",
     "deploy:bsc_testnet": "buidler deploy --network bsc_testnet",
-    "prepack": "run-s clean prepare",
+    "prepack": "run-s clean deploy:testnet",
     "start": "buidler node"
   },
   "scripts-info": {

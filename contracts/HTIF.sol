@@ -29,9 +29,9 @@ library HTIF {
     uint64 constant HTIF_FROMHOST_ADDR_CONST = 0x40008008;
 
     // [c++] enum HTIF_devices
-    uint64 constant HTIF_DEVICE_HALT = 0;        ///< Used to halt machine
-    uint64 constant HTIF_DEVICE_CONSOLE = 1;     ///< Used for console input and output
-    uint64 constant HTIF_DEVICE_YIELD = 2;       ///< Used to yield control back to host
+    uint64 constant HTIF_DEVICE_HALT = 0;        //< Used to halt machine
+    uint64 constant HTIF_DEVICE_CONSOLE = 1;     //< Used for console input and output
+    uint64 constant HTIF_DEVICE_YIELD = 2;       //< Used to yield control back to host
 
     // [c++] enum HTIF_commands
     uint64 constant HTIF_HALT_HALT = 0; 

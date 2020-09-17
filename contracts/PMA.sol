@@ -21,11 +21,11 @@ import "./MemoryInteractor.sol";
 /// @notice Implements PMA behaviour
 library PMA {
 
-    uint64 constant MEMORY_ID = 0; ///< DID for memory
-    uint64 constant SHADOW_ID = 1; ///< DID for shadow device
-    uint64 constant DRIVE_ID = 2;  ///< DID for drive device
-    uint64 constant CLINT_ID = 3;  ///< DID for CLINT device
-    uint64 constant HTIF_ID = 4;   ///< DID for HTIF device
+    uint64 constant MEMORY_ID = 0; //< DID for memory
+    uint64 constant SHADOW_ID = 1; //< DID for shadow device
+    uint64 constant DRIVE_ID = 2;  //< DID for drive device
+    uint64 constant CLINT_ID = 3;  //< DID for CLINT device
+    uint64 constant HTIF_ID = 4;   //< DID for HTIF device
 
     /// @notice Finds PMA that contains target physical address.
     /// @param mi Memory Interactor with which Step function is interacting.
