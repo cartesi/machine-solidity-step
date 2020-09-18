@@ -57,7 +57,7 @@ library ArithmeticInstructions {
         // emit Print("SLL");
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
 
-        return rs1 << (rs2 & (XLEN - 1));
+        return rs1 << (rs2 & uint64(XLEN - 1));
     }
 
     function executeSLT(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
@@ -173,7 +173,7 @@ library ArithmeticInstructions {
 
         if (srs2 == 0) {
             return uint64(srs1);
-        } else if (srs1 == (int64(1 << (XLEN - 1))) && srs2 == -1) {
+        } else if (srs1 == (int64(1 << uint64(XLEN - 1))) && srs2 == -1) {
             return 0;
         } else {
             return uint64(srs1 % srs2);
@@ -212,7 +212,7 @@ library ArithmeticInstructions {
     function executeSLLW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
         (uint64 rs1, uint64 rs2) = getRs1Rs2(mi, mmIndex, insn);
 
-        int32 rs1w = int32(uint32(rs1) << (rs2 & 31));
+        int32 rs1w = int32(uint32(rs1) << uint32(rs2 & 31));
 
         return uint64(rs1w);
     }

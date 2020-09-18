@@ -50,7 +50,7 @@ library ArithmeticImmediateInstructions {
     // Reference: riscv-spec-v2.2.pdf - Section 4.2 -  Page 30
     function executeSLLIW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns (uint64) {
         (uint64 rs1, int32 imm) = getRs1Imm(mi, mmIndex, insn);
-        int32 rs1w = int32(rs1) << (imm & 0x1F);
+        int32 rs1w = int32(rs1) << uint32(imm & 0x1F);
         return uint64(rs1w);
     }
 
@@ -67,7 +67,7 @@ library ArithmeticImmediateInstructions {
     // Reference: riscv-spec-v2.2.pdf - Section 2.4 -  Page 14
     function executeSLLI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64) {
         (uint64 rs1, int32 imm) = getRs1Imm(mi, mmIndex, insn);
-        return rs1 << (imm & 0x3F);
+        return rs1 << uint32(imm & 0x3F);
     }
 
     // SLRI instructions is a logical shift right instruction. The variable to be
@@ -76,7 +76,7 @@ library ArithmeticImmediateInstructions {
     function executeSRLI(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64) {
         // Get imm's lower 6 bits
         (uint64 rs1, int32 imm) = getRs1Imm(mi, mmIndex, insn);
-        int32 shiftAmount = imm & int32(RiscVConstants.getXlen() - 1);
+        uint32 shiftAmount = uint32(imm & int32(RiscVConstants.getXlen() - 1));
 
         return rs1 >> shiftAmount;
     }
@@ -87,7 +87,7 @@ library ArithmeticImmediateInstructions {
     function executeSRLIW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64) {
         // Get imm's lower 6 bits
         (uint64 rs1, int32 imm) = getRs1Imm(mi, mmIndex, insn);
-        int32 rs1w = int32(uint32(rs1) >> (imm & 0x1F));
+        int32 rs1w = int32(uint32(rs1) >> uint32(imm & 0x1F));
         return uint64(rs1w);
     }
 
@@ -112,7 +112,7 @@ library ArithmeticImmediateInstructions {
     function executeSRAIW(MemoryInteractor mi, uint256 mmIndex, uint32 insn) public returns(uint64) {
         // Get imm's lower 6 bits
         (uint64 rs1, int32 imm) = getRs1Imm(mi, mmIndex, insn);
-        int32 rs1w = int32(rs1) >> (imm & 0x1F);
+        int32 rs1w = int32(rs1) >> uint32(imm & 0x1F);
         return uint64(rs1w);
     }
 

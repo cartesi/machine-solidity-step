@@ -309,7 +309,7 @@ library VirtualMemory {
 
         //TO-DO: Use bitmanipulation library for arithmetic shift
         intvars[VADDR_SHIFT] = RiscVConstants.getXlen() - (RiscVConstants.getPgShift() + levels * 9);
-        if (((int64(vaddr) << intvars[VADDR_SHIFT]) >> intvars[VADDR_SHIFT]) != int64(vaddr)) {
+        if (((int64(vaddr) << uint64(intvars[VADDR_SHIFT])) >> uint64(intvars[VADDR_SHIFT])) != int64(vaddr)) {
             return (false, 0);
         }
         // The least significant 44 bits of satp contain the physical page number
@@ -317,21 +317,21 @@ library VirtualMemory {
         // Reference: riscv-priv-spec-1.10.pdf - Figure 4.12, page 57.
         intvars[SATP_PPN_BITS] = 44;
         // Initialize pteAddr with the base address for the root page table
-        uint64vars[PTE_ADDR] = (uint64vars[SATP] & ((uint64(1) << intvars[SATP_PPN_BITS]) - 1)) << RiscVConstants.getPgShift();
+        uint64vars[PTE_ADDR] = (uint64vars[SATP] & ((uint64(1) << uint64(intvars[SATP_PPN_BITS])) - 1)) << RiscVConstants.getPgShift();
         // All page table entries have 8 bytes
         // Each page table has 4k/pteSize entries
         // To index all entries, we need vpnBits
         // Reference: riscv-priv-spec-1.10.pdf - Section 4.4.1, page 63.
         intvars[PTE_SIZE_LOG2] = 3;
         intvars[VPN_BITS] = 12 - intvars[PTE_SIZE_LOG2];
-        uint64vars[VPN_MASK] = uint64((1 << intvars[VPN_BITS]) - 1);
+        uint64vars[VPN_MASK] = uint64((1 << uint(intvars[VPN_BITS])) - 1);
 
         for (int i = 0; i < levels; i++) {
             // Mask out VPN[levels -i-1]
             intvars[VADDR_SHIFT] = RiscVConstants.getPgShift() + intvars[VPN_BITS] * (levels - 1 - i);
-            uint64 vpn = (vaddr >> intvars[VADDR_SHIFT]) & uint64vars[VPN_MASK];
+            uint64 vpn = (vaddr >> uint(intvars[VADDR_SHIFT])) & uint64vars[VPN_MASK];
             // Add offset to find physical address of page table entry
-            uint64vars[PTE_ADDR] += vpn << intvars[PTE_SIZE_LOG2];
+            uint64vars[PTE_ADDR] += vpn << uint64(intvars[PTE_SIZE_LOG2]);
             //Read page table entry from physical memory
             bool readRamSucc;
             (readRamSucc, uint64vars[PTE]) = readRamUint64(mi, mmIndex, uint64vars[PTE_ADDR]);
@@ -377,11 +377,11 @@ library VirtualMemory {
                     xwr = xwr | (xwr >> 2);
                 }
                 // Check protection bits against request access
-                if (((xwr >> xwrShift) & 1) == 0) {
+                if (((xwr >> uint(xwrShift)) & 1) == 0) {
                     return (false, 0);
                 }
                 // Check page, megapage, and gigapage alignment
-                uint64vars[VADDR_MASK] = (uint64(1) << intvars[VADDR_SHIFT]) - 1;
+                uint64vars[VADDR_MASK] = (uint64(1) << uint64(intvars[VADDR_SHIFT])) - 1;
                 if (ppn & uint64vars[VADDR_MASK] != 0) {
                     return (false, 0);
                 }
