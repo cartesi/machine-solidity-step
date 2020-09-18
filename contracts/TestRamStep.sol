@@ -22,7 +22,7 @@ import "./Step.sol";
 /// @dev This should never be deployed to Main net.
 /// @dev This contract is unsafe.
 contract TestRamStep is Step {
-    constructor(address miAddress) Step(miAddress) public {}
+    constructor(address miAddress) Step(miAddress) {}
     /// @notice Run step define by a MemoryManager instance until halt.
     /// @param mmIndex Specific index of the Memory Manager that contains this Step's access logs
     /// @return Returns an cycle number.

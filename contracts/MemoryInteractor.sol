@@ -34,7 +34,7 @@ import "@cartesi/arbitration/contracts/MMInterface.sol";
 contract MemoryInteractor {
     MMInterface mm;
 
-    constructor(address mmAddress) public {
+    constructor(address mmAddress) {
         mm = MMInterface(mmAddress);
     }
 

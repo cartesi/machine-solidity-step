@@ -31,7 +31,7 @@ contract Step {
 
     MemoryInteractor mi;
 
-    constructor(address miAddress) public {
+    constructor(address miAddress) {
         mi = MemoryInteractor(miAddress);
     }
 
