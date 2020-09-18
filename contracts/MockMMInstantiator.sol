@@ -220,8 +220,11 @@ contract MockMMInstantiator is InstantiatorImpl, MMInterface, Decorated {
         );
     }
 
-    function getSubInstances(uint256)
-        public view returns (address[] memory, uint256[] memory)
+    function getSubInstances(uint256, address)
+        public
+        override
+        pure
+        returns (address[] memory, uint256[] memory)
     {
         address[] memory a = new address[](0);
         uint256[] memory i = new uint256[](0);
@@ -264,6 +267,66 @@ contract MockMMInstantiator is InstantiatorImpl, MMInterface, Decorated {
             return "FinishedReplay";
         }
         require(false, "Unrecognized state");
+    }
+
+    /// @notice Get the worst case scenario duration for a specific state
+    /// @param _roundDuration security parameter, the max time an agent
+    //          has to react and submit one simple transaction
+    /// @param _timeToStartMachine time to build the machine for the first time
+    function getMaxStateDuration(
+        state _state,
+        uint256 _roundDuration,
+        uint256 _timeToStartMachine
+    ) private pure returns (uint256) {
+        if (_state == state.WaitingProofs) {
+            // proving siblings is assumed to be free
+            // so its time to start the machine
+            // + one round duration to send the proofs
+            // + one transaction for finishProofPhase transaction
+            return _timeToStartMachine + uint256(2) * _roundDuration;
+        }
+        if (_state == state.WaitingReplay) {
+            // one transaction for the step function to be completed
+            return _roundDuration;
+        }
+        if (_state == state.FinishedReplay) {
+            // one transaction for finishReplay transaction
+            return _roundDuration;
+        }
+
+        require(false, "Unrecognized state");
+    }
+
+    /// @notice Get the worst case scenario duration for an instance of this contract
+    /// @param _roundDuration security parameter, the max time an agent
+    //          has to react and submit one simple transaction
+    /// @param _timeToStartMachine time to build the machine for the first time
+    function getMaxInstanceDuration(
+        uint256 _roundDuration,
+        uint256 _timeToStartMachine
+    ) public override pure returns (uint256) {
+        uint256 waitingProofsDuration = getMaxStateDuration(
+            state.WaitingProofs,
+            _roundDuration,
+            _timeToStartMachine
+        );
+
+        uint256 waitingReplayDuration = getMaxStateDuration(
+            state.WaitingReplay,
+            _roundDuration,
+            _timeToStartMachine
+        );
+
+        uint256 finishProofsDuration = getMaxStateDuration(
+            state.WaitingProofs,
+            _roundDuration,
+            _timeToStartMachine
+        );
+
+        return
+            waitingProofsDuration +
+            waitingReplayDuration +
+            finishProofsDuration;
     }
 
     // remove these functions and change tests accordingly

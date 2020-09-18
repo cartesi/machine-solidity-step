@@ -941,7 +941,6 @@ library Execute {
         } else {
             return executeStatus.retired;
         }
-        return raiseIllegalInsnException(mi, mmIndex, insn);
     }
 
     enum executeStatus {
