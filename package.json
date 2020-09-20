@@ -66,10 +66,10 @@
     "cartesi"
   ],
   "files": [
+    "artifacts",
     "contracts",
-    "migrations",
-    "build"
+    "deployments"
   ],
-  "author": "Danilo Tuler <danilo@cartesi.io>",
+  "author": "Danilo Tuler <danilo.tuler@cartesi.io>",
   "license": "Apache-2.0"
 }

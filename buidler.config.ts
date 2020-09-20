@@ -62,6 +62,10 @@ const config: BuidlerConfig = {
             url: "http://localhost:8545",
             accounts: mnemonic ? { mnemonic } : undefined
         },
+        ramtest: {
+            url: "http://localhost:8545",
+            accounts: mnemonic ? { mnemonic } : undefined
+        },
         ropsten: infuraNetwork("ropsten", 3, 6283185),
         rinkeby: infuraNetwork("rinkeby", 4, 6283185),
         kovan: infuraNetwork("kovan", 42, 6283185),
@@ -89,15 +93,15 @@ const config: BuidlerConfig = {
         deployments: "deployments"
     },
     external: {
-        artifacts: ["node_modules/@cartesi/util/artifacts"],
+        artifacts: ["node_modules/@cartesi/util/artifacts", "node_modules/@cartesi/arbitration/artifacts"],
         deployments: {
-            localhost: ["node_modules/@cartesi/util/deployments/localhost"],
-            ropsten: ["node_modules/@cartesi/util/deployments/ropsten"],
-            rinkeby: ["node_modules/@cartesi/util/deployments/rinkeby"],
-            kovan: ["node_modules/@cartesi/util/deployments/kovan"],
-            goerli: ["node_modules/@cartesi/util/deployments/goerli"],
-            matic_testnet: ["node_modules/@cartesi/util/deployments/matic_testnet"],
-            bsc_testnet: ["node_modules/@cartesi/util/deployments/bsc_testnet"]
+            localhost: ["node_modules/@cartesi/util/deployments/localhost", "node_modules/@cartesi/arbitration/deployments/localhost"],
+            ropsten: ["node_modules/@cartesi/util/deployments/ropsten", "node_modules/@cartesi/arbitration/deployments/ropsten"],
+            rinkeby: ["node_modules/@cartesi/util/deployments/rinkeby", "node_modules/@cartesi/arbitration/deployments/rinkeby"],
+            kovan: ["node_modules/@cartesi/util/deployments/kovan", "node_modules/@cartesi/arbitration/deployments/kovan"],
+            goerli: ["node_modules/@cartesi/util/deployments/goerli", "node_modules/@cartesi/arbitration/deployments/goerli"],
+            matic_testnet: ["node_modules/@cartesi/util/deployments/matic_testnet", "node_modules/@cartesi/arbitration/deployments/matic_testnet"],
+            bsc_testnet: ["node_modules/@cartesi/util/deployments/bsc_testnet", "node_modules/@cartesi/arbitration/deployments/bsc_testnet"]
         }
     },    
     typechain: {
