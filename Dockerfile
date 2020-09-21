@@ -7,6 +7,7 @@ SHELL ["/bin/bash", "--login", "-c"]
 COPY ./contracts ./contracts/
 COPY ./test/aleth-assets/ .
 COPY ./test/rv64-tests/  ./rv64-tests/
+COPY ./prepare_byte_codes.sh .
 COPY ./yarn.lock .
 COPY ./package.json .
 COPY ./tsconfig.json .
@@ -30,8 +31,11 @@ RUN npm install -g yarn
 
 # install node/contracts dependencies
 
+# --ignore-scripts to ignore prepare hook that compiles contracts using buidler
+RUN yarn install --ignore-scripts
+
 # build it
-RUN yarn install
+RUN /bin/bash prepare_byte_codes.sh
 
 # clean up
 RUN apt-get purge git curl -qy && \
