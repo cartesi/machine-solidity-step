@@ -114,14 +114,14 @@ if not w3.isConnected():
 
 networkId = w3.net.version
 
-with open('../build/contracts/Step.json') as json_file:
+with open('../deployments/localhost/Step.json') as json_file:
     step_data = json.load(json_file)
 
-with open('../node_modules/@cartesi/arbitration/build/contracts/MMInstantiator.json') as json_file:
+with open('../deployments/localhost/MMInstantiator.json') as json_file:
     mm_data = json.load(json_file)
 
-step = w3.eth.contract(address=step_data['networks'][networkId]['address'], abi=step_data['abi'])
-mm = w3.eth.contract(address=mm_data['networks'][networkId]['address'], abi=mm_data['abi'])
+step = w3.eth.contract(address=step_data['address'], abi=step_data['abi'])
+mm = w3.eth.contract(address=mm_data['address'], abi=mm_data['abi'])
 
 with open(sys.argv[1]) as json_file:
     jsonsteps = json.load(json_file)

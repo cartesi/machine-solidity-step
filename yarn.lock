@@ -3,16 +3,11 @@
 
 
 "@cartesi/arbitration@^0.5.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@cartesi/arbitration/-/arbitration-0.4.0.tgz#ed44d66483cb4c36457f46d215a377b0cf0ede6c"
-  integrity sha512-zYXqzxh+BkAgDdb4i5EWzNPuQ3IUH+6FBn4J+S30OWYjwEU+iC7g1MJlxZaKd59f60dsFM8CMyDzCBs3badUjg==
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@cartesi/arbitration/-/arbitration-0.5.0.tgz#55b56ac72bec28b81426ce16c9f979c0e9342a51"
+  integrity sha512-zenQOt4MpCDwmLbgMPo+4TkI4a+SVE5td57P8ZGCTbWY5GbGJ8W52kqNpMBukvKTP2Ur6IA1+3lXddMnzgw46w==
   dependencies:
-    "@cartesi/util" "^0.2.1"
-
-"@cartesi/util@^0.2.1":
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/@cartesi/util/-/util-0.2.1.tgz#3108d778f79ceea89252f816a4726d1cde200878"
-  integrity sha512-+DZ5f/x+8NJlIpplSrWrllsGG7lDE1ruBw58ZDinsaSryt1V4MQKeqpiJgDi0tX+/NvPus0mKaumkKltUUMxSQ==
+    "@cartesi/util" "^0.4.2"
 
 "@cartesi/util@^0.4.2":
   version "0.4.2"

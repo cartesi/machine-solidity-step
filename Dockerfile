@@ -7,12 +7,13 @@ SHELL ["/bin/bash", "--login", "-c"]
 COPY ./contracts ./contracts/
 COPY ./test/aleth-assets/ .
 COPY ./test/rv64-tests/  ./rv64-tests/
-COPY ./prepare_byte_codes.sh .
 COPY ./yarn.lock .
 COPY ./package.json .
+COPY ./tsconfig.json .
+COPY ./buidler.config.ts .
 
 # copy c++ solidity solc
-COPY --from=ethereum/solc:0.5.14 /usr/bin/solc /usr/bin/solc
+COPY --from=ethereum/solc:0.7.1 /usr/bin/solc /usr/bin/solc
 
 
 # Install nodeJS
@@ -24,16 +25,13 @@ RUN apt-get -q update && \
     openssl 
 
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-RUN nvm install 12
+RUN nvm install 14
 RUN npm install -g yarn
 
 # install node/contracts dependencies
 
-# --ignore-scripts to ignore truffle prepare hook
-RUN yarn install --ignore-scripts
-
 # build it
-RUN /bin/bash prepare_byte_codes.sh
+RUN yarn install
 
 # clean up
 RUN apt-get purge git curl -qy && \

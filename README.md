@@ -48,47 +48,43 @@ The Memory Interactor contract is the middleman between the Step and the Memory 
 
 ### Install
 
-Install dependencies
+Install dependencies and build:
 
-    npm install
+    yarn
 
-Compile contracts with
+Having a node listening to 8545, you can deploy using:
 
-    ./node_modules/.bin/truffle compile
-
-Having a node listening to 8545, you can deploy using
-
-    ./node_modules/.bin/truffle deploy
+    yarn deploy
 
 
 ### Run tests
 
-Run step tests with docker
+Run step tests with docker:
 
     docker build . -t cartesi/step-test -f Dockerfile.step
     
     docker run cartesi/step-test
 
-Run ram tests with docker
+Run ram tests with docker:
 
     docker build . -t cartesi/ram-test -f Dockerfile.ram
     
     docker run cartesi/ram-test
 
 
-Build main test docker image with aleth
+Build main test docker image with aleth:
 
-    docker build . -t cartesi/tests
+    docker build . -t cartesi/test
 
-Run step test with docker + aleth
+Run step test with docker + aleth:
 
-    docker run cartesi/tests
+    docker run cartesi/test
 
-Run sequence test with all files
+Run sequence test with all files:
 
     docker run -v <hostpath>:/usr/src/app/proofs/ --entrypoint ./machine-test cartesi/test sequence --network Istanbul --contracts-config sequence_contracts.json
 
-Run sequence test with standar input
+Run sequence test with standard input:
 
     cat <jsonfile> | docker run -i --entrypoint ./machine-test cartesi/test sequence --network Istanbul --contracts-config sequence_contracts.json --cin
 
