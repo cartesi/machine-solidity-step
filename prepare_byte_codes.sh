@@ -44,7 +44,7 @@ fetch_address="1a57ad4fe582cf034c0ad7710762ab9b37121007"
 interrupts_address="fbac75958518c3be70bc335b428ecf071cbbb21c"
 execute_address="053679655a96792b75b218a376e0dd170be8b4f9"
 memory_interactor_address="c52b3d0598675df528b3dfd3336e04298b109447"
-step_address="xyz"
+step_address="f0e0e08c16b500e7650586bef904a991d267e835"
 
 # link contracts binary file with libraries
 solc --link \
