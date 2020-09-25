@@ -2,6 +2,7 @@
     "path": "/usr/src/app/build/",
     "contracts": [
         "BitsManipulationLibrary.bin",
+        "Merkle.bin",
         "MMInstantiator.bin",
         "ShadowAddresses.bin",
         "RiscVConstants.bin",
