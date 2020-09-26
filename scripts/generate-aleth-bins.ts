@@ -9,7 +9,7 @@ import {
 
 import libDeploymentFn from "../deploy/01_libs";
 
-const OUTDIR = process.env.OUTDIR || "./build2";
+const OUTDIR = process.env.OUTDIR || "./build";
 
 async function saveFile(
     fileName: string,
@@ -45,18 +45,33 @@ async function saveRunContractsConfig(contractList: Array<string>) {
         "TestRamMMInstantiator"
     ).map(value => `${value}.bin`);
     const config = {
-        path: path.resolve(OUTDIR),
+        path: path.resolve(OUTDIR) + "/",
         contracts: list
     };
     await saveFile("run_contracts.json", config);
+}
+
+async function saveSequenceContractsConfig(contractList: Array<string>) {
+  const list = changeContract(
+      contractList,
+      "MMInstantiator",
+      "TestNoMerkleMM"
+  ).map(value => `${value}.bin`);
+  const config = {
+      path: path.resolve(OUTDIR) + "/",
+      contracts: list
+  };
+  await saveFile("sequence_contracts.json", config);
 }
 
 async function getDataByHash(
     bre: BuidlerRuntimeEnvironment,
     hash: string
 ): Promise<string> {
-  const tx = await bre.ethers.provider.send('eth_getTransactionByHash', [hash]);
-  return tx.input;
+    const tx = await bre.ethers.provider.send("eth_getTransactionByHash", [
+        hash
+    ]);
+    return tx.input;
 }
 
 async function main() {
@@ -92,6 +107,8 @@ async function main() {
     await saveFile("addresses.json", addresses);
     // build and save run_contracts.json
     await saveRunContractsConfig(contractsOrder);
+    
+    await saveSequenceContractsConfig(contractsOrder);
 
     // Deploy instrumental contracts
     await bre.deployments.deploy("TestRamMMInstantiator", {
@@ -102,7 +119,16 @@ async function main() {
         },
         log: true
     });
-    //@TODO missing contracts here
+
+    // Deploy instrumental contracts
+    await bre.deployments.deploy("TestNoMerkleMM", {
+        from: deployer,
+        libraries: {
+            BitsManipulationLibrary: addresses.BitsManipulationLibrary,
+            Merkle: addresses.Merkle
+        },
+        log: true
+    });
 }
 
 // We recommend this pattern to be able to use async/await everywhere
