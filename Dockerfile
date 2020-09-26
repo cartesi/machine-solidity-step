@@ -7,7 +7,9 @@ SHELL ["/bin/bash", "--login", "-c"]
 COPY ./contracts ./contracts/
 COPY ./test/aleth-assets/ .
 COPY ./test/rv64-tests/  ./rv64-tests/
-COPY ./prepare_byte_codes.sh .
+COPY ./deploy/ ./deploy/
+COPY ./src/ ./src/
+COPY ./scripts/ ./scripts/
 COPY ./yarn.lock .
 COPY ./package.json .
 COPY ./tsconfig.json .
@@ -31,11 +33,12 @@ RUN npm install -g yarn
 
 # install node/contracts dependencies
 
-# --ignore-scripts to ignore prepare hook that compiles contracts using buidler
-RUN yarn install --ignore-scripts
+RUN yarn install
 
 # build it
-RUN /bin/bash prepare_byte_codes.sh
+RUN mkdir build
+RUN npx buidler run ./scripts/generate-aleth-bins.ts
+RUN mv ./build/*.json .
 
 # clean up
 RUN apt-get purge git curl -qy && \
@@ -45,7 +48,7 @@ RUN apt-get purge git curl -qy && \
     rm -rf ./node-modules
 
 # ======================= test runner ============
-FROM cartesi/aleth-test:0.2.0
+FROM cartesi/aleth-test:0.2.1
 WORKDIR /usr/src/app/
 COPY --from=builder /usr/src/app/ . 
 

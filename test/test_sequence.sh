@@ -10,5 +10,5 @@ files=$(ls -d $testFilesPath/*.br)
 for testFile in $files
 do
     echo "Executing test for the file $testFile"
-    brotli -d -c $testFile | docker run -i --entrypoint ./machine-test cartesi/test sequence --network Istanbul --contracts-config sequence_contracts.json --cin
+    brotli -d -c $testFile | docker run -i --rm --entrypoint ./machine-test cartesi/test sequence --network Istanbul --contracts-config sequence_contracts.json --cin
 done
