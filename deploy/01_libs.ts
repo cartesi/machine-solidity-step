@@ -31,12 +31,12 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
     const { deployer } = await getNamedAccounts();
 
     // use pre-deployed contracts, or deploy a new one (development/localhost)
-    const MerkleAddress = await useOrDeploy(bre, deployer, "Merkle");
     const BitsManipulationLibraryAddress = await useOrDeploy(
         bre,
         deployer,
         "BitsManipulationLibrary"
-    );
+        );
+    const MerkleAddress = await useOrDeploy(bre, deployer, "Merkle");
     const MMInstantiatorAddress = await useOrDeploy(
         bre,
         deployer,
@@ -64,6 +64,14 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
         from: deployer,
         log: true
     });
+    const BranchInstructions = await deploy("BranchInstructions", {
+        from: deployer,
+        libraries: {
+            RiscVDecoder: RiscVDecoder.address,
+            RiscVConstants: RiscVConstants.address
+        },
+        log: true
+    });
     const ArithmeticInstructions = await deploy("ArithmeticInstructions", {
         from: deployer,
         libraries: {
@@ -84,14 +92,6 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
         }
     );
     const StandAloneInstructions = await deploy("StandAloneInstructions", {
-        from: deployer,
-        libraries: {
-            RiscVDecoder: RiscVDecoder.address,
-            RiscVConstants: RiscVConstants.address
-        },
-        log: true
-    });
-    const BranchInstructions = await deploy("BranchInstructions", {
         from: deployer,
         libraries: {
             RiscVDecoder: RiscVDecoder.address,

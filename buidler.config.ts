@@ -83,8 +83,10 @@ const config: BuidlerConfig = {
     },
     solc: {
         version: "0.7.1",
+        evmVersion: "istanbul",
         optimizer: {
-            enabled: true
+            enabled: true,
+            runs: 200
         }
     },
     paths: {
