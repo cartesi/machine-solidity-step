@@ -6,7 +6,7 @@
     "info": "npm-scripts-info",
     "prepare": "buidler compile && buidler typechain",
     "test": "buidler test",
-    "clean": "rimraf artifacts && rimraf cache && rimraf deployments/localhost && rimraf src/types/*",
+    "clean": "rimraf artifacts && rimraf cache && rimraf deployments/localhost && rimraf deployments/ramtest && rimraf src/types/*",
     "deploy": "run-s deploy:development",
     "deploy:testnet": "run-s deploy:ropsten deploy:rinkeby deploy:kovan deploy:goerli deploy:matic_testnet deploy:bsc_testnet",
     "deploy:development": "buidler deploy --network localhost",
