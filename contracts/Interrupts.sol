@@ -25,14 +25,12 @@ library Interrupts {
 
     /// @notice Raises an interrupt if any are enabled and pending.
     /// @param mi Memory Interactor with which Step function is interacting.
-    /// @param mmIndex Index corresponding to the instance of Memory Manager that.
-    function raiseInterruptIfAny(uint256 mmIndex, MemoryInteractor mi) public {
-        uint32 mask = getPendingIrqMask(mmIndex, mi);
+    function raiseInterruptIfAny(MemoryInteractor mi) public {
+        uint32 mask = getPendingIrqMask(mi);
         if (mask != 0) {
             uint64 irqNum = ilog2(mask);
             Exceptions.raiseException(
                 mi,
-                mmIndex,
                 irqNum | Exceptions.getMcauseInterruptFlag(),
                 0
             );
@@ -43,9 +41,9 @@ library Interrupts {
     // mip register contains information on pending interrupts.
     // mie register contains the interrupt enabled bits.
     // Reference: riscv-privileged-v1.10 - section 3.1.14 - page 28.
-    function getPendingIrqMask(uint256 mmIndex, MemoryInteractor mi) internal returns (uint32) {
-        uint64 mip = mi.readMip(mmIndex);
-        uint64 mie = mi.readMie(mmIndex);
+    function getPendingIrqMask(MemoryInteractor mi) internal returns (uint32) {
+        uint64 mip = mi.readMip();
+        uint64 mie = mi.readMie();
 
         uint32 pendingInts = uint32(mip & mie);
         // if there are no pending interrupts, return 0.
@@ -58,25 +56,25 @@ library Interrupts {
         // Read privilege level on iflags register.
         // The privilege level is represented by bits 2 and 3 on iflags register.
         // Reference: The Core of Cartesi, v1.02 - figure 1.
-        uint64 priv = mi.readIflagsPrv(mmIndex);
+        uint64 priv = mi.readIflagsPrv();
 
         if (priv == RiscVConstants.getPrvM()) {
             // MSTATUS is the Machine Status Register - it controls the current
             // operating state. The MIE is an interrupt-enable bit for machine mode.
             // MIE for 64bit is stored on location 3 - according to:
             // Reference: riscv-privileged-v1.10 - figure 3.7 - page 20.
-            mstatus = mi.readMstatus(mmIndex);
+            mstatus = mi.readMstatus();
 
             if ((mstatus & RiscVConstants.getMstatusMieMask()) != 0) {
-                enabledInts = uint32(~mi.readMideleg(mmIndex));
+                enabledInts = uint32(~mi.readMideleg());
             }
         } else if (priv == RiscVConstants.getPrvS()) {
             // MIDELEG: Machine trap delegation register
             // mideleg defines if a interrupt can be proccessed by a lower privilege
             // level. If mideleg bit is set, the trap will delegated to the S-Mode.
             // Reference: riscv-privileged-v1.10 - Section 3.1.13 - page 27.
-            mstatus = mi.readMstatus(mmIndex);
-            uint64 mideleg = mi.readMideleg(mmIndex);
+            mstatus = mi.readMstatus();
+            uint64 mideleg = mi.readMideleg();
             enabledInts = uint32(~mideleg);
 
             // SIE: is the register contaning interrupt enabled bits for supervisor mode.
