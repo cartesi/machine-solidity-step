@@ -34,22 +34,20 @@ library HTIF {
     uint64 constant HTIF_DEVICE_YIELD = 2;       //< Used to yield control back to host
 
     // [c++] enum HTIF_commands
-    uint64 constant HTIF_HALT_HALT = 0; 
-    uint64 constant HTIF_CONSOLE_GETCHAR = 0; 
-    uint64 constant HTIF_CONSOLE_PUTCHAR = 1; 
-    uint64 constant HTIF_YIELD_PROGRESS = 0; 
-    uint64 constant HTIF_YIELD_ROLLUP = 1; 
+    uint64 constant HTIF_HALT_HALT = 0;
+    uint64 constant HTIF_CONSOLE_GETCHAR = 0;
+    uint64 constant HTIF_CONSOLE_PUTCHAR = 1;
+    uint64 constant HTIF_YIELD_PROGRESS = 0;
+    uint64 constant HTIF_YIELD_ROLLUP = 1;
 
     /// @notice reads htif
     /// @param mi Memory Interactor with which Step function is interacting.
-    /// @param mmIndex Index corresponding to the instance of Memory Manager
     /// @param addr address to read from
     /// @param wordSize can be uint8, uint16, uint32 or uint64
     /// @return bool if read was successfull
     /// @return uint64 pval
     function htifRead(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint64 addr,
         uint64 wordSize
     )
@@ -61,9 +59,9 @@ library HTIF {
         }
 
         if (addr == HTIF_TOHOST_ADDR_CONST) {
-            return (true, mi.readHtifTohost(mmIndex));
+            return (true, mi.readHtifTohost());
         } else if (addr == HTIF_FROMHOST_ADDR_CONST) {
-            return (true, mi.readHtifFromhost(mmIndex));
+            return (true, mi.readHtifFromhost());
         } else {
             return (false, 0);
         }
@@ -71,14 +69,12 @@ library HTIF {
 
     /// @notice write htif
     /// @param mi Memory Interactor with which Step function is interacting.
-    /// @param mmIndex Index corresponding to the instance of Memory Manager that
     /// @param addr address to read from
     /// @param val value to be written
     /// @param wordSize can be uint8, uint16, uint32 or uint64
     /// @return bool if write was successfull
     function htifWrite(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint64 addr,
         uint64 val,
         uint64 wordSize
@@ -90,9 +86,9 @@ library HTIF {
             return false;
         }
         if (addr == HTIF_TOHOST_ADDR_CONST) {
-            return htifWriteTohost(mi, mmIndex, val);
+            return htifWriteTohost(mi, val);
         } else if (addr == HTIF_FROMHOST_ADDR_CONST) {
-            mi.writeHtifFromhost(mmIndex, val);
+            mi.writeHtifFromhost(val);
             return true;
         } else {
             return false;
@@ -100,39 +96,36 @@ library HTIF {
     }
 
     // Internal functions
-    function htifWriteFromhost(MemoryInteractor mi, uint256 mmIndex, uint64 val)
+    function htifWriteFromhost(MemoryInteractor mi, uint64 val)
     internal returns (bool)
     {
-        mi.writeHtifFromhost(mmIndex, val);
+        mi.writeHtifFromhost(val);
         // TO-DO: check if h is interactive? reset from host? pollConsole?
         return true;
     }
 
-    function htifWriteTohost(MemoryInteractor mi, uint256 mmIndex, uint64 tohost)
+    function htifWriteTohost(MemoryInteractor mi, uint64 tohost)
     internal returns (bool)
     {
         uint32 device = uint32(tohost >> 56);
         uint32 cmd = uint32((tohost >> 48) & 0xff);
         uint64 payload = uint32((tohost & (~(uint256(1) >> 16))));
 
-        mi.writeHtifTohost(mmIndex, tohost);
+        mi.writeHtifTohost(tohost);
 
         if (device == HTIF_DEVICE_HALT) {
             return htifHalt(
                 mi,
-                mmIndex,
                 cmd,
                 payload);
         } else if (device == HTIF_DEVICE_CONSOLE) {
             return htifConsole(
                 mi,
-                mmIndex,
                 cmd,
                 payload);
         } else if (device == HTIF_DEVICE_YIELD) {
             return htifYield(
                 mi,
-                mmIndex,
                 cmd,
                 payload);
         } else {
@@ -142,42 +135,39 @@ library HTIF {
 
     function htifHalt(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint64 cmd,
         uint64 payload)
     internal returns (bool)
     {
         if (cmd == HTIF_HALT_HALT && ((payload & 1) == 1) ) {
             //set iflags to halted
-            mi.setIflagsH(mmIndex, true);
+            mi.setIflagsH(true);
         }
         return true;
     }
 
     function htifYield(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint64 cmd,
         uint64 payload)
     internal returns (bool)
     {
         // TO-DO: check if h is yieldable?
-        mi.setIflagsY(mmIndex, true);
-        mi.writeHtifFromhost(mmIndex, (HTIF_DEVICE_YIELD << 56) | cmd << 48);
+        mi.setIflagsY(true);
+        mi.writeHtifFromhost((HTIF_DEVICE_YIELD << 56) | cmd << 48);
         return true;
     }
 
     function htifConsole(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint64 cmd,
         uint64 payload)
     internal returns (bool)
     {
         if (cmd == HTIF_CONSOLE_PUTCHAR) {
-            htifPutchar(mi, mmIndex);
+            htifPutchar(mi);
         } else if (cmd == HTIF_CONSOLE_GETCHAR) {
-            htifGetchar(mi, mmIndex);
+            htifGetchar(mi);
         } else {
             // Unknown HTIF console commands are silently ignored
             return true;
@@ -188,14 +178,14 @@ library HTIF {
     returns (bool)
     {
         // TO-DO: what to do in the blockchain? Generate event?
-        mi.writeHtifFromhost(mmIndex, (HTIF_DEVICE_CONSOLE << 56) | uint64(HTIF_CONSOLE_PUTCHAR) << 48);
+        mi.writeHtifFromhost((HTIF_DEVICE_CONSOLE << 56) | uint64(HTIF_CONSOLE_PUTCHAR) << 48);
         return true;
     }
 
     function htifGetchar(MemoryInteractor mi, uint256 mmIndex) internal
     returns (bool)
     {
-        mi.writeHtifFromhost(mmIndex, (HTIF_DEVICE_CONSOLE << 56) | uint64(HTIF_CONSOLE_GETCHAR) << 48);
+        mi.writeHtifFromhost((HTIF_DEVICE_CONSOLE << 56) | uint64(HTIF_CONSOLE_GETCHAR) << 48);
         return true;
     }
 
