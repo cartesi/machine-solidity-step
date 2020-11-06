@@ -21,26 +21,24 @@ import "../VirtualMemory.sol";
 
 
 library S_Instructions {
-    function getRs1ImmRs2(MemoryInteractor mi, uint256 mmIndex, uint32 insn)
+    function getRs1ImmRs2(MemoryInteractor mi, uint32 insn)
     internal returns(uint64 rs1, int32 imm, uint64 val)
     {
-        rs1 = mi.readX(mmIndex, RiscVDecoder.insnRs1(insn));
+        rs1 = mi.readX(RiscVDecoder.insnRs1(insn));
         imm = RiscVDecoder.insnSImm(insn);
-        val = mi.readX(mmIndex, RiscVDecoder.insnRs2(insn));
+        val = mi.readX(RiscVDecoder.insnRs2(insn));
     }
 
     function sb(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint32 insn
     )
     public returns(bool)
     {
-        (uint64 vaddr, int32 imm, uint64 val) = getRs1ImmRs2(mi, mmIndex, insn);
+        (uint64 vaddr, int32 imm, uint64 val) = getRs1ImmRs2(mi, insn);
         // 8 == uint8
         return VirtualMemory.writeVirtualMemory(
             mi,
-            mmIndex,
             8,
             vaddr + uint64(imm),
             val
@@ -49,16 +47,14 @@ library S_Instructions {
 
     function sh(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint32 insn
         )
     public returns(bool)
     {
-        (uint64 vaddr, int32 imm, uint64 val) = getRs1ImmRs2(mi, mmIndex, insn);
+        (uint64 vaddr, int32 imm, uint64 val) = getRs1ImmRs2(mi, insn);
         // 16 == uint16
         return VirtualMemory.writeVirtualMemory(
             mi,
-            mmIndex,
             16,
             vaddr + uint64(imm),
             val
@@ -67,16 +63,14 @@ library S_Instructions {
 
     function sw(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint32 insn
     )
     public returns(bool)
     {
-        (uint64 vaddr, int32 imm, uint64 val) = getRs1ImmRs2(mi, mmIndex, insn);
+        (uint64 vaddr, int32 imm, uint64 val) = getRs1ImmRs2(mi, insn);
         // 32 == uint32
         return VirtualMemory.writeVirtualMemory(
             mi,
-            mmIndex,
             32,
             vaddr + uint64(imm),
             val
@@ -85,16 +79,14 @@ library S_Instructions {
 
     function sd(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint32 insn
     )
     public returns(bool)
     {
-        (uint64 vaddr, int32 imm, uint64 val) = getRs1ImmRs2(mi, mmIndex, insn);
+        (uint64 vaddr, int32 imm, uint64 val) = getRs1ImmRs2(mi, insn);
         // 64 == uint64
         return VirtualMemory.writeVirtualMemory(
             mi,
-            mmIndex,
             64,
             vaddr + uint64(imm),
             val
