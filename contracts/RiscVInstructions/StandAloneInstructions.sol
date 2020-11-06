@@ -25,7 +25,6 @@ library StandAloneInstructions {
     // Reference: riscv-spec-v2.2.pdf -  Page 14
     function executeAuipc(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint32 insn,
         uint64 pc
     ) public
@@ -33,9 +32,9 @@ library StandAloneInstructions {
         uint32 rd = RiscVDecoder.insnRd(insn);
 
         if (rd != 0) {
-            mi.writeX(mmIndex, rd, pc + uint64(RiscVDecoder.insnUImm(insn)));
+            mi.writeX(rd, pc + uint64(RiscVDecoder.insnUImm(insn)));
         }
-        //return advanceToNextInsn(mi, mmIndex, pc);
+        //return advanceToNextInsn(mi, pc);
     }
 
     // LUI (i.e load upper immediate). Is used to build 32-bit constants and uses
@@ -44,16 +43,15 @@ library StandAloneInstructions {
     // Reference: riscv-spec-v2.2.pdf -  Section 2.5 - page 13
     function executeLui(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint32 insn
     ) public
     {
         uint32 rd = RiscVDecoder.insnRd(insn);
 
         if (rd != 0) {
-            mi.writeX(mmIndex, rd, uint64(RiscVDecoder.insnUImm(insn)));
+            mi.writeX(rd, uint64(RiscVDecoder.insnUImm(insn)));
         }
-        //return advanceToNextInsn(mi, mmIndex, pc);
+        //return advanceToNextInsn(mi, pc);
     }
 
     // JALR (i.e Jump and Link Register). uses the I-type encoding. The target
@@ -63,25 +61,24 @@ library StandAloneInstructions {
     // Reference: riscv-spec-v2.2.pdf -  Section 2.5 - page 16
     function executeJalr(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint32 insn,
         uint64 pc
     )
     public returns (bool, uint64)
     {
-        uint64 newPc = uint64(int64(mi.readX(mmIndex, RiscVDecoder.insnRs1(insn))) + int64(RiscVDecoder.insnIImm(insn))) & ~uint64(1);
+        uint64 newPc = uint64(int64(mi.readX(RiscVDecoder.insnRs1(insn))) + int64(RiscVDecoder.insnIImm(insn))) & ~uint64(1);
 
         if ((newPc & 3) != 0) {
             return (false, newPc);
-            //return raiseMisalignedFetchException(mi, mmIndex, newPc);
+            //return raiseMisalignedFetchException(mi, newPc);
         }
         uint32 rd = RiscVDecoder.insnRd(insn);
 
         if (rd != 0) {
-            mi.writeX(mmIndex, rd, pc + 4);
+            mi.writeX(rd, pc + 4);
         }
         return (true, newPc);
-        //return executeJump(mi, mmIndex, newPc);
+        //return executeJump(mi, newPc);
     }
 
     // JAL (i.e Jump and Link). JImmediate encondes a signed offset in multiples
@@ -90,7 +87,6 @@ library StandAloneInstructions {
     // Reference: riscv-spec-v2.2.pdf -  Section 2.5 - page 16
     function executeJal(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint32 insn,
         uint64 pc
     )
@@ -100,15 +96,15 @@ library StandAloneInstructions {
 
         if ((newPc & 3) != 0) {
             return (false, newPc);
-            //return raiseMisalignedFetchException(mi, mmIndex, newPc);
+            //return raiseMisalignedFetchException(mi, newPc);
         }
         uint32 rd = RiscVDecoder.insnRd(insn);
 
         if (rd != 0) {
-            mi.writeX(mmIndex, rd, pc + 4);
+            mi.writeX(rd, pc + 4);
         }
         return (true, newPc);
-        //return executeJump(mi, mmIndex, newPc);
+        //return executeJump(mi, newPc);
     }
 
 }
