@@ -29,11 +29,10 @@ library PMA {
 
     /// @notice Finds PMA that contains target physical address.
     /// @param mi Memory Interactor with which Step function is interacting.
-    /// @param mmIndex Index corresponding to the instance of Memory Manager that
     //  contains the logs for this Step execution.
     /// @param paddr Target physical address.
     /// @return start of pma if found. If not, returns (0)
-    function findPmaEntry(MemoryInteractor mi, uint256 mmIndex, uint64 paddr) public returns (uint64) {
+    function findPmaEntry(MemoryInteractor mi, uint64 paddr) public returns (uint64) {
         // Hard coded ram address starts at 0x800
         // In total there are 32 PMAs from processor shadow to Flash disk 7.
         // PMA 0 - describes RAM and is hardcoded to address 0x800
@@ -44,9 +43,9 @@ library PMA {
         uint64 lastPma = 62; // 0 - 31 * 2 words
 
         for (uint64 i = 0; i <= lastPma; i += 2) {
-            uint64 startWord = mi.memoryRead(mmIndex, pmaAddress + (i * 8));
+            uint64 startWord = mi.memoryRead(pmaAddress + (i * 8));
 
-            uint64 lengthWord = mi.memoryRead(mmIndex, pmaAddress + ((i * 8 + 8)));
+            uint64 lengthWord = mi.memoryRead(pmaAddress + ((i * 8 + 8)));
 
             uint64 pmaStart = pmaGetStart(startWord);
             uint64 pmaLength = pmaGetLength(lengthWord);
