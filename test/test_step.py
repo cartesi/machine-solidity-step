@@ -54,8 +54,8 @@ def test_json_steps(json_steps, w3, start):
                 except ValueError as e:
                     print("proveWrite REVERT transaction")
                     print(e)
-    
-        try: 
+
+        try:
             tx_hash = mm.functions.finishProofPhase(mm_index).transact({'from': provider, 'gas': 6283185})
             tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
             if receipt['status'] == 0:
@@ -64,10 +64,18 @@ def test_json_steps(json_steps, w3, start):
             print("finishProofPhase REVERT transaction")
             print(e)
 
+        try:
+            (positions, values, operations) = mm.functions.getRWArrays(mm_index).transact({'from': provider, 'gas': 6283185})
+            tx_receipt = w3.eth.waitForTransactionReceipt(tx_hash)
+            if receipt['status'] == 0:
+                raise ValueError(receipt['transactionHash'].hex())
+        except ValueError as e:
+            print("getRWArrats REVERT transaction")
+            print(e)
 
         print("Calling Step ({}/{}):".format(index + 1, total))
         try:
-            step_tx = step.functions.step(mm_index).transact({'from': client, 'gas': 6283185})
+            step_tx = step.functions.step(positions, values, operations).transact({'from': client, 'gas': 6283185})
             tx_receipt = w3.eth.waitForTransactionReceipt(step_tx)
             if receipt['status'] == 0:
                 raise ValueError(receipt['transactionHash'].hex())
