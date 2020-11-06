@@ -24,19 +24,20 @@ import "./Step.sol";
 contract TestRamStep is Step {
     constructor(address miAddress) Step(miAddress) {}
     /// @notice Run step define by a MemoryManager instance until halt.
-    /// @param mmIndex Specific index of the Memory Manager that contains this Step's access logs
     /// @return Returns an cycle number.
-    function stepUntilHalt(uint mmIndex) public returns (uint64) {
+    function stepUntilHalt() public returns (uint64) {
         uint64 halt = 0;
+        uint64[] memory rwPos;
+        bytes8[] memory rwValues;
+        bool[] memory isRead;
 
         while (halt == 0) {
-            step(mmIndex);
-            halt = mi.readIflagsH(mmIndex);
+            step(rwPos, rwValues, isRead);
+            halt = mi.readIflagsH();
         }
 
-        uint64 mcycle = mi.readMcycle(mmIndex);
+        uint64 mcycle = mi.readMcycle();
 
         return mcycle;
     }
-
 }
