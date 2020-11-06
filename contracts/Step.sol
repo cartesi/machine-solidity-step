@@ -103,7 +103,6 @@ contract Step {
     }
 
     function endStep(uint8 exitCode) internal returns (uint8, uint256) {
-        mi.finishReplayPhase();
         emit StepGiven(exitCode);
 
         return (exitCode, mi.getRWIndex());

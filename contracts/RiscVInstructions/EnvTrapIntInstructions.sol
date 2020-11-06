@@ -25,7 +25,7 @@ import "../Exceptions.sol";
 
 library EnvTrapIntInstructions {
     function executeECALL(
-        MemoryInteractor mi,
+        MemoryInteractor mi
     ) public
     {
         uint64 priv = mi.readIflagsPrv();

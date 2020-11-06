@@ -74,7 +74,7 @@ library CSR {
     /// @param csrAddr Address of CSR in file.
     /// @return Returns the status of the operation (true for success, false otherwise).
     /// @return Register value.
-    function readCsr(MemoryInteractor mi, uint256 uint32 csrAddr)
+    function readCsr(MemoryInteractor mi, uint32 csrAddr)
     public returns (bool, uint64)
     {
         // Attemps to access a CSR without appropriate privilege level raises a
@@ -295,7 +295,7 @@ library CSR {
         return ((csrAddr & 0xc00) == 0xc00);
     }
 
-    function writeCsrMstatus(MemoryInteractor mi, uint256 uint64 val)
+    function writeCsrMstatus(MemoryInteractor mi, uint64 val)
     internal returns(bool)
     {
         uint64 cMstatus = mi.readMstatus() & RiscVConstants.getMstatusRMask();

@@ -426,7 +426,7 @@ contract MemoryInteractor {
     }
 
     // Memory Read without endianess swap
-    function pureMemoryRead(uint256 index, uint64 readAddress) internal returns (uint64) {
+    function pureMemoryRead(uint64 _readAddress) internal returns (uint64) {
         return uint64(memoryAccessManager(_readAddress, true));
     }
 

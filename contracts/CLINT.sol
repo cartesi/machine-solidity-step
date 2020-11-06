@@ -36,6 +36,7 @@ library CLINT {
     /// @return bool if read was successfull
     /// @return uint64 pval
     function clintRead(
+        MemoryInteractor mi,
         uint64 offset,
         uint64 wordSize
     )
@@ -89,7 +90,7 @@ library CLINT {
     }
 
     // internal functions
-    function clintReadMsip(MemoryInteractor mi, uint256 uint64 wordSize)
+    function clintReadMsip(MemoryInteractor mi, uint64 wordSize)
     internal returns (bool, uint64)
     {
         if (wordSize == 32) {
@@ -102,7 +103,7 @@ library CLINT {
         return (false, 0);
     }
 
-    function clintReadMtime(MemoryInteractor mi, uint256 uint64 wordSize)
+    function clintReadMtime(MemoryInteractor mi, uint64 wordSize)
     internal returns (bool, uint64)
     {
         if (wordSize == 64) {
@@ -111,7 +112,7 @@ library CLINT {
         return (false, 0);
     }
 
-    function clintReadMtimecmp(MemoryInteractor mi, uint256 uint64 wordSize)
+    function clintReadMtimecmp(MemoryInteractor mi, uint64 wordSize)
     internal returns (bool, uint64)
     {
         if (wordSize == 64) {

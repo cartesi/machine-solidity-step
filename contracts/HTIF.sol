@@ -174,7 +174,7 @@ library HTIF {
         }
     }
 
-    function htifPutchar(MemoryInteractor mi, uint256 mmIndex) internal
+    function htifPutchar(MemoryInteractor mi) internal
     returns (bool)
     {
         // TO-DO: what to do in the blockchain? Generate event?
@@ -182,7 +182,7 @@ library HTIF {
         return true;
     }
 
-    function htifGetchar(MemoryInteractor mi, uint256 mmIndex) internal
+    function htifGetchar(MemoryInteractor mi) internal
     returns (bool)
     {
         mi.writeHtifFromhost((HTIF_DEVICE_CONSOLE << 56) | uint64(HTIF_CONSOLE_GETCHAR) << 48);

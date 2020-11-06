@@ -391,7 +391,7 @@ library VirtualMemory {
         return (false, 0);
     }
 
-    function readRamUint64(MemoryInteractor mi, uint256 uint64 paddr)
+    function readRamUint64(MemoryInteractor mi, uint64 paddr)
     internal returns (bool, uint64)
     {
         uint64 pmaStart = PMA.findPmaEntry(mi, paddr);
