@@ -26,41 +26,36 @@ import "../Exceptions.sol";
 library EnvTrapIntInstructions {
     function executeECALL(
         MemoryInteractor mi,
-        uint256 mmIndex
     ) public
     {
-        uint64 priv = mi.readIflagsPrv(mmIndex);
-        uint64 mtval = mi.readMtval(mmIndex);
+        uint64 priv = mi.readIflagsPrv();
+        uint64 mtval = mi.readMtval();
         // TO-DO: Are parameter valuation order deterministic? If so, we dont need to allocate memory
         Exceptions.raiseException(
             mi,
-            mmIndex,
             Exceptions.getMcauseEcallBase() + priv,
             mtval
         );
     }
 
     function executeEBREAK(
-        MemoryInteractor mi,
-        uint256 mmIndex
+        MemoryInteractor mi
     ) public
     {
         Exceptions.raiseException(
             mi,
-            mmIndex,
             Exceptions.getMcauseBreakpoint(),
-            mi.readMtval(mmIndex)
+            mi.readMtval()
         );
     }
 
     function executeSRET(
-        MemoryInteractor mi,
-        uint256 mmIndex
+        MemoryInteractor mi
     )
     public returns (bool)
     {
-        uint64 priv = mi.readIflagsPrv(mmIndex);
-        uint64 mstatus = mi.readMstatus(mmIndex);
+        uint64 priv = mi.readIflagsPrv();
+        uint64 mstatus = mi.readMstatus();
 
         if (priv < RiscVConstants.getPrvS() || (priv == RiscVConstants.getPrvS() && (mstatus & RiscVConstants.getMstatusTsrMask() != 0))) {
             return false;
@@ -74,27 +69,26 @@ library EnvTrapIntInstructions {
             mstatus |= RiscVConstants.getMstatusSpieMask();
             // set SPP to U
             mstatus &= ~RiscVConstants.getMstatusSppMask();
-            mi.writeMstatus(mmIndex, mstatus);
+            mi.writeMstatus(mstatus);
             if (priv != spp) {
-                mi.setPriv(mmIndex, spp);
+                mi.setPriv(spp);
             }
-            mi.writePc(mmIndex, mi.readSepc(mmIndex));
+            mi.writePc(mi.readSepc());
             return true;
         }
     }
 
     function executeMRET(
-        MemoryInteractor mi,
-        uint256 mmIndex
+        MemoryInteractor mi
     )
     public returns(bool)
     {
-        uint64 priv = mi.readIflagsPrv(mmIndex);
+        uint64 priv = mi.readIflagsPrv();
 
         if (priv < RiscVConstants.getPrvM()) {
             return false;
         } else {
-            uint64 mstatus = mi.readMstatus(mmIndex);
+            uint64 mstatus = mi.readMstatus();
             uint64 mpp = (mstatus & RiscVConstants.getMstatusMppMask()) >> RiscVConstants.getMstatusMppShift();
             // set IE state to previous IE state
             uint64 mpie = (mstatus & RiscVConstants.getMstatusMpieMask()) >> RiscVConstants.getMstatusMpieShift();
@@ -104,33 +98,32 @@ library EnvTrapIntInstructions {
             mstatus |= RiscVConstants.getMstatusMpieMask();
             // set MPP to U
             mstatus &= ~RiscVConstants.getMstatusMppMask();
-            mi.writeMstatus(mmIndex, mstatus);
+            mi.writeMstatus(mstatus);
 
             if (priv != mpp) {
-                mi.setPriv(mmIndex, mpp);
+                mi.setPriv(mpp);
             }
-            mi.writePc(mmIndex, mi.readMepc(mmIndex));
+            mi.writePc(mi.readMepc());
             return true;
         }
     }
 
     function executeWFI(
-        MemoryInteractor mi,
-        uint256 mmIndex
+        MemoryInteractor mi
     )
     public returns(bool)
     {
-        uint64 priv = mi.readIflagsPrv(mmIndex);
-        uint64 mstatus = mi.readMstatus(mmIndex);
+        uint64 priv = mi.readIflagsPrv();
+        uint64 mstatus = mi.readMstatus();
 
         if (priv == RiscVConstants.getPrvU() || (priv == RiscVConstants.getPrvS() && (mstatus & RiscVConstants.getMstatusTwMask() != 0))) {
             return false;
         } else {
-            uint64 mip = mi.readMip(mmIndex);
-            uint64 mie = mi.readMie(mmIndex);
+            uint64 mip = mi.readMip();
+            uint64 mie = mi.readMie();
             // Go to power down if no enable interrupts are pending
             if ((mip & mie) == 0) {
-                mi.setIflagsI(mmIndex, true);
+                mi.setIflagsI(true);
             }
             return true;
         }
