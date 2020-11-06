@@ -58,7 +58,6 @@ library VirtualMemory {
     /// @return Word with receiveing value.
     function readVirtualMemory(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint64 wordSize,
         uint64 vaddr
     )
@@ -69,7 +68,6 @@ library VirtualMemory {
             // Word is not aligned - raise exception
             Exceptions.raiseException(
                 mi,
-                mmIndex,
                 Exceptions.getMcauseLoadAddressMisaligned(),
                 vaddr
             );
@@ -77,7 +75,6 @@ library VirtualMemory {
         } else {
             (bool translateSuccess, uint64 paddr) = translateVirtualAddress(
                 mi,
-                mmIndex,
                 vaddr,
                 RiscVConstants.getPteXwrReadShift()
             );
@@ -86,37 +83,33 @@ library VirtualMemory {
                 // translation failed - raise exception
                 Exceptions.raiseException(
                     mi,
-                    mmIndex,
                     Exceptions.getMcauseLoadPageFault(),
                     vaddr
                 );
                 return (false, 0);
             }
-            uint64vars[PMA_START] = PMA.findPmaEntry(mi, mmIndex, paddr);
+            uint64vars[PMA_START] = PMA.findPmaEntry(mi, paddr);
             if (PMA.pmaGetIstartE(uint64vars[PMA_START]) || !PMA.pmaGetIstartR(uint64vars[PMA_START])) {
                 // PMA is either excluded or we dont have permission to write - raise exception
                 Exceptions.raiseException(
                     mi,
-                    mmIndex,
                     Exceptions.getMcauseLoadAccessFault(),
                     vaddr
                 );
                 return (false, 0);
             } else if (PMA.pmaGetIstartM(uint64vars[PMA_START])) {
-                return (true, mi.readMemory(mmIndex, paddr, wordSize));
+                return (true, mi.readMemory(paddr, wordSize));
             }else {
                 bool success = false;
                 if (PMA.pmaIsHTIF(uint64vars[PMA_START])) {
                     (success, uint64vars[VAL]) = HTIF.htifRead(
                         mi,
-                        mmIndex,
                         paddr,
                         wordSize
                     );
                 } else if (PMA.pmaIsCLINT(uint64vars[PMA_START])) {
                     (success, uint64vars[VAL]) = CLINT.clintRead(
                         mi,
-                        mmIndex,
                         paddr,
                         wordSize
                     );
@@ -124,7 +117,6 @@ library VirtualMemory {
                 if (!success) {
                     Exceptions.raiseException(
                         mi,
-                        mmIndex,
                         Exceptions.getMcauseLoadAccessFault(),
                         vaddr
                     );
@@ -141,7 +133,6 @@ library VirtualMemory {
     /// @return True if write was succesfull, false if not.
     function writeVirtualMemory(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint64 wordSize,
         uint64 vaddr,
         uint64 val
@@ -154,7 +145,6 @@ library VirtualMemory {
             // Word is not aligned - raise exception
             Exceptions.raiseException(
                 mi,
-                mmIndex,
                 Exceptions.getMcauseStoreAmoAddressMisaligned(),
                 vaddr
             );
@@ -163,7 +153,6 @@ library VirtualMemory {
             bool translateSuccess;
             (translateSuccess, uint64vars[PADDR]) = translateVirtualAddress(
                 mi,
-                mmIndex,
                 vaddr,
                 RiscVConstants.getPteXwrWriteShift()
             );
@@ -172,19 +161,17 @@ library VirtualMemory {
                 // translation failed - raise exception
                 Exceptions.raiseException(
                     mi,
-                    mmIndex,
                     Exceptions.getMcauseStoreAmoPageFault(),
                     vaddr);
 
                 return false;
             }
-            uint64vars[PMA_START] = PMA.findPmaEntry(mi, mmIndex, uint64vars[PADDR]);
+            uint64vars[PMA_START] = PMA.findPmaEntry(mi, uint64vars[PADDR]);
 
             if (PMA.pmaGetIstartE(uint64vars[PMA_START]) || !PMA.pmaGetIstartW(uint64vars[PMA_START])) {
                 // PMA is either excluded or we dont have permission to write - raise exception
                 Exceptions.raiseException(
                     mi,
-                    mmIndex,
                     Exceptions.getMcauseStoreAmoAccessFault(),
                     vaddr
                 );
@@ -192,7 +179,6 @@ library VirtualMemory {
             } else if (PMA.pmaGetIstartM(uint64vars[PMA_START])) {
                 //write to memory
                 mi.writeMemory(
-                    mmIndex,
                     uint64vars[PADDR],
                     val,
                     wordSize
@@ -203,12 +189,10 @@ library VirtualMemory {
                 if (PMA.pmaIsHTIF(uint64vars[PMA_START])) {
                     if (!HTIF.htifWrite(
                        mi,
-                       mmIndex,
                        PMA.pmaGetStart(uint64vars[PMA_START]), val, wordSize
                     )) {
                         Exceptions.raiseException(
                             mi,
-                            mmIndex,
                             Exceptions.getMcauseStoreAmoAccessFault(),
                             vaddr
                         );
@@ -217,12 +201,10 @@ library VirtualMemory {
                 } else if (PMA.pmaIsCLINT(uint64vars[PMA_START])) {
                     if (!CLINT.clintWrite(
                             mi,
-                            mmIndex,
                             PMA.pmaGetStart(uint64vars[PMA_START]), val, wordSize
                     )) {
                         Exceptions.raiseException(
                             mi,
-                            mmIndex,
                             Exceptions.getMcauseStoreAmoAccessFault(),
                             vaddr
                         );
@@ -243,7 +225,6 @@ library VirtualMemory {
     // Reference: riscv-priv-spec-1.10.pdf - Section 4.3.2, page 62.
     function translateVirtualAddress(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint64 vaddr,
         int xwrShift
     )
@@ -260,10 +241,10 @@ library VirtualMemory {
         // Reads privilege level on iflags register. The privilege level is located
         // on bits 2 and 3.
         // Reference: The Core of Cartesi, v1.02 - figure 1.
-        intvars[PRIV] = mi.readIflagsPrv(mmIndex);
+        intvars[PRIV] = mi.readIflagsPrv();
 
         //readMstatus
-        uint64vars[MSTATUS] = mi.memoryRead(mmIndex, ShadowAddresses.getMstatus());
+        uint64vars[MSTATUS] = mi.memoryRead(ShadowAddresses.getMstatus());
 
         // When MPRV is set, data loads and stores use privilege in MPP
         // instead of the current privilege level (code access is unaffected)
@@ -283,7 +264,7 @@ library VirtualMemory {
         // Holds MODE, Physical page number (PPN) and address space identifier (ASID)
         // MODE is located on bits 60 to 63 for RV64.
         // Reference: riscv-priv-spec-1.10.pdf - Section 4.1.12, page 56.
-        uint64vars[SATP] = mi.memoryRead(mmIndex, ShadowAddresses.getSatp());
+        uint64vars[SATP] = mi.memoryRead(ShadowAddresses.getSatp());
         // In RV64, mode can be
         //   0: Bare: No translation or protection
         //   8: sv39: Page-based 39-bit virtual addressing
@@ -334,7 +315,7 @@ library VirtualMemory {
             uint64vars[PTE_ADDR] += vpn << uint64(intvars[PTE_SIZE_LOG2]);
             //Read page table entry from physical memory
             bool readRamSucc;
-            (readRamSucc, uint64vars[PTE]) = readRamUint64(mi, mmIndex, uint64vars[PTE_ADDR]);
+            (readRamSucc, uint64vars[PTE]) = readRamUint64(mi, uint64vars[PTE_ADDR]);
 
             if (!readRamSucc) {
                 return(false, 0);
@@ -397,7 +378,6 @@ library VirtualMemory {
                 if (updatePte) {
                     writeRamUint64(
                         mi,
-                        mmIndex,
                         uint64vars[PTE_ADDR],
                         uint64vars[PTE]
                     );
@@ -411,30 +391,28 @@ library VirtualMemory {
         return (false, 0);
     }
 
-    function readRamUint64(MemoryInteractor mi, uint256 mmIndex, uint64 paddr)
+    function readRamUint64(MemoryInteractor mi, uint256 uint64 paddr)
     internal returns (bool, uint64)
     {
-        uint64 pmaStart = PMA.findPmaEntry(mi, mmIndex, paddr);
+        uint64 pmaStart = PMA.findPmaEntry(mi, paddr);
         if (!PMA.pmaGetIstartM(pmaStart) || !PMA.pmaGetIstartR(pmaStart)) {
             return (false, 0);
         }
-        return (true, mi.readMemory(mmIndex, paddr, 64));
+        return (true, mi.readMemory(paddr, 64));
     }
 
     function writeRamUint64(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint64 paddr,
         uint64 val
     )
     internal returns (bool)
     {
-        uint64 pmaStart = PMA.findPmaEntry(mi, mmIndex, paddr);
+        uint64 pmaStart = PMA.findPmaEntry(mi, paddr);
         if (!PMA.pmaGetIstartM(pmaStart) || !PMA.pmaGetIstartW(pmaStart)) {
             return false;
         }
         mi.writeMemory(
-            mmIndex,
             paddr,
             val,
             64
