@@ -23,209 +23,209 @@ import "./RealTimeClock.sol";
 /// @author Felipe Argento
 /// @notice Implements CSR read logic
 library CSRReads {
-    function readCsrCycle(MemoryInteractor mi, uint256 mmIndex, uint32 csrAddr)
+    function readCsrCycle(MemoryInteractor mi, uint32 csrAddr)
     internal returns(bool, uint64)
     {
-        if (rdcounteren(mi, mmIndex, csrAddr)) {
-            return (true, mi.readMcycle(mmIndex));
+        if (rdcounteren(mi, csrAddr)) {
+            return (true, mi.readMcycle());
         } else {
             return (false, 0);
         }
     }
 
-    function readCsrInstret(MemoryInteractor mi, uint256 mmIndex, uint32 csrAddr)
+    function readCsrInstret(MemoryInteractor mi, uint32 csrAddr)
     internal returns(bool, uint64)
     {
-        if (rdcounteren(mi, mmIndex, csrAddr)) {
-            return (true, mi.readMinstret(mmIndex));
+        if (rdcounteren(mi, csrAddr)) {
+            return (true, mi.readMinstret());
         } else {
             return (false, 0);
         }
     }
 
-    function readCsrTime(MemoryInteractor mi, uint256 mmIndex, uint32 csrAddr)
+    function readCsrTime(MemoryInteractor mi, uint32 csrAddr)
     internal returns(bool, uint64)
     {
-        if (rdcounteren(mi, mmIndex, csrAddr)) {
-            uint64 mtime = RealTimeClock.rtcCycleToTime(mi.readMcycle(mmIndex));
+        if (rdcounteren(mi, csrAddr)) {
+            uint64 mtime = RealTimeClock.rtcCycleToTime(mi.readMcycle());
             return (true, mtime);
         } else {
             return (false, 0);
         }
     }
 
-    function readCsrSstatus(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrSstatus(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMstatus(mmIndex) & RiscVConstants.getSstatusRMask());
+        return (true, mi.readMstatus() & RiscVConstants.getSstatusRMask());
     }
 
-    function readCsrSie(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrSie(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        uint64 mie = mi.readMie(mmIndex);
-        uint64 mideleg = mi.readMideleg(mmIndex);
+        uint64 mie = mi.readMie();
+        uint64 mideleg = mi.readMideleg();
 
         return (true, mie & mideleg);
     }
 
-    function readCsrStvec(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrStvec(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readStvec(mmIndex));
+        return (true, mi.readStvec());
     }
 
-    function readCsrScounteren(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrScounteren(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readScounteren(mmIndex));
+        return (true, mi.readScounteren());
     }
 
-    function readCsrSscratch(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrSscratch(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readSscratch(mmIndex));
+        return (true, mi.readSscratch());
     }
 
-    function readCsrSepc(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrSepc(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readSepc(mmIndex));
+        return (true, mi.readSepc());
     }
 
-    function readCsrScause(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrScause(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readScause(mmIndex));
+        return (true, mi.readScause());
     }
 
-    function readCsrStval(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrStval(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readStval(mmIndex));
+        return (true, mi.readStval());
     }
 
-    function readCsrSip(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrSip(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        uint64 mip = mi.readMip(mmIndex);
-        uint64 mideleg = mi.readMideleg(mmIndex);
+        uint64 mip = mi.readMip();
+        uint64 mideleg = mi.readMideleg();
         return (true, mip & mideleg);
     }
 
-    function readCsrSatp(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrSatp(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        uint64 mstatus = mi.readMstatus(mmIndex);
-        uint64 priv = mi.readIflagsPrv(mmIndex);
+        uint64 mstatus = mi.readMstatus();
+        uint64 priv = mi.readIflagsPrv();
 
         if (priv == RiscVConstants.getPrvS() && (mstatus & RiscVConstants.getMstatusTvmMask() != 0)) {
             return (false, 0);
         } else {
-            return (true, mi.readSatp(mmIndex));
+            return (true, mi.readSatp());
         }
     }
 
-    function readCsrMstatus(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMstatus(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMstatus(mmIndex) & RiscVConstants.getMstatusRMask());
+        return (true, mi.readMstatus() & RiscVConstants.getMstatusRMask());
     }
 
-    function readCsrMisa(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMisa(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMisa(mmIndex));
+        return (true, mi.readMisa());
     }
 
-    function readCsrMedeleg(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMedeleg(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMedeleg(mmIndex));
+        return (true, mi.readMedeleg());
     }
 
-    function readCsrMideleg(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMideleg(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMideleg(mmIndex));
+        return (true, mi.readMideleg());
     }
 
-    function readCsrMie(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMie(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMie(mmIndex));
+        return (true, mi.readMie());
     }
 
-    function readCsrMtvec(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMtvec(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMtvec(mmIndex));
+        return (true, mi.readMtvec());
     }
 
-    function readCsrMcounteren(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMcounteren(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMcounteren(mmIndex));
+        return (true, mi.readMcounteren());
     }
 
-    function readCsrMscratch(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMscratch(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMscratch(mmIndex));
+        return (true, mi.readMscratch());
     }
 
-    function readCsrMepc(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMepc(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMepc(mmIndex));
+        return (true, mi.readMepc());
     }
 
-    function readCsrMcause(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMcause(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMcause(mmIndex));
+        return (true, mi.readMcause());
     }
 
-    function readCsrMtval(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMtval(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMtval(mmIndex));
+        return (true, mi.readMtval());
     }
 
-    function readCsrMip(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMip(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMip(mmIndex));
+        return (true, mi.readMip());
     }
 
-    function readCsrMcycle(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMcycle(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMcycle(mmIndex));
+        return (true, mi.readMcycle());
     }
 
-    function readCsrMinstret(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMinstret(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMinstret(mmIndex));
+        return (true, mi.readMinstret());
     }
 
-    function readCsrMvendorid(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMvendorid(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMvendorid(mmIndex));
+        return (true, mi.readMvendorid());
     }
 
-    function readCsrMarchid(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMarchid(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMarchid(mmIndex));
+        return (true, mi.readMarchid());
     }
 
-    function readCsrMimpid(MemoryInteractor mi, uint256 mmIndex)
+    function readCsrMimpid(MemoryInteractor mi)
     internal returns(bool, uint64)
     {
-        return (true, mi.readMimpid(mmIndex));
+        return (true, mi.readMimpid());
     }
 
     function readCsrFail() internal pure returns(bool, uint64) {
@@ -235,16 +235,16 @@ library CSRReads {
     // Check if counter is enabled. mcounteren control the availability of the
     // hardware performance monitoring counter to the next-lowest priv level.
     // Reference: riscv-privileged-v1.10 - section 3.1.17 - page 32.
-    function rdcounteren(MemoryInteractor mi, uint256 mmIndex, uint32 csrAddr)
+    function rdcounteren(MemoryInteractor mi, uint32 csrAddr)
     internal returns (bool)
     {
         uint64 counteren = RiscVConstants.getMcounterenRwMask();
-        uint64 priv = mi.readIflagsPrv(mmIndex);
+        uint64 priv = mi.readIflagsPrv();
 
         if (priv < RiscVConstants.getPrvM()) {
-            counteren &= mi.readMcounteren(mmIndex);
+            counteren &= mi.readMcounteren();
             if (priv < RiscVConstants.getPrvS()) {
-                counteren &= mi.readScounteren(mmIndex);
+                counteren &= mi.readScounteren();
             }
         }
         return (((counteren >> (csrAddr & 0x1f)) & 1) != 0);
