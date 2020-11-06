@@ -31,15 +31,11 @@ library CLINT {
     uint64 constant CLINT_MTIME_ADDR = 0x0200bff8;
 
     /// @notice reads clint
-    /// @param mi Memory Interactor with which Step function is interacting.
-    /// @param mmIndex Index corresponding to the instance of Memory Manager
     /// @param offset can be uint8, uint16, uint32 or uint64
     /// @param wordSize can be uint8, uint16, uint32 or uint64
     /// @return bool if read was successfull
     /// @return uint64 pval
     function clintRead(
-        MemoryInteractor mi,
-        uint256 mmIndex,
         uint64 offset,
         uint64 wordSize
     )
@@ -47,11 +43,11 @@ library CLINT {
     {
 
         if (offset == CLINT_MSIP0_ADDR) {
-            return clintReadMsip(mi, mmIndex, wordSize);
+            return clintReadMsip(mi, wordSize);
         } else if (offset == CLINT_MTIMECMP_ADDR) {
-            return clintReadMtime(mi, mmIndex, wordSize);
+            return clintReadMtime(mi, wordSize);
         } else if (offset == CLINT_MTIME_ADDR) {
-            return clintReadMtimecmp(mi, mmIndex, wordSize);
+            return clintReadMtimecmp(mi, wordSize);
         } else {
             return (false, 0);
         }
@@ -59,14 +55,12 @@ library CLINT {
 
     /// @notice write to clint
     /// @param mi Memory Interactor with which Step function is interacting.
-    /// @param mmIndex Index corresponding to the instance of Memory Manager
     /// @param offset can be uint8, uint16, uint32 or uint64
     /// @param val to be written
     /// @param wordSize can be uint8, uint16, uint32 or uint64
     /// @return bool if write was successfull
     function clintWrite(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint64 offset,
         uint64 val,
         uint64 wordSize)
@@ -75,17 +69,17 @@ library CLINT {
         if (offset == CLINT_MSIP0_ADDR) {
             if (wordSize == 32) {
                 if ((val & 1) != 0) {
-                    mi.setMip(mmIndex, RiscVConstants.getMipMsipMask());
+                    mi.setMip(RiscVConstants.getMipMsipMask());
                 } else {
-                    mi.resetMip(mmIndex, RiscVConstants.getMipMsipMask());
+                    mi.resetMip(RiscVConstants.getMipMsipMask());
                 }
                 return true;
             }
             return false;
         } else if (offset == CLINT_MTIMECMP_ADDR) {
             if (wordSize == 64) {
-                mi.writeClintMtimecmp(mmIndex, val);
-                mi.resetMip(mmIndex, RiscVConstants.getMipMsipMask());
+                mi.writeClintMtimecmp(val);
+                mi.resetMip(RiscVConstants.getMipMsipMask());
                 return true;
             }
             // partial mtimecmp is not supported
@@ -95,11 +89,11 @@ library CLINT {
     }
 
     // internal functions
-    function clintReadMsip(MemoryInteractor mi, uint256 mmIndex, uint64 wordSize)
+    function clintReadMsip(MemoryInteractor mi, uint256 uint64 wordSize)
     internal returns (bool, uint64)
     {
         if (wordSize == 32) {
-            if ((mi.readMip(mmIndex) & RiscVConstants.getMipMsipMask()) == RiscVConstants.getMipMsipMask()) {
+            if ((mi.readMip() & RiscVConstants.getMipMsipMask()) == RiscVConstants.getMipMsipMask()) {
                 return(true, 1);
             } else {
                 return (true, 0);
@@ -108,20 +102,20 @@ library CLINT {
         return (false, 0);
     }
 
-    function clintReadMtime(MemoryInteractor mi, uint256 mmIndex, uint64 wordSize)
+    function clintReadMtime(MemoryInteractor mi, uint256 uint64 wordSize)
     internal returns (bool, uint64)
     {
         if (wordSize == 64) {
-            return (true, RealTimeClock.rtcCycleToTime(mi.readMcycle(mmIndex)));
+            return (true, RealTimeClock.rtcCycleToTime(mi.readMcycle()));
         }
         return (false, 0);
     }
 
-    function clintReadMtimecmp(MemoryInteractor mi, uint256 mmIndex, uint64 wordSize)
+    function clintReadMtimecmp(MemoryInteractor mi, uint256 uint64 wordSize)
     internal returns (bool, uint64)
     {
         if (wordSize == 64) {
-            return (true, mi.readClintMtimecmp(mmIndex));
+            return (true, mi.readClintMtimecmp());
         }
         return (false, 0);
     }
