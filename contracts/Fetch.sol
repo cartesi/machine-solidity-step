@@ -28,19 +28,17 @@ library Fetch {
 
     /// @notice Finds and loads next insn.
     /// @param mi Memory Interactor with which Step function is interacting.
-    /// @param mmIndex Index corresponding to the instance of Memory Manager that
     /// @return Returns fetchStatus.success if load was successful, excpetion if not.
     /// @return Returns instructions
     /// @return Returns pc
-    function fetchInsn(uint256 mmIndex, MemoryInteractor mi) public returns (fetchStatus, uint32, uint64) {
+    function fetchInsn(MemoryInteractor mi) public returns (fetchStatus, uint32, uint64) {
         bool translateBool;
         uint64 paddr;
 
         //readPc
-        uint64 pc = mi.readPc(mmIndex);
+        uint64 pc = mi.readPc();
         (translateBool, paddr) = VirtualMemory.translateVirtualAddress(
             mi,
-            mmIndex,
             pc,
             RiscVConstants.getPteXwrCodeShift()
         );
@@ -49,7 +47,6 @@ library Fetch {
         if (!translateBool) {
             Exceptions.raiseException(
                 mi,
-                mmIndex,
                 Exceptions.getMcauseFetchPageFault(),
                 pc
             );
@@ -59,7 +56,7 @@ library Fetch {
 
         // Finds the range in memory in which the physical address is located
         // Returns start and length words from pma
-        uint64 pmaStart = PMA.findPmaEntry(mi, mmIndex, paddr);
+        uint64 pmaStart = PMA.findPmaEntry(mi, paddr);
 
         // M flag defines if the pma range is in memory
         // X flag defines if the pma is executable
@@ -68,7 +65,6 @@ library Fetch {
         if (!PMA.pmaGetIstartM(pmaStart) || !PMA.pmaGetIstartX(pmaStart)) {
             Exceptions.raiseException(
                 mi,
-                mmIndex,
                 Exceptions.getMcauseInsnAccessFault(),
                 paddr
             );
@@ -79,10 +75,10 @@ library Fetch {
 
         // Check if instruction is on first 32 bits or last 32 bits
         if ((paddr & 7) == 0) {
-            insn = uint32(mi.memoryRead(mmIndex, paddr));
+            insn = uint32(mi.memoryRead(paddr));
         } else {
             // If not aligned, read at the last addr and shift to get the correct insn
-            uint64 fullMemory = mi.memoryRead(mmIndex, paddr - 4);
+            uint64 fullMemory = mi.memoryRead(paddr - 4);
             insn = uint32(fullMemory >> 32);
         }
 
