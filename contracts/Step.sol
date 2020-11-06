@@ -36,37 +36,46 @@ contract Step {
     }
 
     /// @notice Run step define by a MemoryManager instance.
-    /// @param mmIndex Specific index of the Memory Manager that contains this Step's access logs
     /// @return Returns an exit code.
-    function step(uint mmIndex) public returns (uint8) {
+    /// @param _rwPositions position of all read and writes
+    /// @param _rwValues value of all read and writes
+    /// @param _isRead bool specifying if access is a read
+    /// @return Returns an exit code and the amount of memory accesses
+    function step(
+        uint64[] memory _rwPositions,
+        bytes8[] memory _rwValues,
+        bool[] memory _isRead
+    ) public returns (uint8, uint256) {
+
+        mi.initializeMemory(_rwPositions, _rwValues, _isRead);
+
         // Read iflags register and check its H flag, to see if machine is halted.
         // If machine is halted - nothing else to do. H flag is stored on the least
         // signficant bit on iflags register.
         // Reference: The Core of Cartesi, v1.02 - figure 1.
-        uint64 halt = mi.readIflagsH(mmIndex);
+        uint64 halt = mi.readIflagsH();
 
         if (halt != 0) {
             //machine is halted
             emit StepStatus(0, true);
-            return endStep(mmIndex, 0);
+            return endStep(0);
         }
-        
-	mi.setIflagsY(mmIndex, false);       
- 
-	//Raise the highest priority interrupt
-        Interrupts.raiseInterruptIfAny(mmIndex, mi);
+
+	    mi.setIflagsY(false);
+
+	    //Raise the highest priority interrupt
+        Interrupts.raiseInterruptIfAny(mi);
 
         //Fetch Instruction
         Fetch.fetchStatus fetchStatus;
         uint64 pc;
         uint32 insn;
 
-        (fetchStatus, insn, pc) = Fetch.fetchInsn(mmIndex, mi);
+        (fetchStatus, insn, pc) = Fetch.fetchInsn(mi);
 
         if (fetchStatus == Fetch.fetchStatus.success) {
             // If fetch was successfull, tries to execute instruction
             if (Execute.executeInsn(
-                    mmIndex,
                     mi,
                     insn,
                     pc
@@ -75,28 +84,28 @@ contract Step {
                 // If executeInsn finishes successfully we need to update the number of
                 // retired instructions. This number is stored on minstret CSR.
                 // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
-                uint64 minstret = mi.readMinstret(mmIndex);
-                mi.writeMinstret(mmIndex, minstret + 1);
+                uint64 minstret = mi.readMinstret();
+                mi.writeMinstret(minstret + 1);
             }
         }
         // Last thing that has to be done in a step is to update the cycle counter.
         // The cycle counter is stored on mcycle CSR.
         // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
-        uint64 mcycle = mi.readMcycle(mmIndex);
-        mi.writeMcycle(mmIndex, mcycle + 1);
+        uint64 mcycle = mi.readMcycle();
+        mi.writeMcycle(mcycle + 1);
         emit StepStatus(mcycle + 1, false);
 
-        return endStep(mmIndex, 0);
+        return endStep(0);
     }
 
     function getMemoryInteractor() public view returns (address) {
         return address(mi);
     }
 
-    function endStep(uint256 mmIndex, uint8 exitCode) internal returns (uint8) {
-        mi.finishReplayPhase(mmIndex);
+    function endStep(uint8 exitCode) internal returns (uint8, uint256) {
+        mi.finishReplayPhase();
         emit StepGiven(exitCode);
-        return exitCode;
-    }
 
+        return (exitCode, mi.getRWIndex());
+    }
 }
