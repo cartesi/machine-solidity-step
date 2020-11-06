@@ -24,12 +24,10 @@ library Exceptions {
 
     /// @notice Raise an exception (or interrupt).
     /// @param mi Memory Interactor with which Step function is interacting.
-    /// @param mmIndex Index corresponding to the instance of Memory Manager that
     /// @param cause Exception (or interrupt) mcause (or scause).
     /// @param tval Associated tval.
     function raiseException(
         MemoryInteractor mi,
-        uint256 mmIndex,
         uint64 cause,
         uint64 tval)
     public
@@ -41,7 +39,7 @@ library Exceptions {
         // Mideleg -> Machine Interrupt Delegation register
         // Reference: riscv-privileged-v1.9.1.pdf - Section 3.1.12, page 28.
         uint64 deleg = 0;
-        uint64 priv = mi.readIflagsPrv(mmIndex);
+        uint64 priv = mi.readIflagsPrv();
 
         if (priv <= RiscVConstants.getPrvS()) {
             if ((cause & getMcauseInterruptFlag()) != 0) {
@@ -49,10 +47,10 @@ library Exceptions {
                 // stored on mideleg register.
 
                 // Clear the MCAUSE_INTERRUPT_FLAG() bit before shifting
-                deleg = (mi.readMideleg(mmIndex) >> (cause & uint64(RiscVConstants.getXlen() - 1))) & 1;
+                deleg = (mi.readMideleg() >> (cause & uint64(RiscVConstants.getXlen() - 1))) & 1;
             } else {
                 //If not, information is in the medeleg register
-                deleg = (mi.readMedeleg(mmIndex) >> cause) & 1;
+                deleg = (mi.readMedeleg() >> cause) & 1;
             }
         }
         if (deleg != 0) {
@@ -63,24 +61,24 @@ library Exceptions {
             // and the Exception code, that identifies the last exception
             // The execption codes can be seen at table 4.1
             // Reference: riscv-privileged-v1.9.1.pdf - Section 4.1.8, page 51.
-            mi.writeScause(mmIndex, cause);
+            mi.writeScause(cause);
 
             // SEPC - Supervisor Exception Program Counter
             // When a trap is taken, sepc is written with the address of the instruction
             // the encountered the exception.
             // Reference: riscv-privileged-v1.9.1.pdf - Section 4.1.7, page 50.
-            mi.writeSepc(mmIndex, mi.readPc(mmIndex));
+            mi.writeSepc(mi.readPc());
 
             // STVAL - Supervisor Trap Value
             // stval is written with exception-specific information, when a trap is
             // taken into S-Mode. The specific values can be found in Reference.
             // Reference: riscv-privileged-v1.10.pdf - Section 4.1.11, page 55.
-            mi.writeStval(mmIndex, tval);
+            mi.writeStval(tval);
 
             // MSTATUS - Machine Status Register
             // keeps track of and controls hart's current operating state.
             // Reference: riscv-privileged-v1.10.pdf - Section 3.1.16, page 19.
-            uint64 mstatus = mi.readMstatus(mmIndex);
+            uint64 mstatus = mi.readMstatus();
 
             // The SPIE bit indicates whether supervisor interrupts were enabled prior
             // to trapping into supervisor mode. When a trap is taken into supervisor
@@ -103,34 +101,34 @@ library Exceptions {
             // Reference: riscv-privileged-v1.10.pdf - Section 4.1.1, page 50.
             mstatus &= ~RiscVConstants.getMstatusSieMask();
 
-            mi.writeMstatus(mmIndex, mstatus);
+            mi.writeMstatus(mstatus);
 
             // TO-DO: Check gas cost to delegate function to library - if its zero the
             // if check should move to setPriv()
             if (priv != RiscVConstants.getPrvS()) {
-                mi.setPriv(mmIndex, RiscVConstants.getPrvS());
+                mi.setPriv(RiscVConstants.getPrvS());
             }
             // SVEC - Supervisor Trap Vector Base Address Register
-            mi.writePc(mmIndex, mi.readStvec(mmIndex));
+            mi.writePc(mi.readStvec());
         } else {
             // is in M mode
-            mi.writeMcause(mmIndex, cause);
-            mi.writeMepc(mmIndex, mi.readPc(mmIndex));
-            mi.writeMtval(mmIndex, tval);
-            uint64 mstatus = mi.readMstatus(mmIndex);
+            mi.writeMcause(cause);
+            mi.writeMepc(mi.readPc());
+            mi.writeMtval(tval);
+            uint64 mstatus = mi.readMstatus();
 
             mstatus = (mstatus & ~RiscVConstants.getMstatusMpieMask()) | (((mstatus >> RiscVConstants.getPrvM()) & 1) << RiscVConstants.getMstatusMpieShift());
             mstatus = (mstatus & ~RiscVConstants.getMstatusMppMask()) | (priv << RiscVConstants.getMstatusMppShift());
 
             mstatus &= ~RiscVConstants.getMstatusMieMask();
-            mi.writeMstatus(mmIndex, mstatus);
+            mi.writeMstatus(mstatus);
 
             // TO-DO: Check gas cost to delegate function to library - if its zero the
             // if check should move to setPriv()
             if (priv != RiscVConstants.getPrvM()) {
-                mi.setPriv(mmIndex, RiscVConstants.getPrvM());
+                mi.setPriv(RiscVConstants.getPrvM());
             }
-            mi.writePc(mmIndex, mi.readMtvec(mmIndex));
+            mi.writePc(mi.readMtvec());
         }
     }
 
