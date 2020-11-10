@@ -25,7 +25,7 @@ COPY --from=builder /go-ethereum/build/bin/geth /usr/local/bin/
 
 COPY ./package.json .
 COPY ./tsconfig.json .
-COPY ./buidler.config.ts .
+COPY ./hardhat.config.ts .
 COPY ./yarn.lock .
 RUN yarn install
 
@@ -34,7 +34,6 @@ RUN pip3 install -r requirements.txt
 
 COPY ./contracts ./contracts
 COPY ./deploy ./deploy
-COPY ./src/helpers ./src/helpers
 COPY ./deploy_ram_tests.sh .
 
 WORKDIR $BASE/test

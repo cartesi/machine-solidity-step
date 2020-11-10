@@ -19,24 +19,18 @@
 // be used independently under the Apache v2 license. After this component is
 // rewritten, the entire component will be released under the Apache v2 license.
 
-import {
-    BuidlerRuntimeEnvironment,
-    DeployFunction
-} from "@nomiclabs/buidler/types";
-import { useOrDeploy } from "../src/helpers/useOrDeploy";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { DeployFunction } from "hardhat-deploy/types";
 
-const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
+const func: DeployFunction = async (bre: HardhatRuntimeEnvironment) => {
     const { deployments, getNamedAccounts, network } = bre;
     const { deploy } = deployments;
     const { deployer } = await getNamedAccounts();
 
     // use pre-deployed contracts, or deploy a new one (development/localhost)
-    const BitsManipulationLibraryAddress = await useOrDeploy(
-        bre,
-        deployer,
-        "BitsManipulationLibrary"
-        );
-
+    const {
+        BitsManipulationLibrary, 
+    } = await deployments.all();
 
     // deploy machine-solidity-step contracts
     const ShadowAddresses = await deploy("ShadowAddresses", {
@@ -50,7 +44,7 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
     const RiscVDecoder = await deploy("RiscVDecoder", {
         from: deployer,
         libraries: {
-            BitsManipulationLibrary: BitsManipulationLibraryAddress
+            BitsManipulationLibrary: BitsManipulationLibrary.address
         },
         log: true
     });
@@ -212,7 +206,7 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
     const Execute = await deploy("Execute", {
         from: deployer,
         libraries: {
-            BitsManipulationLibrary: BitsManipulationLibraryAddress,
+            BitsManipulationLibrary: BitsManipulationLibrary.address,
             RiscVDecoder: RiscVDecoder.address,
             RiscVConstants: RiscVConstants.address,
             ShadowAddresses: ShadowAddresses.address,
@@ -235,7 +229,7 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
     const MemoryInteractor = await deploy("MemoryInteractor", {
         from: deployer,
         libraries: {
-            BitsManipulationLibrary: BitsManipulationLibraryAddress,
+            BitsManipulationLibrary: BitsManipulationLibrary.address,
             RiscVConstants: RiscVConstants.address,
             ShadowAddresses: ShadowAddresses.address,
             HTIF: HTIF.address,
@@ -254,7 +248,7 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
         const TestMemoryInteractor = await deploy("TestMemoryInteractor", {
             from: deployer,
             libraries: {
-                BitsManipulationLibrary: BitsManipulationLibraryAddress,
+                BitsManipulationLibrary: BitsManipulationLibrary.address,
             },
             log: true
         });

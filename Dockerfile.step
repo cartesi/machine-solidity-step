@@ -13,7 +13,7 @@ RUN apk add --no-cache \
 
 COPY ./package.json .
 COPY ./tsconfig.json .
-COPY ./buidler.config.ts .
+COPY ./hardhat.config.ts .
 
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 ENV PATH=$PATH:/home/node/.npm-global/bin
@@ -30,7 +30,6 @@ RUN pip3 install -r requirements.txt
 
 COPY ./contracts ./contracts
 COPY ./deploy ./deploy
-COPY ./src/helpers ./src/helpers
 COPY ./deploy_step_tests.sh .
 
 WORKDIR $BASE/test

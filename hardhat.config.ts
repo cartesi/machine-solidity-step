@@ -1,52 +1,19 @@
-import fs from "fs";
-import { Wallet } from "@ethersproject/wallet";
-import { BuidlerConfig, task, usePlugin } from "@nomiclabs/buidler/config";
-import { HttpNetworkConfig } from "@nomiclabs/buidler/types";
+import { HardhatUserConfig, task } from "hardhat/config";
+import { HttpNetworkUserConfig } from "hardhat/types";
 
-usePlugin("@nomiclabs/buidler-ethers");
-usePlugin("@nomiclabs/buidler-waffle");
-usePlugin("@nodefactory/buidler-typechain");
-usePlugin("buidler-deploy");
-
-// This is a sample Buidler task. To learn how to create your own go to
-// https://buidler.dev/guides/create-task.html
-task("accounts", "Prints the list of accounts", async (taskArgs, bre) => {
-    const accounts = await bre.ethers.getSigners();
-
-    for (const account of accounts) {
-        console.log(await account.getAddress());
-    }
-});
+import "@nomiclabs/hardhat-ethers";
+import "@nomiclabs/hardhat-waffle";
+import "hardhat-deploy";
+import "hardhat-typechain";
 
 // read MNEMONIC from file or from env variable
 let mnemonic = process.env.MNEMONIC;
-try {
-    mnemonic = fs
-        .readFileSync(process.env.MNEMONIC_PATH || ".mnemonic")
-        .toString();
-} catch (e) {}
-
-// create a Buidler EVM account array from mnemonic
-const mnemonicAccounts = (n = 10) => {
-    return mnemonic
-        ? Array.from(Array(n).keys()).map(i => {
-              const wallet = Wallet.fromMnemonic(
-                  mnemonic as string,
-                  `m/44'/60'/0'/0/${i}`
-              );
-              return {
-                  privateKey: wallet.privateKey,
-                  balance: "1000000000000000000000"
-              };
-          })
-        : undefined;
-};
 
 const infuraNetwork = (
     network: string,
     chainId?: number,
     gas?: number
-): HttpNetworkConfig => {
+): HttpNetworkUserConfig => {
     return {
         url: `https://${network}.infura.io/v3/${process.env.PROJECT_ID}`,
         chainId,
@@ -55,9 +22,9 @@ const infuraNetwork = (
     };
 };
 
-const config: BuidlerConfig = {
+const config: HardhatUserConfig = {
     networks: {
-        buidlerevm: mnemonic ? { accounts: mnemonicAccounts() } : {},
+        hardhat: mnemonic ? { accounts: { mnemonic } } : {},
         localhost: {
             url: "http://localhost:8545",
             accounts: mnemonic ? { mnemonic } : undefined
@@ -66,7 +33,6 @@ const config: BuidlerConfig = {
             url: "http://localhost:8545",
             accounts: mnemonic ? { mnemonic } : undefined
         },
-        ropsten: infuraNetwork("ropsten", 3, 6283185),
         rinkeby: infuraNetwork("rinkeby", 4, 6283185),
         kovan: infuraNetwork("kovan", 42, 6283185),
         goerli: infuraNetwork("goerli", 5, 6283185),
@@ -81,12 +47,12 @@ const config: BuidlerConfig = {
             accounts: mnemonic ? { mnemonic } : undefined
         }   
     },
-    solc: {
-        version: "0.7.1",
-        evmVersion: "istanbul",
-        optimizer: {
-            enabled: true,
-            runs: 200
+    solidity: {
+        version: "0.7.4",
+        settings: {
+            optimizer: {
+                enabled: true
+            }
         }
     },
     paths: {
@@ -95,10 +61,18 @@ const config: BuidlerConfig = {
         deployments: "deployments"
     },
     external: {
-        artifacts: ["node_modules/@cartesi/util/artifacts", "node_modules/@cartesi/arbitration/artifacts"],
+        contracts: [
+            {
+                artifacts: "node_modules/@cartesi/util/export/artifacts",
+                deploy: "node_modules/@cartesi/dist/deploy"
+            },
+            {
+                artifacts: "node_modules/@cartesi/arbitration/export/artifacts",
+                deploy: "node_modules/@cartesi/arbitration/dist/deploy"
+            }
+        ],
         deployments: {
             localhost: ["node_modules/@cartesi/util/deployments/localhost", "node_modules/@cartesi/arbitration/deployments/localhost"],
-            ropsten: ["node_modules/@cartesi/util/deployments/ropsten", "node_modules/@cartesi/arbitration/deployments/ropsten"],
             rinkeby: ["node_modules/@cartesi/util/deployments/rinkeby", "node_modules/@cartesi/arbitration/deployments/rinkeby"],
             kovan: ["node_modules/@cartesi/util/deployments/kovan", "node_modules/@cartesi/arbitration/deployments/kovan"],
             goerli: ["node_modules/@cartesi/util/deployments/goerli", "node_modules/@cartesi/arbitration/deployments/goerli"],

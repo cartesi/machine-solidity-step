@@ -8,12 +8,11 @@ COPY ./contracts ./contracts/
 COPY ./test/aleth-assets/ .
 COPY ./test/bin/  ./bin/
 COPY ./deploy/ ./deploy/
-COPY ./src/ ./src/
 COPY ./scripts/ ./scripts/
 COPY ./yarn.lock .
 COPY ./package.json .
 COPY ./tsconfig.json .
-COPY ./buidler.config.ts .
+COPY ./hardhat.config.ts .
 
 # copy c++ solidity solc
 COPY --from=ethereum/solc:0.7.1 /usr/bin/solc /usr/bin/solc
@@ -37,7 +36,7 @@ RUN yarn install
 
 # build it
 RUN mkdir build
-RUN npx buidler run ./scripts/generate-aleth-bins.ts
+RUN npx hardhat run ./scripts/generate-aleth-bins.ts
 RUN mv ./build/*.json .
 
 # clean up

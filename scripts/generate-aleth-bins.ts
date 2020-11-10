@@ -1,11 +1,8 @@
 import fs from "fs";
 import path from "path";
-import bre from "@nomiclabs/buidler";
-import {
-    DeployOptions,
-    DeployResult,
-    BuidlerRuntimeEnvironment
-} from "@nomiclabs/buidler/types";
+import hre from "hardhat";
+import { HardhatRuntimeEnvironment } from "hardhat/types";
+import { DeployOptions, DeployResult } from "hardhat-deploy/types";
 
 import libDeploymentFn from "../deploy/01_libs";
 
@@ -61,23 +58,23 @@ async function saveSequenceContractsConfig(contractList: Array<string>) {
 }
 
 async function getDataByHash(
-    bre: BuidlerRuntimeEnvironment,
+    hre: HardhatRuntimeEnvironment,
     hash: string
 ): Promise<string> {
-    const tx = await bre.ethers.provider.send("eth_getTransactionByHash", [
+    const tx = await hre.ethers.provider.send("eth_getTransactionByHash", [
         hash
     ]);
     return tx.input;
 }
 
 async function main() {
-    const breDeploy = bre.deployments.deploy;
+    const breDeploy = hre.deployments.deploy;
     const contractsOrder: Array<string> = [];
     const addresses: { [key: string]: string } = {};
-    const { deployer } = await bre.getNamedAccounts();
+    const { deployer } = await hre.getNamedAccounts();
     addresses.sender = deployer;
 
-    bre.deployments.deploy = async (
+    hre.deployments.deploy = async (
         name: string,
         options: DeployOptions
     ): Promise<DeployResult> => {
@@ -91,13 +88,13 @@ async function main() {
             );
             process.exit(-1);
         }
-        const data = await getDataByHash(bre, result.transactionHash);
+        const data = await getDataByHash(hre, result.transactionHash);
         await saveFile(`${name}.bin`, data.slice(2), false);
         console.log("saved", `${name}.bin`);
 
         return result;
     };
-    await libDeploymentFn(bre);
+    await libDeploymentFn(hre);
 
     // save addresses file
     await saveFile("addresses.json", addresses);
@@ -107,7 +104,7 @@ async function main() {
     await saveSequenceContractsConfig(contractsOrder);
 
     // Deploy instrumental contracts
-    await bre.deployments.deploy("TestMemoryInteractor", {
+    await hre.deployments.deploy("TestMemoryInteractor", {
         from: deployer,
         libraries: {
             BitsManipulationLibrary: addresses.BitsManipulationLibrary,

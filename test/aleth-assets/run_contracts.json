@@ -3,7 +3,6 @@
     "contracts": [
         "BitsManipulationLibrary.bin",
         "Merkle.bin",
-        "TestRamMMInstantiator.bin",
         "ShadowAddresses.bin",
         "RiscVConstants.bin",
         "RiscVDecoder.bin",
