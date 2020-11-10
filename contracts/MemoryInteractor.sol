@@ -41,7 +41,7 @@ contract MemoryInteractor {
         uint64[] memory _rwPositions,
         bytes8[] memory _rwValues,
         bool[] memory _isRead
-    ) public
+    ) virtual public
     {
         require(_rwPositions.length == _rwValues.length, "Read/write arrays are not the same size");
         require(_rwPositions.length == _isRead.length, "Read/write arrays are not the same size");
@@ -412,13 +412,13 @@ contract MemoryInteractor {
         );
     }
 
-    function memoryWrite(uint64 _writeAddress, uint64 _value) public {
+    function memoryWrite(uint64 _writeAddress, uint64 _value) virtual public {
         bytes8 bytesvalue = bytes8(BitsManipulationLibrary.uint64SwapEndian(_value));
         require(memoryAccessManager(_writeAddress, false) == bytesvalue, "Written value does not match");
     }
 
     // Memory Write without endianess swap
-    function pureMemoryWrite(uint64 _writeAddress, uint64 _value) internal {
+    function pureMemoryWrite(uint64 _writeAddress, uint64 _value) virtual internal {
         require(
             memoryAccessManager(_writeAddress, false) == bytes8(_value),
             "Written value does not match"
@@ -433,7 +433,7 @@ contract MemoryInteractor {
    // Private functions
 
     // takes care of read/write access
-    function memoryAccessManager(uint64 _address, bool _accessIsRead) private returns(bytes8) {
+    function memoryAccessManager(uint64 _address, bool _accessIsRead) internal virtual returns (bytes8) {
         require(isRead[rwIndex] != _accessIsRead, "Access was not the correct type");
 
         uint64 position = rwPositions[rwIndex];
