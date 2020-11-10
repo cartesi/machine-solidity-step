@@ -43,35 +43,35 @@ contract TestMemoryInstantiator is MemoryInteractor {
     {
     }
 
-    function memoryWrite(uint64 _writeAddress, uint64 _value) override public {
+    function memoryWrite(uint64 _position, uint64 _writeAddress, uint64 _value) public {
         bytes8 bytesvalue = bytes8(BitsManipulationLibrary.uint64SwapEndian(_value));
         require(memoryAccessManager(_writeAddress, false) == bytesvalue, "Written value does not match");
 
         // TODO: should the endianess be swapped?
-        ram[rwIndex].map[_writeAddress] = bytes8(_value);
+        ram[_position].map[_writeAddress] = bytes8(_value);
     }
 
     // Memory Write without endianess swap
-    function pureMemoryWrite(uint64 _writeAddress, uint64 _value) override internal {
+    function pureMemoryWrite(uint64 _position, uint64 _writeAddress, uint64 _value) internal {
 
         require(memoryAccessManager(_writeAddress, false) == bytes8(_value), "Written value does not match");
-        ram[rwIndex].map[_writeAddress] = bytes8(_value);
+        ram[_position].map[_writeAddress] = bytes8(_value);
     }
 
     // Private functions
 
     // takes care of read/write access
-    function memoryAccessManager(uint64 _address, bool) internal override returns (bytes8) {
+    function memoryAccessManager(uint64 _position, uint64 _address, bool) internal returns (bytes8) {
         require((_address & 7) == 0, "Position is not aligned");
 
-        return ram[rwIndex].map[_address];
+        return ram[_position].map[_address];
     }
 
     /// @notice Perform a read in HTIF to get the arbitrary exit code
-    function htifExit() public
+    function htifExit(uint64 _position) public
         returns (uint64)
     {
-        uint64 val = uint64(ram[rwIndex].map[0x40008000]);
+        uint64 val = uint64(ram[_position].map[0x40008000]);
         bool halt = false;
 
         val = BitsManipulationLibrary.uint64SwapEndian(val);
@@ -81,7 +81,7 @@ contract TestMemoryInstantiator is MemoryInteractor {
 
         halt = (bit0 == 1);
 
-        emit HTIFExit(rwIndex, payload, halt);
+        emit HTIFExit(_position, payload, halt);
         return payload;
     }
 }
