@@ -28,11 +28,8 @@ contract TestMemoryInstantiator is MemoryInteractor {
   // then client can read inserted values and write some more
   // finally the provider has to update the hash to account for writes
 
-    struct MemoryMap {
-        mapping(uint64 => bytes8) map;
-    }
-
-    mapping(uint256 => MemoryMap) internal ram;
+   // ram map
+    mapping(uint64 => bytes8) ram;
     event HTIFExit(uint256 _index, uint64 _exitCode, bool _halt);
 
     function initializeMemory(
@@ -43,35 +40,35 @@ contract TestMemoryInstantiator is MemoryInteractor {
     {
     }
 
-    function memoryWrite(uint64 _position, uint64 _writeAddress, uint64 _value) public {
+    function memoryWrite(uint64 _writeAddress, uint64 _value) override public {
         bytes8 bytesvalue = bytes8(BitsManipulationLibrary.uint64SwapEndian(_value));
         require(memoryAccessManager(_writeAddress, false) == bytesvalue, "Written value does not match");
 
         // TODO: should the endianess be swapped?
-        ram[_position].map[_writeAddress] = bytes8(_value);
+        ram[_writeAddress] = bytes8(_value);
     }
 
     // Memory Write without endianess swap
-    function pureMemoryWrite(uint64 _position, uint64 _writeAddress, uint64 _value) internal {
+    function pureMemoryWrite(uint64 _writeAddress, uint64 _value) override internal {
 
         require(memoryAccessManager(_writeAddress, false) == bytes8(_value), "Written value does not match");
-        ram[_position].map[_writeAddress] = bytes8(_value);
+        ram[_writeAddress] = bytes8(_value);
     }
 
     // Private functions
 
     // takes care of read/write access
-    function memoryAccessManager(uint64 _position, uint64 _address, bool) internal returns (bytes8) {
+    function memoryAccessManager(uint64 _address, bool) internal override returns (bytes8) {
         require((_address & 7) == 0, "Position is not aligned");
 
-        return ram[_position].map[_address];
+        return ram[_address];
     }
 
     /// @notice Perform a read in HTIF to get the arbitrary exit code
-    function htifExit(uint64 _position) public
+    function htifExit() public
         returns (uint64)
     {
-        uint64 val = uint64(ram[_position].map[0x40008000]);
+        uint64 val = uint64(ram[0x40008000]);
         bool halt = false;
 
         val = BitsManipulationLibrary.uint64SwapEndian(val);
@@ -81,7 +78,7 @@ contract TestMemoryInstantiator is MemoryInteractor {
 
         halt = (bit0 == 1);
 
-        emit HTIFExit(_position, payload, halt);
+        emit HTIFExit(rwIndex, payload, halt);
         return payload;
     }
 }
