@@ -254,6 +254,8 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
         });
         mmInstantiatorAddress = TestRamMMInstantiator.address;
     }
+
+
     const MemoryInteractor = await deploy("MemoryInteractor", {
         from: deployer,
         libraries: {
@@ -264,8 +266,25 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
             CLINT: CLINT.address
         },
         log: true,
-        args: [mmInstantiatorAddress]
     });
+
+    // defines which MemoryInteractor address to use for step
+    // - default: address of the already deployed MemoryInteractor contract
+    // - if on ramtest: deploys TestMemoryInteractor and uses its address
+
+    let miInstantiatorAddress = MemoryInteractor.address;
+    if (network.name == "ramtest") {
+        console.log("    Deploying TestRam contracts...");
+        const TestMemoryInteractor = await deploy("TestMemoryInteractor", {
+            from: deployer,
+            libraries: {
+                BitsManipulationLibrary: BitsManipulationLibraryAddress,
+                Merkle: MerkleAddress
+            },
+            log: true
+        });
+        miInstantiatorAddress  = TestMemoryInteractor.address;
+    }
 
     const Step = await deploy("Step", {
         from: deployer,
@@ -278,7 +297,7 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
             Execute: Execute.address
         },
         log: true,
-        args: [MemoryInteractor.address]
+        args: [miInstantiatorAddress]
     });
 };
 
