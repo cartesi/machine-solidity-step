@@ -42,7 +42,6 @@ contract TestMemoryInstantiator is MemoryInteractor {
 
     function memoryWrite(uint64 _writeAddress, uint64 _value) override public {
         bytes8 bytesvalue = bytes8(BitsManipulationLibrary.uint64SwapEndian(_value));
-        require(memoryAccessManager(_writeAddress, false) == bytesvalue, "Written value does not match");
 
         // TODO: should the endianess be swapped?
         ram[_writeAddress] = bytes8(_value);
@@ -51,7 +50,6 @@ contract TestMemoryInstantiator is MemoryInteractor {
     // Memory Write without endianess swap
     function pureMemoryWrite(uint64 _writeAddress, uint64 _value) override internal {
 
-        require(memoryAccessManager(_writeAddress, false) == bytes8(_value), "Written value does not match");
         ram[_writeAddress] = bytes8(_value);
     }
 
