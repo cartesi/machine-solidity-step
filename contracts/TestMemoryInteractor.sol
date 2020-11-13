@@ -17,12 +17,12 @@ import "./MemoryInteractor.sol";
 import "@cartesi/util/contracts/BitsManipulationLibrary.sol";
 
 
-/// @title Test Memory Instantiator
+/// @title Test Memory Interactor
 /// @author Felipe
 /// @notice A mock memory interactor for running test_ram.py
 /// @dev This should never be deployed to Main net.
 /// @dev This contract is unsafe.
-contract TestMemoryInstantiator is MemoryInteractor {
+contract TestMemoryInteractor is MemoryInteractor {
   // the provider will fill the memory for the client to read and write
   // memory starts with hash and all values that are inserted are first verified
   // then client can read inserted values and write some more
@@ -43,14 +43,19 @@ contract TestMemoryInstantiator is MemoryInteractor {
     function memoryWrite(uint64 _writeAddress, uint64 _value) override public {
         bytes8 bytesvalue = bytes8(BitsManipulationLibrary.uint64SwapEndian(_value));
 
-        // TODO: should the endianess be swapped?
-        ram[_writeAddress] = bytes8(_value);
+        ram[_writeAddress] = bytes8(bytesvalue);
     }
 
     // Memory Write without endianess swap
     function pureMemoryWrite(uint64 _writeAddress, uint64 _value) override internal {
 
         ram[_writeAddress] = bytes8(_value);
+    }
+
+    // Memory Write without endianess swap
+    function externalPureMemoryWrite(uint64 _writeAddress, bytes8 _value) public {
+
+        ram[_writeAddress] = _value;
     }
 
     // Private functions
