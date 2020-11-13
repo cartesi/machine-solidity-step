@@ -272,7 +272,7 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
     // - default: address of the already deployed MemoryInteractor contract
     // - if on ramtest: deploys TestMemoryInteractor and uses its address
 
-    let miInstantiatorAddress = MemoryInteractor.address;
+    let miAddress = MemoryInteractor.address;
     if (network.name == "ramtest") {
         console.log("    Deploying TestRam contracts...");
         const TestMemoryInteractor = await deploy("TestMemoryInteractor", {
@@ -283,7 +283,7 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
             },
             log: true
         });
-        miInstantiatorAddress  = TestMemoryInteractor.address;
+        miAddress  = TestMemoryInteractor.address;
     }
 
     const Step = await deploy("Step", {
@@ -297,7 +297,7 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
             Execute: Execute.address
         },
         log: true,
-        args: [miInstantiatorAddress]
+        args: [miAddress]
     });
 };
 

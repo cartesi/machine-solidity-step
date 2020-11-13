@@ -41,8 +41,8 @@ function changeContract(
 async function saveRunContractsConfig(contractList: Array<string>) {
     const list = changeContract(
         contractList,
-        "MMInstantiator",
-        "TestRamMMInstantiator"
+        "MemoryInteractor",
+        "TestMemoryInteractor"
     ).map(value => `${value}.bin`);
     const config = {
         path: path.resolve(OUTDIR) + "/",
@@ -52,16 +52,16 @@ async function saveRunContractsConfig(contractList: Array<string>) {
 }
 
 async function saveSequenceContractsConfig(contractList: Array<string>) {
-  const list = changeContract(
-      contractList,
-      "MMInstantiator",
-      "TestNoMerkleMM"
-  ).map(value => `${value}.bin`);
-  const config = {
-      path: path.resolve(OUTDIR) + "/",
-      contracts: list
-  };
-  await saveFile("sequence_contracts.json", config);
+    const list = changeContract(
+        contractList,
+        "MMInstantiator",
+        "TestNoMerkleMM"
+    ).map(value => `${value}.bin`);
+    const config = {
+        path: path.resolve(OUTDIR) + "/",
+        contracts: list
+    };
+    await saveFile("sequence_contracts.json", config);
 }
 
 async function getDataByHash(
@@ -107,15 +107,18 @@ async function main() {
     await saveFile("addresses.json", addresses);
     // build and save run_contracts.json
     await saveRunContractsConfig(contractsOrder);
-    
+
     await saveSequenceContractsConfig(contractsOrder);
 
     // Deploy instrumental contracts
-    await bre.deployments.deploy("TestRamMMInstantiator", {
+    await bre.deployments.deploy("TestMemoryInteractor", {
         from: deployer,
         libraries: {
             BitsManipulationLibrary: addresses.BitsManipulationLibrary,
-            Merkle: addresses.Merkle
+            RiscVConstants: addresses.RiscVConstants,
+            ShadowAddresses: addresses.ShadowAddresses,
+            HTIF: addresses.HTIF,
+            CLINT: addresses.CLINT
         },
         log: true
     });
