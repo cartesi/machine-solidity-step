@@ -52,11 +52,7 @@ async function saveRunContractsConfig(contractList: Array<string>) {
 }
 
 async function saveSequenceContractsConfig(contractList: Array<string>) {
-    const list = changeContract(
-        contractList,
-        "MMInstantiator",
-        "TestNoMerkleMM"
-    ).map(value => `${value}.bin`);
+    const list = contractList.map(value => `${value}.bin`);
     const config = {
         path: path.resolve(OUTDIR) + "/",
         contracts: list
@@ -97,7 +93,7 @@ async function main() {
         }
         const data = await getDataByHash(bre, result.transactionHash);
         await saveFile(`${name}.bin`, data.slice(2), false);
-        console.log("passed here", name);
+        console.log("saved", `${name}.bin`);
 
         return result;
     };
@@ -119,16 +115,6 @@ async function main() {
             ShadowAddresses: addresses.ShadowAddresses,
             HTIF: addresses.HTIF,
             CLINT: addresses.CLINT
-        },
-        log: true
-    });
-
-    // Deploy instrumental contracts
-    await bre.deployments.deploy("TestNoMerkleMM", {
-        from: deployer,
-        libraries: {
-            BitsManipulationLibrary: addresses.BitsManipulationLibrary,
-            Merkle: addresses.Merkle
         },
         log: true
     });

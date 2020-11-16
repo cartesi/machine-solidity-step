@@ -36,13 +36,7 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
         deployer,
         "BitsManipulationLibrary"
         );
-    const MerkleAddress = await useOrDeploy(bre, deployer, "Merkle");
-    const MMInstantiatorAddress = await useOrDeploy(
-        bre,
-        deployer,
-        "MMInstantiator",
-        { Merkle: MerkleAddress }
-    );
+
 
     // deploy machine-solidity-step contracts
     const ShadowAddresses = await deploy("ShadowAddresses", {
@@ -238,24 +232,6 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
         log: true
     });
 
-    // defines which MMInstantiator address to use for MemoryInteractor
-    // - default: address of the already deployed MMInstantiator contract
-    // - if on ramtest: deploys TestRamMMInstantiator and uses its address
-    let mmInstantiatorAddress = MMInstantiatorAddress;
-    if (network.name == "ramtest") {
-        console.log("    Deploying TestRam contracts...");
-        const TestRamMMInstantiator = await deploy("TestRamMMInstantiator", {
-            from: deployer,
-            libraries: {
-                BitsManipulationLibrary: BitsManipulationLibraryAddress,
-                Merkle: MerkleAddress
-            },
-            log: true
-        });
-        mmInstantiatorAddress = TestRamMMInstantiator.address;
-    }
-
-
     const MemoryInteractor = await deploy("MemoryInteractor", {
         from: deployer,
         libraries: {
@@ -279,7 +255,6 @@ const func: DeployFunction = async (bre: BuidlerRuntimeEnvironment) => {
             from: deployer,
             libraries: {
                 BitsManipulationLibrary: BitsManipulationLibraryAddress,
-                Merkle: MerkleAddress
             },
             log: true
         });
