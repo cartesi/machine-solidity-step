@@ -68,7 +68,7 @@ async function getDataByHash(
 }
 
 async function main() {
-    const breDeploy = hre.deployments.deploy;
+    const hreDeploy = hre.deployments.deploy;
     const contractsOrder: Array<string> = [];
     const addresses: { [key: string]: string } = {};
     const { deployer } = await hre.getNamedAccounts();
@@ -78,7 +78,7 @@ async function main() {
         name: string,
         options: DeployOptions
     ): Promise<DeployResult> => {
-        const result = await breDeploy(name, options);
+        const result = await hreDeploy(name, options);
 
         contractsOrder.push(name);
         addresses[name] = result.address;

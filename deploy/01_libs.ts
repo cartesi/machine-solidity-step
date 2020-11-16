@@ -27,10 +27,10 @@ const func: DeployFunction = async (bre: HardhatRuntimeEnvironment) => {
     const { deploy } = deployments;
     const { deployer } = await getNamedAccounts();
 
-    // use pre-deployed contracts, or deploy a new one (development/localhost)
-    const {
-        BitsManipulationLibrary, 
-    } = await deployments.all();
+    const BitsManipulationLibrary = await deploy("BitsManipulationLibrary", {
+        from: deployer,
+        log: true
+    });
 
     // deploy machine-solidity-step contracts
     const ShadowAddresses = await deploy("ShadowAddresses", {
