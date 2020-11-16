@@ -434,7 +434,7 @@ contract MemoryInteractor {
 
     // takes care of read/write access
     function memoryAccessManager(uint64 _address, bool _accessIsRead) internal virtual returns (bytes8) {
-        require(isRead[rwIndex] != _accessIsRead, "Access was not the correct type");
+        require(isRead[rwIndex] == _accessIsRead, "Access was not the correct type");
 
         uint64 position = rwPositions[rwIndex];
         bytes8 value = rwValues[rwIndex];
