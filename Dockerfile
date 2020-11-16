@@ -48,7 +48,7 @@ RUN apt-get purge git curl -qy && \
     rm -rf ./node-modules
 
 # ======================= test runner ============
-FROM cartesi/aleth-test:0.3.0
+FROM cartesi/aleth-test:0.4.0
 WORKDIR /usr/src/app/
 COPY --from=builder /usr/src/app/ . 
 
