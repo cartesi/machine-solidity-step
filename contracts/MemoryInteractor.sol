@@ -185,12 +185,14 @@ contract MemoryInteractor {
 
     function readIflagsPrv() public returns (uint64) {
         return (memoryRead(ShadowAddresses.getIflags()) & RiscVConstants.getIflagsPrvMask()) >> RiscVConstants.getIflagsPrvShift();
- 
     }
 
     function readIflagsH() public returns (uint64) {
         return (memoryRead(ShadowAddresses.getIflags()) & RiscVConstants.getIflagsHMask()) >> RiscVConstants.getIflagsHShift();
- 
+    }
+
+    function readIflagsY() public returns (uint64) {
+        return (memoryRead(ShadowAddresses.getIflags()) & RiscVConstants.getIflagsYMask()) >> RiscVConstants.getIflagsYShift();
     }
 
     function readMemory(uint64 paddr, uint64 wordSize) public returns (uint64) {
