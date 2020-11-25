@@ -216,7 +216,7 @@ library Execute {
                 return raiseIllegalInsnException(mi,  insn);
             }
 
-            mi.writeX( rd, arithImmResult);
+            mi.writeX(rd, arithImmResult);
         }
         return advanceToNextInsn(mi,  pc);
     }
@@ -300,6 +300,8 @@ library Execute {
     {
         uint64 vaddr = mi.readX( RiscVDecoder.insnRs1(insn));
         int32 imm = RiscVDecoder.insnIImm(insn);
+        uint32 rd = RiscVDecoder.insnRd(insn);
+
         (bool succ, uint64 val) = VirtualMemory.readVirtualMemory(
             mi,
             wordSize,
@@ -310,8 +312,13 @@ library Execute {
             if (isSigned) {
                 val = BitsManipulationLibrary.uint64SignExtension(val, wordSize);
             }
-            mi.writeX( RiscVDecoder.insnRd(insn), val);
-            return advanceToNextInsn(mi,  pc);
+
+            if (rd != 0) {
+                mi.writeX(rd, val);
+            }
+
+            return advanceToNextInsn(mi, pc);
+
         } else {
             //return advanceToRaisedException()
             return executeStatus.retired;
