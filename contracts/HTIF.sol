@@ -154,7 +154,7 @@ library HTIF {
     internal returns (bool)
     {
         // If yield command is enabled, yield
-        if ((mi.readHtifYield() >> cmd) & 1) {
+        if ((mi.readHtifYield() >> cmd) & 1 == 1) {
             mi.setIflagsY(true);
             mi.writeHtifFromhost((HTIF_DEVICE_YIELD << 56) | cmd << 48);
         }
