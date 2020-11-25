@@ -61,7 +61,13 @@ contract Step {
             return endStep(0);
         }
 
-	    mi.setIflagsY(false);
+        uint64 yield = mi.readIflagsY();
+
+        if (yield != 0) {
+             //cpu is yielded
+            emit StepStatus(0, true);
+            return endStep(0);
+        }
 
 	    //Raise the highest priority interrupt
         Interrupts.raiseInterruptIfAny(mi);
