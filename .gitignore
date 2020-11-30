@@ -1,6 +1,7 @@
 artifacts
 cache
 coverage
+build
 deployments/localhost
 deployments/*/solcInputs/*.json
 dist

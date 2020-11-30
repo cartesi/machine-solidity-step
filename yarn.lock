@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@cartesi/arbitration@^0.5.0":
+"@cartesi/arbitration@^0.5.1":
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/@cartesi/arbitration/-/arbitration-0.5.1.tgz#387ac2b4b46134ac89707e2128887c3879c1bbb8"
   integrity sha512-APMWUguOh5dUYPc/KDbiWbw9W3kiI2p8djkid/gUUkDYKSMlNSxGYUDb8O1ryqdnaLIstPEY7DkMTC/oPgv4SA==
@@ -454,7 +454,7 @@
     safe-buffer "^5.1.1"
     util.promisify "^1.0.0"
 
-"@nomiclabs/hardhat-ethers@^2.0.0":
+"@nomiclabs/hardhat-ethers@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@nomiclabs/hardhat-ethers/-/hardhat-ethers-2.0.1.tgz#f86a6fa210dbe6270adffccc75e93ed60a856904"
   integrity sha512-uTFHDhhvJ+UjfvvMeQxD3ZALuzuI3FXzTYT1Z5N3ebyZL5z4Ogwt55GB0R9tdKY0p5HhDhBjU/gsCjUEwIVoaw==
