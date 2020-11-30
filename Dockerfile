@@ -52,4 +52,4 @@ FROM cartesi/aleth-test:0.4.2
 WORKDIR /usr/src/app/
 COPY --from=builder /usr/src/app/ . 
 
-ENTRYPOINT [ "./machine-test", "run", "--network", "Istanbul",  "--loads-config", "loads.json", "--tests-config", "./bin/test-list.json",  "--vm=/usr/src/app/lib/libevmone.so"]
+ENTRYPOINT [ "./machine-test", "run", "--network", "Istanbul",  "--loads-config", "loads.json", "--tests-config", "./bin/test_list.json",  "--vm=/usr/src/app/lib/libevmone.so"]
