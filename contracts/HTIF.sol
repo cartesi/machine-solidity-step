@@ -27,7 +27,7 @@ library HTIF {
 
     uint64 constant HTIF_TOHOST_ADDR_CONST = 0x40008000;
     uint64 constant HTIF_FROMHOST_ADDR_CONST = 0x40008008;
-    uint64 constant HTIF_YIELD_ADDR_CONST = 0x40008020;
+    uint64 constant HTIF_IYIELD_ADDR_CONST = 0x40008020;
 
     // [c++] enum HTIF_devices
     uint64 constant HTIF_DEVICE_HALT = 0;        //< Used to halt machine
@@ -154,7 +154,7 @@ library HTIF {
     internal returns (bool)
     {
         // If yield command is enabled, yield
-        if ((mi.readHtifYield() >> cmd) & 1 == 1) {
+        if ((mi.readHtifIYield() >> cmd) & 1 == 1) {
             mi.setIflagsY(true);
             mi.writeHtifFromhost((HTIF_DEVICE_YIELD << 56) | cmd << 48);
         }
@@ -202,8 +202,8 @@ library HTIF {
         return HTIF_FROMHOST_ADDR_CONST;
     }
 
-    function getHtifYieldAddr() public pure returns (uint64) {
-        return HTIF_YIELD_ADDR_CONST;
+    function getHtifIYieldAddr() public pure returns (uint64) {
+        return HTIF_IYIELD_ADDR_CONST;
     }
 
 }
