@@ -1,17 +1,41 @@
 name: Test
 on: [push]
+env:
+  TEST_VERSION: v0.8.0
+  GIT_ORG: ${{ steps.git_org.outputs.current_organization }}
 jobs:
   test:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Download rv64 JSON test files
-        run: aws s3 sync s3://cartesi-ci/${GITHUB_REPOSITORY}/test/rv64 test/rv64/
+
+      - name: Download rv64 logs JSON test files
+        run: aws s3 sync s3://cartesi-ci/${{ env.GIT_ORG }}/machine-emulator/ground-truth/logs-v0.8.0-0004/1/ test/rv64/
         env:
           AWS_REGION: 'us-east-1'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
+      - name: Download machine init state
+        run: aws s3 cp s3://cartesi-ci/${{ env.GIT_ORG }}/machine-emulator/ground-truth/machine-init-state-v0.8.0-0004.tar.gz test/
+        env:
+          AWS_REGION: 'us-east-1'
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
+      - name: Download rv64 test bin files 
+        uses: Legion2/download-release-action@v2.1.0
+        with:
+          repository: ${{ env.GIT_ORG }}/machine-tests
+          tag: ${{ env.TEST_VERSION }}
+          file: machine-tests-${{ env.TEST_VERSION }}.tar.gz
+          token: ${{ secrets.CI_TOKEN }}
+
+      - name: Untar test suite
+        run: mkdir -p test/bin && tar -xzf machine-tests-${TEST_VERSION}.tar.gz -C test/bin && rm test/bin/*.dump
+      
+      - name: Untar init state
+        run: tar -xzf machine-init-state-v0.8.0-0004.tar.gz -C test/bin && mv test/bin/machine-init-state/* test/bin/
 
       - name: Build test image
         run: docker build . -t cartesi/test
@@ -19,9 +43,8 @@ jobs:
       - name: Add brotli to the system
         run: sudo apt-get install brotli -y
       
-      - name: Run sequence tests
-        run: ./test/test_sequence.sh ./test/rv64
-      
       - name: Run bin tests
         run: docker run cartesi/test
-      
+
+      - name: Run sequence tests
+        run: ./test/test_sequence.sh ./test/rv64

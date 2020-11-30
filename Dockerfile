@@ -6,7 +6,7 @@ SHELL ["/bin/bash", "--login", "-c"]
 
 COPY ./contracts ./contracts/
 COPY ./test/aleth-assets/ .
-COPY ./test/rv64-tests/  ./rv64-tests/
+COPY ./test/bin/  ./bin/
 COPY ./deploy/ ./deploy/
 COPY ./src/ ./src/
 COPY ./scripts/ ./scripts/
@@ -48,8 +48,8 @@ RUN apt-get purge git curl -qy && \
     rm -rf ./node-modules
 
 # ======================= test runner ============
-FROM cartesi/aleth-test:0.4.1
+FROM cartesi/aleth-test:0.4.2
 WORKDIR /usr/src/app/
 COPY --from=builder /usr/src/app/ . 
 
-ENTRYPOINT [ "./machine-test", "run", "--network", "Istanbul",  "--loads-config", "loads.json",  "--vm=/usr/src/app/lib/libevmone.so"]
+ENTRYPOINT [ "./machine-test", "run", "--network", "Istanbul",  "--loads-config", "loads.json", "--tests-config", "./bin/test-list.json",  "--vm=/usr/src/app/lib/libevmone.so"]
