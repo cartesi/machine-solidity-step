@@ -64,6 +64,8 @@ const config: HardhatUserConfig = {
         contracts: [
             {
                 artifacts: "node_modules/@cartesi/util/export/artifacts",
+                deploy: "node_modules/@cartesi/util/dist/deploy"
+
             },
             {
                 artifacts: "node_modules/@cartesi/arbitration/export/artifacts",

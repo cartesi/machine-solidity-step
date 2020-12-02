@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import hre from "hardhat";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { DeployOptions, DeployResult } from "hardhat-deploy/types";
+import { DeployOptions, DeployResult, Deployment } from "hardhat-deploy/types";
 
 import libDeploymentFn from "../deploy/01_libs";
 
@@ -15,7 +15,7 @@ async function saveFile(
 ): Promise<string> {
     const parsedData = isJson ? JSON.stringify(data) : data;
     const p = new Promise<string>((resolve, reject) => {
-        fs.writeFile(path.join(OUTDIR, fileName), parsedData, err => {
+        fs.writeFile(path.join(OUTDIR, fileName), parsedData, (err) => {
             if (err) return reject(err);
             resolve("done");
         });
@@ -28,7 +28,7 @@ function changeContract(
     target: string,
     newName: string
 ): Array<string> {
-    const idx = contractList.findIndex(value => value === target);
+    const idx = contractList.findIndex((value) => value === target);
     if (idx == -1) return contractList;
     const copy = [...contractList];
     copy[idx] = newName;
@@ -40,19 +40,19 @@ async function saveRunContractsConfig(contractList: Array<string>) {
         contractList,
         "MemoryInteractor",
         "TestMemoryInteractor"
-    ).map(value => `${value}.bin`);
+    ).map((value) => `${value}.bin`);
     const config = {
         path: path.resolve(OUTDIR) + "/",
-        contracts: list
+        contracts: list,
     };
     await saveFile("run_contracts.json", config);
 }
 
 async function saveSequenceContractsConfig(contractList: Array<string>) {
-    const list = contractList.map(value => `${value}.bin`);
+    const list = contractList.map((value) => `${value}.bin`);
     const config = {
         path: path.resolve(OUTDIR) + "/",
-        contracts: list
+        contracts: list,
     };
     await saveFile("sequence_contracts.json", config);
 }
@@ -62,13 +62,16 @@ async function getDataByHash(
     hash: string
 ): Promise<string> {
     const tx = await hre.ethers.provider.send("eth_getTransactionByHash", [
-        hash
+        hash,
     ]);
     return tx.input;
 }
 
 async function main() {
+    const d = await hre.deployments.all();
+    console.log(Object.keys(d));
     const hreDeploy = hre.deployments.deploy;
+    const hreGet = hre.deployments.get;
     const contractsOrder: Array<string> = [];
     const addresses: { [key: string]: string } = {};
     const { deployer } = await hre.getNamedAccounts();
@@ -94,6 +97,15 @@ async function main() {
 
         return result;
     };
+
+    hre.deployments.get = async (name: string): Promise<Deployment> => {
+        console.log(name);
+        const result = await hre.deployments.deploy(name, {
+            from: deployer,
+            log: true,
+        });
+        return result;
+    };
     await libDeploymentFn(hre);
 
     // save addresses file
@@ -111,9 +123,9 @@ async function main() {
             RiscVConstants: addresses.RiscVConstants,
             ShadowAddresses: addresses.ShadowAddresses,
             HTIF: addresses.HTIF,
-            CLINT: addresses.CLINT
+            CLINT: addresses.CLINT,
         },
-        log: true
+        log: true,
     });
 }
 
@@ -121,7 +133,7 @@ async function main() {
 // and properly handle errors.
 main()
     .then(() => process.exit(0))
-    .catch(error => {
+    .catch((error) => {
         console.error(error);
         process.exit(1);
     });

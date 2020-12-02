@@ -24,14 +24,10 @@ import { DeployFunction } from "hardhat-deploy/types";
 
 const func: DeployFunction = async (bre: HardhatRuntimeEnvironment) => {
     const { deployments, getNamedAccounts, network } = bre;
-    const { deploy } = deployments;
+    const { deploy, get } = deployments;
     const { deployer } = await getNamedAccounts();
 
-    const BitsManipulationLibrary = await deploy("BitsManipulationLibrary", {
-        from: deployer,
-        log: true
-    });
-
+    const BitsManipulationLibrary = await get('BitsManipulationLibrary');
     // deploy machine-solidity-step contracts
     const ShadowAddresses = await deploy("ShadowAddresses", {
         from: deployer,
