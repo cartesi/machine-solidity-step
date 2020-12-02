@@ -1,0 +1,395 @@
+{
+  "address": "0x877d2E892Dfb635f2F325CB7c07e286Ce15a47F5",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "getIflags",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getIlrsc",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMarchid",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcause",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcounteren",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcycle",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMedeleg",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMepc",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMideleg",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMie",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMimpid",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMinstret",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMip",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMisa",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMscratch",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatus",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMtval",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMtvec",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMvendorid",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPc",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSatp",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getScause",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getScounteren",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSepc",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSscratch",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getStval",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getStvec",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xda03b7afa863f3329fe037383b6be10eee98443336a85aff17197bd7a357633a",
+  "receipt": {
+    "to": null,
+    "from": "0x18930e8a66a1DbE21D00581216789AAB7460Afd0",
+    "contractAddress": "0x877d2E892Dfb635f2F325CB7c07e286Ce15a47F5",
+    "transactionIndex": 0,
+    "gasUsed": "248067",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x7938b7a264c112fe141ed7fa9597fb6f9e12cdd47a8a44c794b015e28fcf5366",
+    "transactionHash": "0xda03b7afa863f3329fe037383b6be10eee98443336a85aff17197bd7a357633a",
+    "logs": [],
+    "blockNumber": 4149418,
+    "cumulativeGasUsed": "248067",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "solcInputHash": "4ab6a1e1786521c94a86efcef741c284",
+  "metadata": "{\"compiler\":{\"version\":\"0.7.4+commit.3f05b770\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"getIflags\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getIlrsc\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMarchid\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcause\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcounteren\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcycle\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMedeleg\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMepc\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMideleg\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMie\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMimpid\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMinstret\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMip\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMisa\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMscratch\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatus\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMtval\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMtvec\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMvendorid\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPc\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSatp\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getScause\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getScounteren\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSepc\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSscratch\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStval\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStvec\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Felipe Argento\",\"details\":\"Defined on Cartesi techpaper version 1.02 - Section 3 - table 2  Source: https://cartesi.io/cartesi_whitepaper.pdf \",\"kind\":\"dev\",\"methods\":{},\"title\":\"ShadowAddresses\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"notice\":\"Defines the processor state. Memory-mapped to the lowest 512 bytes in pm\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/ShadowAddresses.sol\":\"ShadowAddresses\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/ShadowAddresses.sol\":{\"content\":\"// Copyright 2019 Cartesi Pte. Ltd.\\n\\n// SPDX-License-Identifier: Apache-2.0\\n// Licensed under the Apache License, Version 2.0 (the \\\"License\\\"); you may not use\\n// this file except in compliance with the License. You may obtain a copy of the\\n// License at http://www.apache.org/licenses/LICENSE-2.0\\n\\n// Unless required by applicable law or agreed to in writing, software distributed\\n// under the License is distributed on an \\\"AS IS\\\" BASIS, WITHOUT WARRANTIES OR\\n// CONDITIONS OF ANY KIND, either express or implied. See the License for the\\n// specific language governing permissions and limitations under the License.\\n\\n\\n\\npragma solidity ^0.7.0;\\n\\n\\n/// @title ShadowAddresses\\n/// @author Felipe Argento\\n/// @notice Defines the processor state. Memory-mapped to the lowest 512 bytes in pm\\n/// @dev Defined on Cartesi techpaper version 1.02 - Section 3 - table 2 \\n/// Source: https://cartesi.io/cartesi_whitepaper.pdf \\nlibrary ShadowAddresses {\\n    uint64 constant PC         = 0x100;\\n    uint64 constant MVENDORID  = 0x108;\\n    uint64 constant MARCHID    = 0x110;\\n    uint64 constant MIMPID     = 0x118;\\n    uint64 constant MCYCLE     = 0x120;\\n    uint64 constant MINSTRET   = 0x128;\\n    uint64 constant MSTATUS    = 0x130;\\n    uint64 constant MTVEC      = 0x138;\\n    uint64 constant MSCRATCH   = 0x140;\\n    uint64 constant MEPC       = 0x148;\\n    uint64 constant MCAUSE     = 0x150;\\n    uint64 constant MTVAL      = 0x158;\\n    uint64 constant MISA       = 0x160;\\n    uint64 constant MIE        = 0x168;\\n    uint64 constant MIP        = 0x170;\\n    uint64 constant MEDELEG    = 0x178;\\n    uint64 constant MIDELEG    = 0x180;\\n    uint64 constant MCOUNTEREN = 0x188;\\n    uint64 constant STVEC      = 0x190;\\n    uint64 constant SSCRATCH   = 0x198;\\n    uint64 constant SEPC       = 0x1a0;\\n    uint64 constant SCAUSE     = 0x1a8;\\n    uint64 constant STVAL      = 0x1b0;\\n    uint64 constant SATP       = 0x1b8;\\n    uint64 constant SCOUNTEREN = 0x1c0;\\n    uint64 constant ILRSC      = 0x1c8;\\n    uint64 constant IFLAGS     = 0x1d0;\\n\\n    //getters - contracts cant access constants directly\\n    function getPc()         public pure returns(uint64) {return PC;}\\n    function getMvendorid()  public pure returns(uint64) {return MVENDORID;}\\n    function getMarchid()    public pure returns(uint64) {return MARCHID;}\\n    function getMimpid()     public pure returns(uint64) {return MIMPID;}\\n    function getMcycle()     public pure returns(uint64) {return MCYCLE;}\\n    function getMinstret()   public pure returns(uint64) {return MINSTRET;}\\n    function getMstatus()    public pure returns(uint64) {return MSTATUS;}\\n    function getMtvec()      public pure returns(uint64) {return MTVEC;}\\n    function getMscratch()   public pure returns(uint64) {return MSCRATCH;}\\n    function getMepc()       public pure returns(uint64) {return MEPC;}\\n    function getMcause()     public pure returns(uint64) {return MCAUSE;}\\n    function getMtval()      public pure returns(uint64) {return MTVAL;}\\n    function getMisa()       public pure returns(uint64) {return MISA;}\\n    function getMie()        public pure returns(uint64) {return MIE;}\\n    function getMip()        public pure returns(uint64) {return MIP;}\\n    function getMedeleg()    public pure returns(uint64) {return MEDELEG;}\\n    function getMideleg()    public pure returns(uint64) {return MIDELEG;}\\n    function getMcounteren() public pure returns(uint64) {return MCOUNTEREN;}\\n    function getStvec()      public pure returns(uint64) {return STVEC;}\\n    function getSscratch()   public pure returns(uint64) {return SSCRATCH;}\\n    function getSepc()       public pure returns(uint64) {return SEPC;}\\n    function getScause()     public pure returns(uint64) {return SCAUSE;}\\n    function getStval()      public pure returns(uint64) {return STVAL;}\\n    function getSatp()       public pure returns(uint64) {return SATP;}\\n    function getScounteren() public pure returns(uint64) {return SCOUNTEREN;}\\n    function getIlrsc()      public pure returns(uint64) {return ILRSC;}\\n    function getIflags()     public pure returns(uint64) {return IFLAGS;}\\n}\\n\",\"keccak256\":\"0xbfd187bab76a2802de777406cdddc9fe0cbf79ab8cb6f76075da7db664a9e9ae\",\"license\":\"Apache-2.0\"}},\"version\":1}",
+  "bytecode": "0x610385610026600b82828239805160001a60731461001957fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600436106101b35760003560e01c8063929127db11610103578063ca04595a116100a1578063da3e8d7b1161007b578063da3e8d7b1461028d578063e2e2e71214610295578063e59cb5741461029d578063e80d1751146102a5576101b3565b8063ca04595a14610275578063d124bd131461027d578063d41a5b5914610285576101b3565b80639ff9932b116100dd5780639ff9932b14610255578063a43e290f1461025d578063b255e9e414610265578063c585eede1461026d576101b3565b8063929127db1461023d57806392f5aa22146102455780639a59734c1461024d576101b3565b80634a4c3510116101705780637047f4df1161014a5780637047f4df1461021d57806372eb67d014610225578063734b96001461022d5780638fd6b7c414610235576101b3565b80634a4c351014610205578063520aff6c1461020d5780636630ad8714610215576101b3565b806329301cac146101b85780632935b8ce146101dd5780632ffdabc5146101e557806342db3667146101ed578063443fd598146101f557806345827f69146101fd575b600080fd5b6101c06102ad565b6040805167ffffffffffffffff9092168252519081900360200190f35b6101c06102b3565b6101c06102b9565b6101c06102bf565b6101c06102c5565b6101c06102cb565b6101c06102d1565b6101c06102d7565b6101c06102dd565b6101c06102e3565b6101c06102e9565b6101c06102ef565b6101c06102f5565b6101c06102fb565b6101c0610301565b6101c0610307565b6101c061030d565b6101c0610313565b6101c0610319565b6101c061031f565b6101c0610325565b6101c061032b565b6101c0610331565b6101c0610337565b6101c061033d565b6101c0610343565b6101c0610349565b6101b090565b61018090565b6101d090565b61013090565b6101b890565b6101a890565b61016090565b61017090565b61019090565b61015090565b61012890565b6101a090565b61013890565b61011890565b61010890565b61014090565b61019890565b61012090565b6101c090565b61011090565b61014890565b61018890565b61010090565b61015890565b6101c890565b61017890565b6101689056fea2646970667358221220c2645a6c0067eeb44cca824c64fdfbd38ee7978a544a8881a9547c7780c26f6564736f6c63430007040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600436106101b35760003560e01c8063929127db11610103578063ca04595a116100a1578063da3e8d7b1161007b578063da3e8d7b1461028d578063e2e2e71214610295578063e59cb5741461029d578063e80d1751146102a5576101b3565b8063ca04595a14610275578063d124bd131461027d578063d41a5b5914610285576101b3565b80639ff9932b116100dd5780639ff9932b14610255578063a43e290f1461025d578063b255e9e414610265578063c585eede1461026d576101b3565b8063929127db1461023d57806392f5aa22146102455780639a59734c1461024d576101b3565b80634a4c3510116101705780637047f4df1161014a5780637047f4df1461021d57806372eb67d014610225578063734b96001461022d5780638fd6b7c414610235576101b3565b80634a4c351014610205578063520aff6c1461020d5780636630ad8714610215576101b3565b806329301cac146101b85780632935b8ce146101dd5780632ffdabc5146101e557806342db3667146101ed578063443fd598146101f557806345827f69146101fd575b600080fd5b6101c06102ad565b6040805167ffffffffffffffff9092168252519081900360200190f35b6101c06102b3565b6101c06102b9565b6101c06102bf565b6101c06102c5565b6101c06102cb565b6101c06102d1565b6101c06102d7565b6101c06102dd565b6101c06102e3565b6101c06102e9565b6101c06102ef565b6101c06102f5565b6101c06102fb565b6101c0610301565b6101c0610307565b6101c061030d565b6101c0610313565b6101c0610319565b6101c061031f565b6101c0610325565b6101c061032b565b6101c0610331565b6101c0610337565b6101c061033d565b6101c0610343565b6101c0610349565b6101b090565b61018090565b6101d090565b61013090565b6101b890565b6101a890565b61016090565b61017090565b61019090565b61015090565b61012890565b6101a090565b61013890565b61011890565b61010890565b61014090565b61019890565b61012090565b6101c090565b61011090565b61014890565b61018890565b61010090565b61015890565b6101c890565b61017890565b6101689056fea2646970667358221220c2645a6c0067eeb44cca824c64fdfbd38ee7978a544a8881a9547c7780c26f6564736f6c63430007040033",
+  "devdoc": {
+    "author": "Felipe Argento",
+    "details": "Defined on Cartesi techpaper version 1.02 - Section 3 - table 2  Source: https://cartesi.io/cartesi_whitepaper.pdf ",
+    "kind": "dev",
+    "methods": {},
+    "title": "ShadowAddresses",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "notice": "Defines the processor state. Memory-mapped to the lowest 512 bytes in pm",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  }
+}

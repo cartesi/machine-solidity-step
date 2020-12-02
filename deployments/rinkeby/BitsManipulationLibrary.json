@@ -1,0 +1,165 @@
+{
+  "address": "0x594c206fdE6a11bf40700D2675D845E0cC65e1b3",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "int32",
+          "name": "number",
+          "type": "int32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "wordSize",
+          "type": "uint32"
+        }
+      ],
+      "name": "int32SignExtension",
+      "outputs": [
+        {
+          "internalType": "int32",
+          "name": "",
+          "type": "int32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "num",
+          "type": "uint32"
+        }
+      ],
+      "name": "uint32SwapEndian",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint64",
+          "name": "number",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64",
+          "name": "wordSize",
+          "type": "uint64"
+        }
+      ],
+      "name": "uint64SignExtension",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint64",
+          "name": "num",
+          "type": "uint64"
+        }
+      ],
+      "name": "uint64SwapEndian",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x215d51a0e31d6245c93a260bcdb212b31f35888d814bcf49d4699793adc474ab",
+  "receipt": {
+    "to": null,
+    "from": "0x18930e8a66a1DbE21D00581216789AAB7460Afd0",
+    "contractAddress": "0x594c206fdE6a11bf40700D2675D845E0cC65e1b3",
+    "transactionIndex": 11,
+    "gasUsed": "198644",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x15ae4849cccfc92edfc7edecfca5364a78e69e61525760d065993868e96965ec",
+    "transactionHash": "0x215d51a0e31d6245c93a260bcdb212b31f35888d814bcf49d4699793adc474ab",
+    "logs": [],
+    "blockNumber": 7649383,
+    "cumulativeGasUsed": "4639910",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "solcInputHash": "4ab6a1e1786521c94a86efcef741c284",
+  "metadata": "{\"compiler\":{\"version\":\"0.7.4+commit.3f05b770\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"int32\",\"name\":\"number\",\"type\":\"int32\"},{\"internalType\":\"uint32\",\"name\":\"wordSize\",\"type\":\"uint32\"}],\"name\":\"int32SignExtension\",\"outputs\":[{\"internalType\":\"int32\",\"name\":\"\",\"type\":\"int32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"num\",\"type\":\"uint32\"}],\"name\":\"uint32SwapEndian\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"number\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"wordSize\",\"type\":\"uint64\"}],\"name\":\"uint64SignExtension\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"num\",\"type\":\"uint64\"}],\"name\":\"uint64SwapEndian\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Felipe Argento / Stephen Chen\",\"kind\":\"dev\",\"methods\":{\"int32SignExtension(int32,uint32)\":{\"params\":{\"number\":\"signed number to be extended\",\"wordSize\":\"number of bits of the signed number, ie, 8 for int8\"}},\"uint32SwapEndian(uint32)\":{\"params\":{\"num\":\"number to have bytes swapped\"}},\"uint64SignExtension(uint64,uint64)\":{\"params\":{\"number\":\"signed number to be extended\",\"wordSize\":\"number of bits of the signed number, ie, 8 for int8\"}},\"uint64SwapEndian(uint64)\":{\"params\":{\"num\":\"number to have bytes swapped\"}}},\"title\":\"Bits Manipulation Library\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"int32SignExtension(int32,uint32)\":{\"notice\":\"Sign extend a shorter signed value to the full int32\"},\"uint32SwapEndian(uint32)\":{\"notice\":\"Swap byte order of unsigned ints with 32 bytes\"},\"uint64SignExtension(uint64,uint64)\":{\"notice\":\"Sign extend a shorter signed value to the full uint64\"},\"uint64SwapEndian(uint64)\":{\"notice\":\"Swap byte order of unsigned ints with 64 bytes\"}},\"notice\":\"Implements bit manipulation helper functions\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"@cartesi/util/contracts/BitsManipulationLibrary.sol\":\"BitsManipulationLibrary\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@cartesi/util/contracts/BitsManipulationLibrary.sol\":{\"content\":\"// Copyright 2020 Cartesi Pte. Ltd.\\n\\n// SPDX-License-Identifier: Apache-2.0\\n// Licensed under the Apache License, Version 2.0 (the \\\"License\\\"); you may not use\\n// this file except in compliance with the License. You may obtain a copy of the\\n// License at http://www.apache.org/licenses/LICENSE-2.0\\n\\n// Unless required by applicable law or agreed to in writing, software distributed\\n// under the License is distributed on an \\\"AS IS\\\" BASIS, WITHOUT WARRANTIES OR\\n// CONDITIONS OF ANY KIND, either express or implied. See the License for the\\n// specific language governing permissions and limitations under the License.\\n\\n\\npragma solidity ^0.7.0;\\n\\n/// @title Bits Manipulation Library\\n/// @author Felipe Argento / Stephen Chen\\n/// @notice Implements bit manipulation helper functions\\nlibrary BitsManipulationLibrary {\\n\\n    /// @notice Sign extend a shorter signed value to the full int32\\n    /// @param number signed number to be extended\\n    /// @param wordSize number of bits of the signed number, ie, 8 for int8\\n    function int32SignExtension(int32 number, uint32 wordSize)\\n    public pure returns(int32)\\n    {\\n        uint32 uNumber = uint32(number);\\n        bool isNegative = ((uint64(1) << (wordSize - 1)) & uNumber) > 0;\\n        uint32 mask = ((uint32(2) ** wordSize) - 1);\\n\\n        if (isNegative) {\\n            uNumber = uNumber | ~mask;\\n        }\\n\\n        return int32(uNumber);\\n    }\\n\\n    /// @notice Sign extend a shorter signed value to the full uint64\\n    /// @param number signed number to be extended\\n    /// @param wordSize number of bits of the signed number, ie, 8 for int8\\n    function uint64SignExtension(uint64 number, uint64 wordSize)\\n    public pure returns(uint64)\\n    {\\n        uint64 uNumber = number;\\n        bool isNegative = ((uint64(1) << (wordSize - 1)) & uNumber) > 0;\\n        uint64 mask = ((uint64(2) ** wordSize) - 1);\\n\\n        if (isNegative) {\\n            uNumber = uNumber | ~mask;\\n        }\\n\\n        return uNumber;\\n    }\\n\\n    /// @notice Swap byte order of unsigned ints with 64 bytes\\n    /// @param num number to have bytes swapped\\n    function uint64SwapEndian(uint64 num) public pure returns(uint64) {\\n        uint64 output = ((num & 0x00000000000000ff) << 56)|\\n            ((num & 0x000000000000ff00) << 40)|\\n            ((num & 0x0000000000ff0000) << 24)|\\n            ((num & 0x00000000ff000000) << 8) |\\n            ((num & 0x000000ff00000000) >> 8) |\\n            ((num & 0x0000ff0000000000) >> 24)|\\n            ((num & 0x00ff000000000000) >> 40)|\\n            ((num & 0xff00000000000000) >> 56);\\n\\n        return output;\\n    }\\n\\n    /// @notice Swap byte order of unsigned ints with 32 bytes\\n    /// @param num number to have bytes swapped\\n    function uint32SwapEndian(uint32 num) public pure returns(uint32) {\\n        uint32 output = ((num >> 24) & 0xff) | ((num << 8) & 0xff0000) | ((num >> 8) & 0xff00) | ((num << 24) & 0xff000000);\\n        return output;\\n    }\\n}\\n\\n\",\"keccak256\":\"0x95b97e0ae364fb91a3fdcf8132e7b61c745c23dd4e5beb980f396c05a69bbd08\",\"license\":\"Apache-2.0\"}},\"version\":1}",
+  "bytecode": "0x6102a3610026600b82828239805160001a60731461001957fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600436106100565760003560e01c8063240034ec1461005b578063bf1924c514610097578063ef7c7949146100db578063f69c389b1461010a575b600080fd5b61007e6004803603602081101561007157600080fd5b503563ffffffff1661014d565b6040805163ffffffff9092168252519081900360200190f35b6100be600480360360208110156100ad57600080fd5b503567ffffffffffffffff1661017a565b6040805167ffffffffffffffff9092168252519081900360200190f35b6100be600480360360408110156100f157600080fd5b5067ffffffffffffffff813581169160200135166101f3565b6101366004803603604081101561012057600080fd5b50803560030b906020013563ffffffff16610234565b6040805160039290920b8252519081900360200190f35b601881811b63ff00000016600883811c61ff00169084901b62ff0000169390921c60ff1692909217171790565b603881811b67ff0000000000000016602883811b66ff0000000000001691909117601884811b65ff00000000001691909117600885811b64ff00000000169190911763ff0000009186901c919091161762ff00009185901c919091161761ff009184901c919091161760ff9183901c9190911617919050565b600082600167ffffffffffffffff60001980860182169290921b831681161580159291861660020a9091019061022a578019831792505b5090949350505050565b600082600160001980850163ffffffff9081169290921b8316821615801592861660020a9091019061022a57199190911794935050505056fea26469706673582212209663046c355fd0f2999be7d72b92f559657e81f142ac8f4b15842b53c96f7c1f64736f6c63430007040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600436106100565760003560e01c8063240034ec1461005b578063bf1924c514610097578063ef7c7949146100db578063f69c389b1461010a575b600080fd5b61007e6004803603602081101561007157600080fd5b503563ffffffff1661014d565b6040805163ffffffff9092168252519081900360200190f35b6100be600480360360208110156100ad57600080fd5b503567ffffffffffffffff1661017a565b6040805167ffffffffffffffff9092168252519081900360200190f35b6100be600480360360408110156100f157600080fd5b5067ffffffffffffffff813581169160200135166101f3565b6101366004803603604081101561012057600080fd5b50803560030b906020013563ffffffff16610234565b6040805160039290920b8252519081900360200190f35b601881811b63ff00000016600883811c61ff00169084901b62ff0000169390921c60ff1692909217171790565b603881811b67ff0000000000000016602883811b66ff0000000000001691909117601884811b65ff00000000001691909117600885811b64ff00000000169190911763ff0000009186901c919091161762ff00009185901c919091161761ff009184901c919091161760ff9183901c9190911617919050565b600082600167ffffffffffffffff60001980860182169290921b831681161580159291861660020a9091019061022a578019831792505b5090949350505050565b600082600160001980850163ffffffff9081169290921b8316821615801592861660020a9091019061022a57199190911794935050505056fea26469706673582212209663046c355fd0f2999be7d72b92f559657e81f142ac8f4b15842b53c96f7c1f64736f6c63430007040033",
+  "devdoc": {
+    "author": "Felipe Argento / Stephen Chen",
+    "kind": "dev",
+    "methods": {
+      "int32SignExtension(int32,uint32)": {
+        "params": {
+          "number": "signed number to be extended",
+          "wordSize": "number of bits of the signed number, ie, 8 for int8"
+        }
+      },
+      "uint32SwapEndian(uint32)": {
+        "params": {
+          "num": "number to have bytes swapped"
+        }
+      },
+      "uint64SignExtension(uint64,uint64)": {
+        "params": {
+          "number": "signed number to be extended",
+          "wordSize": "number of bits of the signed number, ie, 8 for int8"
+        }
+      },
+      "uint64SwapEndian(uint64)": {
+        "params": {
+          "num": "number to have bytes swapped"
+        }
+      }
+    },
+    "title": "Bits Manipulation Library",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "int32SignExtension(int32,uint32)": {
+        "notice": "Sign extend a shorter signed value to the full int32"
+      },
+      "uint32SwapEndian(uint32)": {
+        "notice": "Swap byte order of unsigned ints with 32 bytes"
+      },
+      "uint64SignExtension(uint64,uint64)": {
+        "notice": "Sign extend a shorter signed value to the full uint64"
+      },
+      "uint64SwapEndian(uint64)": {
+        "notice": "Swap byte order of unsigned ints with 64 bytes"
+      }
+    },
+    "notice": "Implements bit manipulation helper functions",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  }
+}

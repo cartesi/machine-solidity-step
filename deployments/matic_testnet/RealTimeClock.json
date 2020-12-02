@@ -1,0 +1,121 @@
+{
+  "address": "0x5a4c3AbBd7391A2F060b05564567FE4D13F38aFB",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint64",
+          "name": "cycle",
+          "type": "uint64"
+        }
+      ],
+      "name": "rtcCycleToTime",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint64",
+          "name": "time",
+          "type": "uint64"
+        }
+      ],
+      "name": "rtcTimeToCycle",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x3bfd096a564edea78ebba6ff8db50c16707b237f322fa8eb17237e1bcfbef168",
+  "receipt": {
+    "to": null,
+    "from": "0x18930e8a66a1DbE21D00581216789AAB7460Afd0",
+    "contractAddress": "0x5a4c3AbBd7391A2F060b05564567FE4D13F38aFB",
+    "transactionIndex": 0,
+    "gasUsed": "106495",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000800000000000000000000100000000004000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000080000000000000000000200000000000000000000000000000000000000000000000000000000000004000000000000000000001000000000000000000000000000000100040000000000000000000000000000000000000000000000000000000000000024000100000",
+    "blockHash": "0x88313e58cee7f894c9d724ec50b918ab20742e3588d814726f469313fef8c666",
+    "transactionHash": "0x3bfd096a564edea78ebba6ff8db50c16707b237f322fa8eb17237e1bcfbef168",
+    "logs": [
+      {
+        "transactionIndex": 0,
+        "blockNumber": 7547284,
+        "transactionHash": "0x3bfd096a564edea78ebba6ff8db50c16707b237f322fa8eb17237e1bcfbef168",
+        "address": "0x0000000000000000000000000000000000001010",
+        "topics": [
+          "0x4dfe1bbbcf077ddc3e01291eea2d5c70c2b422b415d95645b9adcfd678cb1d63",
+          "0x0000000000000000000000000000000000000000000000000000000000001010",
+          "0x00000000000000000000000018930e8a66a1dbe21d00581216789aab7460afd0",
+          "0x000000000000000000000000be188d6641e8b680743a4815dfa0f6208038960f"
+        ],
+        "data": "0x0000000000000000000000000000000000000000000000000001e4487f3a0e0000000000000000000000000000000000000000000000000027305a3d5f51c40000000000000000000000000000000000000000000000005cb02d113f38fcac95000000000000000000000000000000000000000000000000272e75f4e017b60000000000000000000000000000000000000000000000005cb02ef587b836ba95",
+        "logIndex": 0,
+        "blockHash": "0x88313e58cee7f894c9d724ec50b918ab20742e3588d814726f469313fef8c666"
+      }
+    ],
+    "blockNumber": 7547284,
+    "cumulativeGasUsed": "106495",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "solcInputHash": "4ab6a1e1786521c94a86efcef741c284",
+  "metadata": "{\"compiler\":{\"version\":\"0.7.4+commit.3f05b770\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"cycle\",\"type\":\"uint64\"}],\"name\":\"rtcCycleToTime\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"time\",\"type\":\"uint64\"}],\"name\":\"rtcTimeToCycle\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Felipe Argento\",\"kind\":\"dev\",\"methods\":{\"rtcCycleToTime(uint64)\":{\"params\":{\"cycle\":\"Cycle count\"},\"returns\":{\"_0\":\"Time count\"}},\"rtcTimeToCycle(uint64)\":{\"params\":{\"time\":\"Time count\"},\"returns\":{\"_0\":\"Cycle count\"}}},\"title\":\"RealTimeClock\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"rtcCycleToTime(uint64)\":{\"notice\":\"Converts from cycle count to time count\"},\"rtcTimeToCycle(uint64)\":{\"notice\":\"Converts from time count to cycle count\"}},\"notice\":\"Real Time clock simulator\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/RealTimeClock.sol\":\"RealTimeClock\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/RealTimeClock.sol\":{\"content\":\"// Copyright 2019 Cartesi Pte. Ltd.\\n\\n// SPDX-License-Identifier: Apache-2.0\\n// Licensed under the Apache License, Version 2.0 (the \\\"License\\\"); you may not use\\n// this file except in compliance with the License. You may obtain a copy of the\\n// License at http://www.apache.org/licenses/LICENSE-2.0\\n\\n// Unless required by applicable law or agreed to in writing, software distributed\\n// under the License is distributed on an \\\"AS IS\\\" BASIS, WITHOUT WARRANTIES OR\\n// CONDITIONS OF ANY KIND, either express or implied. See the License for the\\n// specific language governing permissions and limitations under the License.\\n\\n\\n\\n/// @title RealTimeClock\\npragma solidity ^0.7.0;\\n\\n/// @title RealTimeClock\\n/// @author Felipe Argento\\n/// @notice Real Time clock simulator\\nlibrary RealTimeClock {\\n    uint64 constant RTC_FREQ_DIV = 100;\\n    \\n    /// @notice Converts from cycle count to time count\\n    /// @param cycle Cycle count\\n    /// @return Time count\\n    function rtcCycleToTime(uint64 cycle) public pure returns (uint64) {\\n        return cycle / RTC_FREQ_DIV;\\n    }\\n\\n    /// @notice Converts from time count to cycle count\\n    /// @param  time Time count\\n    /// @return Cycle count\\n    function rtcTimeToCycle(uint64 time) public pure returns (uint64) {\\n        return time * RTC_FREQ_DIV;\\n    }\\n}\\n\",\"keccak256\":\"0x07a038d80a3f50c9cb153f63ff8d251a5704a2cd1c74863c9f5aeeb0aee247fd\",\"license\":\"Apache-2.0\"}},\"version\":1}",
+  "bytecode": "0x60f6610025600b82828239805160001a60731461001857fe5b30600052607381538281f3fe7300000000000000000000000000000000000000003014608060405260043610603d5760003560e01c8063453f06be14604257806368bd2a56146083575b600080fd5b606660048036036020811015605657600080fd5b503567ffffffffffffffff1660a7565b6040805167ffffffffffffffff9092168252519081900360200190f35b606660048036036020811015609757600080fd5b503567ffffffffffffffff1660ba565b606467ffffffffffffffff919091160490565b6064029056fea26469706673582212205432e00f1fccffb20a220f9c2171e7371da6ed33f0698bb3d69843a5c780cff364736f6c63430007040033",
+  "deployedBytecode": "0x7300000000000000000000000000000000000000003014608060405260043610603d5760003560e01c8063453f06be14604257806368bd2a56146083575b600080fd5b606660048036036020811015605657600080fd5b503567ffffffffffffffff1660a7565b6040805167ffffffffffffffff9092168252519081900360200190f35b606660048036036020811015609757600080fd5b503567ffffffffffffffff1660ba565b606467ffffffffffffffff919091160490565b6064029056fea26469706673582212205432e00f1fccffb20a220f9c2171e7371da6ed33f0698bb3d69843a5c780cff364736f6c63430007040033",
+  "devdoc": {
+    "author": "Felipe Argento",
+    "kind": "dev",
+    "methods": {
+      "rtcCycleToTime(uint64)": {
+        "params": {
+          "cycle": "Cycle count"
+        },
+        "returns": {
+          "_0": "Time count"
+        }
+      },
+      "rtcTimeToCycle(uint64)": {
+        "params": {
+          "time": "Time count"
+        },
+        "returns": {
+          "_0": "Cycle count"
+        }
+      }
+    },
+    "title": "RealTimeClock",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "rtcCycleToTime(uint64)": {
+        "notice": "Converts from cycle count to time count"
+      },
+      "rtcTimeToCycle(uint64)": {
+        "notice": "Converts from time count to cycle count"
+      }
+    },
+    "notice": "Real Time clock simulator",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  }
+}

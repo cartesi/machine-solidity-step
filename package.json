@@ -1,6 +1,6 @@
 {
   "name": "@cartesi/machine-solidity-step",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Machine Solidity Step",
   "scripts": {
     "build": "hardhat compile && tsc",
@@ -36,7 +36,7 @@
   },  
   "dependencies": {
     "@cartesi/arbitration": "^0.5.1",
-    "@cartesi/util": "^0.6.1"
+    "@cartesi/util": "^0.6.2"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.1",
