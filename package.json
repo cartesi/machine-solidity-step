@@ -1,6 +1,6 @@
 {
   "name": "@cartesi/machine-solidity-step",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Machine Solidity Step",
   "scripts": {
     "build": "hardhat compile && tsc",
@@ -72,6 +72,7 @@
     "contracts",
     "deployments/*/*.json",
     "deployments/*/.chainid",
+    "dist/deploy/*.js",
     "dist/src/types",
     "export"
   ],
