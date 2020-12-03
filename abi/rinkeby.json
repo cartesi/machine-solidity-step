@@ -3,19 +3,19 @@
   "chainId": "4",
   "contracts": {
     "ArithmeticImmediateInstructions": {
-      "address": "0x5b27Fa7ec9697a2A08548EcaceCA56531405c7Bd",
+      "address": "0x203CCba48ae61cb296F069C74d133968c916b1De",
       "abi": []
     },
     "ArithmeticInstructions": {
-      "address": "0x978A71d82a2666cc242f7864c75ebf1778aE3951",
+      "address": "0x20808b6451bB203Aa28C4c15ab3Da2F58C685e40",
       "abi": []
     },
     "AtomicInstructions": {
-      "address": "0xAe323D452B3EcE83cfBC4402F9a5C54BBfA0B6Be",
+      "address": "0x29B33E43Bed18B6f3cA2913d074FeAc5f14d3185",
       "abi": []
     },
     "BitsManipulationLibrary": {
-      "address": "0x594c206fdE6a11bf40700D2675D845E0cC65e1b3",
+      "address": "0xAc301c9CD929bBC333BB47cf12802B5045A31820",
       "abi": [
         {
           "inputs": [
@@ -106,7 +106,7 @@
       ]
     },
     "BranchInstructions": {
-      "address": "0x66ed41e00A3553e6b01f4846e95A80E847f4C611",
+      "address": "0xff7c20eCE07FCC8f34b9D3d0DF3E3A5B41d460b6",
       "abi": []
     },
     "CLINT": {
@@ -132,7 +132,7 @@
       "abi": []
     },
     "CSRExecute": {
-      "address": "0x3ba4426C5d3ccf0a4fac244cDe628e551c205949",
+      "address": "0x4f3ad9445ec7D19FB1E38E77a5Df43D8dc62da79",
       "abi": []
     },
     "CSRReads": {
@@ -318,7 +318,7 @@
       ]
     },
     "Execute": {
-      "address": "0x44BcC5a5F3aa860Fcc117D07B71A17811b9c75aC",
+      "address": "0xE1B9c48ECC4D98865AD991775E886496D8De8651",
       "abi": []
     },
     "Fetch": {
@@ -394,7 +394,7 @@
       ]
     },
     "MemoryInteractor": {
-      "address": "0x28DB709749f11630352aFdaE72FCd7A7d9385043",
+      "address": "0xbEF95E6fE7720851b6Db5294369CE8De058d69e8",
       "abi": [
         {
           "inputs": [],
@@ -2991,7 +2991,7 @@
       ]
     },
     "RiscVDecoder": {
-      "address": "0xe6e40f98771f05933A2e9Dd419205b81ae42e7E8",
+      "address": "0x1EfaA831Bd6c1C59ECabbb99c1bcDF9e118eB0a8",
       "abi": [
         {
           "inputs": [
@@ -3281,7 +3281,7 @@
       ]
     },
     "S_Instructions": {
-      "address": "0xdC15056028d5AAdc15354EC2cDaC03e09Cf7055f",
+      "address": "0x9C677bb30c6baFF0d8C535C2a1619D474e7226bE",
       "abi": []
     },
     "ShadowAddresses": {
@@ -3641,11 +3641,11 @@
       ]
     },
     "StandAloneInstructions": {
-      "address": "0x9D8d5CEdAae2A1958F6Dc16CD4CBaF5620f8C1c5",
+      "address": "0xb1d5479B208E8c4f8A43F4167AC52193C6D3F987",
       "abi": []
     },
     "Step": {
-      "address": "0xA16aaa56FB0c2573D330110740654f4CEb1DE82F",
+      "address": "0x345fA4EBDbB15F4Ec40C3097d4ec521044cD5a56",
       "abi": [
         {
           "inputs": [
