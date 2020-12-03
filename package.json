@@ -68,7 +68,6 @@
     "cartesi"
   ],
   "files": [
-    "abi",
     "contracts",
     "deployments/*/*.json",
     "deployments/*/.chainid",
