@@ -1,0 +1,184 @@
+{
+  "contractName": "BitsManipulationLibrary",
+  "sourceName": "@cartesi/util/contracts/BitsManipulationLibrary.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "int32",
+          "name": "number",
+          "type": "int32"
+        },
+        {
+          "internalType": "uint32",
+          "name": "wordSize",
+          "type": "uint32"
+        }
+      ],
+      "name": "int32SignExtension",
+      "outputs": [
+        {
+          "internalType": "int32",
+          "name": "",
+          "type": "int32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "num",
+          "type": "uint32"
+        }
+      ],
+      "name": "uint32SwapEndian",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint64",
+          "name": "number",
+          "type": "uint64"
+        },
+        {
+          "internalType": "uint64",
+          "name": "wordSize",
+          "type": "uint64"
+        }
+      ],
+      "name": "uint64SignExtension",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint64",
+          "name": "num",
+          "type": "uint64"
+        }
+      ],
+      "name": "uint64SwapEndian",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x6102a3610026600b82828239805160001a60731461001957fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600436106100565760003560e01c8063240034ec1461005b578063bf1924c514610097578063ef7c7949146100db578063f69c389b1461010a575b600080fd5b61007e6004803603602081101561007157600080fd5b503563ffffffff1661014d565b6040805163ffffffff9092168252519081900360200190f35b6100be600480360360208110156100ad57600080fd5b503567ffffffffffffffff1661017a565b6040805167ffffffffffffffff9092168252519081900360200190f35b6100be600480360360408110156100f157600080fd5b5067ffffffffffffffff813581169160200135166101f3565b6101366004803603604081101561012057600080fd5b50803560030b906020013563ffffffff16610234565b6040805160039290920b8252519081900360200190f35b601881811b63ff00000016600883811c61ff00169084901b62ff0000169390921c60ff1692909217171790565b603881811b67ff0000000000000016602883811b66ff0000000000001691909117601884811b65ff00000000001691909117600885811b64ff00000000169190911763ff0000009186901c919091161762ff00009185901c919091161761ff009184901c919091161760ff9183901c9190911617919050565b600082600167ffffffffffffffff60001980860182169290921b831681161580159291861660020a9091019061022a578019831792505b5090949350505050565b600082600160001980850163ffffffff9081169290921b8316821615801592861660020a9091019061022a57199190911794935050505056fea26469706673582212209663046c355fd0f2999be7d72b92f559657e81f142ac8f4b15842b53c96f7c1f64736f6c63430007040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600436106100565760003560e01c8063240034ec1461005b578063bf1924c514610097578063ef7c7949146100db578063f69c389b1461010a575b600080fd5b61007e6004803603602081101561007157600080fd5b503563ffffffff1661014d565b6040805163ffffffff9092168252519081900360200190f35b6100be600480360360208110156100ad57600080fd5b503567ffffffffffffffff1661017a565b6040805167ffffffffffffffff9092168252519081900360200190f35b6100be600480360360408110156100f157600080fd5b5067ffffffffffffffff813581169160200135166101f3565b6101366004803603604081101561012057600080fd5b50803560030b906020013563ffffffff16610234565b6040805160039290920b8252519081900360200190f35b601881811b63ff00000016600883811c61ff00169084901b62ff0000169390921c60ff1692909217171790565b603881811b67ff0000000000000016602883811b66ff0000000000001691909117601884811b65ff00000000001691909117600885811b64ff00000000169190911763ff0000009186901c919091161762ff00009185901c919091161761ff009184901c919091161760ff9183901c9190911617919050565b600082600167ffffffffffffffff60001980860182169290921b831681161580159291861660020a9091019061022a578019831792505b5090949350505050565b600082600160001980850163ffffffff9081169290921b8316821615801592861660020a9091019061022a57199190911794935050505056fea26469706673582212209663046c355fd0f2999be7d72b92f559657e81f142ac8f4b15842b53c96f7c1f64736f6c63430007040033",
+  "linkReferences": {},
+  "deployedLinkReferences": {},
+  "devdoc": {
+    "author": "Felipe Argento / Stephen Chen",
+    "kind": "dev",
+    "methods": {
+      "int32SignExtension(int32,uint32)": {
+        "params": {
+          "number": "signed number to be extended",
+          "wordSize": "number of bits of the signed number, ie, 8 for int8"
+        }
+      },
+      "uint32SwapEndian(uint32)": {
+        "params": {
+          "num": "number to have bytes swapped"
+        }
+      },
+      "uint64SignExtension(uint64,uint64)": {
+        "params": {
+          "number": "signed number to be extended",
+          "wordSize": "number of bits of the signed number, ie, 8 for int8"
+        }
+      },
+      "uint64SwapEndian(uint64)": {
+        "params": {
+          "num": "number to have bytes swapped"
+        }
+      }
+    },
+    "title": "Bits Manipulation Library",
+    "version": 1
+  },
+  "evm": {
+    "bytecode": {
+      "generatedSources": [],
+      "linkReferences": {},
+      "opcodes": "PUSH2 0x2A3 PUSH2 0x26 PUSH1 0xB DUP3 DUP3 DUP3 CODECOPY DUP1 MLOAD PUSH1 0x0 BYTE PUSH1 0x73 EQ PUSH2 0x19 JUMPI INVALID JUMPDEST ADDRESS PUSH1 0x0 MSTORE PUSH1 0x73 DUP2 MSTORE8 DUP3 DUP2 RETURN INVALID PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH1 0x4 CALLDATASIZE LT PUSH2 0x56 JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x240034EC EQ PUSH2 0x5B JUMPI DUP1 PUSH4 0xBF1924C5 EQ PUSH2 0x97 JUMPI DUP1 PUSH4 0xEF7C7949 EQ PUSH2 0xDB JUMPI DUP1 PUSH4 0xF69C389B EQ PUSH2 0x10A JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH2 0x7E PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x20 DUP2 LT ISZERO PUSH2 0x71 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP CALLDATALOAD PUSH4 0xFFFFFFFF AND PUSH2 0x14D JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH4 0xFFFFFFFF SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0xBE PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x20 DUP2 LT ISZERO PUSH2 0xAD JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP CALLDATALOAD PUSH8 0xFFFFFFFFFFFFFFFF AND PUSH2 0x17A JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH8 0xFFFFFFFFFFFFFFFF SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0xBE PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x40 DUP2 LT ISZERO PUSH2 0xF1 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH8 0xFFFFFFFFFFFFFFFF DUP2 CALLDATALOAD DUP2 AND SWAP2 PUSH1 0x20 ADD CALLDATALOAD AND PUSH2 0x1F3 JUMP JUMPDEST PUSH2 0x136 PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x40 DUP2 LT ISZERO PUSH2 0x120 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP DUP1 CALLDATALOAD PUSH1 0x3 SIGNEXTEND SWAP1 PUSH1 0x20 ADD CALLDATALOAD PUSH4 0xFFFFFFFF AND PUSH2 0x234 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x3 SWAP3 SWAP1 SWAP3 SIGNEXTEND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH1 0x18 DUP2 DUP2 SHL PUSH4 0xFF000000 AND PUSH1 0x8 DUP4 DUP2 SHR PUSH2 0xFF00 AND SWAP1 DUP5 SWAP1 SHL PUSH3 0xFF0000 AND SWAP4 SWAP1 SWAP3 SHR PUSH1 0xFF AND SWAP3 SWAP1 SWAP3 OR OR OR SWAP1 JUMP JUMPDEST PUSH1 0x38 DUP2 DUP2 SHL PUSH8 0xFF00000000000000 AND PUSH1 0x28 DUP4 DUP2 SHL PUSH7 0xFF000000000000 AND SWAP2 SWAP1 SWAP2 OR PUSH1 0x18 DUP5 DUP2 SHL PUSH6 0xFF0000000000 AND SWAP2 SWAP1 SWAP2 OR PUSH1 0x8 DUP6 DUP2 SHL PUSH5 0xFF00000000 AND SWAP2 SWAP1 SWAP2 OR PUSH4 0xFF000000 SWAP2 DUP7 SWAP1 SHR SWAP2 SWAP1 SWAP2 AND OR PUSH3 0xFF0000 SWAP2 DUP6 SWAP1 SHR SWAP2 SWAP1 SWAP2 AND OR PUSH2 0xFF00 SWAP2 DUP5 SWAP1 SHR SWAP2 SWAP1 SWAP2 AND OR PUSH1 0xFF SWAP2 DUP4 SWAP1 SHR SWAP2 SWAP1 SWAP2 AND OR SWAP2 SWAP1 POP JUMP JUMPDEST PUSH1 0x0 DUP3 PUSH1 0x1 PUSH8 0xFFFFFFFFFFFFFFFF PUSH1 0x0 NOT DUP1 DUP7 ADD DUP3 AND SWAP3 SWAP1 SWAP3 SHL DUP4 AND DUP2 AND ISZERO DUP1 ISZERO SWAP3 SWAP2 DUP7 AND PUSH1 0x2 EXP SWAP1 SWAP2 ADD SWAP1 PUSH2 0x22A JUMPI DUP1 NOT DUP4 OR SWAP3 POP JUMPDEST POP SWAP1 SWAP5 SWAP4 POP POP POP POP JUMP JUMPDEST PUSH1 0x0 DUP3 PUSH1 0x1 PUSH1 0x0 NOT DUP1 DUP6 ADD PUSH4 0xFFFFFFFF SWAP1 DUP2 AND SWAP3 SWAP1 SWAP3 SHL DUP4 AND DUP3 AND ISZERO DUP1 ISZERO SWAP3 DUP7 AND PUSH1 0x2 EXP SWAP1 SWAP2 ADD SWAP1 PUSH2 0x22A JUMPI NOT SWAP2 SWAP1 SWAP2 OR SWAP5 SWAP4 POP POP POP POP JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 SWAP7 PUSH4 0x46C355F 0xD0 CALLCODE SWAP10 SWAP12 0xE7 0xD7 0x2B SWAP3 CREATE2 MSIZE PUSH6 0x7E81F142AC8F 0x4B ISZERO DUP5 0x2B MSTORE8 0xC9 PUSH16 0x7C1F64736F6C63430007040033000000 ",
+      "sourceMap": "779:2128:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;"
+    },
+    "deployedBytecode": {
+      "generatedSources": [],
+      "immutableReferences": {},
+      "linkReferences": {},
+      "opcodes": "PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH1 0x4 CALLDATASIZE LT PUSH2 0x56 JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x240034EC EQ PUSH2 0x5B JUMPI DUP1 PUSH4 0xBF1924C5 EQ PUSH2 0x97 JUMPI DUP1 PUSH4 0xEF7C7949 EQ PUSH2 0xDB JUMPI DUP1 PUSH4 0xF69C389B EQ PUSH2 0x10A JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH2 0x7E PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x20 DUP2 LT ISZERO PUSH2 0x71 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP CALLDATALOAD PUSH4 0xFFFFFFFF AND PUSH2 0x14D JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH4 0xFFFFFFFF SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0xBE PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x20 DUP2 LT ISZERO PUSH2 0xAD JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP CALLDATALOAD PUSH8 0xFFFFFFFFFFFFFFFF AND PUSH2 0x17A JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH8 0xFFFFFFFFFFFFFFFF SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0xBE PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x40 DUP2 LT ISZERO PUSH2 0xF1 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP PUSH8 0xFFFFFFFFFFFFFFFF DUP2 CALLDATALOAD DUP2 AND SWAP2 PUSH1 0x20 ADD CALLDATALOAD AND PUSH2 0x1F3 JUMP JUMPDEST PUSH2 0x136 PUSH1 0x4 DUP1 CALLDATASIZE SUB PUSH1 0x40 DUP2 LT ISZERO PUSH2 0x120 JUMPI PUSH1 0x0 DUP1 REVERT JUMPDEST POP DUP1 CALLDATALOAD PUSH1 0x3 SIGNEXTEND SWAP1 PUSH1 0x20 ADD CALLDATALOAD PUSH4 0xFFFFFFFF AND PUSH2 0x234 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH1 0x3 SWAP3 SWAP1 SWAP3 SIGNEXTEND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH1 0x18 DUP2 DUP2 SHL PUSH4 0xFF000000 AND PUSH1 0x8 DUP4 DUP2 SHR PUSH2 0xFF00 AND SWAP1 DUP5 SWAP1 SHL PUSH3 0xFF0000 AND SWAP4 SWAP1 SWAP3 SHR PUSH1 0xFF AND SWAP3 SWAP1 SWAP3 OR OR OR SWAP1 JUMP JUMPDEST PUSH1 0x38 DUP2 DUP2 SHL PUSH8 0xFF00000000000000 AND PUSH1 0x28 DUP4 DUP2 SHL PUSH7 0xFF000000000000 AND SWAP2 SWAP1 SWAP2 OR PUSH1 0x18 DUP5 DUP2 SHL PUSH6 0xFF0000000000 AND SWAP2 SWAP1 SWAP2 OR PUSH1 0x8 DUP6 DUP2 SHL PUSH5 0xFF00000000 AND SWAP2 SWAP1 SWAP2 OR PUSH4 0xFF000000 SWAP2 DUP7 SWAP1 SHR SWAP2 SWAP1 SWAP2 AND OR PUSH3 0xFF0000 SWAP2 DUP6 SWAP1 SHR SWAP2 SWAP1 SWAP2 AND OR PUSH2 0xFF00 SWAP2 DUP5 SWAP1 SHR SWAP2 SWAP1 SWAP2 AND OR PUSH1 0xFF SWAP2 DUP4 SWAP1 SHR SWAP2 SWAP1 SWAP2 AND OR SWAP2 SWAP1 POP JUMP JUMPDEST PUSH1 0x0 DUP3 PUSH1 0x1 PUSH8 0xFFFFFFFFFFFFFFFF PUSH1 0x0 NOT DUP1 DUP7 ADD DUP3 AND SWAP3 SWAP1 SWAP3 SHL DUP4 AND DUP2 AND ISZERO DUP1 ISZERO SWAP3 SWAP2 DUP7 AND PUSH1 0x2 EXP SWAP1 SWAP2 ADD SWAP1 PUSH2 0x22A JUMPI DUP1 NOT DUP4 OR SWAP3 POP JUMPDEST POP SWAP1 SWAP5 SWAP4 POP POP POP POP JUMP JUMPDEST PUSH1 0x0 DUP3 PUSH1 0x1 PUSH1 0x0 NOT DUP1 DUP6 ADD PUSH4 0xFFFFFFFF SWAP1 DUP2 AND SWAP3 SWAP1 SWAP3 SHL DUP4 AND DUP3 AND ISZERO DUP1 ISZERO SWAP3 DUP7 AND PUSH1 0x2 EXP SWAP1 SWAP2 ADD SWAP1 PUSH2 0x22A JUMPI NOT SWAP2 SWAP1 SWAP2 OR SWAP5 SWAP4 POP POP POP POP JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 SWAP7 PUSH4 0x46C355F 0xD0 CALLCODE SWAP10 SWAP12 0xE7 0xD7 0x2B SWAP3 CREATE2 MSIZE PUSH6 0x7E81F142AC8F 0x4B ISZERO DUP5 0x2B MSTORE8 0xC9 PUSH16 0x7C1F64736F6C63430007040033000000 ",
+      "sourceMap": "779:2128:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2684:221;;;;;;;;;;;;;;;;-1:-1:-1;2684:221:0;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;2074:493;;;;;;;;;;;;;;;;-1:-1:-1;2074:493:0;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;1593:364;;;;;;;;;;;;;;;;-1:-1:-1;1593:364:0;;;;;;;;;;;:::i;1014:376::-;;;;;;;;;;;;;;;;-1:-1:-1;1014:376:0;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;2684:221;2858:2;2851:9;;;2864:10;2850:24;2834:1;2827:8;;;2839:6;2826:19;2801:8;;;;2813;2800:21;2778:9;;;;;;2776:46;;;;:70;:99;;2684:221::o;2074:493::-;2533:2;2167:32;;;2510:18;2167:32;2485:2;2215:32;;;2462:18;2215:32;2166:82;;;;2437:2;2263:32;;;2414:18;2263:32;2166:130;;;;2389:1;2311:31;;;2366:18;2311:31;2166:177;;;;2359:31;;;;;;;;;2166:225;2407:32;;;;;;;;;2166:274;2455:32;;;;;;;;;2166:322;2503:32;;;;;;;;;2166:370;2074:493;;;:::o;1593:364::-;1678:6;1717;1778:1;1753:27;-1:-1:-1;;1767:12:0;;;1753:27;;;;;;1752:39;;1751:45;;;;;;1822:21;;;1829:1;1822:21;1821:27;;;;1860:66;;1911:4;1910:5;1900:7;:15;1890:25;;1860:66;-1:-1:-1;1943:7:0;;1593:364;-1:-1:-1;;;;1593:364:0:o;1014:376::-;1097:5;1142:6;1204:1;-1:-1:-1;;1193:12:0;;;1178:39;1179:27;;;;;;;1178:39;;;;1177:45;;;;1248:21;;1255:1;1248:21;1247:27;;;;1286:66;;1336:5;1326:15;;;;;1014:376;-1:-1:-1;;;;1014:376:0:o"
+    },
+    "gasEstimates": {
+      "creation": {
+        "codeDepositCost": "135000",
+        "executionCost": "208",
+        "totalCost": "135208"
+      },
+      "external": {
+        "int32SignExtension(int32,uint32)": "2050",
+        "uint32SwapEndian(uint32)": "304",
+        "uint64SignExtension(uint64,uint64)": "2029",
+        "uint64SwapEndian(uint64)": "469"
+      }
+    },
+    "methodIdentifiers": {
+      "int32SignExtension(int32,uint32)": "f69c389b",
+      "uint32SwapEndian(uint32)": "240034ec",
+      "uint64SignExtension(uint64,uint64)": "ef7c7949",
+      "uint64SwapEndian(uint64)": "bf1924c5"
+    }
+  },
+  "metadata": "{\"compiler\":{\"version\":\"0.7.4+commit.3f05b770\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"int32\",\"name\":\"number\",\"type\":\"int32\"},{\"internalType\":\"uint32\",\"name\":\"wordSize\",\"type\":\"uint32\"}],\"name\":\"int32SignExtension\",\"outputs\":[{\"internalType\":\"int32\",\"name\":\"\",\"type\":\"int32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"num\",\"type\":\"uint32\"}],\"name\":\"uint32SwapEndian\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"number\",\"type\":\"uint64\"},{\"internalType\":\"uint64\",\"name\":\"wordSize\",\"type\":\"uint64\"}],\"name\":\"uint64SignExtension\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint64\",\"name\":\"num\",\"type\":\"uint64\"}],\"name\":\"uint64SwapEndian\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Felipe Argento / Stephen Chen\",\"kind\":\"dev\",\"methods\":{\"int32SignExtension(int32,uint32)\":{\"params\":{\"number\":\"signed number to be extended\",\"wordSize\":\"number of bits of the signed number, ie, 8 for int8\"}},\"uint32SwapEndian(uint32)\":{\"params\":{\"num\":\"number to have bytes swapped\"}},\"uint64SignExtension(uint64,uint64)\":{\"params\":{\"number\":\"signed number to be extended\",\"wordSize\":\"number of bits of the signed number, ie, 8 for int8\"}},\"uint64SwapEndian(uint64)\":{\"params\":{\"num\":\"number to have bytes swapped\"}}},\"title\":\"Bits Manipulation Library\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"int32SignExtension(int32,uint32)\":{\"notice\":\"Sign extend a shorter signed value to the full int32\"},\"uint32SwapEndian(uint32)\":{\"notice\":\"Swap byte order of unsigned ints with 32 bytes\"},\"uint64SignExtension(uint64,uint64)\":{\"notice\":\"Sign extend a shorter signed value to the full uint64\"},\"uint64SwapEndian(uint64)\":{\"notice\":\"Swap byte order of unsigned ints with 64 bytes\"}},\"notice\":\"Implements bit manipulation helper functions\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"@cartesi/util/contracts/BitsManipulationLibrary.sol\":\"BitsManipulationLibrary\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@cartesi/util/contracts/BitsManipulationLibrary.sol\":{\"content\":\"// Copyright 2020 Cartesi Pte. Ltd.\\n\\n// SPDX-License-Identifier: Apache-2.0\\n// Licensed under the Apache License, Version 2.0 (the \\\"License\\\"); you may not use\\n// this file except in compliance with the License. You may obtain a copy of the\\n// License at http://www.apache.org/licenses/LICENSE-2.0\\n\\n// Unless required by applicable law or agreed to in writing, software distributed\\n// under the License is distributed on an \\\"AS IS\\\" BASIS, WITHOUT WARRANTIES OR\\n// CONDITIONS OF ANY KIND, either express or implied. See the License for the\\n// specific language governing permissions and limitations under the License.\\n\\n\\npragma solidity ^0.7.0;\\n\\n/// @title Bits Manipulation Library\\n/// @author Felipe Argento / Stephen Chen\\n/// @notice Implements bit manipulation helper functions\\nlibrary BitsManipulationLibrary {\\n\\n    /// @notice Sign extend a shorter signed value to the full int32\\n    /// @param number signed number to be extended\\n    /// @param wordSize number of bits of the signed number, ie, 8 for int8\\n    function int32SignExtension(int32 number, uint32 wordSize)\\n    public pure returns(int32)\\n    {\\n        uint32 uNumber = uint32(number);\\n        bool isNegative = ((uint64(1) << (wordSize - 1)) & uNumber) > 0;\\n        uint32 mask = ((uint32(2) ** wordSize) - 1);\\n\\n        if (isNegative) {\\n            uNumber = uNumber | ~mask;\\n        }\\n\\n        return int32(uNumber);\\n    }\\n\\n    /// @notice Sign extend a shorter signed value to the full uint64\\n    /// @param number signed number to be extended\\n    /// @param wordSize number of bits of the signed number, ie, 8 for int8\\n    function uint64SignExtension(uint64 number, uint64 wordSize)\\n    public pure returns(uint64)\\n    {\\n        uint64 uNumber = number;\\n        bool isNegative = ((uint64(1) << (wordSize - 1)) & uNumber) > 0;\\n        uint64 mask = ((uint64(2) ** wordSize) - 1);\\n\\n        if (isNegative) {\\n            uNumber = uNumber | ~mask;\\n        }\\n\\n        return uNumber;\\n    }\\n\\n    /// @notice Swap byte order of unsigned ints with 64 bytes\\n    /// @param num number to have bytes swapped\\n    function uint64SwapEndian(uint64 num) public pure returns(uint64) {\\n        uint64 output = ((num & 0x00000000000000ff) << 56)|\\n            ((num & 0x000000000000ff00) << 40)|\\n            ((num & 0x0000000000ff0000) << 24)|\\n            ((num & 0x00000000ff000000) << 8) |\\n            ((num & 0x000000ff00000000) >> 8) |\\n            ((num & 0x0000ff0000000000) >> 24)|\\n            ((num & 0x00ff000000000000) >> 40)|\\n            ((num & 0xff00000000000000) >> 56);\\n\\n        return output;\\n    }\\n\\n    /// @notice Swap byte order of unsigned ints with 32 bytes\\n    /// @param num number to have bytes swapped\\n    function uint32SwapEndian(uint32 num) public pure returns(uint32) {\\n        uint32 output = ((num >> 24) & 0xff) | ((num << 8) & 0xff0000) | ((num >> 8) & 0xff00) | ((num << 24) & 0xff000000);\\n        return output;\\n    }\\n}\\n\\n\",\"keccak256\":\"0x95b97e0ae364fb91a3fdcf8132e7b61c745c23dd4e5beb980f396c05a69bbd08\",\"license\":\"Apache-2.0\"}},\"version\":1}",
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "int32SignExtension(int32,uint32)": {
+        "notice": "Sign extend a shorter signed value to the full int32"
+      },
+      "uint32SwapEndian(uint32)": {
+        "notice": "Swap byte order of unsigned ints with 32 bytes"
+      },
+      "uint64SignExtension(uint64,uint64)": {
+        "notice": "Sign extend a shorter signed value to the full uint64"
+      },
+      "uint64SwapEndian(uint64)": {
+        "notice": "Swap byte order of unsigned ints with 64 bytes"
+      }
+    },
+    "notice": "Implements bit manipulation helper functions",
+    "version": 1
+  }
+}

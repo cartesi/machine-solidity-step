@@ -1,0 +1,460 @@
+{
+  "contractName": "ShadowAddresses",
+  "sourceName": "contracts/ShadowAddresses.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "getIflags",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getIlrsc",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMarchid",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcause",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcounteren",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcycle",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMedeleg",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMepc",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMideleg",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMie",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMimpid",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMinstret",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMip",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMisa",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMscratch",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatus",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMtval",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMtvec",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMvendorid",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPc",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSatp",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getScause",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getScounteren",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSepc",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSscratch",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getStval",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getStvec",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x610385610026600b82828239805160001a60731461001957fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600436106101b35760003560e01c8063929127db11610103578063ca04595a116100a1578063da3e8d7b1161007b578063da3e8d7b1461028d578063e2e2e71214610295578063e59cb5741461029d578063e80d1751146102a5576101b3565b8063ca04595a14610275578063d124bd131461027d578063d41a5b5914610285576101b3565b80639ff9932b116100dd5780639ff9932b14610255578063a43e290f1461025d578063b255e9e414610265578063c585eede1461026d576101b3565b8063929127db1461023d57806392f5aa22146102455780639a59734c1461024d576101b3565b80634a4c3510116101705780637047f4df1161014a5780637047f4df1461021d57806372eb67d014610225578063734b96001461022d5780638fd6b7c414610235576101b3565b80634a4c351014610205578063520aff6c1461020d5780636630ad8714610215576101b3565b806329301cac146101b85780632935b8ce146101dd5780632ffdabc5146101e557806342db3667146101ed578063443fd598146101f557806345827f69146101fd575b600080fd5b6101c06102ad565b6040805167ffffffffffffffff9092168252519081900360200190f35b6101c06102b3565b6101c06102b9565b6101c06102bf565b6101c06102c5565b6101c06102cb565b6101c06102d1565b6101c06102d7565b6101c06102dd565b6101c06102e3565b6101c06102e9565b6101c06102ef565b6101c06102f5565b6101c06102fb565b6101c0610301565b6101c0610307565b6101c061030d565b6101c0610313565b6101c0610319565b6101c061031f565b6101c0610325565b6101c061032b565b6101c0610331565b6101c0610337565b6101c061033d565b6101c0610343565b6101c0610349565b6101b090565b61018090565b6101d090565b61013090565b6101b890565b6101a890565b61016090565b61017090565b61019090565b61015090565b61012890565b6101a090565b61013890565b61011890565b61010890565b61014090565b61019890565b61012090565b6101c090565b61011090565b61014890565b61018890565b61010090565b61015890565b6101c890565b61017890565b6101689056fea2646970667358221220c2645a6c0067eeb44cca824c64fdfbd38ee7978a544a8881a9547c7780c26f6564736f6c63430007040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600436106101b35760003560e01c8063929127db11610103578063ca04595a116100a1578063da3e8d7b1161007b578063da3e8d7b1461028d578063e2e2e71214610295578063e59cb5741461029d578063e80d1751146102a5576101b3565b8063ca04595a14610275578063d124bd131461027d578063d41a5b5914610285576101b3565b80639ff9932b116100dd5780639ff9932b14610255578063a43e290f1461025d578063b255e9e414610265578063c585eede1461026d576101b3565b8063929127db1461023d57806392f5aa22146102455780639a59734c1461024d576101b3565b80634a4c3510116101705780637047f4df1161014a5780637047f4df1461021d57806372eb67d014610225578063734b96001461022d5780638fd6b7c414610235576101b3565b80634a4c351014610205578063520aff6c1461020d5780636630ad8714610215576101b3565b806329301cac146101b85780632935b8ce146101dd5780632ffdabc5146101e557806342db3667146101ed578063443fd598146101f557806345827f69146101fd575b600080fd5b6101c06102ad565b6040805167ffffffffffffffff9092168252519081900360200190f35b6101c06102b3565b6101c06102b9565b6101c06102bf565b6101c06102c5565b6101c06102cb565b6101c06102d1565b6101c06102d7565b6101c06102dd565b6101c06102e3565b6101c06102e9565b6101c06102ef565b6101c06102f5565b6101c06102fb565b6101c0610301565b6101c0610307565b6101c061030d565b6101c0610313565b6101c0610319565b6101c061031f565b6101c0610325565b6101c061032b565b6101c0610331565b6101c0610337565b6101c061033d565b6101c0610343565b6101c0610349565b6101b090565b61018090565b6101d090565b61013090565b6101b890565b6101a890565b61016090565b61017090565b61019090565b61015090565b61012890565b6101a090565b61013890565b61011890565b61010890565b61014090565b61019890565b61012090565b6101c090565b61011090565b61014890565b61018890565b61010090565b61015890565b6101c890565b61017890565b6101689056fea2646970667358221220c2645a6c0067eeb44cca824c64fdfbd38ee7978a544a8881a9547c7780c26f6564736f6c63430007040033",
+  "linkReferences": {},
+  "deployedLinkReferences": {},
+  "devdoc": {
+    "author": "Felipe Argento",
+    "details": "Defined on Cartesi techpaper version 1.02 - Section 3 - table 2  Source: https://cartesi.io/cartesi_whitepaper.pdf ",
+    "kind": "dev",
+    "methods": {},
+    "title": "ShadowAddresses",
+    "version": 1
+  },
+  "evm": {
+    "bytecode": {
+      "generatedSources": [],
+      "linkReferences": {},
+      "opcodes": "PUSH2 0x385 PUSH2 0x26 PUSH1 0xB DUP3 DUP3 DUP3 CODECOPY DUP1 MLOAD PUSH1 0x0 BYTE PUSH1 0x73 EQ PUSH2 0x19 JUMPI INVALID JUMPDEST ADDRESS PUSH1 0x0 MSTORE PUSH1 0x73 DUP2 MSTORE8 DUP3 DUP2 RETURN INVALID PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH1 0x4 CALLDATASIZE LT PUSH2 0x1B3 JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x929127DB GT PUSH2 0x103 JUMPI DUP1 PUSH4 0xCA04595A GT PUSH2 0xA1 JUMPI DUP1 PUSH4 0xDA3E8D7B GT PUSH2 0x7B JUMPI DUP1 PUSH4 0xDA3E8D7B EQ PUSH2 0x28D JUMPI DUP1 PUSH4 0xE2E2E712 EQ PUSH2 0x295 JUMPI DUP1 PUSH4 0xE59CB574 EQ PUSH2 0x29D JUMPI DUP1 PUSH4 0xE80D1751 EQ PUSH2 0x2A5 JUMPI PUSH2 0x1B3 JUMP JUMPDEST DUP1 PUSH4 0xCA04595A EQ PUSH2 0x275 JUMPI DUP1 PUSH4 0xD124BD13 EQ PUSH2 0x27D JUMPI DUP1 PUSH4 0xD41A5B59 EQ PUSH2 0x285 JUMPI PUSH2 0x1B3 JUMP JUMPDEST DUP1 PUSH4 0x9FF9932B GT PUSH2 0xDD JUMPI DUP1 PUSH4 0x9FF9932B EQ PUSH2 0x255 JUMPI DUP1 PUSH4 0xA43E290F EQ PUSH2 0x25D JUMPI DUP1 PUSH4 0xB255E9E4 EQ PUSH2 0x265 JUMPI DUP1 PUSH4 0xC585EEDE EQ PUSH2 0x26D JUMPI PUSH2 0x1B3 JUMP JUMPDEST DUP1 PUSH4 0x929127DB EQ PUSH2 0x23D JUMPI DUP1 PUSH4 0x92F5AA22 EQ PUSH2 0x245 JUMPI DUP1 PUSH4 0x9A59734C EQ PUSH2 0x24D JUMPI PUSH2 0x1B3 JUMP JUMPDEST DUP1 PUSH4 0x4A4C3510 GT PUSH2 0x170 JUMPI DUP1 PUSH4 0x7047F4DF GT PUSH2 0x14A JUMPI DUP1 PUSH4 0x7047F4DF EQ PUSH2 0x21D JUMPI DUP1 PUSH4 0x72EB67D0 EQ PUSH2 0x225 JUMPI DUP1 PUSH4 0x734B9600 EQ PUSH2 0x22D JUMPI DUP1 PUSH4 0x8FD6B7C4 EQ PUSH2 0x235 JUMPI PUSH2 0x1B3 JUMP JUMPDEST DUP1 PUSH4 0x4A4C3510 EQ PUSH2 0x205 JUMPI DUP1 PUSH4 0x520AFF6C EQ PUSH2 0x20D JUMPI DUP1 PUSH4 0x6630AD87 EQ PUSH2 0x215 JUMPI PUSH2 0x1B3 JUMP JUMPDEST DUP1 PUSH4 0x29301CAC EQ PUSH2 0x1B8 JUMPI DUP1 PUSH4 0x2935B8CE EQ PUSH2 0x1DD JUMPI DUP1 PUSH4 0x2FFDABC5 EQ PUSH2 0x1E5 JUMPI DUP1 PUSH4 0x42DB3667 EQ PUSH2 0x1ED JUMPI DUP1 PUSH4 0x443FD598 EQ PUSH2 0x1F5 JUMPI DUP1 PUSH4 0x45827F69 EQ PUSH2 0x1FD JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH2 0x1C0 PUSH2 0x2AD JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH8 0xFFFFFFFFFFFFFFFF SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0x1C0 PUSH2 0x2B3 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2B9 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2BF JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2C5 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2CB JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2D1 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2D7 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2DD JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2E3 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2E9 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2EF JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2F5 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2FB JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x301 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x307 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x30D JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x313 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x319 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x31F JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x325 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x32B JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x331 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x337 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x33D JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x343 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x349 JUMP JUMPDEST PUSH2 0x1B0 SWAP1 JUMP JUMPDEST PUSH2 0x180 SWAP1 JUMP JUMPDEST PUSH2 0x1D0 SWAP1 JUMP JUMPDEST PUSH2 0x130 SWAP1 JUMP JUMPDEST PUSH2 0x1B8 SWAP1 JUMP JUMPDEST PUSH2 0x1A8 SWAP1 JUMP JUMPDEST PUSH2 0x160 SWAP1 JUMP JUMPDEST PUSH2 0x170 SWAP1 JUMP JUMPDEST PUSH2 0x190 SWAP1 JUMP JUMPDEST PUSH2 0x150 SWAP1 JUMP JUMPDEST PUSH2 0x128 SWAP1 JUMP JUMPDEST PUSH2 0x1A0 SWAP1 JUMP JUMPDEST PUSH2 0x138 SWAP1 JUMP JUMPDEST PUSH2 0x118 SWAP1 JUMP JUMPDEST PUSH2 0x108 SWAP1 JUMP JUMPDEST PUSH2 0x140 SWAP1 JUMP JUMPDEST PUSH2 0x198 SWAP1 JUMP JUMPDEST PUSH2 0x120 SWAP1 JUMP JUMPDEST PUSH2 0x1C0 SWAP1 JUMP JUMPDEST PUSH2 0x110 SWAP1 JUMP JUMPDEST PUSH2 0x148 SWAP1 JUMP JUMPDEST PUSH2 0x188 SWAP1 JUMP JUMPDEST PUSH2 0x100 SWAP1 JUMP JUMPDEST PUSH2 0x158 SWAP1 JUMP JUMPDEST PUSH2 0x1C8 SWAP1 JUMP JUMPDEST PUSH2 0x178 SWAP1 JUMP JUMPDEST PUSH2 0x168 SWAP1 JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 0xC2 PUSH5 0x5A6C0067EE 0xB4 0x4C 0xCA DUP3 0x4C PUSH5 0xFDFBD38EE7 SWAP8 DUP11 SLOAD 0x4A DUP9 DUP2 0xA9 SLOAD PUSH29 0x7780C26F6564736F6C6343000704003300000000000000000000000000 ",
+      "sourceMap": "913:3161:22:-:0;;;;;;;;;;;;;;;;;;;;;;;;;"
+    },
+    "deployedBytecode": {
+      "generatedSources": [],
+      "immutableReferences": {},
+      "linkReferences": {},
+      "opcodes": "PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH1 0x4 CALLDATASIZE LT PUSH2 0x1B3 JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x929127DB GT PUSH2 0x103 JUMPI DUP1 PUSH4 0xCA04595A GT PUSH2 0xA1 JUMPI DUP1 PUSH4 0xDA3E8D7B GT PUSH2 0x7B JUMPI DUP1 PUSH4 0xDA3E8D7B EQ PUSH2 0x28D JUMPI DUP1 PUSH4 0xE2E2E712 EQ PUSH2 0x295 JUMPI DUP1 PUSH4 0xE59CB574 EQ PUSH2 0x29D JUMPI DUP1 PUSH4 0xE80D1751 EQ PUSH2 0x2A5 JUMPI PUSH2 0x1B3 JUMP JUMPDEST DUP1 PUSH4 0xCA04595A EQ PUSH2 0x275 JUMPI DUP1 PUSH4 0xD124BD13 EQ PUSH2 0x27D JUMPI DUP1 PUSH4 0xD41A5B59 EQ PUSH2 0x285 JUMPI PUSH2 0x1B3 JUMP JUMPDEST DUP1 PUSH4 0x9FF9932B GT PUSH2 0xDD JUMPI DUP1 PUSH4 0x9FF9932B EQ PUSH2 0x255 JUMPI DUP1 PUSH4 0xA43E290F EQ PUSH2 0x25D JUMPI DUP1 PUSH4 0xB255E9E4 EQ PUSH2 0x265 JUMPI DUP1 PUSH4 0xC585EEDE EQ PUSH2 0x26D JUMPI PUSH2 0x1B3 JUMP JUMPDEST DUP1 PUSH4 0x929127DB EQ PUSH2 0x23D JUMPI DUP1 PUSH4 0x92F5AA22 EQ PUSH2 0x245 JUMPI DUP1 PUSH4 0x9A59734C EQ PUSH2 0x24D JUMPI PUSH2 0x1B3 JUMP JUMPDEST DUP1 PUSH4 0x4A4C3510 GT PUSH2 0x170 JUMPI DUP1 PUSH4 0x7047F4DF GT PUSH2 0x14A JUMPI DUP1 PUSH4 0x7047F4DF EQ PUSH2 0x21D JUMPI DUP1 PUSH4 0x72EB67D0 EQ PUSH2 0x225 JUMPI DUP1 PUSH4 0x734B9600 EQ PUSH2 0x22D JUMPI DUP1 PUSH4 0x8FD6B7C4 EQ PUSH2 0x235 JUMPI PUSH2 0x1B3 JUMP JUMPDEST DUP1 PUSH4 0x4A4C3510 EQ PUSH2 0x205 JUMPI DUP1 PUSH4 0x520AFF6C EQ PUSH2 0x20D JUMPI DUP1 PUSH4 0x6630AD87 EQ PUSH2 0x215 JUMPI PUSH2 0x1B3 JUMP JUMPDEST DUP1 PUSH4 0x29301CAC EQ PUSH2 0x1B8 JUMPI DUP1 PUSH4 0x2935B8CE EQ PUSH2 0x1DD JUMPI DUP1 PUSH4 0x2FFDABC5 EQ PUSH2 0x1E5 JUMPI DUP1 PUSH4 0x42DB3667 EQ PUSH2 0x1ED JUMPI DUP1 PUSH4 0x443FD598 EQ PUSH2 0x1F5 JUMPI DUP1 PUSH4 0x45827F69 EQ PUSH2 0x1FD JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH2 0x1C0 PUSH2 0x2AD JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH8 0xFFFFFFFFFFFFFFFF SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0x1C0 PUSH2 0x2B3 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2B9 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2BF JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2C5 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2CB JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2D1 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2D7 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2DD JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2E3 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2E9 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2EF JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2F5 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x2FB JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x301 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x307 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x30D JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x313 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x319 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x31F JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x325 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x32B JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x331 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x337 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x33D JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x343 JUMP JUMPDEST PUSH2 0x1C0 PUSH2 0x349 JUMP JUMPDEST PUSH2 0x1B0 SWAP1 JUMP JUMPDEST PUSH2 0x180 SWAP1 JUMP JUMPDEST PUSH2 0x1D0 SWAP1 JUMP JUMPDEST PUSH2 0x130 SWAP1 JUMP JUMPDEST PUSH2 0x1B8 SWAP1 JUMP JUMPDEST PUSH2 0x1A8 SWAP1 JUMP JUMPDEST PUSH2 0x160 SWAP1 JUMP JUMPDEST PUSH2 0x170 SWAP1 JUMP JUMPDEST PUSH2 0x190 SWAP1 JUMP JUMPDEST PUSH2 0x150 SWAP1 JUMP JUMPDEST PUSH2 0x128 SWAP1 JUMP JUMPDEST PUSH2 0x1A0 SWAP1 JUMP JUMPDEST PUSH2 0x138 SWAP1 JUMP JUMPDEST PUSH2 0x118 SWAP1 JUMP JUMPDEST PUSH2 0x108 SWAP1 JUMP JUMPDEST PUSH2 0x140 SWAP1 JUMP JUMPDEST PUSH2 0x198 SWAP1 JUMP JUMPDEST PUSH2 0x120 SWAP1 JUMP JUMPDEST PUSH2 0x1C0 SWAP1 JUMP JUMPDEST PUSH2 0x110 SWAP1 JUMP JUMPDEST PUSH2 0x148 SWAP1 JUMP JUMPDEST PUSH2 0x188 SWAP1 JUMP JUMPDEST PUSH2 0x100 SWAP1 JUMP JUMPDEST PUSH2 0x158 SWAP1 JUMP JUMPDEST PUSH2 0x1C8 SWAP1 JUMP JUMPDEST PUSH2 0x178 SWAP1 JUMP JUMPDEST PUSH2 0x168 SWAP1 JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 0xC2 PUSH5 0x5A6C0067EE 0xB4 0x4C 0xCA DUP3 0x4C PUSH5 0xFDFBD38EE7 SWAP8 DUP11 SLOAD 0x4A DUP9 DUP2 0xA9 SLOAD PUSH29 0x7780C26F6564736F6C6343000704003300000000000000000000000000 ",
+      "sourceMap": "913:3161:22:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3707:68;;;:::i;:::-;;;;;;;;;;;;;;;;;;;3259:70;;;:::i;4003:69::-;;;:::i;2527:70::-;;;:::i;3780:67::-;;;:::i;3633:69::-;;;:::i;2970:67::-;;;:::i;3113:66::-;;;:::i;3412:68::-;;;:::i;2823:69::-;;;:::i;2451:71::-;;;:::i;3561:67::-;;;:::i;2602:68::-;;;:::i;2303:69::-;;;:::i;2151:72::-;;;:::i;2675:71::-;;;:::i;3485:::-;;;:::i;2377:69::-;;;:::i;3852:73::-;;;:::i;2228:70::-;;;:::i;2751:67::-;;;:::i;3334:73::-;;;:::i;2081:65::-;;;:::i;2897:68::-;;;:::i;3930:::-;;;:::i;3184:70::-;;;:::i;3042:66::-;;;:::i;3707:68::-;1852:5;3707:68;:::o;3259:70::-;1612:5;3259:70;:::o;4003:69::-;2012:5;4003:69;:::o;2527:70::-;1212:5;2527:70;:::o;3780:67::-;1892:5;3780:67;:::o;3633:69::-;1812:5;3633:69;:::o;2970:67::-;1452:5;2970:67;:::o;3113:66::-;1532:5;3113:66;:::o;3412:68::-;1692:5;3412:68;:::o;2823:69::-;1372:5;2823:69;:::o;2451:71::-;1172:5;2451:71;:::o;3561:67::-;1772:5;3561:67;:::o;2602:68::-;1252:5;2602:68;:::o;2303:69::-;1092:5;2303:69;:::o;2151:72::-;1012:5;2151:72;:::o;2675:71::-;1292:5;2675:71;:::o;3485:::-;1732:5;3485:71;:::o;2377:69::-;1132:5;2377:69;:::o;3852:73::-;1932:5;3852:73;:::o;2228:70::-;1052:5;2228:70;:::o;2751:67::-;1332:5;2751:67;:::o;3334:73::-;1652:5;3334:73;:::o;2081:65::-;972:5;2081:65;:::o;2897:68::-;1412:5;2897:68;:::o;3930:::-;1972:5;3930:68;:::o;3184:70::-;1572:5;3184:70;:::o;3042:66::-;1492:5;3042:66;:::o"
+    },
+    "gasEstimates": {
+      "creation": {
+        "codeDepositCost": "180200",
+        "executionCost": "251",
+        "totalCost": "180451"
+      },
+      "external": {
+        "getIflags()": "259",
+        "getIlrsc()": "257",
+        "getMarchid()": "302",
+        "getMcause()": "236",
+        "getMcounteren()": "258",
+        "getMcycle()": "258",
+        "getMedeleg()": "279",
+        "getMepc()": "236",
+        "getMideleg()": "237",
+        "getMie()": "301",
+        "getMimpid()": "237",
+        "getMinstret()": "258",
+        "getMip()": "259",
+        "getMisa()": "237",
+        "getMscratch()": "281",
+        "getMstatus()": "281",
+        "getMtval()": "235",
+        "getMtvec()": "302",
+        "getMvendorid()": "259",
+        "getPc()": "280",
+        "getSatp()": "303",
+        "getScause()": "325",
+        "getScounteren()": "280",
+        "getSepc()": "280",
+        "getSscratch()": "236",
+        "getStval()": "215",
+        "getStvec()": "281"
+      }
+    },
+    "methodIdentifiers": {
+      "getIflags()": "2ffdabc5",
+      "getIlrsc()": "e2e2e712",
+      "getMarchid()": "c585eede",
+      "getMcause()": "7047f4df",
+      "getMcounteren()": "d124bd13",
+      "getMcycle()": "a43e290f",
+      "getMedeleg()": "e59cb574",
+      "getMepc()": "ca04595a",
+      "getMideleg()": "2935b8ce",
+      "getMie()": "e80d1751",
+      "getMimpid()": "929127db",
+      "getMinstret()": "72eb67d0",
+      "getMip()": "520aff6c",
+      "getMisa()": "4a4c3510",
+      "getMscratch()": "9a59734c",
+      "getMstatus()": "42db3667",
+      "getMtval()": "da3e8d7b",
+      "getMtvec()": "8fd6b7c4",
+      "getMvendorid()": "92f5aa22",
+      "getPc()": "d41a5b59",
+      "getSatp()": "443fd598",
+      "getScause()": "45827f69",
+      "getScounteren()": "b255e9e4",
+      "getSepc()": "734b9600",
+      "getSscratch()": "9ff9932b",
+      "getStval()": "29301cac",
+      "getStvec()": "6630ad87"
+    }
+  },
+  "metadata": "{\"compiler\":{\"version\":\"0.7.4+commit.3f05b770\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"getIflags\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getIlrsc\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMarchid\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcause\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcounteren\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcycle\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMedeleg\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMepc\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMideleg\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMie\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMimpid\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMinstret\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMip\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMisa\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMscratch\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatus\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMtval\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMtvec\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMvendorid\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPc\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSatp\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getScause\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getScounteren\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSepc\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSscratch\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStval\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getStvec\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Felipe Argento\",\"details\":\"Defined on Cartesi techpaper version 1.02 - Section 3 - table 2  Source: https://cartesi.io/cartesi_whitepaper.pdf \",\"kind\":\"dev\",\"methods\":{},\"title\":\"ShadowAddresses\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"notice\":\"Defines the processor state. Memory-mapped to the lowest 512 bytes in pm\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/ShadowAddresses.sol\":\"ShadowAddresses\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/ShadowAddresses.sol\":{\"content\":\"// Copyright 2019 Cartesi Pte. Ltd.\\n\\n// SPDX-License-Identifier: Apache-2.0\\n// Licensed under the Apache License, Version 2.0 (the \\\"License\\\"); you may not use\\n// this file except in compliance with the License. You may obtain a copy of the\\n// License at http://www.apache.org/licenses/LICENSE-2.0\\n\\n// Unless required by applicable law or agreed to in writing, software distributed\\n// under the License is distributed on an \\\"AS IS\\\" BASIS, WITHOUT WARRANTIES OR\\n// CONDITIONS OF ANY KIND, either express or implied. See the License for the\\n// specific language governing permissions and limitations under the License.\\n\\n\\n\\npragma solidity ^0.7.0;\\n\\n\\n/// @title ShadowAddresses\\n/// @author Felipe Argento\\n/// @notice Defines the processor state. Memory-mapped to the lowest 512 bytes in pm\\n/// @dev Defined on Cartesi techpaper version 1.02 - Section 3 - table 2 \\n/// Source: https://cartesi.io/cartesi_whitepaper.pdf \\nlibrary ShadowAddresses {\\n    uint64 constant PC         = 0x100;\\n    uint64 constant MVENDORID  = 0x108;\\n    uint64 constant MARCHID    = 0x110;\\n    uint64 constant MIMPID     = 0x118;\\n    uint64 constant MCYCLE     = 0x120;\\n    uint64 constant MINSTRET   = 0x128;\\n    uint64 constant MSTATUS    = 0x130;\\n    uint64 constant MTVEC      = 0x138;\\n    uint64 constant MSCRATCH   = 0x140;\\n    uint64 constant MEPC       = 0x148;\\n    uint64 constant MCAUSE     = 0x150;\\n    uint64 constant MTVAL      = 0x158;\\n    uint64 constant MISA       = 0x160;\\n    uint64 constant MIE        = 0x168;\\n    uint64 constant MIP        = 0x170;\\n    uint64 constant MEDELEG    = 0x178;\\n    uint64 constant MIDELEG    = 0x180;\\n    uint64 constant MCOUNTEREN = 0x188;\\n    uint64 constant STVEC      = 0x190;\\n    uint64 constant SSCRATCH   = 0x198;\\n    uint64 constant SEPC       = 0x1a0;\\n    uint64 constant SCAUSE     = 0x1a8;\\n    uint64 constant STVAL      = 0x1b0;\\n    uint64 constant SATP       = 0x1b8;\\n    uint64 constant SCOUNTEREN = 0x1c0;\\n    uint64 constant ILRSC      = 0x1c8;\\n    uint64 constant IFLAGS     = 0x1d0;\\n\\n    //getters - contracts cant access constants directly\\n    function getPc()         public pure returns(uint64) {return PC;}\\n    function getMvendorid()  public pure returns(uint64) {return MVENDORID;}\\n    function getMarchid()    public pure returns(uint64) {return MARCHID;}\\n    function getMimpid()     public pure returns(uint64) {return MIMPID;}\\n    function getMcycle()     public pure returns(uint64) {return MCYCLE;}\\n    function getMinstret()   public pure returns(uint64) {return MINSTRET;}\\n    function getMstatus()    public pure returns(uint64) {return MSTATUS;}\\n    function getMtvec()      public pure returns(uint64) {return MTVEC;}\\n    function getMscratch()   public pure returns(uint64) {return MSCRATCH;}\\n    function getMepc()       public pure returns(uint64) {return MEPC;}\\n    function getMcause()     public pure returns(uint64) {return MCAUSE;}\\n    function getMtval()      public pure returns(uint64) {return MTVAL;}\\n    function getMisa()       public pure returns(uint64) {return MISA;}\\n    function getMie()        public pure returns(uint64) {return MIE;}\\n    function getMip()        public pure returns(uint64) {return MIP;}\\n    function getMedeleg()    public pure returns(uint64) {return MEDELEG;}\\n    function getMideleg()    public pure returns(uint64) {return MIDELEG;}\\n    function getMcounteren() public pure returns(uint64) {return MCOUNTEREN;}\\n    function getStvec()      public pure returns(uint64) {return STVEC;}\\n    function getSscratch()   public pure returns(uint64) {return SSCRATCH;}\\n    function getSepc()       public pure returns(uint64) {return SEPC;}\\n    function getScause()     public pure returns(uint64) {return SCAUSE;}\\n    function getStval()      public pure returns(uint64) {return STVAL;}\\n    function getSatp()       public pure returns(uint64) {return SATP;}\\n    function getScounteren() public pure returns(uint64) {return SCOUNTEREN;}\\n    function getIlrsc()      public pure returns(uint64) {return ILRSC;}\\n    function getIflags()     public pure returns(uint64) {return IFLAGS;}\\n}\\n\",\"keccak256\":\"0xbfd187bab76a2802de777406cdddc9fe0cbf79ab8cb6f76075da7db664a9e9ae\",\"license\":\"Apache-2.0\"}},\"version\":1}",
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "notice": "Defines the processor state. Memory-mapped to the lowest 512 bytes in pm",
+    "version": 1
+  }
+}

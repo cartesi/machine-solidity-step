@@ -1,0 +1,1696 @@
+{
+  "contractName": "RiscVConstants",
+  "sourceName": "contracts/RiscVConstants.sol",
+  "abi": [
+    {
+      "inputs": [],
+      "name": "getIflagsHMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getIflagsHShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getIflagsIMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getIflagsIShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getIflagsPrvMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getIflagsPrvShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getIflagsYMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getIflagsYShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcauseBreakpoint",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcauseEcallBase",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcauseFetchPageFault",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcauseIllegalInsn",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcauseInsnAccessFault",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcauseInsnAddressMisaligned",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcauseInterruptFlag",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcauseLoadAccessFault",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcauseLoadAddressMisaligned",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcauseLoadPageFault",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcauseStoreAmoAccessFault",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcauseStoreAmoAddressMisaligned",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcauseStoreAmoPageFault",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcounterenCyMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcounterenCyShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcounterenIrMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcounterenIrShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcounterenRwMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcounterenTmMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMcounterenTmShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipMeipMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipMeipShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipMsipMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipMsipShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipMtipMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipMtipShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipSeipMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipSeipShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipSsipMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipSsipShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipStipMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipStipShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipUeipMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipUeipShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipUsipMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipUsipShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipUtipMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMipUtipShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusFsMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusFsShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusHieShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusMieMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusMieShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusMpieMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusMpieShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusMppMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusMppShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusMprvMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusMprvShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusMxrMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusMxrShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusRMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusSdMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusSdShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusSieMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusSieShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusSpieMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusSpieShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusSppMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusSppShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusSumMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusSumShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusSxlMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusSxlShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusTsrMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusTsrShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusTvmMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusTvmShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusTwMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusTwShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusUieMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusUieShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusUpieMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusUpieShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusUxlMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusUxlShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusWMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusXsMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMstatusXsShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getMxl",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPageNumberShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPageOffsetMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPgMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPgShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPrvH",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPrvM",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPrvS",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPrvU",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPteAMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPteDMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPteUMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPteVMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPteXwrCodeShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPteXwrReadShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getPteXwrWriteShift",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getScounterenRwMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSstatusRMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getSstatusWMask",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getXlen",
+      "outputs": [
+        {
+          "internalType": "uint64",
+          "name": "",
+          "type": "uint64"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x610cb4610026600b82828239805160001a60731461001957fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600436106106635760003560e01c80638e0840bf1161035b578063c3b85a8f116101cd578063db19725411610119578063f2f21e4c116100b7578063f796d7d711610091578063f796d7d714610845578063fcc61eff146107fd578063fd198e55146107fd578063fd6607c11461084d57610663565b8063f2f21e4c146106ad578063f2fb62c91461083d578063f4a407611461073d57610663565b8063e746ac72116100f3578063e746ac7214610835578063e89d408d1461068d578063e8a2695914610725578063e9d727641461066857610663565b8063db1972541461082d578063e1d206ab146106e5578063e697ace91461071d57610663565b8063cac5b49511610186578063cf7ecf7911610160578063cf7ecf79146106e5578063d50ca22f14610725578063d8685e0814610825578063dacff167146107cd57610663565b8063cac5b49514610815578063cba6d20c1461071d578063cc19195c1461081d57610663565b8063c3b85a8f146106ed578063c3d5890f1461080d578063c49235ea146107e5578063c5d15aad14610695578063c6ce50d614610785578063ca3c11341461068d57610663565b8063a4521d8b116102a7578063ae3a10d111610245578063b396896e1161021f578063b396896e146106cd578063b482d45114610805578063b4e549ba14610715578063bc8957431461072557610663565b8063ae3a10d1146107fd578063ae458ae8146107fd578063b0c41fc51461068d57610663565b8063a8f81e2311610281578063a8f81e23146107e5578063a92353d7146107ed578063ac5732fe1461068d578063ad21dcaf146107f557610663565b8063a4521d8b146107d5578063a4652fa5146106b5578063a73fa952146107dd57610663565b8063944b9ad411610314578063a16de11c116102ee578063a16de11c146107cd578063a195e2db146106dd578063a1a29005146106bd578063a406ed801461075557610663565b8063944b9ad4146107bd5780639839423814610695578063a12e3511146107c557610663565b80638e0840bf146107a55780638ed7317f146106ed5780638fbe78d2146106fd578063910a5247146106e55780639166a2f9146107ad5780639230fa1d146107b557610663565b8063594dc373116104f45780637273ba701161044057806386c22955116103de57806389941a2a116103b857806389941a2a146107855780638a17ca861461078d5780638a911eef146107955780638c295e351461079d57610663565b806386c2295514610775578063883d4fb01461077d578063895327721461074557610663565b80637e6a20ca1161041a5780637e6a20ca146106fd5780638208d1f21461071d5780638235ca8814610725578063835658181461076d57610663565b80637273ba7014610725578063729e52ee146107655780637df413631461069557610663565b8063656b151f116104ad5780636db638c8116104875780636db638c8146107255780636eb9d0a01461073d5780636f5514e414610755578063717c5d7c1461075d57610663565b8063656b151f14610695578063693549ac146107455780636bdd3bf91461074d57610663565b8063594dc3731461071d57806359e4e7c3146107255780635af17adf1461072d578063609fd47c146107355780636164e3421461073d57806361ed380a1461068d57610663565b80633fe2098a116105b357806345d9c4651161056c5780634d89d393116105465780634d89d393146106bd5780634e95a4101461070d578063501bec4514610715578063574a20ef1461068d57610663565b806345d9c465146106e557806348b36c3a146106fd5780634d26940d1461070557610663565b80633fe2098a146106d557806340391774146106dd5780634074af28146106e5578063422c61941461069557806344312160146106ed578063458472a7146106f557610663565b806327d1ff75116106205780632ee52303116105fa5780632ee52303146106bd578063317d2bb5146106c55780633a6d9202146106cd5780633afcb7a11461068d57610663565b806327d1ff75146106a55780632968a7bd146106ad5780632e750856146106b557610663565b80630129840414610668578063026797d91461068d5780630ab3e66614610695578063143fb1a4146106685780631918bc6f1461069d5780631d5edf0314610695575b600080fd5b610670610855565b6040805167ffffffffffffffff9092168252519081900360200190f35b61067061085a565b61067061085f565b610670610864565b61067061088b565b610670610890565b6106706108b7565b6106706108bc565b6106706108c1565b6106706108cb565b6106706108d5565b6106706108da565b6106706108df565b6106706108e4565b6106706108e9565b6106706108f3565b6106706108f8565b610670610902565b61067061090c565b610670610911565b61067061091b565b610670610920565b61067061092a565b610670610934565b610670610939565b610670610943565b61067061094d565b610670610957565b61067061095c565b61067061096e565b6106706109fb565b610670610a49565b610670610a73565b610670610a7d565b610670610a87565b610670610ae7565b610670610af1565b610670610b04565b610670610b0e565b610670610b13565b610670610bbb565b610670610bc5565b610670610bca565b610670610bcf565b610670610bd9565b610670610be3565b610670610be8565b610670610bed565b610670610bf7565b610670610bfc565b610670610c01565b610670610c10565b610670610c3a565b610670610c3f565b610670610c44565b610670610c4e565b610670610c6f565b610670610c79565b600590565b600190565b600090565b600061086e6108da565b67ffffffffffffffff16600367ffffffffffffffff16901b905090565b601190565b600061089a6108df565b67ffffffffffffffff16600167ffffffffffffffff16901b905090565b600f90565b600c90565b600061086e6108df565b600061089a610934565b608090565b600d90565b600390565b600890565b600061089a610b0e565b600790565b600061089a610bc5565b600061089a610be3565b604090565b600061089a61085a565b600290565b600061086e610be8565b600061089a610bf7565b600490565b600061089a61091b565b600061086e610957565b600061089a610855565b602290565b6000600161096861090c565b03905090565b600061097861092a565b6109806108e9565b610988610b04565b610990610902565b610998610a7d565b6109a0610ae7565b6109a8610864565b6109b0610c44565b6109b8610a73565b6109c0610bd9565b6109c861094d565b6109d06108cb565b6109d8610890565b6109e0610911565b6109e8610bed565b1717171717171717171717171717905090565b6000610a05610902565b610a0d610a7d565b610a15610864565b610a1d610a73565b610a2561094d565b610a2d6108cb565b610a35610911565b610a3d610bed565b17171717171717905090565b60006001610a5561090c565b0367ffffffffffffffff16600167ffffffffffffffff16901b905090565b600061089a6108e4565b600061089a610bfc565b6000610a91610bbb565b610a99610920565b610aa1610902565b610aa9610a7d565b610ab1610864565b610ab9610a73565b610ac161094d565b610ac96108cb565b610ad1610911565b610ad9610bed565b171717171717171717905090565b600061089a61088b565b60006001610afd6108bc565b5090919050565b600061089a610c3f565b601590565b6000610b1d610bbb565b610b25610943565b610b2d610920565b610b3561092a565b610b3d6108e9565b610b45610b04565b610b4d610902565b610b55610a7d565b610b5d610ae7565b610b65610864565b610b6d610c44565b610b75610a73565b610b7d610bd9565b610b8561094d565b610b8d6108cb565b610b95610890565b610b9d610911565b610ba5610bed565b1717171717171717171717171717171717905090565b600061089a61095c565b600b90565b601090565b600061089a610c79565b600061089a6108f3565b601390565b602090565b600061089a61085f565b601690565b601290565b6000610c0b610c4e565b905090565b60006001610c1c6108bc565b67ffffffffffffffff16600167ffffffffffffffff16901b03905090565b600690565b601490565b600061086e610bc5565b6000610c58610939565b610c60610911565b610c68610bed565b1717905090565b600061086e6108b7565b60099056fea264697066735822122062c25b7a5817f8e7065370434ba97994a4c57909e9e913d49a945e29053ac80a64736f6c63430007040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600436106106635760003560e01c80638e0840bf1161035b578063c3b85a8f116101cd578063db19725411610119578063f2f21e4c116100b7578063f796d7d711610091578063f796d7d714610845578063fcc61eff146107fd578063fd198e55146107fd578063fd6607c11461084d57610663565b8063f2f21e4c146106ad578063f2fb62c91461083d578063f4a407611461073d57610663565b8063e746ac72116100f3578063e746ac7214610835578063e89d408d1461068d578063e8a2695914610725578063e9d727641461066857610663565b8063db1972541461082d578063e1d206ab146106e5578063e697ace91461071d57610663565b8063cac5b49511610186578063cf7ecf7911610160578063cf7ecf79146106e5578063d50ca22f14610725578063d8685e0814610825578063dacff167146107cd57610663565b8063cac5b49514610815578063cba6d20c1461071d578063cc19195c1461081d57610663565b8063c3b85a8f146106ed578063c3d5890f1461080d578063c49235ea146107e5578063c5d15aad14610695578063c6ce50d614610785578063ca3c11341461068d57610663565b8063a4521d8b116102a7578063ae3a10d111610245578063b396896e1161021f578063b396896e146106cd578063b482d45114610805578063b4e549ba14610715578063bc8957431461072557610663565b8063ae3a10d1146107fd578063ae458ae8146107fd578063b0c41fc51461068d57610663565b8063a8f81e2311610281578063a8f81e23146107e5578063a92353d7146107ed578063ac5732fe1461068d578063ad21dcaf146107f557610663565b8063a4521d8b146107d5578063a4652fa5146106b5578063a73fa952146107dd57610663565b8063944b9ad411610314578063a16de11c116102ee578063a16de11c146107cd578063a195e2db146106dd578063a1a29005146106bd578063a406ed801461075557610663565b8063944b9ad4146107bd5780639839423814610695578063a12e3511146107c557610663565b80638e0840bf146107a55780638ed7317f146106ed5780638fbe78d2146106fd578063910a5247146106e55780639166a2f9146107ad5780639230fa1d146107b557610663565b8063594dc373116104f45780637273ba701161044057806386c22955116103de57806389941a2a116103b857806389941a2a146107855780638a17ca861461078d5780638a911eef146107955780638c295e351461079d57610663565b806386c2295514610775578063883d4fb01461077d578063895327721461074557610663565b80637e6a20ca1161041a5780637e6a20ca146106fd5780638208d1f21461071d5780638235ca8814610725578063835658181461076d57610663565b80637273ba7014610725578063729e52ee146107655780637df413631461069557610663565b8063656b151f116104ad5780636db638c8116104875780636db638c8146107255780636eb9d0a01461073d5780636f5514e414610755578063717c5d7c1461075d57610663565b8063656b151f14610695578063693549ac146107455780636bdd3bf91461074d57610663565b8063594dc3731461071d57806359e4e7c3146107255780635af17adf1461072d578063609fd47c146107355780636164e3421461073d57806361ed380a1461068d57610663565b80633fe2098a116105b357806345d9c4651161056c5780634d89d393116105465780634d89d393146106bd5780634e95a4101461070d578063501bec4514610715578063574a20ef1461068d57610663565b806345d9c465146106e557806348b36c3a146106fd5780634d26940d1461070557610663565b80633fe2098a146106d557806340391774146106dd5780634074af28146106e5578063422c61941461069557806344312160146106ed578063458472a7146106f557610663565b806327d1ff75116106205780632ee52303116105fa5780632ee52303146106bd578063317d2bb5146106c55780633a6d9202146106cd5780633afcb7a11461068d57610663565b806327d1ff75146106a55780632968a7bd146106ad5780632e750856146106b557610663565b80630129840414610668578063026797d91461068d5780630ab3e66614610695578063143fb1a4146106685780631918bc6f1461069d5780631d5edf0314610695575b600080fd5b610670610855565b6040805167ffffffffffffffff9092168252519081900360200190f35b61067061085a565b61067061085f565b610670610864565b61067061088b565b610670610890565b6106706108b7565b6106706108bc565b6106706108c1565b6106706108cb565b6106706108d5565b6106706108da565b6106706108df565b6106706108e4565b6106706108e9565b6106706108f3565b6106706108f8565b610670610902565b61067061090c565b610670610911565b61067061091b565b610670610920565b61067061092a565b610670610934565b610670610939565b610670610943565b61067061094d565b610670610957565b61067061095c565b61067061096e565b6106706109fb565b610670610a49565b610670610a73565b610670610a7d565b610670610a87565b610670610ae7565b610670610af1565b610670610b04565b610670610b0e565b610670610b13565b610670610bbb565b610670610bc5565b610670610bca565b610670610bcf565b610670610bd9565b610670610be3565b610670610be8565b610670610bed565b610670610bf7565b610670610bfc565b610670610c01565b610670610c10565b610670610c3a565b610670610c3f565b610670610c44565b610670610c4e565b610670610c6f565b610670610c79565b600590565b600190565b600090565b600061086e6108da565b67ffffffffffffffff16600367ffffffffffffffff16901b905090565b601190565b600061089a6108df565b67ffffffffffffffff16600167ffffffffffffffff16901b905090565b600f90565b600c90565b600061086e6108df565b600061089a610934565b608090565b600d90565b600390565b600890565b600061089a610b0e565b600790565b600061089a610bc5565b600061089a610be3565b604090565b600061089a61085a565b600290565b600061086e610be8565b600061089a610bf7565b600490565b600061089a61091b565b600061086e610957565b600061089a610855565b602290565b6000600161096861090c565b03905090565b600061097861092a565b6109806108e9565b610988610b04565b610990610902565b610998610a7d565b6109a0610ae7565b6109a8610864565b6109b0610c44565b6109b8610a73565b6109c0610bd9565b6109c861094d565b6109d06108cb565b6109d8610890565b6109e0610911565b6109e8610bed565b1717171717171717171717171717905090565b6000610a05610902565b610a0d610a7d565b610a15610864565b610a1d610a73565b610a2561094d565b610a2d6108cb565b610a35610911565b610a3d610bed565b17171717171717905090565b60006001610a5561090c565b0367ffffffffffffffff16600167ffffffffffffffff16901b905090565b600061089a6108e4565b600061089a610bfc565b6000610a91610bbb565b610a99610920565b610aa1610902565b610aa9610a7d565b610ab1610864565b610ab9610a73565b610ac161094d565b610ac96108cb565b610ad1610911565b610ad9610bed565b171717171717171717905090565b600061089a61088b565b60006001610afd6108bc565b5090919050565b600061089a610c3f565b601590565b6000610b1d610bbb565b610b25610943565b610b2d610920565b610b3561092a565b610b3d6108e9565b610b45610b04565b610b4d610902565b610b55610a7d565b610b5d610ae7565b610b65610864565b610b6d610c44565b610b75610a73565b610b7d610bd9565b610b8561094d565b610b8d6108cb565b610b95610890565b610b9d610911565b610ba5610bed565b1717171717171717171717171717171717905090565b600061089a61095c565b600b90565b601090565b600061089a610c79565b600061089a6108f3565b601390565b602090565b600061089a61085f565b601690565b601290565b6000610c0b610c4e565b905090565b60006001610c1c6108bc565b67ffffffffffffffff16600167ffffffffffffffff16901b03905090565b600690565b601490565b600061086e610bc5565b6000610c58610939565b610c60610911565b610c68610bed565b1717905090565b600061086e6108b7565b60099056fea264697066735822122062c25b7a5817f8e7065370434ba97994a4c57909e9e913d49a945e29053ac80a64736f6c63430007040033",
+  "linkReferences": {},
+  "deployedLinkReferences": {},
+  "devdoc": {
+    "author": "Felipe Argento",
+    "kind": "dev",
+    "methods": {},
+    "title": "RiscVConstants",
+    "version": 1
+  },
+  "evm": {
+    "bytecode": {
+      "generatedSources": [],
+      "linkReferences": {},
+      "opcodes": "PUSH2 0xCB4 PUSH2 0x26 PUSH1 0xB DUP3 DUP3 DUP3 CODECOPY DUP1 MLOAD PUSH1 0x0 BYTE PUSH1 0x73 EQ PUSH2 0x19 JUMPI INVALID JUMPDEST ADDRESS PUSH1 0x0 MSTORE PUSH1 0x73 DUP2 MSTORE8 DUP3 DUP2 RETURN INVALID PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH1 0x4 CALLDATASIZE LT PUSH2 0x663 JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x8E0840BF GT PUSH2 0x35B JUMPI DUP1 PUSH4 0xC3B85A8F GT PUSH2 0x1CD JUMPI DUP1 PUSH4 0xDB197254 GT PUSH2 0x119 JUMPI DUP1 PUSH4 0xF2F21E4C GT PUSH2 0xB7 JUMPI DUP1 PUSH4 0xF796D7D7 GT PUSH2 0x91 JUMPI DUP1 PUSH4 0xF796D7D7 EQ PUSH2 0x845 JUMPI DUP1 PUSH4 0xFCC61EFF EQ PUSH2 0x7FD JUMPI DUP1 PUSH4 0xFD198E55 EQ PUSH2 0x7FD JUMPI DUP1 PUSH4 0xFD6607C1 EQ PUSH2 0x84D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xF2F21E4C EQ PUSH2 0x6AD JUMPI DUP1 PUSH4 0xF2FB62C9 EQ PUSH2 0x83D JUMPI DUP1 PUSH4 0xF4A40761 EQ PUSH2 0x73D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xE746AC72 GT PUSH2 0xF3 JUMPI DUP1 PUSH4 0xE746AC72 EQ PUSH2 0x835 JUMPI DUP1 PUSH4 0xE89D408D EQ PUSH2 0x68D JUMPI DUP1 PUSH4 0xE8A26959 EQ PUSH2 0x725 JUMPI DUP1 PUSH4 0xE9D72764 EQ PUSH2 0x668 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xDB197254 EQ PUSH2 0x82D JUMPI DUP1 PUSH4 0xE1D206AB EQ PUSH2 0x6E5 JUMPI DUP1 PUSH4 0xE697ACE9 EQ PUSH2 0x71D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xCAC5B495 GT PUSH2 0x186 JUMPI DUP1 PUSH4 0xCF7ECF79 GT PUSH2 0x160 JUMPI DUP1 PUSH4 0xCF7ECF79 EQ PUSH2 0x6E5 JUMPI DUP1 PUSH4 0xD50CA22F EQ PUSH2 0x725 JUMPI DUP1 PUSH4 0xD8685E08 EQ PUSH2 0x825 JUMPI DUP1 PUSH4 0xDACFF167 EQ PUSH2 0x7CD JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xCAC5B495 EQ PUSH2 0x815 JUMPI DUP1 PUSH4 0xCBA6D20C EQ PUSH2 0x71D JUMPI DUP1 PUSH4 0xCC19195C EQ PUSH2 0x81D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xC3B85A8F EQ PUSH2 0x6ED JUMPI DUP1 PUSH4 0xC3D5890F EQ PUSH2 0x80D JUMPI DUP1 PUSH4 0xC49235EA EQ PUSH2 0x7E5 JUMPI DUP1 PUSH4 0xC5D15AAD EQ PUSH2 0x695 JUMPI DUP1 PUSH4 0xC6CE50D6 EQ PUSH2 0x785 JUMPI DUP1 PUSH4 0xCA3C1134 EQ PUSH2 0x68D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xA4521D8B GT PUSH2 0x2A7 JUMPI DUP1 PUSH4 0xAE3A10D1 GT PUSH2 0x245 JUMPI DUP1 PUSH4 0xB396896E GT PUSH2 0x21F JUMPI DUP1 PUSH4 0xB396896E EQ PUSH2 0x6CD JUMPI DUP1 PUSH4 0xB482D451 EQ PUSH2 0x805 JUMPI DUP1 PUSH4 0xB4E549BA EQ PUSH2 0x715 JUMPI DUP1 PUSH4 0xBC895743 EQ PUSH2 0x725 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xAE3A10D1 EQ PUSH2 0x7FD JUMPI DUP1 PUSH4 0xAE458AE8 EQ PUSH2 0x7FD JUMPI DUP1 PUSH4 0xB0C41FC5 EQ PUSH2 0x68D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xA8F81E23 GT PUSH2 0x281 JUMPI DUP1 PUSH4 0xA8F81E23 EQ PUSH2 0x7E5 JUMPI DUP1 PUSH4 0xA92353D7 EQ PUSH2 0x7ED JUMPI DUP1 PUSH4 0xAC5732FE EQ PUSH2 0x68D JUMPI DUP1 PUSH4 0xAD21DCAF EQ PUSH2 0x7F5 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xA4521D8B EQ PUSH2 0x7D5 JUMPI DUP1 PUSH4 0xA4652FA5 EQ PUSH2 0x6B5 JUMPI DUP1 PUSH4 0xA73FA952 EQ PUSH2 0x7DD JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x944B9AD4 GT PUSH2 0x314 JUMPI DUP1 PUSH4 0xA16DE11C GT PUSH2 0x2EE JUMPI DUP1 PUSH4 0xA16DE11C EQ PUSH2 0x7CD JUMPI DUP1 PUSH4 0xA195E2DB EQ PUSH2 0x6DD JUMPI DUP1 PUSH4 0xA1A29005 EQ PUSH2 0x6BD JUMPI DUP1 PUSH4 0xA406ED80 EQ PUSH2 0x755 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x944B9AD4 EQ PUSH2 0x7BD JUMPI DUP1 PUSH4 0x98394238 EQ PUSH2 0x695 JUMPI DUP1 PUSH4 0xA12E3511 EQ PUSH2 0x7C5 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x8E0840BF EQ PUSH2 0x7A5 JUMPI DUP1 PUSH4 0x8ED7317F EQ PUSH2 0x6ED JUMPI DUP1 PUSH4 0x8FBE78D2 EQ PUSH2 0x6FD JUMPI DUP1 PUSH4 0x910A5247 EQ PUSH2 0x6E5 JUMPI DUP1 PUSH4 0x9166A2F9 EQ PUSH2 0x7AD JUMPI DUP1 PUSH4 0x9230FA1D EQ PUSH2 0x7B5 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x594DC373 GT PUSH2 0x4F4 JUMPI DUP1 PUSH4 0x7273BA70 GT PUSH2 0x440 JUMPI DUP1 PUSH4 0x86C22955 GT PUSH2 0x3DE JUMPI DUP1 PUSH4 0x89941A2A GT PUSH2 0x3B8 JUMPI DUP1 PUSH4 0x89941A2A EQ PUSH2 0x785 JUMPI DUP1 PUSH4 0x8A17CA86 EQ PUSH2 0x78D JUMPI DUP1 PUSH4 0x8A911EEF EQ PUSH2 0x795 JUMPI DUP1 PUSH4 0x8C295E35 EQ PUSH2 0x79D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x86C22955 EQ PUSH2 0x775 JUMPI DUP1 PUSH4 0x883D4FB0 EQ PUSH2 0x77D JUMPI DUP1 PUSH4 0x89532772 EQ PUSH2 0x745 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x7E6A20CA GT PUSH2 0x41A JUMPI DUP1 PUSH4 0x7E6A20CA EQ PUSH2 0x6FD JUMPI DUP1 PUSH4 0x8208D1F2 EQ PUSH2 0x71D JUMPI DUP1 PUSH4 0x8235CA88 EQ PUSH2 0x725 JUMPI DUP1 PUSH4 0x83565818 EQ PUSH2 0x76D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x7273BA70 EQ PUSH2 0x725 JUMPI DUP1 PUSH4 0x729E52EE EQ PUSH2 0x765 JUMPI DUP1 PUSH4 0x7DF41363 EQ PUSH2 0x695 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x656B151F GT PUSH2 0x4AD JUMPI DUP1 PUSH4 0x6DB638C8 GT PUSH2 0x487 JUMPI DUP1 PUSH4 0x6DB638C8 EQ PUSH2 0x725 JUMPI DUP1 PUSH4 0x6EB9D0A0 EQ PUSH2 0x73D JUMPI DUP1 PUSH4 0x6F5514E4 EQ PUSH2 0x755 JUMPI DUP1 PUSH4 0x717C5D7C EQ PUSH2 0x75D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x656B151F EQ PUSH2 0x695 JUMPI DUP1 PUSH4 0x693549AC EQ PUSH2 0x745 JUMPI DUP1 PUSH4 0x6BDD3BF9 EQ PUSH2 0x74D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x594DC373 EQ PUSH2 0x71D JUMPI DUP1 PUSH4 0x59E4E7C3 EQ PUSH2 0x725 JUMPI DUP1 PUSH4 0x5AF17ADF EQ PUSH2 0x72D JUMPI DUP1 PUSH4 0x609FD47C EQ PUSH2 0x735 JUMPI DUP1 PUSH4 0x6164E342 EQ PUSH2 0x73D JUMPI DUP1 PUSH4 0x61ED380A EQ PUSH2 0x68D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x3FE2098A GT PUSH2 0x5B3 JUMPI DUP1 PUSH4 0x45D9C465 GT PUSH2 0x56C JUMPI DUP1 PUSH4 0x4D89D393 GT PUSH2 0x546 JUMPI DUP1 PUSH4 0x4D89D393 EQ PUSH2 0x6BD JUMPI DUP1 PUSH4 0x4E95A410 EQ PUSH2 0x70D JUMPI DUP1 PUSH4 0x501BEC45 EQ PUSH2 0x715 JUMPI DUP1 PUSH4 0x574A20EF EQ PUSH2 0x68D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x45D9C465 EQ PUSH2 0x6E5 JUMPI DUP1 PUSH4 0x48B36C3A EQ PUSH2 0x6FD JUMPI DUP1 PUSH4 0x4D26940D EQ PUSH2 0x705 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x3FE2098A EQ PUSH2 0x6D5 JUMPI DUP1 PUSH4 0x40391774 EQ PUSH2 0x6DD JUMPI DUP1 PUSH4 0x4074AF28 EQ PUSH2 0x6E5 JUMPI DUP1 PUSH4 0x422C6194 EQ PUSH2 0x695 JUMPI DUP1 PUSH4 0x44312160 EQ PUSH2 0x6ED JUMPI DUP1 PUSH4 0x458472A7 EQ PUSH2 0x6F5 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x27D1FF75 GT PUSH2 0x620 JUMPI DUP1 PUSH4 0x2EE52303 GT PUSH2 0x5FA JUMPI DUP1 PUSH4 0x2EE52303 EQ PUSH2 0x6BD JUMPI DUP1 PUSH4 0x317D2BB5 EQ PUSH2 0x6C5 JUMPI DUP1 PUSH4 0x3A6D9202 EQ PUSH2 0x6CD JUMPI DUP1 PUSH4 0x3AFCB7A1 EQ PUSH2 0x68D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x27D1FF75 EQ PUSH2 0x6A5 JUMPI DUP1 PUSH4 0x2968A7BD EQ PUSH2 0x6AD JUMPI DUP1 PUSH4 0x2E750856 EQ PUSH2 0x6B5 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x1298404 EQ PUSH2 0x668 JUMPI DUP1 PUSH4 0x26797D9 EQ PUSH2 0x68D JUMPI DUP1 PUSH4 0xAB3E666 EQ PUSH2 0x695 JUMPI DUP1 PUSH4 0x143FB1A4 EQ PUSH2 0x668 JUMPI DUP1 PUSH4 0x1918BC6F EQ PUSH2 0x69D JUMPI DUP1 PUSH4 0x1D5EDF03 EQ PUSH2 0x695 JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH2 0x670 PUSH2 0x855 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH8 0xFFFFFFFFFFFFFFFF SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0x670 PUSH2 0x85A JUMP JUMPDEST PUSH2 0x670 PUSH2 0x85F JUMP JUMPDEST PUSH2 0x670 PUSH2 0x864 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x88B JUMP JUMPDEST PUSH2 0x670 PUSH2 0x890 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8B7 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8BC JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8C1 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8CB JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8D5 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8DA JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8DF JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8E4 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8E9 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8F3 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8F8 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x902 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x90C JUMP JUMPDEST PUSH2 0x670 PUSH2 0x911 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x91B JUMP JUMPDEST PUSH2 0x670 PUSH2 0x920 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x92A JUMP JUMPDEST PUSH2 0x670 PUSH2 0x934 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x939 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x943 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x94D JUMP JUMPDEST PUSH2 0x670 PUSH2 0x957 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x95C JUMP JUMPDEST PUSH2 0x670 PUSH2 0x96E JUMP JUMPDEST PUSH2 0x670 PUSH2 0x9FB JUMP JUMPDEST PUSH2 0x670 PUSH2 0xA49 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xA73 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xA7D JUMP JUMPDEST PUSH2 0x670 PUSH2 0xA87 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xAE7 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xAF1 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xB04 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xB0E JUMP JUMPDEST PUSH2 0x670 PUSH2 0xB13 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBBB JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBC5 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBCA JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBCF JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBD9 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBE3 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBE8 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBED JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBF7 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBFC JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC01 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC10 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC3A JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC3F JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC44 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC4E JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC6F JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC79 JUMP JUMPDEST PUSH1 0x5 SWAP1 JUMP JUMPDEST PUSH1 0x1 SWAP1 JUMP JUMPDEST PUSH1 0x0 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x86E PUSH2 0x8DA JUMP JUMPDEST PUSH8 0xFFFFFFFFFFFFFFFF AND PUSH1 0x3 PUSH8 0xFFFFFFFFFFFFFFFF AND SWAP1 SHL SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x11 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x8DF JUMP JUMPDEST PUSH8 0xFFFFFFFFFFFFFFFF AND PUSH1 0x1 PUSH8 0xFFFFFFFFFFFFFFFF AND SWAP1 SHL SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0xF SWAP1 JUMP JUMPDEST PUSH1 0xC SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x86E PUSH2 0x8DF JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x934 JUMP JUMPDEST PUSH1 0x80 SWAP1 JUMP JUMPDEST PUSH1 0xD SWAP1 JUMP JUMPDEST PUSH1 0x3 SWAP1 JUMP JUMPDEST PUSH1 0x8 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xB0E JUMP JUMPDEST PUSH1 0x7 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xBC5 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xBE3 JUMP JUMPDEST PUSH1 0x40 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x85A JUMP JUMPDEST PUSH1 0x2 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x86E PUSH2 0xBE8 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xBF7 JUMP JUMPDEST PUSH1 0x4 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x91B JUMP JUMPDEST PUSH1 0x0 PUSH2 0x86E PUSH2 0x957 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x855 JUMP JUMPDEST PUSH1 0x22 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH1 0x1 PUSH2 0x968 PUSH2 0x90C JUMP JUMPDEST SUB SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x978 PUSH2 0x92A JUMP JUMPDEST PUSH2 0x980 PUSH2 0x8E9 JUMP JUMPDEST PUSH2 0x988 PUSH2 0xB04 JUMP JUMPDEST PUSH2 0x990 PUSH2 0x902 JUMP JUMPDEST PUSH2 0x998 PUSH2 0xA7D JUMP JUMPDEST PUSH2 0x9A0 PUSH2 0xAE7 JUMP JUMPDEST PUSH2 0x9A8 PUSH2 0x864 JUMP JUMPDEST PUSH2 0x9B0 PUSH2 0xC44 JUMP JUMPDEST PUSH2 0x9B8 PUSH2 0xA73 JUMP JUMPDEST PUSH2 0x9C0 PUSH2 0xBD9 JUMP JUMPDEST PUSH2 0x9C8 PUSH2 0x94D JUMP JUMPDEST PUSH2 0x9D0 PUSH2 0x8CB JUMP JUMPDEST PUSH2 0x9D8 PUSH2 0x890 JUMP JUMPDEST PUSH2 0x9E0 PUSH2 0x911 JUMP JUMPDEST PUSH2 0x9E8 PUSH2 0xBED JUMP JUMPDEST OR OR OR OR OR OR OR OR OR OR OR OR OR OR SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0xA05 PUSH2 0x902 JUMP JUMPDEST PUSH2 0xA0D PUSH2 0xA7D JUMP JUMPDEST PUSH2 0xA15 PUSH2 0x864 JUMP JUMPDEST PUSH2 0xA1D PUSH2 0xA73 JUMP JUMPDEST PUSH2 0xA25 PUSH2 0x94D JUMP JUMPDEST PUSH2 0xA2D PUSH2 0x8CB JUMP JUMPDEST PUSH2 0xA35 PUSH2 0x911 JUMP JUMPDEST PUSH2 0xA3D PUSH2 0xBED JUMP JUMPDEST OR OR OR OR OR OR OR SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH1 0x1 PUSH2 0xA55 PUSH2 0x90C JUMP JUMPDEST SUB PUSH8 0xFFFFFFFFFFFFFFFF AND PUSH1 0x1 PUSH8 0xFFFFFFFFFFFFFFFF AND SWAP1 SHL SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x8E4 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xBFC JUMP JUMPDEST PUSH1 0x0 PUSH2 0xA91 PUSH2 0xBBB JUMP JUMPDEST PUSH2 0xA99 PUSH2 0x920 JUMP JUMPDEST PUSH2 0xAA1 PUSH2 0x902 JUMP JUMPDEST PUSH2 0xAA9 PUSH2 0xA7D JUMP JUMPDEST PUSH2 0xAB1 PUSH2 0x864 JUMP JUMPDEST PUSH2 0xAB9 PUSH2 0xA73 JUMP JUMPDEST PUSH2 0xAC1 PUSH2 0x94D JUMP JUMPDEST PUSH2 0xAC9 PUSH2 0x8CB JUMP JUMPDEST PUSH2 0xAD1 PUSH2 0x911 JUMP JUMPDEST PUSH2 0xAD9 PUSH2 0xBED JUMP JUMPDEST OR OR OR OR OR OR OR OR OR SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x88B JUMP JUMPDEST PUSH1 0x0 PUSH1 0x1 PUSH2 0xAFD PUSH2 0x8BC JUMP JUMPDEST POP SWAP1 SWAP2 SWAP1 POP JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xC3F JUMP JUMPDEST PUSH1 0x15 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0xB1D PUSH2 0xBBB JUMP JUMPDEST PUSH2 0xB25 PUSH2 0x943 JUMP JUMPDEST PUSH2 0xB2D PUSH2 0x920 JUMP JUMPDEST PUSH2 0xB35 PUSH2 0x92A JUMP JUMPDEST PUSH2 0xB3D PUSH2 0x8E9 JUMP JUMPDEST PUSH2 0xB45 PUSH2 0xB04 JUMP JUMPDEST PUSH2 0xB4D PUSH2 0x902 JUMP JUMPDEST PUSH2 0xB55 PUSH2 0xA7D JUMP JUMPDEST PUSH2 0xB5D PUSH2 0xAE7 JUMP JUMPDEST PUSH2 0xB65 PUSH2 0x864 JUMP JUMPDEST PUSH2 0xB6D PUSH2 0xC44 JUMP JUMPDEST PUSH2 0xB75 PUSH2 0xA73 JUMP JUMPDEST PUSH2 0xB7D PUSH2 0xBD9 JUMP JUMPDEST PUSH2 0xB85 PUSH2 0x94D JUMP JUMPDEST PUSH2 0xB8D PUSH2 0x8CB JUMP JUMPDEST PUSH2 0xB95 PUSH2 0x890 JUMP JUMPDEST PUSH2 0xB9D PUSH2 0x911 JUMP JUMPDEST PUSH2 0xBA5 PUSH2 0xBED JUMP JUMPDEST OR OR OR OR OR OR OR OR OR OR OR OR OR OR OR OR OR SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x95C JUMP JUMPDEST PUSH1 0xB SWAP1 JUMP JUMPDEST PUSH1 0x10 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xC79 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x8F3 JUMP JUMPDEST PUSH1 0x13 SWAP1 JUMP JUMPDEST PUSH1 0x20 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x85F JUMP JUMPDEST PUSH1 0x16 SWAP1 JUMP JUMPDEST PUSH1 0x12 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0xC0B PUSH2 0xC4E JUMP JUMPDEST SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH1 0x1 PUSH2 0xC1C PUSH2 0x8BC JUMP JUMPDEST PUSH8 0xFFFFFFFFFFFFFFFF AND PUSH1 0x1 PUSH8 0xFFFFFFFFFFFFFFFF AND SWAP1 SHL SUB SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x6 SWAP1 JUMP JUMPDEST PUSH1 0x14 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x86E PUSH2 0xBC5 JUMP JUMPDEST PUSH1 0x0 PUSH2 0xC58 PUSH2 0x939 JUMP JUMPDEST PUSH2 0xC60 PUSH2 0x911 JUMP JUMPDEST PUSH2 0xC68 PUSH2 0xBED JUMP JUMPDEST OR OR SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x86E PUSH2 0x8B7 JUMP JUMPDEST PUSH1 0x9 SWAP1 JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 PUSH3 0xC25B7A PC OR 0xF8 0xE7 MOD MSTORE8 PUSH17 0x434BA97994A4C57909E9E913D49A945E29 SDIV GASPRICE 0xC8 EXP PUSH5 0x736F6C6343 STOP SMOD DIV STOP CALLER ",
+      "sourceMap": "749:11794:13:-:0;;;;;;;;;;;;;;;;;;;;;;;;;"
+    },
+    "deployedBytecode": {
+      "generatedSources": [],
+      "immutableReferences": {},
+      "linkReferences": {},
+      "opcodes": "PUSH20 0x0 ADDRESS EQ PUSH1 0x80 PUSH1 0x40 MSTORE PUSH1 0x4 CALLDATASIZE LT PUSH2 0x663 JUMPI PUSH1 0x0 CALLDATALOAD PUSH1 0xE0 SHR DUP1 PUSH4 0x8E0840BF GT PUSH2 0x35B JUMPI DUP1 PUSH4 0xC3B85A8F GT PUSH2 0x1CD JUMPI DUP1 PUSH4 0xDB197254 GT PUSH2 0x119 JUMPI DUP1 PUSH4 0xF2F21E4C GT PUSH2 0xB7 JUMPI DUP1 PUSH4 0xF796D7D7 GT PUSH2 0x91 JUMPI DUP1 PUSH4 0xF796D7D7 EQ PUSH2 0x845 JUMPI DUP1 PUSH4 0xFCC61EFF EQ PUSH2 0x7FD JUMPI DUP1 PUSH4 0xFD198E55 EQ PUSH2 0x7FD JUMPI DUP1 PUSH4 0xFD6607C1 EQ PUSH2 0x84D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xF2F21E4C EQ PUSH2 0x6AD JUMPI DUP1 PUSH4 0xF2FB62C9 EQ PUSH2 0x83D JUMPI DUP1 PUSH4 0xF4A40761 EQ PUSH2 0x73D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xE746AC72 GT PUSH2 0xF3 JUMPI DUP1 PUSH4 0xE746AC72 EQ PUSH2 0x835 JUMPI DUP1 PUSH4 0xE89D408D EQ PUSH2 0x68D JUMPI DUP1 PUSH4 0xE8A26959 EQ PUSH2 0x725 JUMPI DUP1 PUSH4 0xE9D72764 EQ PUSH2 0x668 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xDB197254 EQ PUSH2 0x82D JUMPI DUP1 PUSH4 0xE1D206AB EQ PUSH2 0x6E5 JUMPI DUP1 PUSH4 0xE697ACE9 EQ PUSH2 0x71D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xCAC5B495 GT PUSH2 0x186 JUMPI DUP1 PUSH4 0xCF7ECF79 GT PUSH2 0x160 JUMPI DUP1 PUSH4 0xCF7ECF79 EQ PUSH2 0x6E5 JUMPI DUP1 PUSH4 0xD50CA22F EQ PUSH2 0x725 JUMPI DUP1 PUSH4 0xD8685E08 EQ PUSH2 0x825 JUMPI DUP1 PUSH4 0xDACFF167 EQ PUSH2 0x7CD JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xCAC5B495 EQ PUSH2 0x815 JUMPI DUP1 PUSH4 0xCBA6D20C EQ PUSH2 0x71D JUMPI DUP1 PUSH4 0xCC19195C EQ PUSH2 0x81D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xC3B85A8F EQ PUSH2 0x6ED JUMPI DUP1 PUSH4 0xC3D5890F EQ PUSH2 0x80D JUMPI DUP1 PUSH4 0xC49235EA EQ PUSH2 0x7E5 JUMPI DUP1 PUSH4 0xC5D15AAD EQ PUSH2 0x695 JUMPI DUP1 PUSH4 0xC6CE50D6 EQ PUSH2 0x785 JUMPI DUP1 PUSH4 0xCA3C1134 EQ PUSH2 0x68D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xA4521D8B GT PUSH2 0x2A7 JUMPI DUP1 PUSH4 0xAE3A10D1 GT PUSH2 0x245 JUMPI DUP1 PUSH4 0xB396896E GT PUSH2 0x21F JUMPI DUP1 PUSH4 0xB396896E EQ PUSH2 0x6CD JUMPI DUP1 PUSH4 0xB482D451 EQ PUSH2 0x805 JUMPI DUP1 PUSH4 0xB4E549BA EQ PUSH2 0x715 JUMPI DUP1 PUSH4 0xBC895743 EQ PUSH2 0x725 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xAE3A10D1 EQ PUSH2 0x7FD JUMPI DUP1 PUSH4 0xAE458AE8 EQ PUSH2 0x7FD JUMPI DUP1 PUSH4 0xB0C41FC5 EQ PUSH2 0x68D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xA8F81E23 GT PUSH2 0x281 JUMPI DUP1 PUSH4 0xA8F81E23 EQ PUSH2 0x7E5 JUMPI DUP1 PUSH4 0xA92353D7 EQ PUSH2 0x7ED JUMPI DUP1 PUSH4 0xAC5732FE EQ PUSH2 0x68D JUMPI DUP1 PUSH4 0xAD21DCAF EQ PUSH2 0x7F5 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0xA4521D8B EQ PUSH2 0x7D5 JUMPI DUP1 PUSH4 0xA4652FA5 EQ PUSH2 0x6B5 JUMPI DUP1 PUSH4 0xA73FA952 EQ PUSH2 0x7DD JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x944B9AD4 GT PUSH2 0x314 JUMPI DUP1 PUSH4 0xA16DE11C GT PUSH2 0x2EE JUMPI DUP1 PUSH4 0xA16DE11C EQ PUSH2 0x7CD JUMPI DUP1 PUSH4 0xA195E2DB EQ PUSH2 0x6DD JUMPI DUP1 PUSH4 0xA1A29005 EQ PUSH2 0x6BD JUMPI DUP1 PUSH4 0xA406ED80 EQ PUSH2 0x755 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x944B9AD4 EQ PUSH2 0x7BD JUMPI DUP1 PUSH4 0x98394238 EQ PUSH2 0x695 JUMPI DUP1 PUSH4 0xA12E3511 EQ PUSH2 0x7C5 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x8E0840BF EQ PUSH2 0x7A5 JUMPI DUP1 PUSH4 0x8ED7317F EQ PUSH2 0x6ED JUMPI DUP1 PUSH4 0x8FBE78D2 EQ PUSH2 0x6FD JUMPI DUP1 PUSH4 0x910A5247 EQ PUSH2 0x6E5 JUMPI DUP1 PUSH4 0x9166A2F9 EQ PUSH2 0x7AD JUMPI DUP1 PUSH4 0x9230FA1D EQ PUSH2 0x7B5 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x594DC373 GT PUSH2 0x4F4 JUMPI DUP1 PUSH4 0x7273BA70 GT PUSH2 0x440 JUMPI DUP1 PUSH4 0x86C22955 GT PUSH2 0x3DE JUMPI DUP1 PUSH4 0x89941A2A GT PUSH2 0x3B8 JUMPI DUP1 PUSH4 0x89941A2A EQ PUSH2 0x785 JUMPI DUP1 PUSH4 0x8A17CA86 EQ PUSH2 0x78D JUMPI DUP1 PUSH4 0x8A911EEF EQ PUSH2 0x795 JUMPI DUP1 PUSH4 0x8C295E35 EQ PUSH2 0x79D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x86C22955 EQ PUSH2 0x775 JUMPI DUP1 PUSH4 0x883D4FB0 EQ PUSH2 0x77D JUMPI DUP1 PUSH4 0x89532772 EQ PUSH2 0x745 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x7E6A20CA GT PUSH2 0x41A JUMPI DUP1 PUSH4 0x7E6A20CA EQ PUSH2 0x6FD JUMPI DUP1 PUSH4 0x8208D1F2 EQ PUSH2 0x71D JUMPI DUP1 PUSH4 0x8235CA88 EQ PUSH2 0x725 JUMPI DUP1 PUSH4 0x83565818 EQ PUSH2 0x76D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x7273BA70 EQ PUSH2 0x725 JUMPI DUP1 PUSH4 0x729E52EE EQ PUSH2 0x765 JUMPI DUP1 PUSH4 0x7DF41363 EQ PUSH2 0x695 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x656B151F GT PUSH2 0x4AD JUMPI DUP1 PUSH4 0x6DB638C8 GT PUSH2 0x487 JUMPI DUP1 PUSH4 0x6DB638C8 EQ PUSH2 0x725 JUMPI DUP1 PUSH4 0x6EB9D0A0 EQ PUSH2 0x73D JUMPI DUP1 PUSH4 0x6F5514E4 EQ PUSH2 0x755 JUMPI DUP1 PUSH4 0x717C5D7C EQ PUSH2 0x75D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x656B151F EQ PUSH2 0x695 JUMPI DUP1 PUSH4 0x693549AC EQ PUSH2 0x745 JUMPI DUP1 PUSH4 0x6BDD3BF9 EQ PUSH2 0x74D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x594DC373 EQ PUSH2 0x71D JUMPI DUP1 PUSH4 0x59E4E7C3 EQ PUSH2 0x725 JUMPI DUP1 PUSH4 0x5AF17ADF EQ PUSH2 0x72D JUMPI DUP1 PUSH4 0x609FD47C EQ PUSH2 0x735 JUMPI DUP1 PUSH4 0x6164E342 EQ PUSH2 0x73D JUMPI DUP1 PUSH4 0x61ED380A EQ PUSH2 0x68D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x3FE2098A GT PUSH2 0x5B3 JUMPI DUP1 PUSH4 0x45D9C465 GT PUSH2 0x56C JUMPI DUP1 PUSH4 0x4D89D393 GT PUSH2 0x546 JUMPI DUP1 PUSH4 0x4D89D393 EQ PUSH2 0x6BD JUMPI DUP1 PUSH4 0x4E95A410 EQ PUSH2 0x70D JUMPI DUP1 PUSH4 0x501BEC45 EQ PUSH2 0x715 JUMPI DUP1 PUSH4 0x574A20EF EQ PUSH2 0x68D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x45D9C465 EQ PUSH2 0x6E5 JUMPI DUP1 PUSH4 0x48B36C3A EQ PUSH2 0x6FD JUMPI DUP1 PUSH4 0x4D26940D EQ PUSH2 0x705 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x3FE2098A EQ PUSH2 0x6D5 JUMPI DUP1 PUSH4 0x40391774 EQ PUSH2 0x6DD JUMPI DUP1 PUSH4 0x4074AF28 EQ PUSH2 0x6E5 JUMPI DUP1 PUSH4 0x422C6194 EQ PUSH2 0x695 JUMPI DUP1 PUSH4 0x44312160 EQ PUSH2 0x6ED JUMPI DUP1 PUSH4 0x458472A7 EQ PUSH2 0x6F5 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x27D1FF75 GT PUSH2 0x620 JUMPI DUP1 PUSH4 0x2EE52303 GT PUSH2 0x5FA JUMPI DUP1 PUSH4 0x2EE52303 EQ PUSH2 0x6BD JUMPI DUP1 PUSH4 0x317D2BB5 EQ PUSH2 0x6C5 JUMPI DUP1 PUSH4 0x3A6D9202 EQ PUSH2 0x6CD JUMPI DUP1 PUSH4 0x3AFCB7A1 EQ PUSH2 0x68D JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x27D1FF75 EQ PUSH2 0x6A5 JUMPI DUP1 PUSH4 0x2968A7BD EQ PUSH2 0x6AD JUMPI DUP1 PUSH4 0x2E750856 EQ PUSH2 0x6B5 JUMPI PUSH2 0x663 JUMP JUMPDEST DUP1 PUSH4 0x1298404 EQ PUSH2 0x668 JUMPI DUP1 PUSH4 0x26797D9 EQ PUSH2 0x68D JUMPI DUP1 PUSH4 0xAB3E666 EQ PUSH2 0x695 JUMPI DUP1 PUSH4 0x143FB1A4 EQ PUSH2 0x668 JUMPI DUP1 PUSH4 0x1918BC6F EQ PUSH2 0x69D JUMPI DUP1 PUSH4 0x1D5EDF03 EQ PUSH2 0x695 JUMPI JUMPDEST PUSH1 0x0 DUP1 REVERT JUMPDEST PUSH2 0x670 PUSH2 0x855 JUMP JUMPDEST PUSH1 0x40 DUP1 MLOAD PUSH8 0xFFFFFFFFFFFFFFFF SWAP1 SWAP3 AND DUP3 MSTORE MLOAD SWAP1 DUP2 SWAP1 SUB PUSH1 0x20 ADD SWAP1 RETURN JUMPDEST PUSH2 0x670 PUSH2 0x85A JUMP JUMPDEST PUSH2 0x670 PUSH2 0x85F JUMP JUMPDEST PUSH2 0x670 PUSH2 0x864 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x88B JUMP JUMPDEST PUSH2 0x670 PUSH2 0x890 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8B7 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8BC JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8C1 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8CB JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8D5 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8DA JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8DF JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8E4 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8E9 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8F3 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x8F8 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x902 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x90C JUMP JUMPDEST PUSH2 0x670 PUSH2 0x911 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x91B JUMP JUMPDEST PUSH2 0x670 PUSH2 0x920 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x92A JUMP JUMPDEST PUSH2 0x670 PUSH2 0x934 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x939 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x943 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x94D JUMP JUMPDEST PUSH2 0x670 PUSH2 0x957 JUMP JUMPDEST PUSH2 0x670 PUSH2 0x95C JUMP JUMPDEST PUSH2 0x670 PUSH2 0x96E JUMP JUMPDEST PUSH2 0x670 PUSH2 0x9FB JUMP JUMPDEST PUSH2 0x670 PUSH2 0xA49 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xA73 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xA7D JUMP JUMPDEST PUSH2 0x670 PUSH2 0xA87 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xAE7 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xAF1 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xB04 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xB0E JUMP JUMPDEST PUSH2 0x670 PUSH2 0xB13 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBBB JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBC5 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBCA JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBCF JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBD9 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBE3 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBE8 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBED JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBF7 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xBFC JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC01 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC10 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC3A JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC3F JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC44 JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC4E JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC6F JUMP JUMPDEST PUSH2 0x670 PUSH2 0xC79 JUMP JUMPDEST PUSH1 0x5 SWAP1 JUMP JUMPDEST PUSH1 0x1 SWAP1 JUMP JUMPDEST PUSH1 0x0 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x86E PUSH2 0x8DA JUMP JUMPDEST PUSH8 0xFFFFFFFFFFFFFFFF AND PUSH1 0x3 PUSH8 0xFFFFFFFFFFFFFFFF AND SWAP1 SHL SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x11 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x8DF JUMP JUMPDEST PUSH8 0xFFFFFFFFFFFFFFFF AND PUSH1 0x1 PUSH8 0xFFFFFFFFFFFFFFFF AND SWAP1 SHL SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0xF SWAP1 JUMP JUMPDEST PUSH1 0xC SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x86E PUSH2 0x8DF JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x934 JUMP JUMPDEST PUSH1 0x80 SWAP1 JUMP JUMPDEST PUSH1 0xD SWAP1 JUMP JUMPDEST PUSH1 0x3 SWAP1 JUMP JUMPDEST PUSH1 0x8 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xB0E JUMP JUMPDEST PUSH1 0x7 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xBC5 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xBE3 JUMP JUMPDEST PUSH1 0x40 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x85A JUMP JUMPDEST PUSH1 0x2 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x86E PUSH2 0xBE8 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xBF7 JUMP JUMPDEST PUSH1 0x4 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x91B JUMP JUMPDEST PUSH1 0x0 PUSH2 0x86E PUSH2 0x957 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x855 JUMP JUMPDEST PUSH1 0x22 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH1 0x1 PUSH2 0x968 PUSH2 0x90C JUMP JUMPDEST SUB SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x978 PUSH2 0x92A JUMP JUMPDEST PUSH2 0x980 PUSH2 0x8E9 JUMP JUMPDEST PUSH2 0x988 PUSH2 0xB04 JUMP JUMPDEST PUSH2 0x990 PUSH2 0x902 JUMP JUMPDEST PUSH2 0x998 PUSH2 0xA7D JUMP JUMPDEST PUSH2 0x9A0 PUSH2 0xAE7 JUMP JUMPDEST PUSH2 0x9A8 PUSH2 0x864 JUMP JUMPDEST PUSH2 0x9B0 PUSH2 0xC44 JUMP JUMPDEST PUSH2 0x9B8 PUSH2 0xA73 JUMP JUMPDEST PUSH2 0x9C0 PUSH2 0xBD9 JUMP JUMPDEST PUSH2 0x9C8 PUSH2 0x94D JUMP JUMPDEST PUSH2 0x9D0 PUSH2 0x8CB JUMP JUMPDEST PUSH2 0x9D8 PUSH2 0x890 JUMP JUMPDEST PUSH2 0x9E0 PUSH2 0x911 JUMP JUMPDEST PUSH2 0x9E8 PUSH2 0xBED JUMP JUMPDEST OR OR OR OR OR OR OR OR OR OR OR OR OR OR SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0xA05 PUSH2 0x902 JUMP JUMPDEST PUSH2 0xA0D PUSH2 0xA7D JUMP JUMPDEST PUSH2 0xA15 PUSH2 0x864 JUMP JUMPDEST PUSH2 0xA1D PUSH2 0xA73 JUMP JUMPDEST PUSH2 0xA25 PUSH2 0x94D JUMP JUMPDEST PUSH2 0xA2D PUSH2 0x8CB JUMP JUMPDEST PUSH2 0xA35 PUSH2 0x911 JUMP JUMPDEST PUSH2 0xA3D PUSH2 0xBED JUMP JUMPDEST OR OR OR OR OR OR OR SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH1 0x1 PUSH2 0xA55 PUSH2 0x90C JUMP JUMPDEST SUB PUSH8 0xFFFFFFFFFFFFFFFF AND PUSH1 0x1 PUSH8 0xFFFFFFFFFFFFFFFF AND SWAP1 SHL SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x8E4 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xBFC JUMP JUMPDEST PUSH1 0x0 PUSH2 0xA91 PUSH2 0xBBB JUMP JUMPDEST PUSH2 0xA99 PUSH2 0x920 JUMP JUMPDEST PUSH2 0xAA1 PUSH2 0x902 JUMP JUMPDEST PUSH2 0xAA9 PUSH2 0xA7D JUMP JUMPDEST PUSH2 0xAB1 PUSH2 0x864 JUMP JUMPDEST PUSH2 0xAB9 PUSH2 0xA73 JUMP JUMPDEST PUSH2 0xAC1 PUSH2 0x94D JUMP JUMPDEST PUSH2 0xAC9 PUSH2 0x8CB JUMP JUMPDEST PUSH2 0xAD1 PUSH2 0x911 JUMP JUMPDEST PUSH2 0xAD9 PUSH2 0xBED JUMP JUMPDEST OR OR OR OR OR OR OR OR OR SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x88B JUMP JUMPDEST PUSH1 0x0 PUSH1 0x1 PUSH2 0xAFD PUSH2 0x8BC JUMP JUMPDEST POP SWAP1 SWAP2 SWAP1 POP JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xC3F JUMP JUMPDEST PUSH1 0x15 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0xB1D PUSH2 0xBBB JUMP JUMPDEST PUSH2 0xB25 PUSH2 0x943 JUMP JUMPDEST PUSH2 0xB2D PUSH2 0x920 JUMP JUMPDEST PUSH2 0xB35 PUSH2 0x92A JUMP JUMPDEST PUSH2 0xB3D PUSH2 0x8E9 JUMP JUMPDEST PUSH2 0xB45 PUSH2 0xB04 JUMP JUMPDEST PUSH2 0xB4D PUSH2 0x902 JUMP JUMPDEST PUSH2 0xB55 PUSH2 0xA7D JUMP JUMPDEST PUSH2 0xB5D PUSH2 0xAE7 JUMP JUMPDEST PUSH2 0xB65 PUSH2 0x864 JUMP JUMPDEST PUSH2 0xB6D PUSH2 0xC44 JUMP JUMPDEST PUSH2 0xB75 PUSH2 0xA73 JUMP JUMPDEST PUSH2 0xB7D PUSH2 0xBD9 JUMP JUMPDEST PUSH2 0xB85 PUSH2 0x94D JUMP JUMPDEST PUSH2 0xB8D PUSH2 0x8CB JUMP JUMPDEST PUSH2 0xB95 PUSH2 0x890 JUMP JUMPDEST PUSH2 0xB9D PUSH2 0x911 JUMP JUMPDEST PUSH2 0xBA5 PUSH2 0xBED JUMP JUMPDEST OR OR OR OR OR OR OR OR OR OR OR OR OR OR OR OR OR SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x95C JUMP JUMPDEST PUSH1 0xB SWAP1 JUMP JUMPDEST PUSH1 0x10 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0xC79 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x8F3 JUMP JUMPDEST PUSH1 0x13 SWAP1 JUMP JUMPDEST PUSH1 0x20 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x89A PUSH2 0x85F JUMP JUMPDEST PUSH1 0x16 SWAP1 JUMP JUMPDEST PUSH1 0x12 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0xC0B PUSH2 0xC4E JUMP JUMPDEST SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH1 0x1 PUSH2 0xC1C PUSH2 0x8BC JUMP JUMPDEST PUSH8 0xFFFFFFFFFFFFFFFF AND PUSH1 0x1 PUSH8 0xFFFFFFFFFFFFFFFF AND SWAP1 SHL SUB SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x6 SWAP1 JUMP JUMPDEST PUSH1 0x14 SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x86E PUSH2 0xBC5 JUMP JUMPDEST PUSH1 0x0 PUSH2 0xC58 PUSH2 0x939 JUMP JUMPDEST PUSH2 0xC60 PUSH2 0x911 JUMP JUMPDEST PUSH2 0xC68 PUSH2 0xBED JUMP JUMPDEST OR OR SWAP1 POP SWAP1 JUMP JUMPDEST PUSH1 0x0 PUSH2 0x86E PUSH2 0x8B7 JUMP JUMPDEST PUSH1 0x9 SWAP1 JUMP INVALID LOG2 PUSH5 0x6970667358 0x22 SLT KECCAK256 PUSH3 0xC25B7A PC OR 0xF8 0xE7 MOD MSTORE8 PUSH17 0x434BA97994A4C57909E9E913D49A945E29 SDIV GASPRICE 0xC8 EXP PUSH5 0x736F6C6343 STOP SMOD DIV STOP CALLER ",
+      "sourceMap": "749:11794:13:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;8313:77;;;:::i;:::-;;;;;;;;;;;;;;;;;;;1749:58;;;:::i;7764:83::-;;;:::i;4361:100::-;;;:::i;2789:71::-;;;:::i;11853:94::-;;;:::i;2713:71::-;;;:::i;10805:70::-;;;:::i;1408:99::-;;;:::i;11952:94::-;;;:::i;10488:69::-;;;:::i;8922:75::-;;;:::i;8103:72::-;;;:::i;8736:::-;;;:::i;4996:100::-;;;:::i;8544:81::-;;;:::i;12447:94::-;;;:::i;4784:101::-;;;:::i;10414:69::-;;;:::i;3616:101::-;;;:::i;2110:70::-;;;:::i;5208:101::-;;;:::i;5101:::-;;;:::i;2260:70::-;;;:::i;1308:95::-;;;:::i;5314:101::-;;;:::i;3935:102::-;;;:::i;3323:71::-;;;:::i;3400:82::-;;;:::i;5553:612::-;;;:::i;6920:367::-;;;:::i;9134:100::-;;;:::i;12249:94::-;;;:::i;4678:101::-;;;:::i;7293:436::-;;;:::i;4571:102::-;;;:::i;10174:86::-;;;:::i;4890:101::-;;;:::i;3093:71::-;;;:::i;6171:716::-;;;:::i;5420:100::-;;;:::i;2560:71::-;;;:::i;10340:69::-;;;:::i;12348:94::-;;;:::i;4042:102::-;;;:::i;2941:71::-;;;:::i;3247:::-;;;:::i;9517:104::-;;;:::i;3169:71::-;;;:::i;2865:::-;;;:::i;9988:90::-;;;:::i;10881:108::-;;;:::i;8418:87::-;;;:::i;3017:71::-;;;:::i;4255:101::-;;;:::i;9845:138::-;;;:::i;4466:100::-;;;:::i;11511:66::-;;;:::i;8313:77::-;8385:3;8313:77;:::o;1749:58::-;1804:1;1749:58;:::o;7764:83::-;7826:6;7764:83;:::o;4361:100::-;4411:6;4440:19;:17;:19::i;:::-;4427:32;;4434:1;4427:32;;;;4420:39;;4361:100;:::o;2789:71::-;2856:2;2789:71;:::o;11853:94::-;11899:6;11928:17;:15;:17::i;:::-;11915:30;;11922:1;11915:30;;;;11908:37;;11853:94;:::o;2713:71::-;2780:2;2713:71;:::o;10805:70::-;10871:2;10805:70;:::o;1408:99::-;1457:6;1486:19;:17;:19::i;11952:94::-;11998:6;12027:17;:15;:17::i;10488:69::-;10548:6;10488:69;:::o;8922:75::-;8992:3;8922:75;:::o;8103:72::-;8170:3;8103:72;:::o;8736:::-;8803:3;8736:72;:::o;4996:100::-;5046:6;5075:19;:17;:19::i;8544:81::-;8620:3;8544:81;:::o;12447:94::-;12493:6;12522:17;:15;:17::i;4784:101::-;4834:6;4863:20;:18;:20::i;10414:69::-;10474:6;10414:69;:::o;3616:101::-;3666:6;3695:20;:18;:20::i;2110:70::-;2177:1;2110:70;:::o;5208:101::-;5258:6;5287:20;:18;:20::i;5101:101::-;5151:6;5180:20;:18;:20::i;2260:70::-;2327:1;2260:70;:::o;1308:95::-;1355:6;1384:17;:15;:17::i;5314:101::-;5364:6;5393:20;:18;:20::i;3935:102::-;3985:6;4014:21;:19;:21::i;3323:71::-;3390:2;3323:71;:::o;3400:82::-;3451:6;3479:1;3467:9;:7;:9::i;:::-;:13;3460:20;;3400:82;:::o;5553:612::-;5600:6;6129:19;:17;:19::i;:::-;6094:18;:16;:18::i;:::-;6059:19;:17;:19::i;:::-;6024;:17;:19::i;:::-;5989;:17;:19::i;:::-;5954:20;:18;:20::i;:::-;5919:18;:16;:18::i;:::-;5884:19;:17;:19::i;:::-;5849;:17;:19::i;:::-;5814:20;:18;:20::i;:::-;5779;:18;:20::i;:::-;5744;:18;:20::i;:::-;5709:19;:17;:19::i;:::-;5674;:17;:19::i;:::-;5639;:17;:19::i;:::-;:54;:89;:125;:160;:195;:229;:264;:298;:335;:369;:404;:439;:473;:509;5618:540;;5553:612;:::o;6920:367::-;6967:6;7251:19;:17;:19::i;:::-;7216;:17;:19::i;:::-;7181:18;:16;:18::i;:::-;7146:19;:17;:19::i;:::-;7111:20;:18;:20::i;:::-;7076;:18;:20::i;:::-;7041:19;:17;:19::i;:::-;7006;:17;:19::i;:::-;:54;:90;:125;:159;:193;:229;:264;6985:295;;6920:367;:::o;9134:100::-;9188:6;9230:1;9218:9;:7;:9::i;:::-;:13;9204:28;;9211:1;9204:28;;;;9197:35;;9134:100;:::o;12249:94::-;12295:6;12324:17;:15;:17::i;4678:101::-;4728:6;4757:20;:18;:20::i;7293:436::-;7340:6;7694:18;:16;:18::i;:::-;7659:19;:17;:19::i;:::-;7624;:17;:19::i;:::-;7589;:17;:19::i;:::-;7554:18;:16;:18::i;:::-;7519:19;:17;:19::i;:::-;7484:20;:18;:20::i;:::-;7449;:18;:20::i;:::-;7414:19;:17;:19::i;:::-;7379;:17;:19::i;:::-;:54;:90;:125;:159;:193;:229;:264;:299;:333;7358:364;;7293:436;:::o;4571:102::-;4621:6;4650:21;:19;:21::i;10174:86::-;10216:6;10256:1;10240:12;:10;:12::i;:::-;-1:-1:-1;10174:86:13;;;-1:-1:-1;10174:86:13:o;4890:101::-;4940:6;4969:20;:18;:20::i;3093:71::-;3160:2;3093:71;:::o;6171:716::-;6218:6;6852:18;:16;:18::i;:::-;6817:19;:17;:19::i;:::-;6782;:17;:19::i;:::-;6747;:17;:19::i;:::-;6712:18;:16;:18::i;:::-;6677:19;:17;:19::i;:::-;6642;:17;:19::i;:::-;6607;:17;:19::i;:::-;6572:20;:18;:20::i;:::-;6537:18;:16;:18::i;:::-;6502:19;:17;:19::i;:::-;6467;:17;:19::i;:::-;6432:20;:18;:20::i;:::-;6397;:18;:20::i;:::-;6362;:18;:20::i;:::-;6327:19;:17;:19::i;:::-;6292;:17;:19::i;:::-;6257;:17;:19::i;:::-;:54;:89;:125;:160;:195;:229;:264;:298;:335;:369;:404;:439;:473;:509;:544;:579;:613;6236:644;;6171:716;:::o;5420:100::-;5470:6;5499:19;:17;:19::i;2560:71::-;2627:2;2560:71;:::o;10340:69::-;10400:6;10340:69;:::o;12348:94::-;12394:6;12423:17;:15;:17::i;4042:102::-;4092:6;4121:21;:19;:21::i;2941:71::-;3008:2;2941:71;:::o;3247:::-;3314:2;3247:71;:::o;9517:104::-;9568:6;9597:22;:20;:22::i;3169:71::-;3236:2;3169:71;:::o;2865:::-;2932:2;2865:71;:::o;9988:90::-;10039:6;10055:21;:19;:21::i;:::-;10048:28;;9988:90;:::o;10881:108::-;10930:6;10985:1;10961:20;:18;:20::i;:::-;10948:33;;10955:1;10948:33;;;;10947:39;10939:48;;10881:108;:::o;8418:87::-;8500:3;8418:87;:::o;3017:71::-;3084:2;3017:71;:::o;4255:101::-;4305:6;4334:20;:18;:20::i;9845:138::-;9896:6;9960:21;:19;:21::i;:::-;9936;:19;:21::i;:::-;9912;:19;:21::i;:::-;:45;:69;9905:76;;9845:138;:::o;4466:100::-;4516:6;4545:19;:17;:19::i;11511:66::-;11574:1;11511:66;:::o"
+    },
+    "gasEstimates": {
+      "creation": {
+        "codeDepositCost": "650400",
+        "executionCost": "708",
+        "totalCost": "651108"
+      },
+      "external": {
+        "getIflagsHMask()": "379",
+        "getIflagsHShift()": "282",
+        "getIflagsIMask()": "360",
+        "getIflagsIShift()": "281",
+        "getIflagsPrvMask()": "360",
+        "getIflagsPrvShift()": "326",
+        "getIflagsYMask()": "381",
+        "getIflagsYShift()": "302",
+        "getMcauseBreakpoint()": "304",
+        "getMcauseEcallBase()": "348",
+        "getMcauseFetchPageFault()": "281",
+        "getMcauseIllegalInsn()": "282",
+        "getMcauseInsnAccessFault()": "348",
+        "getMcauseInsnAddressMisaligned()": "305",
+        "getMcauseInterruptFlag()": "365",
+        "getMcauseLoadAccessFault()": "261",
+        "getMcauseLoadAddressMisaligned()": "324",
+        "getMcauseLoadPageFault()": "282",
+        "getMcauseStoreAmoAccessFault()": "304",
+        "getMcauseStoreAmoAddressMisaligned()": "324",
+        "getMcauseStoreAmoPageFault()": "304",
+        "getMcounterenCyMask()": "337",
+        "getMcounterenCyShift()": "371",
+        "getMcounterenIrMask()": "381",
+        "getMcounterenIrShift()": "325",
+        "getMcounterenRwMask()": "infinite",
+        "getMcounterenTmMask()": "359",
+        "getMcounterenTmShift()": "370",
+        "getMipMeipMask()": "382",
+        "getMipMeipShift()": "346",
+        "getMipMsipMask()": "361",
+        "getMipMsipShift()": "303",
+        "getMipMtipMask()": "359",
+        "getMipMtipShift()": "304",
+        "getMipSeipMask()": "382",
+        "getMipSeipShift()": "345",
+        "getMipSsipMask()": "359",
+        "getMipSsipShift()": "325",
+        "getMipStipMask()": "403",
+        "getMipStipShift()": "327",
+        "getMipUeipMask()": "336",
+        "getMipUeipShift()": "282",
+        "getMipUsipMask()": "359",
+        "getMipUsipShift()": "325",
+        "getMipUtipMask()": "382",
+        "getMipUtipShift()": "303",
+        "getMstatusFsMask()": "405",
+        "getMstatusFsShift()": "303",
+        "getMstatusHieShift()": "282",
+        "getMstatusMieMask()": "336",
+        "getMstatusMieShift()": "282",
+        "getMstatusMpieMask()": "337",
+        "getMstatusMpieShift()": "281",
+        "getMstatusMppMask()": "336",
+        "getMstatusMppShift()": "281",
+        "getMstatusMprvMask()": "402",
+        "getMstatusMprvShift()": "283",
+        "getMstatusMxrMask()": "359",
+        "getMstatusMxrShift()": "303",
+        "getMstatusRMask()": "infinite",
+        "getMstatusSdMask()": "423",
+        "getMstatusSdShift()": "345",
+        "getMstatusSieMask()": "316",
+        "getMstatusSieShift()": "369",
+        "getMstatusSpieMask()": "381",
+        "getMstatusSpieShift()": "346",
+        "getMstatusSppMask()": "403",
+        "getMstatusSppShift()": "259",
+        "getMstatusSumMask()": "358",
+        "getMstatusSumShift()": "281",
+        "getMstatusSxlMask()": "382",
+        "getMstatusSxlShift()": "347",
+        "getMstatusTsrMask()": "382",
+        "getMstatusTsrShift()": "302",
+        "getMstatusTvmMask()": "404",
+        "getMstatusTvmShift()": "281",
+        "getMstatusTwMask()": "426",
+        "getMstatusTwShift()": "370",
+        "getMstatusUieMask()": "357",
+        "getMstatusUieShift()": "326",
+        "getMstatusUpieMask()": "336",
+        "getMstatusUpieShift()": "348",
+        "getMstatusUxlMask()": "360",
+        "getMstatusUxlShift()": "347",
+        "getMstatusWMask()": "infinite",
+        "getMstatusXsMask()": "335",
+        "getMstatusXsShift()": "327",
+        "getMxl()": "302",
+        "getPageNumberShift()": "282",
+        "getPageOffsetMask()": "387",
+        "getPgMask()": "303",
+        "getPgShift()": "325",
+        "getPrvH()": "324",
+        "getPrvM()": "280",
+        "getPrvS()": "283",
+        "getPrvU()": "304",
+        "getPteAMask()": "325",
+        "getPteDMask()": "260",
+        "getPteUMask()": "282",
+        "getPteVMask()": "347",
+        "getPteXwrCodeShift()": "346",
+        "getPteXwrReadShift()": "326",
+        "getPteXwrWriteShift()": "325",
+        "getScounterenRwMask()": "infinite",
+        "getSstatusRMask()": "infinite",
+        "getSstatusWMask()": "infinite",
+        "getXlen()": "324"
+      }
+    },
+    "methodIdentifiers": {
+      "getIflagsHMask()": "fd198e55",
+      "getIflagsHShift()": "656b151f",
+      "getIflagsIMask()": "693549ac",
+      "getIflagsIShift()": "6db638c8",
+      "getIflagsPrvMask()": "317d2bb5",
+      "getIflagsPrvShift()": "910a5247",
+      "getIflagsYMask()": "e697ace9",
+      "getIflagsYShift()": "e89d408d",
+      "getMcauseBreakpoint()": "4074af28",
+      "getMcauseEcallBase()": "44312160",
+      "getMcauseFetchPageFault()": "4d89d393",
+      "getMcauseIllegalInsn()": "7273ba70",
+      "getMcauseInsnAccessFault()": "3afcb7a1",
+      "getMcauseInsnAddressMisaligned()": "0ab3e666",
+      "getMcauseInterruptFlag()": "883d4fb0",
+      "getMcauseLoadAccessFault()": "01298404",
+      "getMcauseLoadAddressMisaligned()": "f4a40761",
+      "getMcauseLoadPageFault()": "40391774",
+      "getMcauseStoreAmoAccessFault()": "48b36c3a",
+      "getMcauseStoreAmoAddressMisaligned()": "d8685e08",
+      "getMcauseStoreAmoPageFault()": "a4652fa5",
+      "getMcounterenCyMask()": "ae3a10d1",
+      "getMcounterenCyShift()": "1d5edf03",
+      "getMcounterenIrMask()": "89532772",
+      "getMcounterenIrShift()": "8235ca88",
+      "getMcounterenRwMask()": "f2fb62c9",
+      "getMcounterenTmMask()": "8208d1f2",
+      "getMcounterenTmShift()": "61ed380a",
+      "getMipMeipMask()": "4d26940d",
+      "getMipMeipShift()": "dacff167",
+      "getMipMsipMask()": "2968a7bd",
+      "getMipMsipShift()": "e1d206ab",
+      "getMipMtipMask()": "c49235ea",
+      "getMipMtipShift()": "8fbe78d2",
+      "getMipSeipMask()": "a73fa952",
+      "getMipSeipShift()": "fd6607c1",
+      "getMipSsipMask()": "cba6d20c",
+      "getMipSsipShift()": "ac5732fe",
+      "getMipStipMask()": "a406ed80",
+      "getMipStipShift()": "143fb1a4",
+      "getMipUeipMask()": "89941a2a",
+      "getMipUeipShift()": "8ed7317f",
+      "getMipUsipMask()": "ae458ae8",
+      "getMipUsipShift()": "c5d15aad",
+      "getMipUtipMask()": "3a6d9202",
+      "getMipUtipShift()": "6eb9d0a0",
+      "getMstatusFsMask()": "1918bc6f",
+      "getMstatusFsShift()": "a195e2db",
+      "getMstatusHieShift()": "59e4e7c3",
+      "getMstatusMieMask()": "f2f21e4c",
+      "getMstatusMieShift()": "45d9c465",
+      "getMstatusMpieMask()": "a8f81e23",
+      "getMstatusMpieShift()": "7e6a20ca",
+      "getMstatusMppMask()": "e746ac72",
+      "getMstatusMppShift()": "a16de11c",
+      "getMstatusMprvMask()": "8c295e35",
+      "getMstatusMprvShift()": "27d1ff75",
+      "getMstatusMxrMask()": "4e95a410",
+      "getMstatusMxrShift()": "a92353d7",
+      "getMstatusRMask()": "944b9ad4",
+      "getMstatusSdMask()": "a12e3511",
+      "getMstatusSdShift()": "729e52ee",
+      "getMstatusSieMask()": "594dc373",
+      "getMstatusSieShift()": "ca3c1134",
+      "getMstatusSpieMask()": "6f5514e4",
+      "getMstatusSpieShift()": "e9d72764",
+      "getMstatusSppMask()": "c6ce50d6",
+      "getMstatusSppShift()": "c3b85a8f",
+      "getMstatusSumMask()": "8a17ca86",
+      "getMstatusSumShift()": "c3d5890f",
+      "getMstatusSxlMask()": "6bdd3bf9",
+      "getMstatusSxlShift()": "717c5d7c",
+      "getMstatusTsrMask()": "609fd47c",
+      "getMstatusTsrShift()": "b482d451",
+      "getMstatusTvmMask()": "9166a2f9",
+      "getMstatusTvmShift()": "db197254",
+      "getMstatusTwMask()": "458472a7",
+      "getMstatusTwShift()": "9230fa1d",
+      "getMstatusUieMask()": "fcc61eff",
+      "getMstatusUieShift()": "422c6194",
+      "getMstatusUpieMask()": "b396896e",
+      "getMstatusUpieShift()": "6164e342",
+      "getMstatusUxlMask()": "5af17adf",
+      "getMstatusUxlShift()": "ad21dcaf",
+      "getMstatusWMask()": "83565818",
+      "getMstatusXsMask()": "f796d7d7",
+      "getMstatusXsShift()": "2e750856",
+      "getMxl()": "d50ca22f",
+      "getPageNumberShift()": "2ee52303",
+      "getPageOffsetMask()": "cc19195c",
+      "getPgMask()": "8e0840bf",
+      "getPgShift()": "a1a29005",
+      "getPrvH()": "e8a26959",
+      "getPrvM()": "cf7ecf79",
+      "getPrvS()": "026797d9",
+      "getPrvU()": "98394238",
+      "getPteAMask()": "501bec45",
+      "getPteDMask()": "3fe2098a",
+      "getPteUMask()": "a4521d8b",
+      "getPteVMask()": "574a20ef",
+      "getPteXwrCodeShift()": "bc895743",
+      "getPteXwrReadShift()": "7df41363",
+      "getPteXwrWriteShift()": "b0c41fc5",
+      "getScounterenRwMask()": "cac5b495",
+      "getSstatusRMask()": "8a911eef",
+      "getSstatusWMask()": "86c22955",
+      "getXlen()": "b4e549ba"
+    }
+  },
+  "metadata": "{\"compiler\":{\"version\":\"0.7.4+commit.3f05b770\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"getIflagsHMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getIflagsHShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getIflagsIMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getIflagsIShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getIflagsPrvMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getIflagsPrvShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getIflagsYMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getIflagsYShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcauseBreakpoint\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcauseEcallBase\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcauseFetchPageFault\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcauseIllegalInsn\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcauseInsnAccessFault\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcauseInsnAddressMisaligned\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcauseInterruptFlag\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcauseLoadAccessFault\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcauseLoadAddressMisaligned\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcauseLoadPageFault\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcauseStoreAmoAccessFault\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcauseStoreAmoAddressMisaligned\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcauseStoreAmoPageFault\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcounterenCyMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcounterenCyShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcounterenIrMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcounterenIrShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcounterenRwMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcounterenTmMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMcounterenTmShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipMeipMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipMeipShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipMsipMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipMsipShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipMtipMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipMtipShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipSeipMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipSeipShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipSsipMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipSsipShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipStipMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipStipShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipUeipMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipUeipShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipUsipMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipUsipShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipUtipMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMipUtipShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusFsMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusFsShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusHieShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusMieMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusMieShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusMpieMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusMpieShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusMppMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusMppShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusMprvMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusMprvShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusMxrMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusMxrShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusRMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusSdMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusSdShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusSieMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusSieShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusSpieMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusSpieShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusSppMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusSppShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusSumMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusSumShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusSxlMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusSxlShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusTsrMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusTsrShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusTvmMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusTvmShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusTwMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusTwShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusUieMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusUieShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusUpieMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusUpieShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusUxlMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusUxlShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusWMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusXsMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMstatusXsShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getMxl\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPageNumberShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPageOffsetMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPgMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPgShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPrvH\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPrvM\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPrvS\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPrvU\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPteAMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPteDMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPteUMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPteVMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPteXwrCodeShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPteXwrReadShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getPteXwrWriteShift\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getScounterenRwMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSstatusRMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getSstatusWMask\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getXlen\",\"outputs\":[{\"internalType\":\"uint64\",\"name\":\"\",\"type\":\"uint64\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Felipe Argento\",\"kind\":\"dev\",\"methods\":{},\"title\":\"RiscVConstants\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"getMcauseBreakpoint()\":{\"notice\":\"< illegal instruction\"},\"getMcauseEcallBase()\":{\"notice\":\"< store/amo access fault < environment call (+0: from u-mode, +1: from s-mode, +3: from m-mode)\"},\"getMcauseIllegalInsn()\":{\"notice\":\"< instruction access fault\"},\"getMcauseInsnAccessFault()\":{\"notice\":\"< instruction address misaligned\"},\"getMcauseInterruptFlag()\":{\"notice\":\"< store/amo page fault\"},\"getMcauseLoadAccessFault()\":{\"notice\":\"< load address misaligned\"},\"getMcauseLoadAddressMisaligned()\":{\"notice\":\"< breakpoint\"},\"getMcauseLoadPageFault()\":{\"notice\":\"< instruction page fault\"},\"getMcauseStoreAmoAccessFault()\":{\"notice\":\"< store/amo address misaligned\"},\"getMcauseStoreAmoAddressMisaligned()\":{\"notice\":\"< load access fault\"},\"getMcauseStoreAmoPageFault()\":{\"notice\":\"< load page fault\"},\"getMcounterenCyShift()\":{\"notice\":\"< interrupt flag\"}},\"notice\":\"Defines getters for important constants\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/RiscVConstants.sol\":\"RiscVConstants\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/RiscVConstants.sol\":{\"content\":\"// Copyright 2019 Cartesi Pte. Ltd.\\n\\n// SPDX-License-Identifier: Apache-2.0\\n// Licensed under the Apache License, Version 2.0 (the \\\"License\\\"); you may not use\\n// this file except in compliance with the License. You may obtain a copy of the\\n// License at http://www.apache.org/licenses/LICENSE-2.0\\n\\n// Unless required by applicable law or agreed to in writing, software distributed\\n// under the License is distributed on an \\\"AS IS\\\" BASIS, WITHOUT WARRANTIES OR\\n// CONDITIONS OF ANY KIND, either express or implied. See the License for the\\n// specific language governing permissions and limitations under the License.\\n\\n\\n\\npragma solidity ^0.7.0;\\n\\n/// @title RiscVConstants\\n/// @author Felipe Argento\\n/// @notice Defines getters for important constants\\nlibrary RiscVConstants {\\n    //iflags shifts\\n    function getIflagsHShift()  public pure returns(uint64) {return 0;}\\n    function getIflagsYShift()  public pure returns(uint64) {return 1;}\\n    function getIflagsIShift()  public pure returns(uint64) {return 2;}\\n    function getIflagsPrvShift()  public pure returns(uint64) {return 3;}\\n\\n    //iflags masks\\n    function getIflagsHMask()  public pure returns(uint64) {return uint64(1) << getIflagsHShift();}\\n    function getIflagsYMask()  public pure returns(uint64) {return uint64(1) << getIflagsYShift();}\\n    function getIflagsIMask()  public pure returns(uint64) {return uint64(1) << getIflagsIShift();}\\n    function getIflagsPrvMask()  public pure returns(uint64) {return uint64(3) << getIflagsPrvShift();}\\n\\n    //general purpose\\n    function getXlen() public pure returns(uint64) {return 64;}\\n    function getMxl()  public pure returns(uint64) {return 2;}\\n\\n    //privilege levels\\n    function getPrvU() public pure returns(uint64) {return 0;}\\n    function getPrvS() public pure returns(uint64) {return 1;}\\n    function getPrvH() public pure returns(uint64) {return 2;}\\n    function getPrvM() public pure returns(uint64) {return 3;}\\n\\n    //mstatus shifts\\n    function getMstatusUieShift()  public pure returns(uint64) {return 0;}\\n    function getMstatusSieShift()  public pure returns(uint64) {return 1;}\\n    function getMstatusHieShift()  public pure returns(uint64) {return 2;}\\n    function getMstatusMieShift()  public pure returns(uint64) {return 3;}\\n    function getMstatusUpieShift() public pure returns(uint64) {return 4;}\\n    function getMstatusSpieShift() public pure returns(uint64) {return 5;}\\n    function getMstatusMpieShift() public pure returns(uint64) {return 7;}\\n    function getMstatusSppShift()  public pure returns(uint64) {return 8;}\\n    function getMstatusMppShift()  public pure returns(uint64) {return 11;}\\n    function getMstatusFsShift()   public pure returns(uint64) {return 13;}\\n\\n    function getMstatusXsShift()   public pure returns(uint64) {return 15;}\\n    function getMstatusMprvShift() public pure returns(uint64) {return 17;}\\n    function getMstatusSumShift()  public pure returns(uint64) {return 18;}\\n    function getMstatusMxrShift()  public pure returns(uint64) {return 19;}\\n    function getMstatusTvmShift()  public pure returns(uint64) {return 20;}\\n    function getMstatusTwShift()   public pure returns(uint64) {return 21;}\\n    function getMstatusTsrShift()  public pure returns(uint64) {return 22;}\\n\\n\\n    function getMstatusUxlShift()  public pure returns(uint64) {return 32;}\\n    function getMstatusSxlShift()  public pure returns(uint64) {return 34;}\\n\\n    function getMstatusSdShift()   public pure returns(uint64) {return getXlen() - 1;}\\n\\n    //mstatus masks\\n    function getMstatusUieMask()  public pure returns(uint64) {return (uint64(1) << getMstatusUieShift());}\\n    function getMstatusSieMask()  public pure returns(uint64) {return uint64(1) << getMstatusSieShift();}\\n    function getMstatusMieMask()  public pure returns(uint64) {return uint64(1) << getMstatusMieShift();}\\n    function getMstatusUpieMask() public pure returns(uint64) {return uint64(1) << getMstatusUpieShift();}\\n    function getMstatusSpieMask() public pure returns(uint64) {return uint64(1) << getMstatusSpieShift();}\\n    function getMstatusMpieMask() public pure returns(uint64) {return uint64(1) << getMstatusMpieShift();}\\n    function getMstatusSppMask()  public pure returns(uint64) {return uint64(1) << getMstatusSppShift();}\\n    function getMstatusMppMask()  public pure returns(uint64) {return uint64(3) << getMstatusMppShift();}\\n    function getMstatusFsMask()   public pure returns(uint64) {return uint64(3) << getMstatusFsShift();}\\n    function getMstatusXsMask()   public pure returns(uint64) {return uint64(3) << getMstatusXsShift();}\\n    function getMstatusMprvMask() public pure returns(uint64) {return uint64(1) << getMstatusMprvShift();}\\n    function getMstatusSumMask()  public pure returns(uint64) {return uint64(1) << getMstatusSumShift();}\\n    function getMstatusMxrMask()  public pure returns(uint64) {return uint64(1) << getMstatusMxrShift();}\\n    function getMstatusTvmMask()  public pure returns(uint64) {return uint64(1) << getMstatusTvmShift();}\\n    function getMstatusTwMask()   public pure returns(uint64) {return uint64(1) << getMstatusTwShift();}\\n    function getMstatusTsrMask()  public pure returns(uint64) {return uint64(1) << getMstatusTsrShift();}\\n\\n    function getMstatusUxlMask()  public pure returns(uint64) {return uint64(3) << getMstatusUxlShift();}\\n    function getMstatusSxlMask()  public pure returns(uint64) {return uint64(3) << getMstatusSxlShift();}\\n    function getMstatusSdMask()   public pure returns(uint64) {return uint64(1) << getMstatusSdShift();}\\n\\n    // mstatus read/writes\\n    function getMstatusWMask() public pure returns(uint64) {\\n        return (\\n            getMstatusUieMask()  |\\n            getMstatusSieMask()  |\\n            getMstatusMieMask()  |\\n            getMstatusUpieMask() |\\n            getMstatusSpieMask() |\\n            getMstatusMpieMask() |\\n            getMstatusSppMask()  |\\n            getMstatusMppMask()  |\\n            getMstatusFsMask()   |\\n            getMstatusMprvMask() |\\n            getMstatusSumMask()  |\\n            getMstatusMxrMask()  |\\n            getMstatusTvmMask()  |\\n            getMstatusTwMask()   |\\n            getMstatusTsrMask()\\n        );\\n    }\\n\\n    function getMstatusRMask() public pure returns(uint64) {\\n        return (\\n            getMstatusUieMask()  |\\n            getMstatusSieMask()  |\\n            getMstatusMieMask()  |\\n            getMstatusUpieMask() |\\n            getMstatusSpieMask() |\\n            getMstatusMpieMask() |\\n            getMstatusSppMask()  |\\n            getMstatusMppMask()  |\\n            getMstatusFsMask()   |\\n            getMstatusMprvMask() |\\n            getMstatusSumMask()  |\\n            getMstatusMxrMask()  |\\n            getMstatusTvmMask()  |\\n            getMstatusTwMask()   |\\n            getMstatusTsrMask()  |\\n            getMstatusUxlMask()  |\\n            getMstatusSxlMask()  |\\n            getMstatusSdMask()\\n        );\\n    }\\n\\n    // sstatus read/writes\\n    function getSstatusWMask() public pure returns(uint64) {\\n        return (\\n            getMstatusUieMask()  |\\n            getMstatusSieMask()  |\\n            getMstatusUpieMask() |\\n            getMstatusSpieMask() |\\n            getMstatusSppMask()  |\\n            getMstatusFsMask()   |\\n            getMstatusSumMask()  |\\n            getMstatusMxrMask()\\n        );\\n    }\\n\\n    function getSstatusRMask() public pure returns(uint64) {\\n        return (\\n            getMstatusUieMask()  |\\n            getMstatusSieMask()  |\\n            getMstatusUpieMask() |\\n            getMstatusSpieMask() |\\n            getMstatusSppMask()  |\\n            getMstatusFsMask()   |\\n            getMstatusSumMask()  |\\n            getMstatusMxrMask()  |\\n            getMstatusUxlMask()  |\\n            getMstatusSdMask()\\n        );\\n    }\\n\\n    // mcause for exceptions\\n    function getMcauseInsnAddressMisaligned() public pure returns(uint64) {return 0x0;} ///< instruction address misaligned\\n    function getMcauseInsnAccessFault() public pure returns(uint64) {return 0x1;} ///< instruction access fault\\n    function getMcauseIllegalInsn() public pure returns(uint64) {return 0x2;} ///< illegal instruction\\n    function getMcauseBreakpoint() public pure returns(uint64) {return 0x3;} ///< breakpoint\\n    function getMcauseLoadAddressMisaligned() public pure returns(uint64) {return 0x4;} ///< load address misaligned\\n    function getMcauseLoadAccessFault() public pure returns(uint64) {return 0x5;} ///< load access fault\\n    function getMcauseStoreAmoAddressMisaligned() public pure returns(uint64) {return 0x6;} ///< store/amo address misaligned\\n    function getMcauseStoreAmoAccessFault() public pure returns(uint64) {return 0x7;} ///< store/amo access fault\\n    ///< environment call (+0: from u-mode, +1: from s-mode, +3: from m-mode)\\n    function getMcauseEcallBase() public pure returns(uint64) { return 0x8;}\\n    function getMcauseFetchPageFault() public pure returns(uint64) {return 0xc;} ///< instruction page fault\\n    function getMcauseLoadPageFault() public pure returns(uint64) {return 0xd;} ///< load page fault\\n    function getMcauseStoreAmoPageFault() public pure returns(uint64) {return 0xf;} ///< store/amo page fault\\n\\n    function getMcauseInterruptFlag() public pure returns(uint64) {return uint64(1) << (getXlen() - 1);} ///< interrupt flag\\n\\n    // mcounteren constants\\n    function getMcounterenCyShift() public pure returns(uint64) {return 0;}\\n    function getMcounterenTmShift() public pure returns(uint64) {return 1;}\\n    function getMcounterenIrShift() public pure returns(uint64) {return 2;}\\n\\n    function getMcounterenCyMask() public pure returns(uint64) {return uint64(1) << getMcounterenCyShift();}\\n    function getMcounterenTmMask() public pure returns(uint64) {return uint64(1) << getMcounterenTmShift();}\\n    function getMcounterenIrMask() public pure returns(uint64) {return uint64(1) << getMcounterenIrShift();}\\n\\n    function getMcounterenRwMask() public pure returns(uint64) {return getMcounterenCyMask() | getMcounterenTmMask() | getMcounterenIrMask();}\\n    function getScounterenRwMask() public pure returns(uint64) {return getMcounterenRwMask();}\\n\\n    //paging constants\\n    function getPgShift() public pure returns(uint64) {return 12;}\\n    function getPgMask()  public pure returns(uint64) {((uint64(1) << getPgShift()) - 1);}\\n\\n    function getPteVMask() public pure returns(uint64) {return (1 << 0);}\\n    function getPteUMask() public pure returns(uint64) {return (1 << 4);}\\n    function getPteAMask() public pure returns(uint64) {return (1 << 6);}\\n    function getPteDMask() public pure returns(uint64) {return (1 << 7);}\\n\\n    function getPteXwrReadShift() public pure returns(uint64) {return 0;}\\n    function getPteXwrWriteShift() public pure returns(uint64) {return 1;}\\n    function getPteXwrCodeShift() public pure returns(uint64) {return 2;}\\n\\n    // page masks\\n    function getPageNumberShift() public pure returns(uint64) {return 12;}\\n\\n    function getPageOffsetMask() public pure returns(uint64) {return ((uint64(1) << getPageNumberShift()) - 1);}\\n\\n    // mip shifts:\\n    function getMipUsipShift() public pure returns(uint64) {return 0;}\\n    function getMipSsipShift() public pure returns(uint64) {return 1;}\\n    function getMipMsipShift() public pure returns(uint64) {return 3;}\\n    function getMipUtipShift() public pure returns(uint64) {return 4;}\\n    function getMipStipShift() public pure returns(uint64) {return 5;}\\n    function getMipMtipShift() public pure returns(uint64) {return 7;}\\n    function getMipUeipShift() public pure returns(uint64) {return 8;}\\n    function getMipSeipShift() public pure returns(uint64) {return 9;}\\n    function getMipMeipShift() public pure returns(uint64) {return 11;}\\n\\n    function getMipUsipMask() public pure returns(uint64) {return uint64(1) << getMipUsipShift();}\\n    function getMipSsipMask() public pure returns(uint64) {return uint64(1) << getMipSsipShift();}\\n    function getMipMsipMask() public pure returns(uint64) {return uint64(1) << getMipMsipShift();}\\n    function getMipUtipMask() public pure returns(uint64) {return uint64(1) << getMipUtipShift();}\\n    function getMipStipMask() public pure returns(uint64) {return uint64(1) << getMipStipShift();}\\n    function getMipMtipMask() public pure returns(uint64) {return uint64(1) << getMipMtipShift();}\\n    function getMipUeipMask() public pure returns(uint64) {return uint64(1) << getMipUeipShift();}\\n    function getMipSeipMask() public pure returns(uint64) {return uint64(1) << getMipSeipShift();}\\n    function getMipMeipMask() public pure returns(uint64) {return uint64(1) << getMipMeipShift();}\\n}\\n\",\"keccak256\":\"0xfd9070a43036eb37831d90fd3770640225fe8fd31e0dbe93034b247933b9a9c1\",\"license\":\"Apache-2.0\"}},\"version\":1}",
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "getMcauseBreakpoint()": {
+        "notice": "< illegal instruction"
+      },
+      "getMcauseEcallBase()": {
+        "notice": "< store/amo access fault < environment call (+0: from u-mode, +1: from s-mode, +3: from m-mode)"
+      },
+      "getMcauseIllegalInsn()": {
+        "notice": "< instruction access fault"
+      },
+      "getMcauseInsnAccessFault()": {
+        "notice": "< instruction address misaligned"
+      },
+      "getMcauseInterruptFlag()": {
+        "notice": "< store/amo page fault"
+      },
+      "getMcauseLoadAccessFault()": {
+        "notice": "< load address misaligned"
+      },
+      "getMcauseLoadAddressMisaligned()": {
+        "notice": "< breakpoint"
+      },
+      "getMcauseLoadPageFault()": {
+        "notice": "< instruction page fault"
+      },
+      "getMcauseStoreAmoAccessFault()": {
+        "notice": "< store/amo address misaligned"
+      },
+      "getMcauseStoreAmoAddressMisaligned()": {
+        "notice": "< load access fault"
+      },
+      "getMcauseStoreAmoPageFault()": {
+        "notice": "< load page fault"
+      },
+      "getMcounterenCyShift()": {
+        "notice": "< interrupt flag"
+      }
+    },
+    "notice": "Defines getters for important constants",
+    "version": 1
+  }
+}
