@@ -4281,7 +4281,7 @@
       ]
     },
     "ComputeInstantiator": {
-      "address": "0xa3771563C743F1d97c1734b6357Ef0dCd757E9c4",
+      "address": "0x1D5d29d56ef09cD0a9531Ab826410a9bfD58c83a",
       "abi": [
         {
           "inputs": [
@@ -8375,7 +8375,7 @@
       ]
     },
     "VGInstantiator": {
-      "address": "0x171A5Eb1b76901a28DC1E1AD84528180416a570c",
+      "address": "0x3440609809C7e6BE1704a4500C6819dCBcB42fe8",
       "abi": [
         {
           "inputs": [
