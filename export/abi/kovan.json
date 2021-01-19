@@ -14,97 +14,6 @@
       "address": "0xF60a3398F8b726363621EB5E63c78A9Ac07eb68E",
       "abi": []
     },
-    "BitsManipulationLibrary": {
-      "address": "0x006a79A0dec981839026CEd17876A67B31655aD4",
-      "abi": [
-        {
-          "inputs": [
-            {
-              "internalType": "int32",
-              "name": "number",
-              "type": "int32"
-            },
-            {
-              "internalType": "uint32",
-              "name": "wordSize",
-              "type": "uint32"
-            }
-          ],
-          "name": "int32SignExtension",
-          "outputs": [
-            {
-              "internalType": "int32",
-              "name": "",
-              "type": "int32"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint32",
-              "name": "num",
-              "type": "uint32"
-            }
-          ],
-          "name": "uint32SwapEndian",
-          "outputs": [
-            {
-              "internalType": "uint32",
-              "name": "",
-              "type": "uint32"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint64",
-              "name": "number",
-              "type": "uint64"
-            },
-            {
-              "internalType": "uint64",
-              "name": "wordSize",
-              "type": "uint64"
-            }
-          ],
-          "name": "uint64SignExtension",
-          "outputs": [
-            {
-              "internalType": "uint64",
-              "name": "",
-              "type": "uint64"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint64",
-              "name": "num",
-              "type": "uint64"
-            }
-          ],
-          "name": "uint64SwapEndian",
-          "outputs": [
-            {
-              "internalType": "uint64",
-              "name": "",
-              "type": "uint64"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        }
-      ]
-    },
     "BranchInstructions": {
       "address": "0x37bE2C67793014CB1C1A2B71d19A7Ad817255C08",
       "abi": []
@@ -3742,6 +3651,97 @@
     "VirtualMemory": {
       "address": "0x37bfB532D44C4Cc1C8aea8e12a19555D37F16967",
       "abi": []
+    },
+    "BitsManipulationLibrary": {
+      "address": "0x006a79A0dec981839026CEd17876A67B31655aD4",
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "int32",
+              "name": "number",
+              "type": "int32"
+            },
+            {
+              "internalType": "uint32",
+              "name": "wordSize",
+              "type": "uint32"
+            }
+          ],
+          "name": "int32SignExtension",
+          "outputs": [
+            {
+              "internalType": "int32",
+              "name": "",
+              "type": "int32"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint32",
+              "name": "num",
+              "type": "uint32"
+            }
+          ],
+          "name": "uint32SwapEndian",
+          "outputs": [
+            {
+              "internalType": "uint32",
+              "name": "",
+              "type": "uint32"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint64",
+              "name": "number",
+              "type": "uint64"
+            },
+            {
+              "internalType": "uint64",
+              "name": "wordSize",
+              "type": "uint64"
+            }
+          ],
+          "name": "uint64SignExtension",
+          "outputs": [
+            {
+              "internalType": "uint64",
+              "name": "",
+              "type": "uint64"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint64",
+              "name": "num",
+              "type": "uint64"
+            }
+          ],
+          "name": "uint64SwapEndian",
+          "outputs": [
+            {
+              "internalType": "uint64",
+              "name": "",
+              "type": "uint64"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function"
+        }
+      ]
     },
     "Merkle": {
       "address": "0x7f713126D4C7396c3dBE9EdA70C3E7166B2f1314",
