@@ -1,6 +1,6 @@
 {
   "name": "@cartesi/machine-solidity-step",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "Machine Solidity Step",
   "scripts": {
     "build": "hardhat compile && tsc",
