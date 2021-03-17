@@ -1,25 +1,25 @@
 {
-  "name": "matic_testnet",
-  "chainId": "80001",
+  "name": "avax_testnet",
+  "chainId": "43113",
   "contracts": {
     "ArithmeticImmediateInstructions": {
-      "address": "0xbF0b2b6b549A5E7b8675007eB7428a4a5b74B4C7",
+      "address": "0xD6d09b0d631287F3877D4B70CF1123B2fc4eD0B8",
       "abi": []
     },
     "ArithmeticInstructions": {
-      "address": "0xBab7212529959019D32Fd1483b1B395c94aE7102",
+      "address": "0xb4bD9952AaEDb1eb0548304f0CdF97AE9c2a65FC",
       "abi": []
     },
     "AtomicInstructions": {
-      "address": "0xfaF200FEa349cb800eb5Cd6691eBBBE1538797dD",
+      "address": "0x78C2519bc5b1973BF85c1b00D8D97293317ca097",
       "abi": []
     },
     "BranchInstructions": {
-      "address": "0x8565dA0483fAF73d3a12459b57a1a6CF2eCabBE4",
+      "address": "0x2B41A015740573a9f9234e83a0ecaD4f4D86825D",
       "abi": []
     },
     "CLINT": {
-      "address": "0x75E1C57EAb29ff136AAEDfF974B3288ba3f16ED6",
+      "address": "0xDA3B012c2b0947b0851aE87cDBdc6C6a297fED36",
       "abi": [
         {
           "inputs": [],
@@ -37,23 +37,23 @@
       ]
     },
     "CSR": {
-      "address": "0x4e09B2d9436e768c914F394cF9f129E3be178A30",
+      "address": "0x22189c430844c8cC84224A18aa8B5Cbd354a234f",
       "abi": []
     },
     "CSRExecute": {
-      "address": "0x19A8FB7d7C4D53713327cEb6ba1293d1F364c502",
+      "address": "0x870d079FBB8f439863DCD5c241bc9A5E5D02900D",
       "abi": []
     },
     "CSRReads": {
-      "address": "0x0e38b65ad9f28209BF646f876E83afa2038187e3",
+      "address": "0xa945Dc7eE7f1d3A88DbCe73581Ad941a8d446590",
       "abi": []
     },
     "EnvTrapIntInstructions": {
-      "address": "0x8992D4bE3A1FeAe33520Ec214A6b41356e107e01",
+      "address": "0x7eF666CA637B0123fD98786D4632B11622E11aEA",
       "abi": []
     },
     "Exceptions": {
-      "address": "0xaA6eA2fcf257e911510456FA63384ef6Af67f381",
+      "address": "0x6fdA1eD28e2b70c323b4dBaFe8e460154226F7f4",
       "abi": [
         {
           "inputs": [],
@@ -227,15 +227,15 @@
       ]
     },
     "Execute": {
-      "address": "0x98C9109C6c1a9bA2Ec0fb69D7413825267036B3D",
+      "address": "0xB24Aa5D844Dac69e0D544Cd40F539d3B4fc29c47",
       "abi": []
     },
     "Fetch": {
-      "address": "0x488ABaBA7eA0273D4779E22724db5bC58E253021",
+      "address": "0x3428133b508251e77A135a0312121389397ea36A",
       "abi": []
     },
     "HTIF": {
-      "address": "0x5Ce4E0f4Ca70DDC4f0B8cc6924077cD8d40fe359",
+      "address": "0xE9CcC831fAfB8FdE006Dadb8e376Bb8119A29579",
       "abi": [
         {
           "inputs": [],
@@ -279,7 +279,7 @@
       ]
     },
     "Interrupts": {
-      "address": "0xa1B9f1827E1db4A2F381d288A2f05328D778E4B6",
+      "address": "0x1a1602ADc9eDFabE68122A41df5f0f9de63F992d",
       "abi": [
         {
           "inputs": [
@@ -303,7 +303,7 @@
       ]
     },
     "MemoryInteractor": {
-      "address": "0xA3355eAff2feE04FB4E3dE9a90e469784F1dDAFe",
+      "address": "0xa24D68a67c598FcE504AB50f6B6129228d8BD662",
       "abi": [
         {
           "inputs": [],
@@ -1323,7 +1323,7 @@
       ]
     },
     "PMA": {
-      "address": "0x05b57bC1d6410C70213FDFc01947bF8e0e07e7ba",
+      "address": "0x034A8dE01476a9E973c2dfF56bf0d2A84A0DaD4F",
       "abi": [
         {
           "inputs": [
@@ -1461,7 +1461,7 @@
       ]
     },
     "RealTimeClock": {
-      "address": "0x5a4c3AbBd7391A2F060b05564567FE4D13F38aFB",
+      "address": "0xFB030f35bd46a1543BeEB7876A68940B39eE9748",
       "abi": [
         {
           "inputs": [
@@ -1504,7 +1504,7 @@
       ]
     },
     "RiscVConstants": {
-      "address": "0xf3DF831E4ca49e5CeD14220F6Aab25B30736283e",
+      "address": "0x9586E5cD4eca81a2617aB2f00FAaf1c8114cDA44",
       "abi": [
         {
           "inputs": [],
@@ -2900,7 +2900,7 @@
       ]
     },
     "RiscVDecoder": {
-      "address": "0xC8318A115d1Dc696EAD84A1a50f37475bB2D0A14",
+      "address": "0x5fDd58b139CdA2f7693f5633754beC183a649434",
       "abi": [
         {
           "inputs": [
@@ -3190,11 +3190,11 @@
       ]
     },
     "S_Instructions": {
-      "address": "0x7D4B014eEd39b5f4253b46B9f7Cc145A903E66e2",
+      "address": "0x2e8777c80C6b31e54CA065f3c8D5A70f203fD7EC",
       "abi": []
     },
     "ShadowAddresses": {
-      "address": "0x665a6a7b86bB63EAA1AcCED021D64B121eE63D77",
+      "address": "0x52BE964c9a9fd9Ebc2295979F9F8362551413cb5",
       "abi": [
         {
           "inputs": [],
@@ -3550,11 +3550,11 @@
       ]
     },
     "StandAloneInstructions": {
-      "address": "0x13aFB26C65b707AA7819eC0C169Df628754813c4",
+      "address": "0x88871Cf88e8440D6925b07e59E79f06ac1DE776d",
       "abi": []
     },
     "Step": {
-      "address": "0x4a452a5bc03D2dDa1BFD65abD85F4dA8d5f5411A",
+      "address": "0x9E8975270EdEAD10B69129C71DEF097920DF0042",
       "abi": [
         {
           "inputs": [
@@ -3649,11 +3649,11 @@
       ]
     },
     "VirtualMemory": {
-      "address": "0xb51b711b885CdFc7a6A525e39AF9Db17736400C8",
+      "address": "0x995ff7313259e65BD9dd3Eb9Db5bfE4A810E3bfc",
       "abi": []
     },
     "BitsManipulationLibrary": {
-      "address": "0xc411FDBCac6537051A4339FD30823467D573bE64",
+      "address": "0xdecac9ff6b588642887414e85dfdde740a797f56",
       "abi": [
         {
           "inputs": [
@@ -3744,7 +3744,7 @@
       ]
     },
     "CartesiMath": {
-      "address": "0x400E5F1128D396D529a47c12188d5A2A327ceEfd",
+      "address": "0x50bEFaEfD3AAaFac11Fd936A8dfEB1050eC5Cf00",
       "abi": [
         {
           "inputs": [
@@ -3787,7 +3787,7 @@
       ]
     },
     "Merkle": {
-      "address": "0xD47860593fe40b3D0E04460e54bFE0b84E1E6922",
+      "address": "0x89f1f1bc37Ef872ff0073bee7eE6d6B0D94Fd166",
       "abi": [
         {
           "inputs": [
@@ -3931,7 +3931,7 @@
       ]
     },
     "WorkerAuthManagerImpl": {
-      "address": "0x85C1929cC1794dd7c25d16d095a09318Cc57d174",
+      "address": "0x3F62ccC0e41287ea4d28dce6582a215B75bB43fd",
       "abi": [
         {
           "inputs": [
@@ -4076,7 +4076,7 @@
       ]
     },
     "WorkerManagerAuthManagerImpl": {
-      "address": "0x7001C93E443D7D9950A9ff71A82FD258132c72Ef",
+      "address": "0x7db3A9BdA16D1C295b23B94a61808EFf82288269",
       "abi": [
         {
           "anonymous": false,
@@ -4452,7 +4452,7 @@
       ]
     },
     "WorkerManagerImpl": {
-      "address": "0x767F4294434be981447B6d23f9565d02A6858fF2",
+      "address": "0x91E780568A1FEdd5d01E1c1E4cAed68E3a849345",
       "abi": [
         {
           "anonymous": false,
@@ -4700,7 +4700,7 @@
       ]
     },
     "ComputeInstantiator": {
-      "address": "0xFe0690CD4512851BF079D77FA0e1D74327AE79d0",
+      "address": "0xFa88aDb853f48Eb533940Af2C33A99803531870c",
       "abi": [
         {
           "inputs": [
@@ -5296,101 +5296,8 @@
         }
       ]
     },
-    "Hasher": {
-      "address": "0xFa88aDb853f48Eb533940Af2C33A99803531870c",
-      "abi": [
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "_mmAddress",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "constructor"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": false,
-              "internalType": "bytes32",
-              "name": "message",
-              "type": "bytes32"
-            },
-            {
-              "indexed": false,
-              "internalType": "uint64",
-              "name": "word",
-              "type": "uint64"
-            }
-          ],
-          "name": "Debug",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": false,
-              "internalType": "uint8",
-              "name": "exitCode",
-              "type": "uint8"
-            }
-          ],
-          "name": "StepGiven",
-          "type": "event"
-        },
-        {
-          "inputs": [],
-          "name": "getAddress",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "getMemoryInteractor",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "_mmIndex",
-              "type": "uint256"
-            }
-          ],
-          "name": "step",
-          "outputs": [
-            {
-              "internalType": "uint8",
-              "name": "",
-              "type": "uint8"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        }
-      ]
-    },
     "MMInstantiator": {
-      "address": "0xC82eF2bD294B8db44027dC0b241b9284Fd8AcBE5",
+      "address": "0x31b3C8DF612a1255a54DEc11A0030820cF914b1B",
       "abi": [
         {
           "anonymous": false,
@@ -6000,7 +5907,7 @@
       ]
     },
     "PartitionInstantiator": {
-      "address": "0x251bE9E13224908C37f4c162D648EA9a5e85E73f",
+      "address": "0x0f4E152E9bc18De7043aB842B2445d8Cfa780336",
       "abi": [
         {
           "anonymous": false,
@@ -6702,400 +6609,8 @@
         }
       ]
     },
-    "SimpleMemoryInstantiator": {
-      "address": "0x0f4E152E9bc18De7043aB842B2445d8Cfa780336",
-      "abi": [
-        {
-          "inputs": [],
-          "name": "currentIndex",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "_index",
-              "type": "uint256"
-            }
-          ],
-          "name": "deactivate",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "name": "finishProofPhase",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "name": "finishReplayPhase",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "name": "getCurrentState",
-          "outputs": [
-            {
-              "internalType": "bytes32",
-              "name": "",
-              "type": "bytes32"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "name": "getMaxInstanceDuration",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "_index",
-              "type": "uint256"
-            }
-          ],
-          "name": "getNonce",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "currentNonce",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "getSubInstances",
-          "outputs": [
-            {
-              "internalType": "address[]",
-              "name": "_addresses",
-              "type": "address[]"
-            },
-            {
-              "internalType": "uint256[]",
-              "name": "_indices",
-              "type": "uint256[]"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            },
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            },
-            {
-              "internalType": "bytes32",
-              "name": "",
-              "type": "bytes32"
-            }
-          ],
-          "name": "instantiate",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "_index",
-              "type": "uint256"
-            }
-          ],
-          "name": "isActive",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "name": "isConcerned",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "name": "newHash",
-          "outputs": [
-            {
-              "internalType": "bytes32",
-              "name": "",
-              "type": "bytes32"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "_index",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint64",
-              "name": "_address",
-              "type": "uint64"
-            }
-          ],
-          "name": "read",
-          "outputs": [
-            {
-              "internalType": "bytes8",
-              "name": "",
-              "type": "bytes8"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "name": "stateIsFinishedReplay",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "name": "stateIsWaitingProofs",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "name": "stateIsWaitingReplay",
-          "outputs": [
-            {
-              "internalType": "bool",
-              "name": "",
-              "type": "bool"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "uint256",
-              "name": "_index",
-              "type": "uint256"
-            },
-            {
-              "internalType": "uint64",
-              "name": "_address",
-              "type": "uint64"
-            },
-            {
-              "internalType": "bytes8",
-              "name": "_value",
-              "type": "bytes8"
-            }
-          ],
-          "name": "write",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        }
-      ]
-    },
-    "TestHash": {
-      "address": "0xc9129903751dA0855c7a7df7ab4b2b5e1DDd0C5c",
-      "abi": [
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": false,
-              "internalType": "bytes32",
-              "name": "_out",
-              "type": "bytes32"
-            }
-          ],
-          "name": "OutB32",
-          "type": "event"
-        },
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": false,
-              "internalType": "uint64",
-              "name": "_out",
-              "type": "uint64"
-            }
-          ],
-          "name": "OutUint64",
-          "type": "event"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "bytes8",
-              "name": "",
-              "type": "bytes8"
-            },
-            {
-              "internalType": "uint64",
-              "name": "",
-              "type": "uint64"
-            }
-          ],
-          "name": "testing",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        }
-      ]
-    },
     "VGInstantiator": {
-      "address": "0xf5a10C0b46eAD9d0B1630DFfC9934b9bbef9A577",
+      "address": "0xc9129903751dA0855c7a7df7ab4b2b5e1DDd0C5c",
       "abi": [
         {
           "inputs": [

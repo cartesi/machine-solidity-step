@@ -1,0 +1,453 @@
+{
+  "address": "0x5fDd58b139CdA2f7693f5633754beC183a649434",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnBImm",
+      "outputs": [
+        {
+          "internalType": "int32",
+          "name": "",
+          "type": "int32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnFunct3",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnFunct3Funct5",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnFunct3Funct7",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnFunct6",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnFunct7",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnIImm",
+      "outputs": [
+        {
+          "internalType": "int32",
+          "name": "",
+          "type": "int32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnIUimm",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnJImm",
+      "outputs": [
+        {
+          "internalType": "int32",
+          "name": "",
+          "type": "int32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnOpcode",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnRd",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnRs1",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnRs2",
+      "outputs": [
+        {
+          "internalType": "uint32",
+          "name": "",
+          "type": "uint32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnSImm",
+      "outputs": [
+        {
+          "internalType": "int32",
+          "name": "",
+          "type": "int32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint32",
+          "name": "insn",
+          "type": "uint32"
+        }
+      ],
+      "name": "insnUImm",
+      "outputs": [
+        {
+          "internalType": "int32",
+          "name": "",
+          "type": "int32"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xaa59d60e0c002a48394527e035de34464836fbf7cb61cad090505841eddd67d5",
+  "receipt": {
+    "to": null,
+    "from": "0x18930e8a66a1DbE21D00581216789AAB7460Afd0",
+    "contractAddress": "0x5fDd58b139CdA2f7693f5633754beC183a649434",
+    "transactionIndex": 0,
+    "gasUsed": "371994",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xe2acf6045936a6894222d6775efb17a54b45b5979d72b8cf6a47d7a3c457d0a9",
+    "transactionHash": "0xaa59d60e0c002a48394527e035de34464836fbf7cb61cad090505841eddd67d5",
+    "logs": [],
+    "blockNumber": 63263,
+    "cumulativeGasUsed": "371994",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "solcInputHash": "4ab6a1e1786521c94a86efcef741c284",
+  "metadata": "{\"compiler\":{\"version\":\"0.7.4+commit.3f05b770\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnBImm\",\"outputs\":[{\"internalType\":\"int32\",\"name\":\"\",\"type\":\"int32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnFunct3\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnFunct3Funct5\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnFunct3Funct7\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnFunct6\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnFunct7\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnIImm\",\"outputs\":[{\"internalType\":\"int32\",\"name\":\"\",\"type\":\"int32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnIUimm\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnJImm\",\"outputs\":[{\"internalType\":\"int32\",\"name\":\"\",\"type\":\"int32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnOpcode\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnRd\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnRs1\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnRs2\",\"outputs\":[{\"internalType\":\"uint32\",\"name\":\"\",\"type\":\"uint32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnSImm\",\"outputs\":[{\"internalType\":\"int32\",\"name\":\"\",\"type\":\"int32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint32\",\"name\":\"insn\",\"type\":\"uint32\"}],\"name\":\"insnUImm\",\"outputs\":[{\"internalType\":\"int32\",\"name\":\"\",\"type\":\"int32\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Felipe Argento\",\"kind\":\"dev\",\"methods\":{\"insnBImm(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnFunct3(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnFunct3Funct5(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnFunct3Funct7(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnFunct6(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnFunct7(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnIImm(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnIUimm(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnJImm(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnOpcode(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnRd(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnRs1(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnRs2(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnSImm(uint32)\":{\"params\":{\"insn\":\"Instruction\"}},\"insnUImm(uint32)\":{\"params\":{\"insn\":\"Instruction\"}}},\"title\":\"RiscVDecoder\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"insnBImm(uint32)\":{\"notice\":\"Get the B-type instruction's immediate value\"},\"insnFunct3(uint32)\":{\"notice\":\"Get the instruction's funct3 field\"},\"insnFunct3Funct5(uint32)\":{\"notice\":\"Get the concatenation of instruction's funct3 and funct5 fields\"},\"insnFunct3Funct7(uint32)\":{\"notice\":\"Get the concatenation of instruction's funct3 and funct7 fields\"},\"insnFunct6(uint32)\":{\"notice\":\"Get the instruction's funct6 field\"},\"insnFunct7(uint32)\":{\"notice\":\"Get the instruction's funct7 field\"},\"insnIImm(uint32)\":{\"notice\":\"Get the I-type instruction's immediate value\"},\"insnIUimm(uint32)\":{\"notice\":\"Get the I-type instruction's unsigned immediate value\"},\"insnJImm(uint32)\":{\"notice\":\"Get the J-type instruction's immediate value\"},\"insnOpcode(uint32)\":{\"notice\":\"Get the instruction's opcode field\"},\"insnRd(uint32)\":{\"notice\":\"Get the instruction's RD\"},\"insnRs1(uint32)\":{\"notice\":\"Get the instruction's RS1\"},\"insnRs2(uint32)\":{\"notice\":\"Get the instruction's RS2\"},\"insnSImm(uint32)\":{\"notice\":\"Get the S-type instruction's immediate value\"},\"insnUImm(uint32)\":{\"notice\":\"Get the U-type instruction's immediate value\"}},\"notice\":\"Contract responsible for decoding the riscv's instructions\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/RiscVDecoder.sol\":\"RiscVDecoder\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@cartesi/util/contracts/BitsManipulationLibrary.sol\":{\"content\":\"// Copyright 2020 Cartesi Pte. Ltd.\\n\\n// SPDX-License-Identifier: Apache-2.0\\n// Licensed under the Apache License, Version 2.0 (the \\\"License\\\"); you may not use\\n// this file except in compliance with the License. You may obtain a copy of the\\n// License at http://www.apache.org/licenses/LICENSE-2.0\\n\\n// Unless required by applicable law or agreed to in writing, software distributed\\n// under the License is distributed on an \\\"AS IS\\\" BASIS, WITHOUT WARRANTIES OR\\n// CONDITIONS OF ANY KIND, either express or implied. See the License for the\\n// specific language governing permissions and limitations under the License.\\n\\n\\npragma solidity ^0.7.0;\\n\\n/// @title Bits Manipulation Library\\n/// @author Felipe Argento / Stephen Chen\\n/// @notice Implements bit manipulation helper functions\\nlibrary BitsManipulationLibrary {\\n\\n    /// @notice Sign extend a shorter signed value to the full int32\\n    /// @param number signed number to be extended\\n    /// @param wordSize number of bits of the signed number, ie, 8 for int8\\n    function int32SignExtension(int32 number, uint32 wordSize)\\n    public pure returns(int32)\\n    {\\n        uint32 uNumber = uint32(number);\\n        bool isNegative = ((uint64(1) << (wordSize - 1)) & uNumber) > 0;\\n        uint32 mask = ((uint32(2) ** wordSize) - 1);\\n\\n        if (isNegative) {\\n            uNumber = uNumber | ~mask;\\n        }\\n\\n        return int32(uNumber);\\n    }\\n\\n    /// @notice Sign extend a shorter signed value to the full uint64\\n    /// @param number signed number to be extended\\n    /// @param wordSize number of bits of the signed number, ie, 8 for int8\\n    function uint64SignExtension(uint64 number, uint64 wordSize)\\n    public pure returns(uint64)\\n    {\\n        uint64 uNumber = number;\\n        bool isNegative = ((uint64(1) << (wordSize - 1)) & uNumber) > 0;\\n        uint64 mask = ((uint64(2) ** wordSize) - 1);\\n\\n        if (isNegative) {\\n            uNumber = uNumber | ~mask;\\n        }\\n\\n        return uNumber;\\n    }\\n\\n    /// @notice Swap byte order of unsigned ints with 64 bytes\\n    /// @param num number to have bytes swapped\\n    function uint64SwapEndian(uint64 num) public pure returns(uint64) {\\n        uint64 output = ((num & 0x00000000000000ff) << 56)|\\n            ((num & 0x000000000000ff00) << 40)|\\n            ((num & 0x0000000000ff0000) << 24)|\\n            ((num & 0x00000000ff000000) << 8) |\\n            ((num & 0x000000ff00000000) >> 8) |\\n            ((num & 0x0000ff0000000000) >> 24)|\\n            ((num & 0x00ff000000000000) >> 40)|\\n            ((num & 0xff00000000000000) >> 56);\\n\\n        return output;\\n    }\\n\\n    /// @notice Swap byte order of unsigned ints with 32 bytes\\n    /// @param num number to have bytes swapped\\n    function uint32SwapEndian(uint32 num) public pure returns(uint32) {\\n        uint32 output = ((num >> 24) & 0xff) | ((num << 8) & 0xff0000) | ((num >> 8) & 0xff00) | ((num << 24) & 0xff000000);\\n        return output;\\n    }\\n}\\n\\n\",\"keccak256\":\"0x95b97e0ae364fb91a3fdcf8132e7b61c745c23dd4e5beb980f396c05a69bbd08\",\"license\":\"Apache-2.0\"},\"contracts/RiscVDecoder.sol\":{\"content\":\"// Copyright 2019 Cartesi Pte. Ltd.\\n\\n// SPDX-License-Identifier: Apache-2.0\\n// Licensed under the Apache License, Version 2.0 (the \\\"License\\\"); you may not use\\n// this file except in compliance with the License. You may obtain a copy of the\\n// License at http://www.apache.org/licenses/LICENSE-2.0\\n\\n// Unless required by applicable law or agreed to in writing, software distributed\\n// under the License is distributed on an \\\"AS IS\\\" BASIS, WITHOUT WARRANTIES OR\\n// CONDITIONS OF ANY KIND, either express or implied. See the License for the\\n// specific language governing permissions and limitations under the License.\\n\\n\\n\\n// @title RiscVDecoder\\npragma solidity ^0.7.0;\\n\\nimport \\\"@cartesi/util/contracts/BitsManipulationLibrary.sol\\\";\\n\\n/// @title RiscVDecoder\\n/// @author Felipe Argento\\n/// @notice Contract responsible for decoding the riscv's instructions\\n//      It applies different bitwise operations and masks to reach\\n//      specific positions and use that positions to identify the\\n//      correct function to be executed\\nlibrary RiscVDecoder {\\n    /// @notice Get the instruction's RD\\n    /// @param insn Instruction\\n    function insnRd(uint32 insn) public pure returns(uint32) {\\n        return (insn >> 7) & 0x1F;\\n    }\\n\\n    /// @notice Get the instruction's RS1\\n    /// @param insn Instruction\\n    function insnRs1(uint32 insn) public pure returns(uint32) {\\n        return (insn >> 15) & 0x1F;\\n    }\\n\\n    /// @notice Get the instruction's RS2\\n    /// @param insn Instruction\\n    function insnRs2(uint32 insn) public pure returns(uint32) {\\n        return (insn >> 20) & 0x1F;\\n    }\\n\\n    /// @notice Get the I-type instruction's immediate value\\n    /// @param insn Instruction\\n    function insnIImm(uint32 insn) public pure returns(int32) {\\n        return int32(insn) >> 20;\\n    }\\n\\n    /// @notice Get the I-type instruction's unsigned immediate value\\n    /// @param insn Instruction\\n    function insnIUimm(uint32 insn) public pure returns(uint32) {\\n        return insn >> 20;\\n    }\\n\\n    /// @notice Get the U-type instruction's immediate value\\n    /// @param insn Instruction\\n    function insnUImm(uint32 insn) public pure returns(int32) {\\n        return int32(insn & 0xfffff000);\\n    }\\n\\n    /// @notice Get the B-type instruction's immediate value\\n    /// @param insn Instruction\\n    function insnBImm(uint32 insn) public pure returns(int32) {\\n        int32 imm = int32(\\n            ((insn >> (31 - 12)) & (1 << 12)) |\\n            ((insn >> (25 - 5)) & 0x7e0) |\\n            ((insn >> (8 - 1)) & 0x1e) |\\n            ((insn << (11 - 7)) & (1 << 11))\\n        );\\n        return BitsManipulationLibrary.int32SignExtension(imm, 13);\\n    }\\n\\n    /// @notice Get the J-type instruction's immediate value\\n    /// @param insn Instruction\\n    function insnJImm(uint32 insn) public pure returns(int32) {\\n        int32 imm = int32(\\n            ((insn >> (31 - 20)) & (1 << 20)) |\\n            ((insn >> (21 - 1)) & 0x7fe) |\\n            ((insn >> (20 - 11)) & (1 << 11)) |\\n            (insn & 0xff000)\\n        );\\n        return BitsManipulationLibrary.int32SignExtension(imm, 21);\\n    }\\n\\n    /// @notice Get the S-type instruction's immediate value\\n    /// @param insn Instruction\\n    function insnSImm(uint32 insn) public pure returns(int32) {\\n        int32 imm = int32(((insn & 0xfe000000) >> (25 - 5)) | ((insn >> 7) & 0x1F));\\n        return BitsManipulationLibrary.int32SignExtension(imm, 12);\\n    }\\n\\n    /// @notice Get the instruction's opcode field\\n    /// @param insn Instruction\\n    function insnOpcode(uint32 insn) public pure returns (uint32) {\\n        return insn & 0x7F;\\n    }\\n\\n    /// @notice Get the instruction's funct3 field\\n    /// @param insn Instruction\\n    function insnFunct3(uint32 insn) public pure returns (uint32) {\\n        return (insn >> 12) & 0x07;\\n    }\\n\\n    /// @notice Get the concatenation of instruction's funct3 and funct7 fields\\n    /// @param insn Instruction\\n    function insnFunct3Funct7(uint32 insn) public pure returns (uint32) {\\n        return ((insn >> 5) & 0x380) | (insn >> 25);\\n    }\\n\\n    /// @notice Get the concatenation of instruction's funct3 and funct5 fields\\n    /// @param insn Instruction\\n    function insnFunct3Funct5(uint32 insn) public pure returns (uint32) {\\n        return ((insn >> 7) & 0xE0) | (insn >> 27);\\n    }\\n\\n    /// @notice Get the instruction's funct7 field\\n    /// @param insn Instruction\\n    function insnFunct7(uint32 insn) public pure returns (uint32) {\\n        return (insn >> 25) & 0x7F;\\n    }\\n\\n    /// @notice Get the instruction's funct6 field\\n    /// @param insn Instruction\\n    function insnFunct6(uint32 insn) public pure returns (uint32) {\\n        return (insn >> 26) & 0x3F;\\n    }\\n}\\n\",\"keccak256\":\"0xd908b1ffb6386732728562ea6cc57d5ffe71dc2134e8b0f79857882c8a3eac3c\",\"license\":\"Apache-2.0\"}},\"version\":1}",
+  "bytecode": "0x6105c4610026600b82828239805160001a60731461001957fe5b30600052607381538281f3fe73000000000000000000000000000000000000000030146080604052600436106100ff5760003560e01c8063b8464b83116100a1578063e91d6a9411610070578063e91d6a94146102b5578063ee9fd035146102d8578063efdbf49a146102fb578063f98780721461031e576100ff565b8063b8464b8314610229578063c920257b1461024c578063dff959bd1461026f578063e01eb62014610292576100ff565b806353c0a143116100dd57806353c0a1431461019d5780635c53fe57146101c05780636d0ba6fa146101e35780637b80452414610206576100ff565b80631863d40c1461010457806322772c841461013e578063287b44bf14610161575b600080fd5b6101276004803603602081101561011a57600080fd5b503563ffffffff16610341565b6040805160039290920b8252519081900360200190f35b6101276004803603602081101561015457600080fd5b503563ffffffff1661034a565b6101846004803603602081101561017757600080fd5b503563ffffffff16610353565b6040805163ffffffff9092168252519081900360200190f35b610184600480360360208110156101b357600080fd5b503563ffffffff1661035c565b610184600480360360208110156101d657600080fd5b503563ffffffff16610365565b610184600480360360208110156101f957600080fd5b503563ffffffff1661036b565b6101846004803603602081101561021c57600080fd5b503563ffffffff16610374565b6101276004803603602081101561023f57600080fd5b503563ffffffff1661037d565b6101846004803603602081101561026257600080fd5b503563ffffffff16610423565b6101846004803603602081101561028557600080fd5b503563ffffffff16610439565b610127600480360360208110156102a857600080fd5b503563ffffffff16610442565b610127600480360360208110156102cb57600080fd5b503563ffffffff166104c8565b610184600480360360208110156102ee57600080fd5b503563ffffffff16610566565b6101846004803603602081101561031157600080fd5b503563ffffffff1661057b565b6101846004803603602081101561033457600080fd5b503563ffffffff16610584565b63fffff0001690565b60030b60141d90565b600f1c601f1690565b60191c607f1690565b607f1690565b601a1c603f1690565b60071c601f1690565b6040805163f69c389b60e01b8152610fe0601484901c16601f600785901c1617600381900b6004830152600c602483015291516000929173decac9ff6b588642887414e85dfdde740a797f569163f69c389b91604480820192602092909190829003018186803b1580156103f057600080fd5b505af4158015610404573d6000803e3d6000fd5b505050506040513d602081101561041a57600080fd5b50519392505050565b601981901c607f1660059190911c610380161790565b600c1c60071690565b6040805163f69c389b60e01b815262100000600b84901c166107fe601485901c1617610800600985901c1617620ff000841617600381900b60048301526015602483015291516000929173decac9ff6b588642887414e85dfdde740a797f569163f69c389b91604480820192602092909190829003018186803b1580156103f057600080fd5b60008060048363ffffffff16901b6108001660078463ffffffff16901c601e1660148563ffffffff16901c6107e01660138663ffffffff16901c61100016171717905073decac9ff6b588642887414e85dfdde740a797f5663f69c389b82600d6040518363ffffffff1660e01b8152600401808360030b81526020018281526020019250505060206040518083038186803b1580156103f057600080fd5b601b81901c601f1660079190911c60e0161790565b60141c601f1690565b60141c610fff169056fea264697066735822122066242daf3a631ec35d14563ef0dfe9b1a7ffdf1b2678d2359f59ecbcae035c7864736f6c63430007040033",
+  "deployedBytecode": "0x73000000000000000000000000000000000000000030146080604052600436106100ff5760003560e01c8063b8464b83116100a1578063e91d6a9411610070578063e91d6a94146102b5578063ee9fd035146102d8578063efdbf49a146102fb578063f98780721461031e576100ff565b8063b8464b8314610229578063c920257b1461024c578063dff959bd1461026f578063e01eb62014610292576100ff565b806353c0a143116100dd57806353c0a1431461019d5780635c53fe57146101c05780636d0ba6fa146101e35780637b80452414610206576100ff565b80631863d40c1461010457806322772c841461013e578063287b44bf14610161575b600080fd5b6101276004803603602081101561011a57600080fd5b503563ffffffff16610341565b6040805160039290920b8252519081900360200190f35b6101276004803603602081101561015457600080fd5b503563ffffffff1661034a565b6101846004803603602081101561017757600080fd5b503563ffffffff16610353565b6040805163ffffffff9092168252519081900360200190f35b610184600480360360208110156101b357600080fd5b503563ffffffff1661035c565b610184600480360360208110156101d657600080fd5b503563ffffffff16610365565b610184600480360360208110156101f957600080fd5b503563ffffffff1661036b565b6101846004803603602081101561021c57600080fd5b503563ffffffff16610374565b6101276004803603602081101561023f57600080fd5b503563ffffffff1661037d565b6101846004803603602081101561026257600080fd5b503563ffffffff16610423565b6101846004803603602081101561028557600080fd5b503563ffffffff16610439565b610127600480360360208110156102a857600080fd5b503563ffffffff16610442565b610127600480360360208110156102cb57600080fd5b503563ffffffff166104c8565b610184600480360360208110156102ee57600080fd5b503563ffffffff16610566565b6101846004803603602081101561031157600080fd5b503563ffffffff1661057b565b6101846004803603602081101561033457600080fd5b503563ffffffff16610584565b63fffff0001690565b60030b60141d90565b600f1c601f1690565b60191c607f1690565b607f1690565b601a1c603f1690565b60071c601f1690565b6040805163f69c389b60e01b8152610fe0601484901c16601f600785901c1617600381900b6004830152600c602483015291516000929173__$184ef4a65c614d890e6225597d290b0ed9$__9163f69c389b91604480820192602092909190829003018186803b1580156103f057600080fd5b505af4158015610404573d6000803e3d6000fd5b505050506040513d602081101561041a57600080fd5b50519392505050565b601981901c607f1660059190911c610380161790565b600c1c60071690565b6040805163f69c389b60e01b815262100000600b84901c166107fe601485901c1617610800600985901c1617620ff000841617600381900b60048301526015602483015291516000929173__$184ef4a65c614d890e6225597d290b0ed9$__9163f69c389b91604480820192602092909190829003018186803b1580156103f057600080fd5b60008060048363ffffffff16901b6108001660078463ffffffff16901c601e1660148563ffffffff16901c6107e01660138663ffffffff16901c61100016171717905073__$184ef4a65c614d890e6225597d290b0ed9$__63f69c389b82600d6040518363ffffffff1660e01b8152600401808360030b81526020018281526020019250505060206040518083038186803b1580156103f057600080fd5b601b81901c601f1660079190911c60e0161790565b60141c601f1690565b60141c610fff169056fea264697066735822122066242daf3a631ec35d14563ef0dfe9b1a7ffdf1b2678d2359f59ecbcae035c7864736f6c63430007040033",
+  "libraries": {
+    "BitsManipulationLibrary": "0xdecac9ff6b588642887414e85dfdde740a797f56"
+  },
+  "devdoc": {
+    "author": "Felipe Argento",
+    "kind": "dev",
+    "methods": {
+      "insnBImm(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnFunct3(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnFunct3Funct5(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnFunct3Funct7(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnFunct6(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnFunct7(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnIImm(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnIUimm(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnJImm(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnOpcode(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnRd(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnRs1(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnRs2(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnSImm(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      },
+      "insnUImm(uint32)": {
+        "params": {
+          "insn": "Instruction"
+        }
+      }
+    },
+    "title": "RiscVDecoder",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "insnBImm(uint32)": {
+        "notice": "Get the B-type instruction's immediate value"
+      },
+      "insnFunct3(uint32)": {
+        "notice": "Get the instruction's funct3 field"
+      },
+      "insnFunct3Funct5(uint32)": {
+        "notice": "Get the concatenation of instruction's funct3 and funct5 fields"
+      },
+      "insnFunct3Funct7(uint32)": {
+        "notice": "Get the concatenation of instruction's funct3 and funct7 fields"
+      },
+      "insnFunct6(uint32)": {
+        "notice": "Get the instruction's funct6 field"
+      },
+      "insnFunct7(uint32)": {
+        "notice": "Get the instruction's funct7 field"
+      },
+      "insnIImm(uint32)": {
+        "notice": "Get the I-type instruction's immediate value"
+      },
+      "insnIUimm(uint32)": {
+        "notice": "Get the I-type instruction's unsigned immediate value"
+      },
+      "insnJImm(uint32)": {
+        "notice": "Get the J-type instruction's immediate value"
+      },
+      "insnOpcode(uint32)": {
+        "notice": "Get the instruction's opcode field"
+      },
+      "insnRd(uint32)": {
+        "notice": "Get the instruction's RD"
+      },
+      "insnRs1(uint32)": {
+        "notice": "Get the instruction's RS1"
+      },
+      "insnRs2(uint32)": {
+        "notice": "Get the instruction's RS2"
+      },
+      "insnSImm(uint32)": {
+        "notice": "Get the S-type instruction's immediate value"
+      },
+      "insnUImm(uint32)": {
+        "notice": "Get the U-type instruction's immediate value"
+      }
+    },
+    "notice": "Contract responsible for decoding the riscv's instructions",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [],
+    "types": null
+  }
+}
