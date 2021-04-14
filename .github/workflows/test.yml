@@ -1,8 +1,8 @@
 name: Test
 on: [push]
 env:
-  TEST_VERSION: v0.8.0
-  GROUND_TRUTH_VERSION: v0.8.0-0004
+  TEST_VERSION: v0.9.0
+  GROUND_TRUTH_VERSION: v0.9.0-0003
   GIT_ORG: cartesi-corp
 jobs:
   test:
@@ -16,15 +16,15 @@ jobs:
           AWS_REGION: 'us-east-1'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      
+
       - name: Download machine init state
         run: aws s3 cp s3://cartesi-ci/${{ env.GIT_ORG }}/machine-emulator/ground-truth/machine-init-state-${{ env.GROUND_TRUTH_VERSION }}.tar.gz .
         env:
           AWS_REGION: 'us-east-1'
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      
-      - name: Download rv64 test bin files 
+
+      - name: Download rv64 test bin files
         uses: Legion2/download-release-action@v2.1.0
         with:
           repository: ${{ env.GIT_ORG }}/machine-tests
@@ -34,7 +34,7 @@ jobs:
 
       - name: Untar test suite
         run: mkdir -p test/bin && tar -xzf machine-tests-${TEST_VERSION}.tar.gz -C test/bin && rm test/bin/*.dump
-      
+
       - name: Untar init state
         run: tar -xzf machine-init-state-${{ env.GROUND_TRUTH_VERSION }}.tar.gz -C test/bin && mv test/bin/machine-init-state/* test/bin/
 
@@ -43,7 +43,7 @@ jobs:
 
       - name: Add brotli to the system
         run: sudo apt-get install brotli -y
-      
+
       - name: Run bin tests
         run: docker run cartesi/test
 

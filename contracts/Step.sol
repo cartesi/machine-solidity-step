@@ -49,6 +49,15 @@ contract Step {
 
         mi.initializeMemory(_rwPositions, _rwValues, _isRead);
 
+        // Read mcycle register and make sure it is not about to overflow
+        uint64 mcycle = mi.readMcycle();
+
+        if (mcycle >= 2**64-1) {
+            // machine can't go forward
+            emit StepStatus(0, true);
+            return endStep(0);
+        }
+
         // Read iflags register and check its H flag, to see if machine is halted.
         // If machine is halted - nothing else to do. H flag is stored on the least
         // signficant bit on iflags register.
@@ -97,7 +106,7 @@ contract Step {
         // Last thing that has to be done in a step is to update the cycle counter.
         // The cycle counter is stored on mcycle CSR.
         // Reference: riscv-priv-spec-1.10.pdf - Table 2.5, page 12.
-        uint64 mcycle = mi.readMcycle();
+        mcycle = mi.readMcycle();
         mi.writeMcycle(mcycle + 1);
         emit StepStatus(mcycle + 1, false);
 
