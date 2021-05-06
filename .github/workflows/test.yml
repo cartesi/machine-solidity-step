@@ -1,8 +1,8 @@
 name: Test
 on: [push]
 env:
-  TEST_VERSION: v0.9.0
-  GROUND_TRUTH_VERSION: v0.9.0-0003
+  TEST_VERSION: v0.10.0
+  GROUND_TRUTH_VERSION: v0.10.0-0001
   GIT_ORG: cartesi-corp
 jobs:
   test:
