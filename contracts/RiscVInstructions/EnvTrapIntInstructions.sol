@@ -116,16 +116,8 @@ library EnvTrapIntInstructions {
         uint64 priv = mi.readIflagsPrv();
         uint64 mstatus = mi.readMstatus();
 
-        if (priv == RiscVConstants.getPrvU() || (priv == RiscVConstants.getPrvS() && (mstatus & RiscVConstants.getMstatusTwMask() != 0))) {
-            return false;
-        } else {
-            uint64 mip = mi.readMip();
-            uint64 mie = mi.readMie();
-            // Go to power down if no enable interrupts are pending
-            if ((mip & mie) == 0) {
-                mi.setIflagsI(true);
-            }
-            return true;
-        }
+        return priv != RiscVConstants.getPrvU() &&
+               (priv != RiscVConstants.getPrvS() ||
+                (mstatus & RiscVConstants.getMstatusTwMask() == 0));
     }
 }

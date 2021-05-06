@@ -17,11 +17,25 @@ pragma solidity ^0.7.0;
 import "./MemoryInteractor.sol";
 import "./RiscVConstants.sol";
 import "./Exceptions.sol";
+import "./RealTimeClock.sol";
 
 /// @title Interrupts
 /// @author Felipe Argento
 /// @notice Implements interrupt behaviour
 library Interrupts {
+
+    /// @notice At every tick, set interrupt as pending if the timer is expired
+    /// @param mi Memory Interactor with which Step function is interacting.
+    function setRtcInterrupt(MemoryInteractor mi, uint64 mcycle) public {
+        if (RealTimeClock.rtcIsTick(mcycle)) {
+            uint64 timecmp = mi.readClintMtimecmp();
+            uint64 timecmpCycle = RealTimeClock.rtcTimeToCycle(timecmp);
+            if (timecmpCycle <= mcycle && timecmpCycle != 0) {
+                uint64 mip = mi.readMip();
+                mi.writeMip(mip | RiscVConstants.getMipMtipMask());
+            }
+        }
+    }
 
     /// @notice Raises an interrupt if any are enabled and pending.
     /// @param mi Memory Interactor with which Step function is interacting.

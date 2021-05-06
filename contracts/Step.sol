@@ -78,6 +78,9 @@ contract Step {
             return endStep(0);
         }
 
+        // Set interrupt flag for RTC
+        Interrupts.setRtcInterrupt(mi, mcycle);
+
 	    //Raise the highest priority interrupt
         Interrupts.raiseInterruptIfAny(mi);
 

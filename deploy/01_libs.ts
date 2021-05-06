@@ -195,7 +195,8 @@ const func: DeployFunction = async (bre: HardhatRuntimeEnvironment) => {
         libraries: {
             RiscVConstants: RiscVConstants.address,
             ShadowAddresses: ShadowAddresses.address,
-            Exceptions: Exceptions.address
+            Exceptions: Exceptions.address,
+            RealTimeClock: RealTimeClock.address
         },
         log: true
     });

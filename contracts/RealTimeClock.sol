@@ -34,4 +34,10 @@ library RealTimeClock {
     function rtcTimeToCycle(uint64 time) public pure returns (uint64) {
         return time * RTC_FREQ_DIV;
     }
+
+    /// @notice Returns whether the cycle is a RTC tick
+    /// @param cycle Cycle count
+    function rtcIsTick(uint64 cycle) public pure returns (bool) {
+        return (cycle % RTC_FREQ_DIV) == 0;
+    }
 }
