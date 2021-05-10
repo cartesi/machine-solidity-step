@@ -215,25 +215,10 @@ contract MemoryInteractor {
         writeIlrsc(uint64(-1)); // invalidate reserved address
     }
 
-    function setIflagsI(bool idle) public {
-        uint64 iflags = readIflags();
-
-        if (idle) {
-            iflags = (iflags | RiscVConstants.getIflagsIMask());
-        } else {
-            iflags = (iflags & ~RiscVConstants.getIflagsIMask());
-        }
-
-        memoryWrite(ShadowAddresses.getIflags(), iflags);
-    }
-
     function setMip(uint64 mask) public {
         uint64 mip = readMip();
         mip |= mask;
-
         writeMip(mip);
-
-        setIflagsI(false);
     }
 
     function resetMip(uint64 mask) public {
