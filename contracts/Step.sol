@@ -78,6 +78,9 @@ contract Step {
             return endStep(0);
         }
 
+        // Just reset the automatic yield flag and continue
+        mi.setIflagsX(false);
+
         // Set interrupt flag for RTC
         Interrupts.setRtcInterrupt(mi, mcycle);
 

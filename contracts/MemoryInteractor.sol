@@ -352,6 +352,18 @@ contract MemoryInteractor {
         memoryWrite(ShadowAddresses.getIflags(), iflags);
     }
 
+    function setIflagsX(bool isYield) public {
+        uint64 iflags = readIflags();
+
+        if (isYield) {
+            iflags = (iflags | RiscVConstants.getIflagsXMask());
+        } else {
+            iflags = (iflags & ~RiscVConstants.getIflagsXMask());
+        }
+
+        memoryWrite(ShadowAddresses.getIflags(), iflags);
+    }
+
     function writeIflagsPrv(uint64 newPriv) public {
         uint64 iflags = readIflags();
 

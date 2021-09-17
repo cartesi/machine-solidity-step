@@ -38,8 +38,8 @@ library HTIF {
     uint64 constant HTIF_HALT_HALT = 0;
     uint64 constant HTIF_CONSOLE_GETCHAR = 0;
     uint64 constant HTIF_CONSOLE_PUTCHAR = 1;
-    uint64 constant HTIF_YIELD_PROGRESS = 0;
-    uint64 constant HTIF_YIELD_ROLLUP = 1;
+    uint64 constant HTIF_YIELD_AUTOMATIC = 0;
+    uint64 constant HTIF_YIELD_MANUAL = 1;
 
     /// @notice reads htif
     /// @param mi Memory Interactor with which Step function is interacting.
@@ -155,7 +155,11 @@ library HTIF {
     {
         // If yield command is enabled, yield
         if ((mi.readHtifIYield() >> cmd) & 1 == 1) {
-            mi.setIflagsY(true);
+            if (cmd == HTIF_YIELD_MANUAL) {
+                mi.setIflagsY(true);
+            } else {
+                mi.setIflagsX(true);
+            }
             mi.writeHtifFromhost((HTIF_DEVICE_YIELD << 56) | cmd << 48);
         }
 

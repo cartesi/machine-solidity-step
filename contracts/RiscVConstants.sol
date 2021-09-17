@@ -21,11 +21,13 @@ library RiscVConstants {
     //iflags shifts
     function getIflagsHShift()  public pure returns(uint64) {return 0;}
     function getIflagsYShift()  public pure returns(uint64) {return 1;}
+    function getIflagsXShift()  public pure returns(uint64) {return 2;}
     function getIflagsPrvShift()  public pure returns(uint64) {return 3;}
 
     //iflags masks
     function getIflagsHMask()  public pure returns(uint64) {return uint64(1) << getIflagsHShift();}
     function getIflagsYMask()  public pure returns(uint64) {return uint64(1) << getIflagsYShift();}
+    function getIflagsXMask()  public pure returns(uint64) {return uint64(1) << getIflagsXShift();}
     function getIflagsPrvMask()  public pure returns(uint64) {return uint64(3) << getIflagsPrvShift();}
 
     //general purpose
