@@ -9,6 +9,7 @@ path = "src/main.rs"
 
 [dependencies]
 getopts = "0.2.21"
+serde = "1.0.130"
 serde_json = "1.0.68"
 web3 = "0.17.0"
 tokio = { version = "1.13"}
