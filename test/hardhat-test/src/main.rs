@@ -2,15 +2,19 @@ mod utils;
 
 use getopts::Options;
 use serde::{Deserialize, Serialize};
+use std::convert::TryFrom;
 use std::path::PathBuf;
-use web3::types::Bytes;
+use web3::ethabi::ethereum_types::H160;
+use web3::ethabi::Address;
+use web3::types::{Bytes, TransactionRequest};
+use web3::Web3;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Access {
     r#type: String,
     address: u64,
     read: Option<String>,
-    write: Option<String>,
+    written: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -54,8 +58,39 @@ fn print_usage(program: &str, opts: Options) {
     print!("{}", opts.usage(&brief));
 }
 
+async fn send_contract_transaction(
+    w3: &Web3<web3::transports::Http>,
+    contract_address: &String,
+    input_data: Bytes,
+) -> Result<(), Box<dyn std::error::Error>> {
+    println!(
+        "Sending step transaction to step contract: {}",
+        contract_address
+    );
+    let contract_address_h160: Address =
+        H160(<[u8; 20]>::try_from(&(utils::from_hex(contract_address).unwrap()).0[0..20]).unwrap());
+    let tx = TransactionRequest {
+        from: w3.eth().accounts().await.unwrap()[0],
+        to: Some(contract_address_h160),
+        gas: None,
+        gas_price: None,
+        value: None,
+        data: Some(input_data),
+        nonce: None,
+        condition: None,
+        transaction_type: None,
+        access_list: None,
+    };
+    let tx_hash = w3.eth().send_transaction(tx).await.unwrap();
+    println!(
+        "Trancation to contract {:?} sent, TX Hash: {:?}",
+        contract_address, tx_hash
+    );
+    Ok(())
+}
+
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = std::env::args().collect();
     let program = args[0].clone();
     let mut opts = Options::new();
@@ -126,7 +161,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                         "Contract name: {} deployed at {}",
                         contract_name, contract_address
                     );
-                    contract_addresses.insert(contract_name, contract_address.to_string());
+                    contract_addresses.insert(
+                        contract_name,
+                        contract_address.to_string().replace(&['\"'][..], ""),
+                    );
                 }
             }
         }
@@ -136,12 +174,12 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let node_address: String =
         matches.opt_get_default("node", "http://localhost:8545".to_string())?;
     let transport = web3::transports::Http::new(&node_address)?;
-    let web3 = web3::Web3::new(transport);
+    let w3 = web3::Web3::new(transport);
     println!(
         "Node address is {}, version: {} block number: {}",
         &node_address,
-        web3.net().version().await?,
-        web3.eth().block_number().await?
+        w3.net().version().await?,
+        w3.eth().block_number().await?
     );
 
     match mode {
@@ -215,16 +253,20 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                                 rw_values.push(
                                     utils::from_hex(
                                         &access
-                                            .write
+                                            .written
                                             .as_ref()
                                             .expect("Missing write value in access description"),
                                     )
                                     .unwrap(),
                                 );
-                                was_read.push(true);
+                                was_read.push(false);
                             }
                         }
+                        let input: Bytes =
+                            utils::step_encode_input(&w3, &rw_positions, &rw_values, &was_read)
+                                .await;
                         // Execute message call to contract on local hardhat node
+                        send_contract_transaction(&w3, &contract_addresses["Step"], input).await?;
                     }
                     println!("Performing test {} finished", &sequence.info.test);
                 }

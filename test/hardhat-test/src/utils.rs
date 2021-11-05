@@ -1,4 +1,6 @@
+use byteorder::ByteOrder;
 use std::io::ErrorKind;
+use web3::ethabi::ethereum_types::H256;
 use web3::types::Bytes;
 use web3::Web3;
 
@@ -54,17 +56,75 @@ pub fn from_hex(s: &String) -> Result<Bytes, Box<dyn std::error::Error + Send + 
     Ok(Bytes(ret))
 }
 
-#[allow(dead_code)]
-pub fn step_encode_input(
+pub async fn step_encode_input(
     w3: &Web3<web3::transports::Http>,
-    _rw_positions: &Vec<u64>,
-    _rw_values: Vec<Bytes>,
-    _is_read: Vec<bool>,
+    rw_positions: &Vec<u64>,
+    rw_values: &Vec<Bytes>,
+    is_read: &Vec<bool>,
 ) -> Bytes {
     let func_signature = Bytes(Vec::from("step(uint64[],bytes8[],bool[])".as_bytes()));
-    let _signature = w3.web3().sha3(func_signature);
+    let signature = w3
+        .web3()
+        .sha3(func_signature)
+        .await
+        .expect("Unable to hash function signature");
+    let mut encode_input: Bytes =
+        Bytes(vec![signature[0], signature[1], signature[2], signature[3]]);
 
-    let encode_input: Bytes = Bytes(Vec::new());
+    let number_of_positions: u32 = rw_positions.len() as u32;
+    let number_of_values = rw_values.len() as u32;
+    let number_of_reads = is_read.len() as u32;
+
+    let mut buffer: [u8; 32] = [0; 32];
+    byteorder::BigEndian::write_u32(&mut buffer[32 - 4..], number_of_positions);
+    let number_of_positions_h: H256 = H256(buffer);
+    byteorder::BigEndian::write_u32(&mut buffer[32 - 4..], number_of_values);
+    let number_of_values_h: H256 = H256(buffer);
+    byteorder::BigEndian::write_u32(&mut buffer[32 - 4..], number_of_reads);
+    let number_of_reads_h: H256 = H256(buffer);
+
+    // Offset for rw_positions
+    let positions_offset: u32 = (encode_input.0.len() - 4 + 32 * 3) as u32;
+    byteorder::BigEndian::write_u32(&mut buffer[32 - 4..], positions_offset);
+    let positions_offset_h: H256 = H256(buffer);
+    encode_input.0.extend_from_slice(&positions_offset_h[..]);
+
+    // Offset for rw_values
+    let values_offset = positions_offset + 32 * (1 + number_of_positions);
+    byteorder::BigEndian::write_u32(&mut buffer[32 - 4..], values_offset as u32);
+    let values_offset_h: H256 = H256(buffer);
+    encode_input.0.extend_from_slice(&values_offset_h[..]);
+
+    // Offset for is_read
+    let read_offset = values_offset + 32 * (1 + number_of_values);
+    byteorder::BigEndian::write_u32(&mut buffer[32 - 4..], read_offset as u32);
+    let read_offset_h: H256 = H256(buffer);
+    encode_input.0.extend_from_slice(&read_offset_h[..]);
+
+    encode_input.0.extend_from_slice(&number_of_positions_h[..]);
+    for i in 0..number_of_positions {
+        byteorder::BigEndian::write_u64(&mut buffer[32 - 8..], rw_positions[i as usize]);
+        let position: H256 = H256(buffer);
+        encode_input.0.extend_from_slice(&position[..]);
+    }
+
+    encode_input.0.extend_from_slice(&number_of_values_h[..]);
+    for i in 0..number_of_values {
+        //let value = &rw_values[i as usize];
+        encode_input
+            .0
+            .extend_from_slice(&(rw_values[i as usize].0)[..]);
+        encode_input
+            .0
+            .resize(encode_input.0.len() + 32 - rw_values[i as usize].0.len(), 0);
+    }
+
+    encode_input.0.extend_from_slice(&number_of_reads_h[..]);
+    for i in 0..number_of_reads {
+        byteorder::BigEndian::write_u64(&mut buffer[32 - 8..], is_read[i as usize] as u64);
+        let read: H256 = H256(buffer);
+        encode_input.0.extend_from_slice(&read[..]);
+    }
 
     encode_input
 }
