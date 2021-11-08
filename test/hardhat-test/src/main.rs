@@ -4,10 +4,13 @@ use getopts::Options;
 use serde::{Deserialize, Serialize};
 use std::convert::TryFrom;
 use std::path::PathBuf;
+use std::{thread, time};
 use web3::ethabi::ethereum_types::H160;
 use web3::ethabi::Address;
-use web3::types::{Bytes, TransactionRequest};
+use web3::types::{Bytes, H256, TransactionRequest};
 use web3::Web3;
+
+const HARDHAT_STARTUP_TIME: u64 = 20;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Access {
@@ -58,11 +61,38 @@ fn print_usage(program: &str, opts: Options) {
     print!("{}", opts.usage(&brief));
 }
 
+fn start_hardhat_local_node() -> Result<u32, Box<dyn std::error::Error>> {
+    let output = std::process::Command::new("npx")
+        .arg("hardhat")
+        .arg("node")
+        .spawn()
+        .expect("Unable to launch local hardhat node");
+    println!(
+        "Waiting {} seconds for hardhat instance pid='{}' to start...",
+        HARDHAT_STARTUP_TIME,
+        output.id()
+    );
+    thread::sleep(time::Duration::from_secs(HARDHAT_STARTUP_TIME));
+    println!("Hardhat node started with pid='{}'", output.id());
+    Ok(output.id())
+}
+
+/// Kill process with provided pid
+fn try_stop_process(pid: u32) -> std::process::ExitStatus {
+    println!("Stopping local hardhat node. with pid {}", pid);
+    let error_message = format!("Error destroying process with pid {}", pid);
+    let mut child = std::process::Command::new("kill")
+        .arg(&pid.to_string())
+        .spawn()
+        .expect(&error_message);
+    child.wait().expect(&error_message)
+}
+
 async fn send_contract_transaction(
     w3: &Web3<web3::transports::Http>,
     contract_address: &String,
     input_data: Bytes,
-) -> Result<(), Box<dyn std::error::Error>> {
+) -> Result<H256, Box<dyn std::error::Error>> {
     println!(
         "Sending step transaction to step contract: {}",
         contract_address
@@ -81,12 +111,12 @@ async fn send_contract_transaction(
         transaction_type: None,
         access_list: None,
     };
-    let tx_hash = w3.eth().send_transaction(tx).await.unwrap();
+    let tx_hash = w3.eth().send_transaction(tx).await?;
     println!(
         "Trancation to contract {:?} sent, TX Hash: {:?}",
         contract_address, tx_hash
     );
-    Ok(())
+    Ok(tx_hash)
 }
 
 #[tokio::main]
@@ -113,7 +143,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         "<path> Configuration file containing the proof tests paths",
         "",
     );
-    opts.reqopt("", "mode", "Mode of test", "MODE_TYPE");
+    opts.optopt("", "mode", "Mode of test", "MODE_TYPE");
     opts.optopt(
         "",
         "port-checkin",
@@ -130,7 +160,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Determine test mode
     let mode_str: String = matches
         .opt_get("mode")?
-        .expect("Mode string value is missing");
+        .expect("Mode type definition is missing");
     println!("Mode is: {}", mode_str);
     let mode: Mode = match &mode_str[..] {
         "run" => Mode::Run,
@@ -170,17 +200,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    // Create web3 interface, check if Ethereum node is running
-    let node_address: String =
-        matches.opt_get_default("node", "http://localhost:8545".to_string())?;
-    let transport = web3::transports::Http::new(&node_address)?;
-    let w3 = web3::Web3::new(transport);
-    println!(
-        "Node address is {}, version: {} block number: {}",
-        &node_address,
-        w3.net().version().await?,
-        w3.eth().block_number().await?
-    );
+    // If node address is provided, use external node
+    // If it is not provided, start hardhat node
+    let mut node_address: String = matches.opt_get_default("node", "".to_string())?;
 
     match mode {
         Mode::Sequence => {
@@ -221,7 +243,29 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                 // Go through all sequences (test files)
                 for sequence in sequences {
-                    //todo here restart hardhat instance
+                    let mut hardhat_pid = 0;
+                    if node_address == "".to_string() {
+                        hardhat_pid = start_hardhat_local_node()?;
+                        node_address = "http://localhost:8545".to_string();
+                    }
+
+                    let transport = match web3::transports::Http::new(&node_address) {
+                        Ok(http) => http,
+                        Err(err) => {
+                            println!("Error connecting to hardhat node {}", err.to_string());
+                            if hardhat_pid != 0 {
+                                try_stop_process(hardhat_pid);
+                            }
+                            panic!("Could not create web3 instance, failed to execute tests!");
+                        }
+                    };
+                    let w3 = web3::Web3::new(transport);
+                    println!(
+                        "Node address is {}, version: {} block number: {}",
+                        &node_address,
+                        w3.net().version().await?,
+                        w3.eth().block_number().await?
+                    );
                     println!(
                         "Performing test for file {}, period: {} start {} number of steps {}",
                         &sequence.info.test,
@@ -266,14 +310,28 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                             utils::step_encode_input(&w3, &rw_positions, &rw_values, &was_read)
                                 .await;
                         // Execute message call to contract on local hardhat node
-                        send_contract_transaction(&w3, &contract_addresses["Step"], input).await?;
+                        match send_contract_transaction(&w3, &contract_addresses["Step"], input)
+                            .await
+                        {
+                            Ok(_) => {}
+                            Err(err) => {
+                                println!("Error connecting to hardhat node {}", err.to_string());
+                                if hardhat_pid != 0 {
+                                    try_stop_process(hardhat_pid);
+                                }
+                                panic!("Test execution failed");
+                            }
+                        }
                     }
                     println!("Performing test {} finished", &sequence.info.test);
+                    if hardhat_pid != 0 {
+                        try_stop_process(hardhat_pid);
+                    }
                 }
             }
         }
         Mode::Proof => {
-            // Execute proof tests
+            panic!("Proof tests are currently not supported!");
         }
         Mode::Run => {
             // Execute run tests
