@@ -246,6 +246,10 @@ const func: DeployFunction = async (bre: HardhatRuntimeEnvironment) => {
             from: deployer,
             libraries: {
                 BitsManipulationLibrary: BitsManipulationLibrary.address,
+                RiscVConstants: RiscVConstants.address,
+                ShadowAddresses: ShadowAddresses.address,
+                HTIF: HTIF.address,
+                CLINT: CLINT.address
             },
             log: true
         });

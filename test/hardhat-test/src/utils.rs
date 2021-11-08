@@ -1,5 +1,6 @@
 use byteorder::ByteOrder;
 use std::io::ErrorKind;
+use std::io::Read;
 use web3::ethabi::ethereum_types::H256;
 use web3::types::Bytes;
 use web3::Web3;
@@ -54,6 +55,16 @@ pub fn from_hex(s: &String) -> Result<Bytes, Box<dyn std::error::Error + Send + 
     }
 
     Ok(Bytes(ret))
+}
+
+pub fn load_file_as_bytes(filename: &String) -> Bytes {
+    let mut f =
+        std::fs::File::open(&filename).expect(&format!("no file with filename {} found", filename));
+    let metadata = std::fs::metadata(&filename)
+        .expect(&format!("unable to read metadata for file {}", filename));
+    let mut file_data: Bytes = Bytes(vec![0; metadata.len() as usize]);
+    f.read(&mut file_data.0).expect("buffer overflow");
+    file_data
 }
 
 pub async fn step_encode_input(
@@ -127,4 +138,98 @@ pub async fn step_encode_input(
     }
 
     encode_input
+}
+
+pub async fn mi_pure_write_encode_input(
+    w3: &Web3<web3::transports::Http>,
+    position: &u64,
+    data_size: usize,
+    data: &[u8],
+) -> Bytes {
+    let func_signature = Bytes(Vec::from(
+        "externalPureMemoryWrite(uint64,bytes8)".as_bytes(),
+    ));
+    let signature = w3
+        .web3()
+        .sha3(func_signature)
+        .await
+        .expect("Unable to hash function signature");
+    let mut encode_input: Bytes =
+        Bytes(vec![signature[0], signature[1], signature[2], signature[3]]);
+    // Add position to message
+    let mut buffer: [u8; 32] = [0; 32];
+    byteorder::BigEndian::write_u64(&mut buffer[32 - 8..], *position);
+    let position_h: H256 = H256(buffer);
+    encode_input.0.extend_from_slice(&position_h[..]);
+    // Add data to message
+    encode_input.0.extend_from_slice(&data[..]);
+    encode_input.0.resize(
+        encode_input.0.len() + (((data_size / 32) + 1) * 32 - data_size),
+        0,
+    ); // round argument to word size
+    return encode_input;
+}
+
+pub async fn mi_set_ifflags_yield_encode_input(
+    w3: &Web3<web3::transports::Http>,
+    is_yield: bool,
+) -> Bytes {
+    let func_signature = Bytes(Vec::from("setIflagsY(bool)".as_bytes()));
+    let signature = w3
+        .web3()
+        .sha3(func_signature)
+        .await
+        .expect("Unable to hash function signature");
+    let mut encode_input: Bytes =
+        Bytes(vec![signature[0], signature[1], signature[2], signature[3]]);
+
+    // Add yield flag
+    let mut buffer: [u8; 32] = [0; 32];
+    if is_yield {
+        buffer[31] = 1;
+    } else {
+        buffer[31] = 0;
+    }
+    let yield_h: H256 = H256(buffer);
+    encode_input.0.extend_from_slice(&yield_h[..]);
+    return encode_input;
+}
+
+pub async fn mi_read_halt_encode_input(w3: &Web3<web3::transports::Http>) -> Bytes {
+    let func_signature = Bytes(Vec::from("readIflagsH()".as_bytes()));
+    let signature = w3
+        .web3()
+        .sha3(func_signature)
+        .await
+        .expect("Unable to hash function signature");
+    let encode_input: Bytes =
+        Bytes(vec![signature[0], signature[1], signature[2], signature[3]]);
+
+    return encode_input;
+}
+
+pub async fn mi_read_mcycle_encode_input(w3: &Web3<web3::transports::Http>) -> Bytes {
+    let func_signature = Bytes(Vec::from("readMcycle()".as_bytes()));
+    let signature = w3
+        .web3()
+        .sha3(func_signature)
+        .await
+        .expect("Unable to hash function signature");
+    let encode_input: Bytes =
+        Bytes(vec![signature[0], signature[1], signature[2], signature[3]]);
+
+    return encode_input;
+}
+
+pub async fn mi_htif_exit_encode_input(w3: &Web3<web3::transports::Http>) -> Bytes {
+    let func_signature = Bytes(Vec::from("htifExit()".as_bytes()));
+    let signature = w3
+        .web3()
+        .sha3(func_signature)
+        .await
+        .expect("Unable to hash function signature");
+    let encode_input: Bytes =
+        Bytes(vec![signature[0], signature[1], signature[2], signature[3]]);
+
+    return encode_input;
 }
