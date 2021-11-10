@@ -202,8 +202,7 @@ pub async fn mi_read_halt_encode_input(w3: &Web3<web3::transports::Http>) -> Byt
         .sha3(func_signature)
         .await
         .expect("Unable to hash function signature");
-    let encode_input: Bytes =
-        Bytes(vec![signature[0], signature[1], signature[2], signature[3]]);
+    let encode_input: Bytes = Bytes(vec![signature[0], signature[1], signature[2], signature[3]]);
 
     return encode_input;
 }
@@ -215,8 +214,7 @@ pub async fn mi_read_mcycle_encode_input(w3: &Web3<web3::transports::Http>) -> B
         .sha3(func_signature)
         .await
         .expect("Unable to hash function signature");
-    let encode_input: Bytes =
-        Bytes(vec![signature[0], signature[1], signature[2], signature[3]]);
+    let encode_input: Bytes = Bytes(vec![signature[0], signature[1], signature[2], signature[3]]);
 
     return encode_input;
 }
@@ -228,8 +226,7 @@ pub async fn mi_htif_exit_encode_input(w3: &Web3<web3::transports::Http>) -> Byt
         .sha3(func_signature)
         .await
         .expect("Unable to hash function signature");
-    let encode_input: Bytes =
-        Bytes(vec![signature[0], signature[1], signature[2], signature[3]]);
+    let encode_input: Bytes = Bytes(vec![signature[0], signature[1], signature[2], signature[3]]);
 
     return encode_input;
 }

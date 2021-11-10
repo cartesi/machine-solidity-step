@@ -8,10 +8,10 @@ use std::path::PathBuf;
 use std::{thread, time};
 use web3::ethabi::ethereum_types::H160;
 use web3::ethabi::Address;
-use web3::types::{Bytes, TransactionRequest, H256, CallRequest};
+use web3::types::{Bytes, CallRequest, TransactionRequest, H256};
 use web3::Web3;
 
-const HARDHAT_STARTUP_TIME: u64 = 20;
+const HARDHAT_STARTUP_COUNTER: u64 = 150;
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Access {
@@ -74,7 +74,10 @@ fn print_usage(program: &str, opts: Options) {
     print!("{}", opts.usage(&brief));
 }
 
-fn start_hardhat_local_node(ramtest: bool) -> Result<u32, Box<dyn std::error::Error>> {
+async fn start_hardhat_local_node(
+    ramtest: bool,
+    node_address: &String,
+) -> Result<u32, Box<dyn std::error::Error>> {
     let output = if ramtest {
         std::process::Command::new("npx")
             .arg("hardhat")
@@ -90,12 +93,25 @@ fn start_hardhat_local_node(ramtest: bool) -> Result<u32, Box<dyn std::error::Er
             .spawn()
             .expect("Unable to launch local hardhat node")
     };
-    println!(
-        "Waiting {} seconds for hardhat instance pid='{}' to start...",
-        HARDHAT_STARTUP_TIME,
-        output.id()
-    );
-    thread::sleep(time::Duration::from_secs(HARDHAT_STARTUP_TIME));
+    let mut counter = 0;
+    let transport = match web3::transports::Http::new(&node_address) {
+        Ok(http) => http,
+        Err(_) => {
+            panic!("Transport error");
+        }
+    };
+    let w3 = web3::Web3::new(transport);
+    while counter < HARDHAT_STARTUP_COUNTER {
+        thread::sleep(time::Duration::from_millis(100));
+        match w3.net().version().await {
+            Ok(_) => {
+                println!("Hardhat is alive!");
+                break;
+            }
+            Err(_) => {}
+        };
+        counter += 1;
+    }
     println!("Hardhat node started with pid='{}'", output.id());
     Ok(output.id())
 }
@@ -116,10 +132,7 @@ async fn send_contract_transaction(
     contract_address: &String,
     input_data: Bytes,
 ) -> Result<H256, Box<dyn std::error::Error>> {
-    println!(
-        "Sending transaction to contract: {}",
-        contract_address
-    );
+    println!("Sending transaction to contract: {}", contract_address);
     let contract_address_h160: Address =
         H160(<[u8; 20]>::try_from(&(utils::from_hex(contract_address).unwrap()).0[0..20]).unwrap());
     let tx = TransactionRequest {
@@ -347,8 +360,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 for sequence in sequences {
                     let mut hardhat_pid = 0;
                     if local_hardhat_node {
-                        println!("Starting local hardhat node for test {}", sequence.info.test);
-                        hardhat_pid = start_hardhat_local_node(false)?;
+                        println!(
+                            "Starting local hardhat node for test {}",
+                            sequence.info.test
+                        );
+                        hardhat_pid = start_hardhat_local_node(false, &node_address).await?;
                     }
 
                     let transport = match web3::transports::Http::new(&node_address) {
@@ -493,7 +509,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 let mut hardhat_pid = 0;
                 if local_hardhat_node {
                     println!("Starting local hardhat node for test {}", test.file);
-                    hardhat_pid = start_hardhat_local_node(true)?;
+                    hardhat_pid = start_hardhat_local_node(true, &node_address).await?;
                 }
                 println!("Executing Run test for file {}", test.file);
                 let transport = match web3::transports::Http::new(&node_address) {
@@ -577,7 +593,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     )
                     .await
                     {
-                        Ok(result) => if result.0[31] == 1 {true} else {false},
+                        Ok(result) => {
+                            if result.0[31] == 1 {
+                                true
+                            } else {
+                                false
+                            }
+                        }
                         Err(err) => {
                             println!("Error reading halt flag {}", err.to_string());
                             if hardhat_pid != 0 {
@@ -613,22 +635,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
                 //Check mcycle final value
                 let input: Bytes = utils::mi_read_mcycle_encode_input(&w3).await;
-                let mcycle_output = match call_contract(
-                    &w3,
-                    &contract_addresses["TestMemoryInteractor"],
-                    input,
-                )
-                    .await
-                {
-                    Ok(result) => result,
-                    Err(err) => {
-                        println!("Error reading halt flag {}", err.to_string());
-                        if hardhat_pid != 0 {
-                            try_stop_process(hardhat_pid);
+                let mcycle_output =
+                    match call_contract(&w3, &contract_addresses["TestMemoryInteractor"], input)
+                        .await
+                    {
+                        Ok(result) => result,
+                        Err(err) => {
+                            println!("Error reading halt flag {}", err.to_string());
+                            if hardhat_pid != 0 {
+                                try_stop_process(hardhat_pid);
+                            }
+                            panic!("Test execution failed");
                         }
-                        panic!("Test execution failed");
-                    }
-                };
+                    };
                 let mut mcycle: u64 = 0;
                 for b in mcycle_output.0.iter() {
                     mcycle = mcycle << 8;
@@ -636,22 +655,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 }
 
                 let input: Bytes = utils::mi_htif_exit_encode_input(&w3).await;
-                let exit_output = match call_contract(
-                    &w3,
-                    &contract_addresses["TestMemoryInteractor"],
-                    input,
-                )
-                    .await
-                {
-                    Ok(result) => result,
-                    Err(err) => {
-                        println!("Error reading halt flag {}", err.to_string());
-                        if hardhat_pid != 0 {
-                            try_stop_process(hardhat_pid);
+                let exit_output =
+                    match call_contract(&w3, &contract_addresses["TestMemoryInteractor"], input)
+                        .await
+                    {
+                        Ok(result) => result,
+                        Err(err) => {
+                            println!("Error reading halt flag {}", err.to_string());
+                            if hardhat_pid != 0 {
+                                try_stop_process(hardhat_pid);
+                            }
+                            panic!("Test execution failed");
                         }
-                        panic!("Test execution failed");
-                    }
-                };
+                    };
 
                 let mut exit: u64 = 0;
                 for b in exit_output.0.iter() {
@@ -659,7 +675,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                     exit = exit + *b as u64;
                 }
 
-                println!("Test {} expected mcycle: {} executed mcycle {} exit: {}", test.file, test.mcycle, mcycle, exit);
+                println!(
+                    "Test {} expected mcycle: {} executed mcycle {} exit: {}",
+                    test.file, test.mcycle, mcycle, exit
+                );
                 if mcycle == test.mcycle {
                     println!("Finished executing test {} and test is SUCCESS", test.file);
                 } else {
