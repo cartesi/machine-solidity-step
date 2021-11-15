@@ -19,7 +19,7 @@ pragma solidity ^0.7.0;
 /// @author Felipe Argento
 /// @notice Real Time clock simulator
 library RealTimeClock {
-    uint64 constant RTC_FREQ_DIV = 100000;
+    uint64 constant RTC_FREQ_DIV = 100;
     
     /// @notice Converts from cycle count to time count
     /// @param cycle Cycle count
