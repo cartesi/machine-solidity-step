@@ -195,6 +195,10 @@ contract MemoryInteractor {
         return (memoryRead(ShadowAddresses.getIflags()) & RiscVConstants.getIflagsYMask()) >> RiscVConstants.getIflagsYShift();
     }
 
+    function readIflagsX() public returns (uint64) {
+        return (memoryRead(ShadowAddresses.getIflags()) & RiscVConstants.getIflagsXMask()) >> RiscVConstants.getIflagsXShift();
+    }
+
     function readMemory(uint64 paddr, uint64 wordSize) public returns (uint64) {
         // get relative address from unaligned paddr
         uint64 closestStartAddr = paddr & uint64(~7);
@@ -340,10 +344,10 @@ contract MemoryInteractor {
         memoryWrite(ShadowAddresses.getIflags(), iflags);
     }
 
-    function setIflagsY(bool isYield) public {
+    function setIflagsY(bool isManualYield) public {
         uint64 iflags = readIflags();
 
-        if (isYield) {
+        if (isManualYield) {
             iflags = (iflags | RiscVConstants.getIflagsYMask());
         } else {
             iflags = (iflags & ~RiscVConstants.getIflagsYMask());
@@ -352,10 +356,10 @@ contract MemoryInteractor {
         memoryWrite(ShadowAddresses.getIflags(), iflags);
     }
 
-    function setIflagsX(bool isYield) public {
+    function setIflagsX(bool isAutomaticYield) public {
         uint64 iflags = readIflags();
 
-        if (isYield) {
+        if (isAutomaticYield) {
             iflags = (iflags | RiscVConstants.getIflagsXMask());
         } else {
             iflags = (iflags & ~RiscVConstants.getIflagsXMask());
