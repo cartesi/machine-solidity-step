@@ -3,23 +3,23 @@
   "chainId": "4",
   "contracts": {
     "ArithmeticImmediateInstructions": {
-      "address": "0x203CCba48ae61cb296F069C74d133968c916b1De",
+      "address": "0x97D27b4Da2f27617E3DC82f562F52b2e2d545A89",
       "abi": []
     },
     "ArithmeticInstructions": {
-      "address": "0x20808b6451bB203Aa28C4c15ab3Da2F58C685e40",
+      "address": "0x06EC7087D8905E4A4Ba17B6f485b603579fFB041",
       "abi": []
     },
     "AtomicInstructions": {
-      "address": "0x29B33E43Bed18B6f3cA2913d074FeAc5f14d3185",
+      "address": "0x94A24af44D52b9F00e9bbec7484BB5b63b77D6b5",
       "abi": []
     },
     "BranchInstructions": {
-      "address": "0xff7c20eCE07FCC8f34b9D3d0DF3E3A5B41d460b6",
+      "address": "0xC6E52C483758AA9A5Cdc702C29a825B48238F559",
       "abi": []
     },
     "CLINT": {
-      "address": "0x9223a1179A7151d69E0E91558AeeC3283079aECa",
+      "address": "0x0A0D47bE600088fBF116075A7d602f1017C5f9b5",
       "abi": [
         {
           "inputs": [],
@@ -37,23 +37,23 @@
       ]
     },
     "CSR": {
-      "address": "0x92b49c6e2982AF5FFe01935D23D3C05eeCD76eDb",
+      "address": "0x6189890F19aE43Fb64FDd2cE1a0FED3e09931bd2",
       "abi": []
     },
     "CSRExecute": {
-      "address": "0x4f3ad9445ec7D19FB1E38E77a5Df43D8dc62da79",
+      "address": "0x71A9F3dc21A09C5FA5C51e501bc97a8428eb7366",
       "abi": []
     },
     "CSRReads": {
-      "address": "0xaCA865f590a2A6DDD2D3dEc2590719D6007Ef38b",
+      "address": "0xB9B354560157eAd6622bfb9e83b21977AeE60881",
       "abi": []
     },
     "EnvTrapIntInstructions": {
-      "address": "0x1db021C81E5307541A0CF6D7203F7885db9dc003",
+      "address": "0xf9Cc2646924DAd637269D3655a1d6eEB799fbeb3",
       "abi": []
     },
     "Exceptions": {
-      "address": "0x6D9E4c7500dBac3b3F3A1DDfa50770bB22Cf54A2",
+      "address": "0xAA143973E32FC5A43D6Cb31Ff9542b7deB3c7840",
       "abi": [
         {
           "inputs": [],
@@ -227,15 +227,15 @@
       ]
     },
     "Execute": {
-      "address": "0xE1B9c48ECC4D98865AD991775E886496D8De8651",
+      "address": "0xF4aF4d2d79324BC2C5F0EF81bDBF16E9cF072841",
       "abi": []
     },
     "Fetch": {
-      "address": "0xDd6DC3a42220d3a15CF0e828933562D42a27E84a",
+      "address": "0x592fC853754CDdFc262E5c24bAA04f681c3E3854",
       "abi": []
     },
     "HTIF": {
-      "address": "0xaDf9B44e5CFe87cC7e32c46d0b196C3063821c17",
+      "address": "0x61A0DF50Ef1EcabFF981d974C0a94f2aE929cC62",
       "abi": [
         {
           "inputs": [],
@@ -279,7 +279,7 @@
       ]
     },
     "Interrupts": {
-      "address": "0xe49cd08884986b22e0df26D3b16F44616f025453",
+      "address": "0x4A1404FA066cDb6257A930a6E4694658c2f50b0A",
       "abi": [
         {
           "inputs": [
@@ -303,7 +303,7 @@
       ]
     },
     "MemoryInteractor": {
-      "address": "0xbEF95E6fE7720851b6Db5294369CE8De058d69e8",
+      "address": "0xd17D8319d58dc628835764e7c2392Cd2860599D8",
       "abi": [
         {
           "inputs": [],
@@ -459,6 +459,19 @@
         {
           "inputs": [],
           "name": "readIflagsPrv",
+          "outputs": [
+            {
+              "internalType": "uint64",
+              "name": "",
+              "type": "uint64"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "readIflagsX",
           "outputs": [
             {
               "internalType": "uint64",
@@ -893,11 +906,11 @@
           "inputs": [
             {
               "internalType": "bool",
-              "name": "idle",
+              "name": "isAutomaticYield",
               "type": "bool"
             }
           ],
-          "name": "setIflagsI",
+          "name": "setIflagsX",
           "outputs": [],
           "stateMutability": "nonpayable",
           "type": "function"
@@ -906,7 +919,7 @@
           "inputs": [
             {
               "internalType": "bool",
-              "name": "isYield",
+              "name": "isManualYield",
               "type": "bool"
             }
           ],
@@ -1323,7 +1336,7 @@
       ]
     },
     "PMA": {
-      "address": "0x1a7E08B3f472D7465B1A83DC68023A9E9ca731B2",
+      "address": "0x0fb187B8119F386a456180d53bFFc531EF2947e4",
       "abi": [
         {
           "inputs": [
@@ -1461,7 +1474,7 @@
       ]
     },
     "RealTimeClock": {
-      "address": "0xDB7e8096298D92a83E80ba2F0edB8601c41A94bf",
+      "address": "0x4276242f78ed4b3Ffed4d3D103b83ADb893B3351",
       "abi": [
         {
           "inputs": [
@@ -1477,6 +1490,25 @@
               "internalType": "uint64",
               "name": "",
               "type": "uint64"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "uint64",
+              "name": "cycle",
+              "type": "uint64"
+            }
+          ],
+          "name": "rtcIsTick",
+          "outputs": [
+            {
+              "internalType": "bool",
+              "name": "",
+              "type": "bool"
             }
           ],
           "stateMutability": "pure",
@@ -1504,7 +1536,7 @@
       ]
     },
     "RiscVConstants": {
-      "address": "0xe7C1808F9DB156235a7c0cE6e2919b9e1322A032",
+      "address": "0xa12215Be01eCDF08cEFf0737426a19f2A03ED267",
       "abi": [
         {
           "inputs": [],
@@ -1534,32 +1566,6 @@
         },
         {
           "inputs": [],
-          "name": "getIflagsIMask",
-          "outputs": [
-            {
-              "internalType": "uint64",
-              "name": "",
-              "type": "uint64"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "getIflagsIShift",
-          "outputs": [
-            {
-              "internalType": "uint64",
-              "name": "",
-              "type": "uint64"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        },
-        {
-          "inputs": [],
           "name": "getIflagsPrvMask",
           "outputs": [
             {
@@ -1574,6 +1580,32 @@
         {
           "inputs": [],
           "name": "getIflagsPrvShift",
+          "outputs": [
+            {
+              "internalType": "uint64",
+              "name": "",
+              "type": "uint64"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "getIflagsXMask",
+          "outputs": [
+            {
+              "internalType": "uint64",
+              "name": "",
+              "type": "uint64"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "getIflagsXShift",
           "outputs": [
             {
               "internalType": "uint64",
@@ -3190,7 +3222,7 @@
       ]
     },
     "S_Instructions": {
-      "address": "0x9C677bb30c6baFF0d8C535C2a1619D474e7226bE",
+      "address": "0x32dC3906846A2D42c49283818b3937a1a74A9D28",
       "abi": []
     },
     "ShadowAddresses": {
@@ -3550,11 +3582,11 @@
       ]
     },
     "StandAloneInstructions": {
-      "address": "0xb1d5479B208E8c4f8A43F4167AC52193C6D3F987",
+      "address": "0x20314Ca6B5Be3aB1AFe55a76BdCD43eA52151A4B",
       "abi": []
     },
     "Step": {
-      "address": "0x345fA4EBDbB15F4Ec40C3097d4ec521044cD5a56",
+      "address": "0x2315ac5acC5ec8327fa9e8954e5f544F72447888",
       "abi": [
         {
           "inputs": [
@@ -3649,7 +3681,7 @@
       ]
     },
     "VirtualMemory": {
-      "address": "0x345929b88947E58E81615D2Ba2E9a9CAed8BA640",
+      "address": "0x2514944B9C5725c13fd9F5bfD114574d7d2F90e9",
       "abi": []
     },
     "BitsManipulationLibrary": {
