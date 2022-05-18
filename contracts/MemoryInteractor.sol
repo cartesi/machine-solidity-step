@@ -71,6 +71,14 @@ contract MemoryInteractor {
         return memoryRead(HTIF.getHtifToHostAddr());
     }
 
+    function readHtifIHalt() public returns (uint64) {
+        return memoryRead(HTIF.getHtifIHaltAddr());
+    }
+
+    function readHtifIConsole() public returns (uint64) {
+        return memoryRead(HTIF.getHtifIConsoleAddr());
+    }    
+
     function readHtifIYield() public returns (uint64) {
         return memoryRead(HTIF.getHtifIYieldAddr());
     }

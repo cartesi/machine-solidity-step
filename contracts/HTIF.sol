@@ -27,6 +27,8 @@ library HTIF {
 
     uint64 constant HTIF_TOHOST_ADDR_CONST = 0x40008000;
     uint64 constant HTIF_FROMHOST_ADDR_CONST = 0x40008008;
+    uint64 constant HTIF_IHALT_ADDR_CONST = 0x40008010;
+    uint64 constant HTIF_ICONSOLE_ADDR_CONST = 0x40008018;
     uint64 constant HTIF_IYIELD_ADDR_CONST = 0x40008020;
 
     // [c++] enum HTIF_devices
@@ -171,29 +173,21 @@ library HTIF {
         uint64 cmd,
         uint64 payload)
     internal returns (bool)
-    {
-        if (cmd == HTIF_CONSOLE_PUTCHAR) {
-            htifPutchar(mi);
-        } else if (cmd == HTIF_CONSOLE_GETCHAR) {
-            htifGetchar(mi);
-        } else {
+    {        
+        // If console command is enabled, aknowledge it
+        if ((mi.readHtifIConsole() >> cmd) & 1 == 1) {
+             if (cmd == HTIF_CONSOLE_PUTCHAR) { 
+                // TO-DO: what to do in the blockchain? Generate event?
+                mi.writeHtifFromhost((HTIF_DEVICE_CONSOLE << 56) | cmd << 48);
+            } else if (cmd == HTIF_CONSOLE_GETCHAR) { 
+                // In blockchain, this command will never be enabled as there is no way to input the same character
+                // to every participant in a dispute: where would character come from? So if the code reached here in the
+                // blockchain, there must be some serious bug
+                revert("Machine is in interactive mode. This is a fatal bug in the Dapp");
+            }
             // Unknown HTIF console commands are silently ignored
-            return true;
         }
-    }
-
-    function htifPutchar(MemoryInteractor mi) internal
-    returns (bool)
-    {
-        // TO-DO: what to do in the blockchain? Generate event?
-        mi.writeHtifFromhost((HTIF_DEVICE_CONSOLE << 56) | uint64(HTIF_CONSOLE_PUTCHAR) << 48);
-        return true;
-    }
-
-    function htifGetchar(MemoryInteractor mi) internal
-    returns (bool)
-    {
-        mi.writeHtifFromhost((HTIF_DEVICE_CONSOLE << 56) | uint64(HTIF_CONSOLE_GETCHAR) << 48);
+        
         return true;
     }
 
@@ -204,6 +198,14 @@ library HTIF {
 
     function getHtifFromHostAddr() public pure returns (uint64) {
         return HTIF_FROMHOST_ADDR_CONST;
+    }
+
+    function getHtifIHaltAddr() public pure returns (uint64) {
+        return HTIF_IHALT_ADDR_CONST;
+    }
+
+    function getHtifIConsoleAddr() public pure returns (uint64) {
+        return HTIF_ICONSOLE_ADDR_CONST;
     }
 
     function getHtifIYieldAddr() public pure returns (uint64) {
