@@ -3,23 +3,23 @@
   "chainId": "80001",
   "contracts": {
     "ArithmeticImmediateInstructions": {
-      "address": "0xE0EbDB5D8Eea2789c5221a678389B15726382F16",
+      "address": "0x998d972B0c886639505328aB9E407F1A0A8bbC33",
       "abi": []
     },
     "ArithmeticInstructions": {
-      "address": "0x0a0e3f520EE5498d10D6d887C77ac661c51bACB8",
+      "address": "0x7DFD05d6A19012236bAaeEe75F9e6005E6A64A42",
       "abi": []
     },
     "AtomicInstructions": {
-      "address": "0xF8e2893917B66b26bade29D6ad5f936c3b97a121",
+      "address": "0x3FE29723652b1AA435Ad6534AAEcb4bAc25caCC8",
       "abi": []
     },
     "BranchInstructions": {
-      "address": "0x8eB44d71aae19FaD87842A90bA6383D6fb914B0B",
+      "address": "0x36C77EE55D00C25f58e502560Ece0ca9494aF363",
       "abi": []
     },
     "CLINT": {
-      "address": "0x27EAe553940A0fc7B702DbA32e56356d13D22490",
+      "address": "0xCD3eFaE1f8CcECb938b8c632b25A7fBab2297d34",
       "abi": [
         {
           "inputs": [],
@@ -37,23 +37,23 @@
       ]
     },
     "CSR": {
-      "address": "0x3f603b62CaC70CA6422bA507F10b6eb016d7A1A7",
+      "address": "0xC783c229B3BF2138c431Fc35dAA2f0F3D795C799",
       "abi": []
     },
     "CSRExecute": {
-      "address": "0x132f96dc16F3d3AB9e6CB7060A0722C918Ac1602",
+      "address": "0x56a6C52AAF8B8f8Cd67BAB18b2bf0a1f0D4F3322",
       "abi": []
     },
     "CSRReads": {
-      "address": "0x4E2F1ACd385B904C46D4aC1C3e3C80AA050c0693",
+      "address": "0x677572F5Fc0e991285EAA7b1A9466F4B4Fbf75bF",
       "abi": []
     },
     "EnvTrapIntInstructions": {
-      "address": "0x34293a6ACF1e9527F38212C882B2AA03E47B032e",
+      "address": "0x355E9F53821D2E9a0Ed91acbbdbbd012D55d75d1",
       "abi": []
     },
     "Exceptions": {
-      "address": "0x7bc5CCeb5C6d071c42e1b7Af1Ae9ee2DDb67e99f",
+      "address": "0x30D58DA6e75FAA3F5E408170e9b2599eef0f56E6",
       "abi": [
         {
           "inputs": [],
@@ -227,19 +227,45 @@
       ]
     },
     "Execute": {
-      "address": "0xf8169d3c573795Ae47f42EBA8A986Df9206A19de",
+      "address": "0xfa315B3E3B9D5Fe150e22c98534A658eBdB944b2",
       "abi": []
     },
     "Fetch": {
-      "address": "0xBFe95F6AEd2d41243f1f832164473244E6cEaB1C",
+      "address": "0xebd366c1ba67aa943f90fb29476E08F12608f3EE",
       "abi": []
     },
     "HTIF": {
-      "address": "0xCB3dbCa537819f0Ffb84A6A91744B84d0179A600",
+      "address": "0x3FB0A99919b80a9E0ADAB11673d0f21845Eeb263",
       "abi": [
         {
           "inputs": [],
           "name": "getHtifFromHostAddr",
+          "outputs": [
+            {
+              "internalType": "uint64",
+              "name": "",
+              "type": "uint64"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "getHtifIConsoleAddr",
+          "outputs": [
+            {
+              "internalType": "uint64",
+              "name": "",
+              "type": "uint64"
+            }
+          ],
+          "stateMutability": "pure",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "getHtifIHaltAddr",
           "outputs": [
             {
               "internalType": "uint64",
@@ -279,7 +305,7 @@
       ]
     },
     "Interrupts": {
-      "address": "0x5b3355eDCc4aC1E2379aD368b5597Ea0Fcc9bd61",
+      "address": "0xB934EF6130E70515d63Ec880933b09030337a5a0",
       "abi": [
         {
           "inputs": [
@@ -303,7 +329,7 @@
       ]
     },
     "MemoryInteractor": {
-      "address": "0x5441A6559c29B24B0515C50b44b8518fD8542d78",
+      "address": "0x6F1265B9c637241FAB063aC308467d26E49E2F88",
       "abi": [
         {
           "inputs": [],
@@ -394,6 +420,32 @@
         {
           "inputs": [],
           "name": "readHtifFromhost",
+          "outputs": [
+            {
+              "internalType": "uint64",
+              "name": "",
+              "type": "uint64"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "readHtifIConsole",
+          "outputs": [
+            {
+              "internalType": "uint64",
+              "name": "",
+              "type": "uint64"
+            }
+          ],
+          "stateMutability": "nonpayable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "readHtifIHalt",
           "outputs": [
             {
               "internalType": "uint64",
@@ -1336,7 +1388,7 @@
       ]
     },
     "PMA": {
-      "address": "0xD2EDE57b38Bb43EFcBa288D47C6DDD3F803cFdB4",
+      "address": "0x2A182fa433682fAbfceaA933bEedCaA3b9af9a6E",
       "abi": [
         {
           "inputs": [
@@ -3222,7 +3274,7 @@
       ]
     },
     "S_Instructions": {
-      "address": "0xD18B8E908139FbAe7d99B85A193540a3BC4062b5",
+      "address": "0xc0e3fe39bd7997Dd14E47Ab8334A11F6cfA2Ff83",
       "abi": []
     },
     "ShadowAddresses": {
@@ -3582,11 +3634,11 @@
       ]
     },
     "StandAloneInstructions": {
-      "address": "0xb1414f9eDAeAc81E05c2bA3d538C498659c99a71",
+      "address": "0x40B86ac8EB148284B55E9e24c948dc5974F35233",
       "abi": []
     },
     "Step": {
-      "address": "0x9a0CfB427b352a46d3814F4ed6bfDA56eE8bBD95",
+      "address": "0xC474d6dE15875D48e7A7E4d109006ABaDBa416C4",
       "abi": [
         {
           "inputs": [
@@ -3681,7 +3733,7 @@
       ]
     },
     "VirtualMemory": {
-      "address": "0x584f0c3e545835726AeE24eA81db549890aBC6Dc",
+      "address": "0x40B412c808F462dbe9b2A4d6Aa819085b123b329",
       "abi": []
     },
     "BitsManipulationLibrary": {
