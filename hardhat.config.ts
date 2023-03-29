@@ -1,11 +1,9 @@
-import { HardhatUserConfig, task } from "hardhat/config";
+import { HardhatUserConfig } from "hardhat/config";
 import { HttpNetworkUserConfig } from "hardhat/types";
 
 import "@nomiclabs/hardhat-ethers";
-import "@nomiclabs/hardhat-waffle";
-import "hardhat-typechain";
+import "@typechain/hardhat";
 import "hardhat-deploy";
-import "hardhat-deploy-ethers";
 
 // read MNEMONIC from file or from env variable
 let mnemonic = process.env.MNEMONIC;
@@ -48,12 +46,16 @@ const config: HardhatUserConfig = {
         },
     },
     solidity: {
-        version: "0.7.4",
-        settings: {
-            optimizer: {
-                enabled: true,
-            },
-        },
+        compilers: [
+            {
+                version: "0.8.16",
+                settings: {
+                    optimizer: {
+                        enabled: true,
+                    },
+                },
+            }
+        ],
     },
     paths: {
         artifacts: "artifacts",
@@ -66,31 +68,22 @@ const config: HardhatUserConfig = {
                 artifacts: "node_modules/@cartesi/util/export/artifacts",
                 deploy: "node_modules/@cartesi/util/dist/deploy",
             },
-            {
-                artifacts: "node_modules/@cartesi/arbitration/export/artifacts",
-                deploy: "node_modules/@cartesi/arbitration/dist/deploy",
-            },
         ],
         deployments: {
             localhost: [
                 "node_modules/@cartesi/util/deployments/localhost",
-                "node_modules/@cartesi/arbitration/deployments/localhost",
             ],
             goerli: [
                 "node_modules/@cartesi/util/deployments/goerli",
-                "node_modules/@cartesi/arbitration/deployments/goerli",
             ],
             matic_testnet: [
                 "node_modules/@cartesi/util/deployments/matic_testnet",
-                "node_modules/@cartesi/arbitration/deployments/matic_testnet",
             ],
             bsc_testnet: [
                 "node_modules/@cartesi/util/deployments/bsc_testnet",
-                "node_modules/@cartesi/arbitration/deployments/bsc_testnet",
             ],
             avax_testnet: [
                 "node_modules/@cartesi/util/deployments/avax_testnet",
-                "node_modules/@cartesi/arbitration/deployments/avax_testnet",
             ],
         },
     },
@@ -101,12 +94,6 @@ const config: HardhatUserConfig = {
     namedAccounts: {
         deployer: {
             default: 0,
-        },
-        alice: {
-            default: 0,
-        },
-        proxy: {
-            default: 1,
         },
     },
 };
