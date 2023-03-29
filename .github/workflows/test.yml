@@ -1,0 +1,41 @@
+name: Test
+on: [push]
+env:
+  TEST_VERSION: v0.13.0
+  UARCH_TEST_VERSION: v0.26.0-uarch
+  GROUND_TRUTH_VERSION: v0.13.0-0001
+  GIT_ORG: cartesi-corp
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          sumodules: recursive
+          token: ${{ secrets.CI_TOKEN }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
+
+      - name: Download uarch test bin files
+        uses: Legion2/download-release-action@v2.1.0
+        with:
+          repository: ${{ env.GIT_ORG }}/machine-tests
+          tag: ${{ env.UARCH_TEST_VERSION }}
+          file: machine-tests-${{ env.UARCH_TEST_VERSION }}.tar.gz
+          token: ${{ secrets.CI_TOKEN }}
+
+      - name: Untar uarch test suite
+        run: mkdir -p test/uarch-bin && tar -xzf machine-tests-${UARCH_TEST_VERSION}.tar.gz -C test/uarch-bin && rm test/uarch-bin/*.dump
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - run: yarn install
+      - run: yarn prettier
+      - run: yarn build
+
+      - name: Run uarch bin tests
+        run: forge test -vv
