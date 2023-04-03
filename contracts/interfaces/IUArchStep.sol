@@ -10,19 +10,14 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 
-/// @title IUArchInterpret
+/// @title IUArchStep
 
 pragma solidity >=0.8.0;
 
 import "./IUArchState.sol";
 
-interface IUArchInterpret {
-    enum InterpreterStatus {
-        Success,
-        Halt
-    }
-
-    function interpret(
+interface IUArchStep {
+    function step(
         IUArchState.State memory state
-    ) external returns (InterpreterStatus);
+    ) external returns (uint64, bool);
 }

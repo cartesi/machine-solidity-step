@@ -10,38 +10,34 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 
-/// @title UArchInterpret
-/// @author Stephen Chen
-/// @notice State transiction function that takes the machine from micro-state s[i] to s[i + 1]
-
 pragma solidity ^0.8.0;
 
-import "./interfaces/IUArchInterpret.sol";
-import "./interfaces/IUArchState.sol";
-import "./UArchExecuteInsn.sol";
-import "./UArchCompat.sol";
+import "./IUArchInterpret.sol";
+import "contracts/interfaces/IUArchStep.sol";
+import "contracts/interfaces/IUArchState.sol";
 
-contract UArchInterpret is IUArchInterpret, UArchExecuteInsn {
-    /// @notice Run interpret define by an State Access instance.
+contract UArchInterpret is IUArchInterpret {
+    IUArchStep immutable step;
+
+    constructor(IUArchStep _step) {
+        step = _step;
+    }
+
+    /// @notice Run interpret until machine halts.
     /// @param state state of machine
     /// @return Returns an exit code
     function interpret(
         IUArchState.State memory state
     ) external override returns (InterpreterStatus) {
-        uint64 ucycle = UArchCompat.readCycle(state);
+        uint64 ucycle;
+        bool halt;
 
         while (ucycle < type(uint64).max) {
-            if (UArchCompat.readHaltFlag(state)) {
+            (ucycle, halt) = step.step(state);
+
+            if (halt) {
                 return InterpreterStatus.Halt;
             }
-            uint64 upc = UArchCompat.readPc(state);
-            uint32 insn = readUint32(state, upc);
-            uarchExecuteInsn(state, insn, upc);
-
-            unchecked {
-                ++ucycle;
-            }
-            UArchCompat.writeCycle(state, ucycle);
         }
         return InterpreterStatus.Success;
     }

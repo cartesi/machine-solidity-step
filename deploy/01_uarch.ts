@@ -40,7 +40,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
         },
     });
 
-    await deploy("UArchInterpret", {
+    await deploy("UArchStep", {
         ...opts
     });
 };

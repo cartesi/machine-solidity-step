@@ -10,10 +10,11 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 
-import "./UArchStateAux.sol";
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
-import "contracts/UArchInterpret.sol";
+import "./UArchStateAux.sol";
+import "./UArchInterpret.sol";
+import "contracts/UArchStep.sol";
 import "contracts/interfaces/IUArchState.sol";
 import "contracts/interfaces/IMemoryAccessLog.sol";
 
@@ -89,6 +90,7 @@ contract UArchInterpretTest is Test {
     ];
 
     UArchStateAux sa;
+    IUArchStep step;
     IUArchInterpret inter;
 
     function testBinaries() public {
@@ -99,7 +101,8 @@ contract UArchInterpretTest is Test {
 
             // create fresh machine state for every test
             sa = new UArchStateAux();
-            inter = new UArchInterpret();
+            step = new UArchStep();
+            inter = new UArchInterpret(step);
             // load ram
             loadBin(
                 PMA_UARCH_RAM_START,

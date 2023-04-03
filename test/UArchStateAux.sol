@@ -12,9 +12,9 @@
 
 pragma solidity ^0.8.0;
 
+import "./MemoryAccessLogAux.sol";
 import "contracts/interfaces/IMemoryAccessLog.sol";
 import "contracts/interfaces/IUArchState.sol";
-import "./MemoryAccessLogAux.sol";
 
 contract UArchStateAux is IUArchState {
     using MemoryAccessLogAux for mapping(uint64 => bytes8);
