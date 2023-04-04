@@ -53,7 +53,6 @@ contract MemoryAccessLogTest is Test {
         // write should succeed
         accessLogs.writeWord(0, 0x8000);
 
-        accessLogs.current = 0;
         // // write should fail
         vm.expectRevert(bytes("Written value not match"));
         accessLogs.writeWord(0, 0x8001);

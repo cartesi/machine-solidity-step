@@ -73,10 +73,6 @@ library MemoryAccessLog {
             "Position and access address not match"
         );
 
-        unchecked {
-            ++a.current;
-        }
-
         return access.val;
     }
 }
