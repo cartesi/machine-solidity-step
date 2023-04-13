@@ -23,9 +23,6 @@ contract UArchStateAux is IUArchState {
     uint64 constant UPC = 0x330;
     uint64 constant UX0 = 0x340;
 
-    uint64 constant MMIO_HALT = 0x7ffff018;
-    uint64 constant MMIO_HALT_VALUE = 1;
-
     mapping(uint64 => bytes8) physicalMemory;
 
     function loadMemory(uint64 paddr, bytes8 value) external {
@@ -77,9 +74,6 @@ contract UArchStateAux is IUArchState {
         uint64 val
     ) external override {
         physicalMemory.writeWord(paddr, val);
-        if (paddr == MMIO_HALT && val == MMIO_HALT_VALUE) {
-            physicalMemory.writeWord(UHALT, 1);
-        }
     }
 
     function writeX(

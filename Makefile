@@ -1,8 +1,8 @@
 EMULATOR_DIR=../machine-emulator
 TEST_BIN_DIR=test/uarch-bin
 DOWNLOADDIR=downloads
-TEST_VERSION=v0.26.0-uarch
-DOWNLOAD_URL=https://github.com/cartesi-corp/machine-tests/releases/download/$(TEST_VERSION)/machine-tests-$(TEST_VERSION).tar.gz
+TEST_VERSION=v0.26.0-uarch-b
+DOWNLOAD_URL=https://github.com/cartesi/machine-tests/releases/download/$(TEST_VERSION)/machine-tests-$(TEST_VERSION).tar.gz
 
 help:
 	@echo 'Cleaning targets:'
