@@ -12,6 +12,7 @@ res
 src/types
 target
 test/uarch-bin
+test/uarch-steps
 .node*
 .vscode
 *.abi

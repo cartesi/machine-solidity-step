@@ -36,7 +36,7 @@ contract UArchInterpretTest is Test {
     string constant RAM_PATH_PREFIX = "./test/uarch-bin/rv64ui-uarch-";
     string constant ROM_PATH = "./test/uarch-bin/uarch-bootstrap.bin";
     // instructions to be tested
-    string[] INSTRUCTIONS = [
+    string[] instructions = [
         "add",
         "addi",
         "addiw",
@@ -94,10 +94,8 @@ contract UArchInterpretTest is Test {
     IUArchInterpret inter;
 
     function testBinaries() public {
-        for (uint i = 0; i < INSTRUCTIONS.length; i++) {
-            console.log(
-                string.concat(string.concat("Testing ", INSTRUCTIONS[i]), "...")
-            );
+        for (uint i = 0; i < instructions.length; i++) {
+            console.log("Testing %s ...", instructions[i]);
 
             // create fresh machine state for every test
             sa = new UArchStateAux();
@@ -107,7 +105,7 @@ contract UArchInterpretTest is Test {
             loadBin(
                 PMA_UARCH_RAM_START,
                 string.concat(
-                    string.concat(RAM_PATH_PREFIX, INSTRUCTIONS[i]),
+                    string.concat(RAM_PATH_PREFIX, instructions[i]),
                     ".bin"
                 )
             );
@@ -133,7 +131,7 @@ contract UArchInterpretTest is Test {
                 uint64(TEST_SUCEEDED)
             );
             console.log(sa.readCycle(accessLogs));
-            console.log(string.concat(INSTRUCTIONS[i], " finished!"));
+            console.log("%s finished!", instructions[i]);
         }
     }
 
