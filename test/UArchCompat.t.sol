@@ -80,15 +80,6 @@ contract UArchCompatTest is Test {
         assertEq(UArchCompat.int64ShiftRight(INT64_MIN, 62), -2);
         assertEq(UArchCompat.int64ShiftRight(INT64_MIN, 63), -1);
 
-        assertEq(UArchCompat.int64ShiftLeft(0, 0), 0);
-        assertEq(UArchCompat.int64ShiftLeft(0, 1), 0);
-        assertEq(UArchCompat.int64ShiftLeft(4, 1), 8);
-        assertEq(UArchCompat.int64ShiftLeft(4, 2), 16);
-        assertEq(UArchCompat.int64ShiftLeft(-1, 1), -2);
-        assertEq(UArchCompat.int64ShiftLeft(1, 63), INT64_MIN);
-        assertEq(UArchCompat.int64ShiftLeft(INT64_MAX, 1), -2);
-        assertEq(UArchCompat.int64ShiftLeft(INT64_MAX, 2), -4);
-
         assertEq(UArchCompat.int64AddInt64(0, 0), 0);
         assertEq(UArchCompat.int64AddInt64(0, 1), 1);
         assertEq(UArchCompat.int64AddInt64(0, -1), -1);
@@ -125,15 +116,6 @@ contract UArchCompatTest is Test {
         assertEq(UArchCompat.int32ShiftRight(-4, 1), -2);
         assertEq(UArchCompat.int32ShiftRight(INT32_MIN, 30), -2);
         assertEq(UArchCompat.int32ShiftRight(INT32_MIN, 31), -1);
-
-        assertEq(UArchCompat.int32ShiftLeft(0, 0), 0);
-        assertEq(UArchCompat.int32ShiftLeft(0, 1), 0);
-        assertEq(UArchCompat.int32ShiftLeft(4, 1), 8);
-        assertEq(UArchCompat.int32ShiftLeft(4, 2), 16);
-        assertEq(UArchCompat.int32ShiftLeft(-1, 1), -2);
-        assertEq(UArchCompat.int32ShiftLeft(1, 31), INT32_MIN);
-        assertEq(UArchCompat.int32ShiftLeft(INT32_MAX, 1), -2);
-        assertEq(UArchCompat.int32ShiftLeft(INT32_MAX, 2), -4);
 
         assertEq(UArchCompat.int32AddInt32(0, 0), 0);
         assertEq(UArchCompat.int32AddInt32(0, 1), 1);

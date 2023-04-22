@@ -205,13 +205,6 @@ library UArchCompat {
         return v >> (count & 0x3f);
     }
 
-    function int64ShiftLeft(
-        int64 v,
-        uint32 count
-    ) internal pure returns (int64) {
-        return v << (count & 0x3f);
-    }
-
     function uint32ShiftRight(
         uint32 v,
         uint32 count
@@ -231,12 +224,5 @@ library UArchCompat {
         uint32 count
     ) internal pure returns (int32) {
         return v >> (count & 0x1f);
-    }
-
-    function int32ShiftLeft(
-        int32 v,
-        uint32 count
-    ) internal pure returns (int32) {
-        return v << (count & 0x1f);
     }
 }
