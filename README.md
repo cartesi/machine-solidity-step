@@ -83,10 +83,6 @@ Thank you for your interest in Cartesi! Head over to our [Contributing Guideline
 
 Please note we have a [Code of Conduct](CODE_OF_CONDUCT.md), please follow it in all your interactions with the project.
 
-## Authors
-
--   _Stephen Chen_
-
 ## License
 
 The uarch-interpret repository and all contributions are licensed under

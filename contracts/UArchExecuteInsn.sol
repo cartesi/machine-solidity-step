@@ -11,8 +11,8 @@
 // specific language governing permissions and limitations under the License.
 
 /// @title UArchExecuteInsn
-/// @author Stephen Chen
 /// @notice Execute instruction and return execution state
+/// @dev This file is generated from translator/generate-UArchExecuteInsn.lua, one should not modify the content directly
 
 pragma solidity ^0.8.0;
 
@@ -20,7 +20,7 @@ import "./interfaces/IUArchState.sol";
 import "./UArchCompat.sol";
 
 contract UArchExecuteInsn {
-    // start of auto-generated code
+    // START OF AUTO-GENERATED CODE
 
     // Memory read/write access
 
@@ -1297,5 +1297,5 @@ contract UArchExecuteInsn {
         revert("illegal instruction");
     }
 
-    // end of auto-generated code
+    // END OF AUTO-GENERATED CODE
 }

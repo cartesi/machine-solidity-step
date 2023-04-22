@@ -82,6 +82,5 @@
         "dist/src/types",
         "export"
     ],
-    "author": "Stephen Chen <stephen.chen@cartesi.io>",
     "license": "Apache-2.0"
 }

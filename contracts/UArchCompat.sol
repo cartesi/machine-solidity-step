@@ -11,7 +11,6 @@
 // specific language governing permissions and limitations under the License.
 
 /// @title UArchCompat
-/// @author Stephen Chen
 /// @notice Compatibility layer functions that guarantee same result as the cpp code
 /// @dev All functions in the compatibility layer should never throw exceptions
 

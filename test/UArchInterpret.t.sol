@@ -111,7 +111,7 @@ contract UArchInterpretTest is Test {
             );
             // init pc to ram start
             initPC();
-            // init cycle to 1
+            // init cycle to 0
             initCYCLE();
 
             IMemoryAccessLog.Access[]

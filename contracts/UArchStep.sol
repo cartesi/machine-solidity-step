@@ -11,8 +11,7 @@
 // specific language governing permissions and limitations under the License.
 
 /// @title UArchStep
-/// @author Stephen Chen
-/// @notice State transiction function that takes the machine from micro-state s[i] to s[i + 1]
+/// @notice State transition function that takes the machine from micro-state s[i] to s[i + 1]
 
 pragma solidity ^0.8.0;
 

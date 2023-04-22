@@ -25,8 +25,8 @@ local solidity_src_path = "./contracts/"
 local solidity_compat_path = solidity_src_path .. "UArchCompat.sol"
 local solidity_execute_path = solidity_src_path .. "UArchExecuteInsn.sol"
 
-local keyword_start = "start of auto-generated code"
-local keyword_end = "end of auto-generated code"
+local keyword_start = "START OF AUTO-GENERATED CODE"
+local keyword_end = "END OF AUTO-GENERATED CODE"
 
 -- compatibility functions replacement dictionary
 local compat_fns = {}

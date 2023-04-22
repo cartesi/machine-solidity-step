@@ -18,7 +18,6 @@ import "./interfaces/IMemoryAccessLog.sol";
 import "@cartesi/util/contracts/BitsManipulation.sol";
 
 /// @title MemoryAccessLog
-/// @author Stephen Chen
 /// @notice Behaves as physical memory to offer accesses to interpret
 /// @dev Every read performed by memoryRead or memoryWrite should contain an
 /// @dev endianess swap from little endian to big endian. This is the case because
@@ -52,7 +51,7 @@ library MemoryAccessLog {
         require(
             accessManager(a, writeAddress, IMemoryAccessLog.AccessType.Write) ==
                 bytesValue,
-            "Written value not match"
+            "Written value mismatch"
         );
     }
 
@@ -66,11 +65,11 @@ library MemoryAccessLog {
 
         IMemoryAccessLog.Access memory access = a.logs[a.current];
 
-        require(access.accessType == accessType, "Access type not match");
+        require(access.accessType == accessType, "Access type mismatch");
 
         require(
             access.position == addr,
-            "Position and access address not match"
+            "Position and access address mismatch"
         );
 
         return access.val;
