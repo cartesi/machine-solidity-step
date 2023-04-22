@@ -2,6 +2,8 @@
 /foundry_artifacts
 cache
 coverage
+report
+lcov.info
 build
 deployments/localhost
 deployments/*/solcInputs/*.json
@@ -12,7 +14,7 @@ res
 src/types
 target
 test/uarch-bin
-test/uarch-steps
+test/uarch-step
 .node*
 .vscode
 *.abi

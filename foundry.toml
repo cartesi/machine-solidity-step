@@ -3,7 +3,7 @@ src = 'contracts'
 out = 'foundry_artifacts'
 libs = ["node_modules", "lib"]
 gas_reports = ["*"]
-fs_permissions = [{access = "read", path = "./test/uarch-bin/"}, {access = "read", path = "./test/uarch-steps/"}]
+fs_permissions = [{access = "read", path = "./test/uarch-bin/"}, {access = "read", path = "./test/uarch-step/"}]
 remappings = [
     '@cartesi/=node_modules/@cartesi/',
     '@ensdomains/=node_modules/@ensdomains/',

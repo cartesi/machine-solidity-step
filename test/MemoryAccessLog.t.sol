@@ -38,6 +38,16 @@ contract MemoryAccessLogTest is Test {
             0x8000,
             "readWord value doesn't match"
         );
+
+        vm.expectRevert("Position and access address mismatch");
+        accessLogs.readWord(1);
+
+        vm.expectRevert("Access type mismatch");
+        accessLogs.writeWord(0, 0x8000);
+
+        accessLogs = IMemoryAccessLog.AccessLogs(accesses, 1);
+        vm.expectRevert("Too many accesses");
+        accessLogs.readWord(0);
     }
 
     function testWriteWord() public {
@@ -54,7 +64,7 @@ contract MemoryAccessLogTest is Test {
         accessLogs.writeWord(0, 0x8000);
 
         // // write should fail
-        vm.expectRevert(bytes("Written value not match"));
+        vm.expectRevert(bytes("Written value mismatch"));
         accessLogs.writeWord(0, 0x8001);
     }
 }

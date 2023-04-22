@@ -24,7 +24,7 @@ contract UArchReplayTest is Test {
     using stdJson for string;
 
     // configure the tests
-    string constant JSON_PATH = "./test/uarch-steps/";
+    string constant JSON_PATH = "./test/uarch-step/";
     string constant CATALOG_PATH = "catalog.json";
 
     UArchState state;

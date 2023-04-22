@@ -12,6 +12,8 @@
 
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
+import "forge-std/StdJson.sol";
+import "./IUArchInterpret.sol";
 import "./UArchStateAux.sol";
 import "./UArchInterpret.sol";
 import "contracts/UArchStep.sol";
@@ -21,8 +23,16 @@ import "contracts/interfaces/IMemoryAccessLog.sol";
 pragma solidity ^0.8.0;
 
 contract UArchInterpretTest is Test {
+    using stdJson for string;
+
+    struct Catalog {
+        uint256 cycle;
+        string path;
+    }
+
     // constant addresses
     uint64 constant UCYCLE = 0x320;
+    uint64 constant UHALT = 0x328;
     uint64 constant UPC = 0x330;
 
     uint64 constant TEST_STATUS_X = 1;
@@ -33,69 +43,21 @@ contract UArchInterpretTest is Test {
     bytes8 constant TEST_SUCEEDED = 0x00000000be1e7aaa; // Indicates that test has passed
     bytes8 constant TEST_FAILED = 0x00000000deadbeef; // Indicates that test has failed
     // configure the tests
-    string constant RAM_PATH_PREFIX = "./test/uarch-bin/rv64ui-uarch-";
+    string constant JSON_PATH = "./test/uarch-bin/";
+    string constant CATALOG_PATH = "catalog.json";
     string constant ROM_PATH = "./test/uarch-bin/uarch-bootstrap.bin";
-    // instructions to be tested
-    string[] instructions = [
-        "add",
-        "addi",
-        "addiw",
-        "addw",
-        "and",
-        "andi",
-        "auipc",
-        "beq",
-        "bge",
-        "bgeu",
-        "blt",
-        "bltu",
-        "bne",
-        "jal",
-        "jalr",
-        "lb",
-        "lbu",
-        "ld",
-        "lh",
-        "lhu",
-        "lui",
-        "lw",
-        "lwu",
-        "or",
-        "ori",
-        "sb",
-        "sd",
-        "sh",
-        "simple",
-        "sll",
-        "slli",
-        "slliw",
-        "sllw",
-        "slt",
-        "slti",
-        "sltiu",
-        "sltu",
-        "sra",
-        "srai",
-        "sraiw",
-        "sraw",
-        "srl",
-        "srli",
-        "srliw",
-        "srlw",
-        "sub",
-        "subw",
-        "sw",
-        "xor",
-        "xori"
-    ];
 
     UArchStateAux sa;
     IUArchStep step;
     IUArchInterpret inter;
 
     function testBinaries() public {
-        for (uint i = 0; i < instructions.length; i++) {
-            console.log("Testing %s ...", instructions[i]);
+        Catalog[] memory catalog = loadCatalog(
+            string.concat(JSON_PATH, CATALOG_PATH)
+        );
+
+        for (uint i = 0; i < catalog.length; i++) {
+            console.log("Testing %s ...", catalog[i].path);
 
             // create fresh machine state for every test
             sa = new UArchStateAux();
@@ -104,10 +66,7 @@ contract UArchInterpretTest is Test {
             // load ram
             loadBin(
                 PMA_UARCH_RAM_START,
-                string.concat(
-                    string.concat(RAM_PATH_PREFIX, instructions[i]),
-                    ".bin"
-                )
+                string.concat(JSON_PATH, catalog[i].path)
             );
             // init pc to ram start
             initPC();
@@ -130,13 +89,90 @@ contract UArchInterpretTest is Test {
                 sa.readX(accessLogs, TEST_STATUS_X),
                 uint64(TEST_SUCEEDED)
             );
-            console.log(sa.readCycle(accessLogs));
-            console.log("%s finished!", instructions[i]);
+            assertTrue(sa.readHaltFlag(accessLogs), "machine should halt");
+            assertEq(
+                sa.readCycle(accessLogs),
+                catalog[i].cycle,
+                "cycle values should match"
+            );
         }
+    }
+
+    function testStepEarlyReturn() public {
+        // create fresh machine state for every test
+        sa = new UArchStateAux();
+        step = new UArchStep();
+        inter = new UArchInterpret(step);
+        // init pc to ram start
+        initPC();
+        // init cycle to uint64.max
+        initMaxCYCLE();
+
+        IMemoryAccessLog.Access[]
+            memory accesses = new IMemoryAccessLog.Access[](0);
+        IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
+            .AccessLogs(accesses, 0);
+        IUArchState.State memory state = IUArchState.State(
+            address(sa),
+            accessLogs
+        );
+
+        IUArchInterpret.InterpreterStatus status = inter.interpret(state);
+
+        assertTrue(
+            status == IUArchInterpret.InterpreterStatus.Success,
+            "machine shouldn't halt"
+        );
+        assertEq(
+            sa.readCycle(accessLogs),
+            type(uint64).max,
+            "step should not advance when cycle is uint64.max"
+        );
+
+        // set machine to halt
+        initHalt();
+
+        status = inter.interpret(state);
+
+        assertTrue(
+            status == IUArchInterpret.InterpreterStatus.Halt,
+            "machine should halt"
+        );
+    }
+
+    function testIllegalInstruction() public {
+        // create fresh machine state for every test
+        sa = new UArchStateAux();
+        step = new UArchStep();
+        inter = new UArchInterpret(step);
+        // init pc to ram start
+        initPC();
+        // init cycle to 0
+        initCYCLE();
+
+        IMemoryAccessLog.Access[]
+            memory accesses = new IMemoryAccessLog.Access[](0);
+        IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
+            .AccessLogs(accesses, 0);
+        IUArchState.State memory state = IUArchState.State(
+            address(sa),
+            accessLogs
+        );
+
+        vm.expectRevert("illegal instruction");
+        inter.interpret(state);
     }
 
     function initCYCLE() private {
         sa.loadMemory(UCYCLE, 0);
+    }
+
+    function initMaxCYCLE() private {
+        sa.loadMemory(UCYCLE, 0xffffffffffffffff);
+    }
+
+    function initHalt() private {
+        sa.loadMemory(UHALT, 0x0100000000000000);
     }
 
     function initPC() private {
@@ -166,5 +202,15 @@ contract UArchInterpretTest is Test {
             }
             sa.loadMemory(start + offset, bytes8Data);
         }
+    }
+
+    function loadCatalog(
+        string memory path
+    ) private view returns (Catalog[] memory) {
+        string memory json = vm.readFile(path);
+        bytes memory raw = json.parseRaw("");
+        Catalog[] memory catalog = abi.decode(raw, (Catalog[]));
+
+        return catalog;
     }
 }
