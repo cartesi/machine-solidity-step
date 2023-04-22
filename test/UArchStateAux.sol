@@ -62,7 +62,11 @@ contract UArchStateAux is IUArchState, UArchConstants {
         IMemoryAccessLog.AccessLogs memory,
         uint8 index
     ) external view override returns (uint64) {
-        return physicalMemory.readWord(UX0 + (index << 3));
+        uint64 paddr;
+        unchecked {
+            paddr = UX0 + (index << 3);
+        }
+        return physicalMemory.readWord(paddr);
     }
 
     function writeWord(
@@ -78,7 +82,11 @@ contract UArchStateAux is IUArchState, UArchConstants {
         uint8 index,
         uint64 val
     ) external override {
-        physicalMemory.writeWord(UX0 + (index << 3), val);
+        uint64 paddr;
+        unchecked {
+            paddr = UX0 + (index << 3);
+        }
+        physicalMemory.writeWord(paddr, val);
     }
 
     function writePc(
