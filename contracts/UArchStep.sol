@@ -28,9 +28,14 @@ contract UArchStep is IUArchStep, UArchExecuteInsn {
         IUArchState.State memory state
     ) external override returns (uint64, bool) {
         uint64 ucycle = UArchCompat.readCycle(state);
+
         if (UArchCompat.readHaltFlag(state)) {
             return (ucycle, true);
         }
+        if (ucycle == type(uint64).max) {
+            return (ucycle, false);
+        }
+
         uint64 upc = UArchCompat.readPc(state);
         uint32 insn = readUint32(state, upc);
         uarchExecuteInsn(state, insn, upc);
