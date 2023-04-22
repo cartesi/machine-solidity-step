@@ -293,7 +293,7 @@ contract UArchExecuteInsn {
     // Execute instruction
 
     function advancePc(IUArchState.State memory a, uint64 pc) private {
-        uint64 newPc = pc + 4;
+        uint64 newPc = UArchCompat.uint64AddUint64(pc, 4);
         return UArchCompat.writePc(a, newPc);
     }
 
@@ -335,7 +335,7 @@ contract UArchExecuteInsn {
         int32 imm = operandJimm20(insn);
         uint8 rd = operandRd(insn);
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, pc + 4);
+            UArchCompat.writeX(a, rd, UArchCompat.uint64AddUint64(pc, 4));
         }
         return branch(a, UArchCompat.uint64AddInt32(pc, imm));
     }
@@ -350,7 +350,7 @@ contract UArchExecuteInsn {
         uint8 rs1 = operandRs1(insn);
         uint64 rs1val = UArchCompat.readX(a, rs1);
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, pc + 4);
+            UArchCompat.writeX(a, rd, UArchCompat.uint64AddUint64(pc, 4));
         }
         return
             branch(a, UArchCompat.uint64AddInt32(rs1val, imm) & (~uint64(1)));
