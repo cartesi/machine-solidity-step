@@ -30,7 +30,7 @@ contract UArchInterpretTest is Test {
         string path;
     }
 
-    uint64 constant TEST_STATUS_X = 1;
+    uint8 constant TEST_STATUS_X = 1;
     uint64 constant PMA_UARCH_RAM_START = 0x70000000;
     // little endian constants
     bytes8 constant LITTLE_PMA_UARCH_RAM_START = 0x0000007000000000;

@@ -60,7 +60,7 @@ contract UArchStateAux is IUArchState, UArchConstants {
 
     function readX(
         IMemoryAccessLog.AccessLogs memory,
-        uint64 index
+        uint8 index
     ) external view override returns (uint64) {
         return physicalMemory.readWord(UX0 + (index << 3));
     }
@@ -75,7 +75,7 @@ contract UArchStateAux is IUArchState, UArchConstants {
 
     function writeX(
         IMemoryAccessLog.AccessLogs memory,
-        uint64 index,
+        uint8 index,
         uint64 val
     ) external override {
         physicalMemory.writeWord(UX0 + (index << 3), val);

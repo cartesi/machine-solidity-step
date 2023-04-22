@@ -54,7 +54,7 @@ contract UArchState is IUArchState, UArchConstants {
 
     function readX(
         IMemoryAccessLog.AccessLogs memory a,
-        uint64 index
+        uint8 index
     ) external pure override returns (uint64) {
         return a.readWord(UX0 + (index << 3));
     }
@@ -69,7 +69,7 @@ contract UArchState is IUArchState, UArchConstants {
 
     function writeX(
         IMemoryAccessLog.AccessLogs memory a,
-        uint64 index,
+        uint8 index,
         uint64 val
     ) external pure override {
         a.writeWord(UX0 + (index << 3), val);

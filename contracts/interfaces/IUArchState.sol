@@ -41,7 +41,7 @@ interface IUArchState {
 
     function readX(
         IMemoryAccessLog.AccessLogs memory a,
-        uint64 index
+        uint8 index
     ) external returns (uint64);
 
     function writeCycle(
@@ -59,7 +59,7 @@ interface IUArchState {
 
     function writeX(
         IMemoryAccessLog.AccessLogs memory a,
-        uint64 index,
+        uint8 index,
         uint64 val
     ) external;
 }

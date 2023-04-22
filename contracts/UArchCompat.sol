@@ -72,7 +72,7 @@ library UArchCompat {
 
     function readX(
         IUArchState.State memory state,
-        uint64 index
+        uint8 index
     ) internal returns (uint64) {
         IUArchState s = IUArchState(state.stateInterface);
         uint64 res = s.readX(state.accessLogs, index);
@@ -96,7 +96,7 @@ library UArchCompat {
 
     function writeX(
         IUArchState.State memory state,
-        uint64 index,
+        uint8 index,
         uint64 val
     ) internal {
         IUArchState s = IUArchState(state.stateInterface);
