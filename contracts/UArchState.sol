@@ -15,13 +15,10 @@ pragma solidity ^0.8.0;
 import "./interfaces/IMemoryAccessLog.sol";
 import "./interfaces/IUArchState.sol";
 import "./MemoryAccessLog.sol";
+import "./UArchConstants.sol";
 
-contract UArchState is IUArchState {
+contract UArchState is IUArchState, UArchConstants {
     using MemoryAccessLog for IMemoryAccessLog.AccessLogs;
-    uint64 constant UCYCLE = 0x320;
-    uint64 constant UHALT = 0x328;
-    uint64 constant UPC = 0x330;
-    uint64 constant UX0 = 0x340;
 
     function readWord(
         IMemoryAccessLog.AccessLogs memory a,

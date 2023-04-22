@@ -30,11 +30,6 @@ contract UArchInterpretTest is Test {
         string path;
     }
 
-    // constant addresses
-    uint64 constant UCYCLE = 0x320;
-    uint64 constant UHALT = 0x328;
-    uint64 constant UPC = 0x330;
-
     uint64 constant TEST_STATUS_X = 1;
     uint64 constant PMA_UARCH_RAM_START = 0x70000000;
     // little endian constants
@@ -164,19 +159,19 @@ contract UArchInterpretTest is Test {
     }
 
     function initCYCLE() private {
-        sa.loadMemory(UCYCLE, 0);
+        sa.loadMemory(sa.UCYCLE(), 0);
     }
 
     function initMaxCYCLE() private {
-        sa.loadMemory(UCYCLE, 0xffffffffffffffff);
+        sa.loadMemory(sa.UCYCLE(), 0xffffffffffffffff);
     }
 
     function initHalt() private {
-        sa.loadMemory(UHALT, 0x0100000000000000);
+        sa.loadMemory(sa.UHALT(), 0x0100000000000000);
     }
 
     function initPC() private {
-        sa.loadMemory(UPC, LITTLE_PMA_UARCH_RAM_START);
+        sa.loadMemory(sa.UPC(), LITTLE_PMA_UARCH_RAM_START);
     }
 
     function loadBin(uint64 start, string memory path) private {

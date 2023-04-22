@@ -13,15 +13,12 @@
 pragma solidity ^0.8.0;
 
 import "./MemoryAccessLogAux.sol";
+import "contracts/UArchConstants.sol";
 import "contracts/interfaces/IMemoryAccessLog.sol";
 import "contracts/interfaces/IUArchState.sol";
 
-contract UArchStateAux is IUArchState {
+contract UArchStateAux is IUArchState, UArchConstants {
     using MemoryAccessLogAux for mapping(uint64 => bytes8);
-    uint64 constant UCYCLE = 0x320;
-    uint64 constant UHALT = 0x328;
-    uint64 constant UPC = 0x330;
-    uint64 constant UX0 = 0x340;
 
     mapping(uint64 => bytes8) physicalMemory;
 
