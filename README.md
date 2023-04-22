@@ -77,6 +77,23 @@ Run all tests:
 
     forge test
 
+### Generate coverage report
+
+To generate a test coverage, run:
+
+```
+forge coverage
+```
+
+To generate a pretty visual report with html, run:
+
+```
+forge coverage --report lcov
+genhtml -o report --branch-coverage lcov.info
+```
+
+And then open `report/contracts/index.html` with your browser.
+
 ## Contributing
 
 Thank you for your interest in Cartesi! Head over to our [Contributing Guidelines](CONTRIBUTING.md) for instructions on how to sign our Contributors Agreement and get started with Cartesi!
