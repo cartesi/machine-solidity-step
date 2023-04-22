@@ -1085,7 +1085,7 @@ contract UArchExecuteInsn {
 
     function executeFENCE(
         IUArchState.State memory a,
-        uint32 insn,
+        uint32,
         uint64 pc
     ) private {
         return advancePc(a, pc);

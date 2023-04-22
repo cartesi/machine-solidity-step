@@ -37,6 +37,9 @@ local pure_fns = {"decode", "insnMatch", "operand", "copyBits"}
 -- internal functions need to be accessed in UArchinterpret.sol
 local internal_fns = {"uarchExecuteInsn", "readUint32"}
 
+-- functions that require special treatment for unused parameter insn to silence the warning
+local unused_insn_fns = {"executeFENCE"}
+
 function readAll(file)
     local f = assert(io.open(file, "r"), "error opening file: " .. file)
     local content = f:read("*all")
@@ -117,6 +120,12 @@ local function build_solidity_function(r_type, name, args)
     for i = 1, #pure_fns do
         if name:find(pure_fns[i]) then
             mutability = "pure"
+        end
+    end
+
+    for i = 1, #unused_insn_fns do
+        if name:find(unused_insn_fns[i]) then
+            args = args:gsub("uint32 insn", "uint32")
         end
     end
 
