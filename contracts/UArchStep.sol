@@ -32,6 +32,7 @@ contract UArchStep is IUArchStep, UArchExecuteInsn {
         if (UArchCompat.readHaltFlag(state)) {
             return (ucycle, true);
         }
+        // early check if ucycle is uint64.max, so it'll be safe to uncheck increment later
         if (ucycle == type(uint64).max) {
             return (ucycle, false);
         }

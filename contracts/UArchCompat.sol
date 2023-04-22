@@ -11,13 +11,16 @@
 // specific language governing permissions and limitations under the License.
 
 /// @title UArchCompat
-/// @notice Compatibility layer functions that guarantee same result as the cpp code
+/// @notice Compatibility layer functions that guarantee same result as the C++ code
 /// @dev All functions in the compatibility layer should never throw exceptions
 
 pragma solidity ^0.8.0;
 
 import "./interfaces/IUArchState.sol";
 
+/// @dev `state.accessLogs.current` is increment here as external calls are incapable of keeping the memory state changes.
+/// The `current` value increment is `unchecked` because it's safe and impossible to exceed uint256.max accesses in one step.
+/// All `unchecked` blocks in `(u)int` functions are intentional to be consistent with C++ implementation.
 library UArchCompat {
     function readWord(
         IUArchState.State memory state,
