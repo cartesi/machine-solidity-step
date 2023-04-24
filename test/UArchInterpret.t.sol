@@ -25,7 +25,7 @@ pragma solidity ^0.8.0;
 contract UArchInterpretTest is Test {
     using stdJson for string;
 
-    struct Catalog {
+    struct Entry {
         uint256 cycle;
         string path;
     }
@@ -47,7 +47,7 @@ contract UArchInterpretTest is Test {
     IUArchInterpret inter;
 
     function testBinaries() public {
-        Catalog[] memory catalog = loadCatalog(
+        Entry[] memory catalog = loadCatalog(
             string.concat(JSON_PATH, CATALOG_PATH)
         );
 
@@ -201,10 +201,10 @@ contract UArchInterpretTest is Test {
 
     function loadCatalog(
         string memory path
-    ) private view returns (Catalog[] memory) {
+    ) private view returns (Entry[] memory) {
         string memory json = vm.readFile(path);
         bytes memory raw = json.parseRaw("");
-        Catalog[] memory catalog = abi.decode(raw, (Catalog[]));
+        Entry[] memory catalog = abi.decode(raw, (Entry[]));
 
         return catalog;
     }

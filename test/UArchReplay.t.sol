@@ -24,13 +24,13 @@ contract UArchReplayTest is Test {
     using stdJson for string;
 
     // configure the tests
-    string constant JSON_PATH = "./test/uarch-step/";
+    string constant JSON_PATH = "./test/uarch-log/";
     string constant CATALOG_PATH = "catalog.json";
 
     UArchState state;
     IUArchStep step;
 
-    struct Catalog {
+    struct Entry {
         string path;
         uint256 steps;
     }
@@ -47,41 +47,54 @@ contract UArchReplayTest is Test {
     }
 
     function testReplayLogs() public {
-        Catalog[] memory catalog = loadCatalog(
+        Entry[] memory catalog = loadCatalog(
             string.concat(JSON_PATH, CATALOG_PATH)
         );
 
+        // all tests combined can easily run out of gas, stop metering
+        // also raise memory_limit in foundry.toml per https://github.com/foundry-rs/foundry/issues/3971
+        vm.pauseGasMetering();
+
         for (uint i = 0; i < catalog.length; i++) {
             console.log("Replaying file %s ...", catalog[i].path);
-            // load json log
-            IMemoryAccessLog.Access[] memory accesses = loadJsonLog(
-                string.concat(JSON_PATH, catalog[i].path)
-            );
-            IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
-                .AccessLogs(accesses, 0);
-            IUArchState.State memory s = IUArchState.State(
-                address(state),
-                accessLogs
-            );
-            step.step(s);
+            for (uint j = 0; j < catalog[i].steps; j++) {
+                console.log("Replaying step %d ...", j);
+                // load json log
+                IMemoryAccessLog.Access[] memory accesses = loadJsonLog(
+                    string.concat(JSON_PATH, catalog[i].path),
+                    j
+                );
+                IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
+                    .AccessLogs(accesses, 0);
+                IUArchState.State memory s = IUArchState.State(
+                    address(state),
+                    accessLogs
+                );
+                step.step(s);
+            }
         }
     }
 
     function loadCatalog(
         string memory path
-    ) private view returns (Catalog[] memory) {
+    ) private view returns (Entry[] memory) {
         string memory json = vm.readFile(path);
         bytes memory raw = json.parseRaw("");
-        Catalog[] memory catalog = abi.decode(raw, (Catalog[]));
+        Entry[] memory catalog = abi.decode(raw, (Entry[]));
 
         return catalog;
     }
 
     function loadJsonLog(
-        string memory path
+        string memory path,
+        uint256 stepIndex
     ) private view returns (IMemoryAccessLog.Access[] memory) {
         string memory json = vm.readFile(path);
-        bytes memory raw = json.parseRaw("");
+        string memory key = string.concat(
+            string.concat(".steps[", vm.toString(stepIndex)),
+            "].accesses"
+        );
+        bytes memory raw = json.parseRaw(key);
         RawAccess[] memory ra = abi.decode(raw, (RawAccess[]));
 
         return fromRawArray(ra);
