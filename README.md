@@ -44,7 +44,8 @@ Generic targets:
   build                      - build solidity code
   deploy                     - deploy to local node
   generate                   - generate solidity code from cpp and template
-  test                       - test with binary files
+	test                       - test both binary files and log files
+	coverage                   - generate coverage report for html view
 ```
 
 ### Requirements
@@ -88,8 +89,7 @@ forge coverage
 To generate a pretty visual report with html, run:
 
 ```
-forge coverage --report lcov
-genhtml -o report --branch-coverage lcov.info
+make coverage
 ```
 
 And then open `report/contracts/index.html` with your browser.
