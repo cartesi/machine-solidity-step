@@ -41,6 +41,10 @@ contract UArchReplayTest is Test {
         string val;
     }
 
+    struct RawStep {
+        RawAccess[] rawAccesses;
+    }
+
     function setUp() public {
         state = new UArchState();
         step = new UArchStep();
@@ -57,12 +61,14 @@ contract UArchReplayTest is Test {
 
         for (uint i = 0; i < catalog.length; i++) {
             console.log("Replaying file %s ...", catalog[i].path);
-            for (uint j = 0; j < catalog[i].steps; j++) {
+            RawStep[] memory rs = loadJsonLog(
+                string.concat(JSON_PATH, catalog[i].path)
+            );
+            for (uint j = 0; j < rs.length; j++) {
                 console.log("Replaying step %d ...", j);
                 // load json log
-                IMemoryAccessLog.Access[] memory accesses = loadJsonLog(
-                    string.concat(JSON_PATH, catalog[i].path),
-                    j
+                IMemoryAccessLog.Access[] memory accesses = fromRawArray(
+                    rs[j].rawAccesses
                 );
                 IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
                     .AccessLogs(accesses, 0);
@@ -86,18 +92,13 @@ contract UArchReplayTest is Test {
     }
 
     function loadJsonLog(
-        string memory path,
-        uint256 stepIndex
-    ) private view returns (IMemoryAccessLog.Access[] memory) {
+        string memory path
+    ) private view returns (RawStep[] memory) {
         string memory json = vm.readFile(path);
-        string memory key = string.concat(
-            string.concat(".steps[", vm.toString(stepIndex)),
-            "].accesses"
-        );
-        bytes memory raw = json.parseRaw(key);
-        RawAccess[] memory ra = abi.decode(raw, (RawAccess[]));
+        bytes memory raw = json.parseRaw(".steps");
+        RawStep[] memory rs = abi.decode(raw, (RawStep[]));
 
-        return fromRawArray(ra);
+        return rs;
     }
 
     function fromRawArray(

@@ -35,7 +35,7 @@ test: downloads
 	tar -xzf $(DOWNLOADDIR)/machine-tests-${BIN_TEST_VERSION}.tar.gz -C $(BIN_TEST_DIR)
 	tar -xzf $(DOWNLOADDIR)/uarch-riscv-tests-json-logs-${LOG_TEST_VERSION}.tar.gz -C $(LOG_TEST_DIR)
 	rm $(BIN_TEST_DIR)/*.dump $(BIN_TEST_DIR)/*.elf
-	forge test -vvv
+	forge test --via-ir -vvv
 
 generate: $(EMULATOR_DIR)/src/uarch-execute-insn.h
 	EMULATOR_DIR=$(EMULATOR_DIR) lua translator/generate-UArchExecuteInsn.lua

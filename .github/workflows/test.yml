@@ -47,4 +47,4 @@ jobs:
       - run: yarn build
 
       - name: Run uarch tests
-        run: forge test -vvv
+        run: forge test --via-ir -vvv
