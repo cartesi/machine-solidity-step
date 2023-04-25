@@ -10,38 +10,24 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 
-/// @title UArchStep
-/// @notice State transition function that takes the machine from micro-state s[i] to s[i + 1]
-
 pragma solidity ^0.8.0;
 
-import "./interfaces/IUArchStep.sol";
-import "./interfaces/IUArchState.sol";
-import "./UArchExecuteInsn.sol";
-import "./UArchCompat.sol";
+import "contracts/interfaces/IUArchStep.sol";
+import "contracts/interfaces/IUArchState.sol";
+import "contracts/UArchExecuteInsn.sol";
+import "contracts/UArchCompat.sol";
 
-contract UArchStep is IUArchStep, UArchExecuteInsn {
-    /// @notice Run step
-    /// @param state state of machine
-    /// @return (uint64, bool) cycle number and if the machine halts
+contract UArchStepAux is IUArchStep, UArchExecuteInsn {
     function step(
         IUArchState.State memory state
     ) external override returns (uint64, bool) {
         uint64 ucycle = UArchCompat.readCycle(state);
 
         if (UArchCompat.readHaltFlag(state)) {
-            require(
-                state.accessLogs.current == state.accessLogs.logs.length,
-                "access pointer should match accesses length when halt"
-            );
             return (ucycle, true);
         }
         // early check if ucycle is uint64.max, so it'll be safe to uncheck increment later
         if (ucycle == type(uint64).max) {
-            require(
-                state.accessLogs.current == state.accessLogs.logs.length,
-                "access pointer should match accesses length when cycle is uint64.max"
-            );
             return (ucycle, false);
         }
 
@@ -54,10 +40,6 @@ contract UArchStep is IUArchStep, UArchExecuteInsn {
         }
         UArchCompat.writeCycle(state, ucycle);
 
-        require(
-            state.accessLogs.current == state.accessLogs.logs.length,
-            "access pointer should match accesses length"
-        );
         return (ucycle, false);
     }
 }

@@ -15,6 +15,7 @@ import "forge-std/Test.sol";
 import "forge-std/StdJson.sol";
 import "./IUArchInterpret.sol";
 import "./UArchStateAux.sol";
+import "./UArchStepAux.sol";
 import "./UArchInterpret.sol";
 import "contracts/UArchStep.sol";
 import "contracts/interfaces/IUArchState.sol";
@@ -56,7 +57,8 @@ contract UArchInterpretTest is Test {
 
             // create fresh machine state for every test
             sa = new UArchStateAux();
-            step = new UArchStep();
+            // use `UArchStepAux` to bypass `current` check, as we don't know how many accesses are in the binary
+            step = new UArchStepAux();
             inter = new UArchInterpret(step);
             // load ram
             loadBin(
@@ -104,7 +106,7 @@ contract UArchInterpretTest is Test {
         initMaxCYCLE();
 
         IMemoryAccessLog.Access[]
-            memory accesses = new IMemoryAccessLog.Access[](0);
+            memory accesses = new IMemoryAccessLog.Access[](2);
         IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
             .AccessLogs(accesses, 0);
         IUArchState.State memory state = IUArchState.State(
@@ -138,7 +140,8 @@ contract UArchInterpretTest is Test {
     function testIllegalInstruction() public {
         // create fresh machine state for every test
         sa = new UArchStateAux();
-        step = new UArchStep();
+        // use `UArchStepAux` to bypass `current` check, as we don't care in this case
+        step = new UArchStepAux();
         inter = new UArchInterpret(step);
         // init pc to ram start
         initPC();
@@ -155,6 +158,45 @@ contract UArchInterpretTest is Test {
         );
 
         vm.expectRevert("illegal instruction");
+        inter.interpret(state);
+    }
+
+    function testCurrentPointer() public {
+        // create fresh machine state for every test
+        sa = new UArchStateAux();
+        step = new UArchStep();
+        inter = new UArchInterpret(step);
+        // init pc to ram start
+        initPC();
+        // NOP = ADDI x0, x0, 0 = 0x00000013
+        sa.loadMemory(PMA_UARCH_RAM_START, bytes8(0x1300000000000000));
+
+        IMemoryAccessLog.Access[]
+            memory accesses = new IMemoryAccessLog.Access[](0);
+        IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
+            .AccessLogs(accesses, 0);
+        IUArchState.State memory state = IUArchState.State(
+            address(sa),
+            accessLogs
+        );
+
+        vm.expectRevert("access pointer should match accesses length");
+        inter.interpret(state);
+
+        // init cycle to uint64.max
+        initMaxCYCLE();
+
+        vm.expectRevert(
+            "access pointer should match accesses length when cycle is uint64.max"
+        );
+        inter.interpret(state);
+
+        // set machine to halt
+        initHalt();
+
+        vm.expectRevert(
+            "access pointer should match accesses length when halt"
+        );
         inter.interpret(state);
     }
 
