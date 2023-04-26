@@ -40,7 +40,7 @@ contract UArchInterpretTest is Test {
     bytes8 constant TEST_FAILED = 0x00000000deadbeef; // Indicates that test has failed
     // configure the tests
     string constant JSON_PATH = "./test/uarch-bin/";
-    string constant CATALOG_PATH = "catalog.json";
+    string constant CATALOG_PATH = "rv64ui-uarch-catalog.json";
     string constant ROM_PATH = "./test/uarch-bin/uarch-bootstrap.bin";
 
     UArchStateAux sa;

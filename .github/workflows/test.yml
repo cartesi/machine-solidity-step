@@ -1,7 +1,7 @@
 name: Test
 on: [push]
 env:
-  UARCH_BIN_TEST_VERSION: v0.26.0
+  UARCH_BIN_TEST_VERSION: v0.27.0
   UARCH_LOG_TEST_VERSION: v0.13.0-uarch
 jobs:
   test:
