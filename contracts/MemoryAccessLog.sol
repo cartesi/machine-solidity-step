@@ -18,7 +18,7 @@ import "./interfaces/IMemoryAccessLog.sol";
 import "@cartesi/util/contracts/BitsManipulation.sol";
 
 /// @title MemoryAccessLog
-/// @notice Behaves as physical memory to offer accesses to interpret
+/// @notice Behaves as physical memory to offer accesses to `step`
 /// @dev Every read performed by memoryRead or memoryWrite should contain an
 /// @dev endianess swap from little endian to big endian. This is the case because
 /// @dev EVM is big endian but RiscV is little endian.
