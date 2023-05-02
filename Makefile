@@ -2,8 +2,8 @@ EMULATOR_DIR=../machine-emulator
 BIN_TEST_DIR=test/uarch-bin
 LOG_TEST_DIR=test/uarch-log
 DOWNLOADDIR=downloads
-BIN_TEST_VERSION=v0.27.0
-LOG_TEST_VERSION=v0.13.0-uarch
+BIN_TEST_VERSION=v0.28.0
+LOG_TEST_VERSION=v0.14.0
 BIN_DOWNLOAD_URL=https://github.com/cartesi/machine-tests/releases/download/$(BIN_TEST_VERSION)/machine-tests-$(BIN_TEST_VERSION).tar.gz
 LOG_DOWNLOAD_URL=https://github.com/cartesi/machine-emulator/releases/download/$(LOG_TEST_VERSION)/uarch-riscv-tests-json-logs-$(LOG_TEST_VERSION).tar.gz
 
