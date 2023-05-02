@@ -73,7 +73,7 @@ contract UArchReplayTest is Test {
                 IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
                     .AccessLogs(accesses, 0);
                 IUArchState.State memory s = IUArchState.State(
-                    address(state),
+                    state,
                     accessLogs
                 );
                 step.step(s);

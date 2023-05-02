@@ -26,8 +26,7 @@ library UArchCompat {
         IUArchState.State memory state,
         uint64 paddr
     ) internal returns (uint64) {
-        IUArchState s = IUArchState(state.stateInterface);
-        uint64 res = s.readWord(state.accessLogs, paddr);
+        uint64 res = state.stateInterface.readWord(state.accessLogs, paddr);
         unchecked {
             ++state.accessLogs.current;
         }
@@ -35,8 +34,7 @@ library UArchCompat {
     }
 
     function readPc(IUArchState.State memory state) internal returns (uint64) {
-        IUArchState s = IUArchState(state.stateInterface);
-        uint64 res = s.readPc(state.accessLogs);
+        uint64 res = state.stateInterface.readPc(state.accessLogs);
         unchecked {
             ++state.accessLogs.current;
         }
@@ -46,8 +44,7 @@ library UArchCompat {
     function readHaltFlag(
         IUArchState.State memory state
     ) internal returns (bool) {
-        IUArchState s = IUArchState(state.stateInterface);
-        bool res = s.readHaltFlag(state.accessLogs);
+        bool res = state.stateInterface.readHaltFlag(state.accessLogs);
         unchecked {
             ++state.accessLogs.current;
         }
@@ -57,8 +54,7 @@ library UArchCompat {
     function readCycle(
         IUArchState.State memory state
     ) internal returns (uint64) {
-        IUArchState s = IUArchState(state.stateInterface);
-        uint64 res = s.readCycle(state.accessLogs);
+        uint64 res = state.stateInterface.readCycle(state.accessLogs);
         unchecked {
             ++state.accessLogs.current;
         }
@@ -66,8 +62,7 @@ library UArchCompat {
     }
 
     function writeCycle(IUArchState.State memory state, uint64 val) internal {
-        IUArchState s = IUArchState(state.stateInterface);
-        s.writeCycle(state.accessLogs, val);
+        state.stateInterface.writeCycle(state.accessLogs, val);
         unchecked {
             ++state.accessLogs.current;
         }
@@ -77,8 +72,7 @@ library UArchCompat {
         IUArchState.State memory state,
         uint8 index
     ) internal returns (uint64) {
-        IUArchState s = IUArchState(state.stateInterface);
-        uint64 res = s.readX(state.accessLogs, index);
+        uint64 res = state.stateInterface.readX(state.accessLogs, index);
         unchecked {
             ++state.accessLogs.current;
         }
@@ -90,8 +84,7 @@ library UArchCompat {
         uint64 paddr,
         uint64 val
     ) internal {
-        IUArchState s = IUArchState(state.stateInterface);
-        s.writeWord(state.accessLogs, paddr, val);
+        state.stateInterface.writeWord(state.accessLogs, paddr, val);
         unchecked {
             ++state.accessLogs.current;
         }
@@ -102,16 +95,14 @@ library UArchCompat {
         uint8 index,
         uint64 val
     ) internal {
-        IUArchState s = IUArchState(state.stateInterface);
-        s.writeX(state.accessLogs, index, val);
+        state.stateInterface.writeX(state.accessLogs, index, val);
         unchecked {
             ++state.accessLogs.current;
         }
     }
 
     function writePc(IUArchState.State memory state, uint64 val) internal {
-        IUArchState s = IUArchState(state.stateInterface);
-        s.writePc(state.accessLogs, val);
+        state.stateInterface.writePc(state.accessLogs, val);
         unchecked {
             ++state.accessLogs.current;
         }

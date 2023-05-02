@@ -18,7 +18,7 @@ import "./IMemoryAccessLog.sol";
 
 interface IUArchState {
     struct State {
-        address stateInterface;
+        IUArchState stateInterface;
         IMemoryAccessLog.AccessLogs accessLogs;
     }
 

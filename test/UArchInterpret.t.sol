@@ -74,10 +74,7 @@ contract UArchInterpretTest is Test {
                 memory accesses = new IMemoryAccessLog.Access[](0);
             IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
                 .AccessLogs(accesses, 0);
-            IUArchState.State memory state = IUArchState.State(
-                address(sa),
-                accessLogs
-            );
+            IUArchState.State memory state = IUArchState.State(sa, accessLogs);
 
             inter.interpret(state);
 
@@ -109,10 +106,7 @@ contract UArchInterpretTest is Test {
             memory accesses = new IMemoryAccessLog.Access[](2);
         IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
             .AccessLogs(accesses, 0);
-        IUArchState.State memory state = IUArchState.State(
-            address(sa),
-            accessLogs
-        );
+        IUArchState.State memory state = IUArchState.State(sa, accessLogs);
 
         IUArchInterpret.InterpreterStatus status = inter.interpret(state);
 
@@ -152,10 +146,7 @@ contract UArchInterpretTest is Test {
             memory accesses = new IMemoryAccessLog.Access[](0);
         IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
             .AccessLogs(accesses, 0);
-        IUArchState.State memory state = IUArchState.State(
-            address(sa),
-            accessLogs
-        );
+        IUArchState.State memory state = IUArchState.State(sa, accessLogs);
 
         vm.expectRevert("illegal instruction");
         inter.interpret(state);
@@ -175,10 +166,7 @@ contract UArchInterpretTest is Test {
             memory accesses = new IMemoryAccessLog.Access[](0);
         IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
             .AccessLogs(accesses, 0);
-        IUArchState.State memory state = IUArchState.State(
-            address(sa),
-            accessLogs
-        );
+        IUArchState.State memory state = IUArchState.State(sa, accessLogs);
 
         vm.expectRevert("access pointer should match accesses length");
         inter.interpret(state);
