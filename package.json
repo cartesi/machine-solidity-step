@@ -1,6 +1,6 @@
 {
     "name": "@cartesi/machine-solidity-step",
-    "version": "0.7.0",
+    "version": "0.8.0",
     "description": "Machine Solidity UArch Interpret",
     "scripts": {
         "build": "hardhat compile && tsc",

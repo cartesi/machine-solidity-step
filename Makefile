@@ -1,4 +1,4 @@
-EMULATOR_DIR=../machine-emulator
+EMULATOR_DIR=../emulator
 BIN_TEST_DIR=test/uarch-bin
 LOG_TEST_DIR=test/uarch-log
 DOWNLOADDIR=downloads
