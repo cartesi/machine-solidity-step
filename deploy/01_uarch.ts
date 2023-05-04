@@ -16,7 +16,6 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     const { deployments, getNamedAccounts, network } = hre;
     const { deploy } = deployments;
     const { deployer } = await getNamedAccounts();
-    const { BitsManipulation } = await deployments.all();
 
     const deterministicDeployment = network.name !== "iotex_testnet";
 
@@ -28,9 +27,6 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 
     const MemoryAccessLog = await deploy("MemoryAccessLog", {
         ...opts,
-        libraries: {
-            ["BitsManipulation"]: BitsManipulation.address,
-        },
     });
 
     const UArchState = await deploy("UArchState", {
@@ -46,5 +42,4 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
 };
 
 func.tags = ["UArch"];
-func.dependencies = ["BitsManipulation"];
 export default func;

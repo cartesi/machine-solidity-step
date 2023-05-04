@@ -15,7 +15,7 @@
 pragma solidity ^0.8.0;
 
 import "./interfaces/IMemoryAccessLog.sol";
-import "@cartesi/util/contracts/BitsManipulation.sol";
+import "./UArchCompat.sol";
 
 /// @title MemoryAccessLog
 /// @notice Behaves as physical memory to offer accesses to `step`
@@ -31,7 +31,7 @@ library MemoryAccessLog {
         uint64 readAddress
     ) external pure returns (uint64) {
         return
-            BitsManipulation.uint64SwapEndian(
+            UArchCompat.uint64SwapEndian(
                 uint64(
                     accessManager(
                         a,
@@ -47,7 +47,7 @@ library MemoryAccessLog {
         uint64 writeAddress,
         uint64 val
     ) external pure {
-        bytes8 bytesValue = bytes8(BitsManipulation.uint64SwapEndian(val));
+        bytes8 bytesValue = bytes8(UArchCompat.uint64SwapEndian(val));
         require(
             accessManager(a, writeAddress, IMemoryAccessLog.AccessType.Write) ==
                 bytesValue,

@@ -219,4 +219,19 @@ library UArchCompat {
     ) internal pure returns (int32) {
         return v >> (count & 0x1f);
     }
+
+    /// @notice Swap byte order of unsigned ints with 64 bytes
+    /// @param num number to have bytes swapped
+    function uint64SwapEndian(uint64 num) internal pure returns (uint64) {
+        uint64 output = ((num & 0x00000000000000ff) << 56) |
+            ((num & 0x000000000000ff00) << 40) |
+            ((num & 0x0000000000ff0000) << 24) |
+            ((num & 0x00000000ff000000) << 8) |
+            ((num & 0x000000ff00000000) >> 8) |
+            ((num & 0x0000ff0000000000) >> 24) |
+            ((num & 0x00ff000000000000) >> 40) |
+            ((num & 0xff00000000000000) >> 56);
+
+        return output;
+    }
 }
