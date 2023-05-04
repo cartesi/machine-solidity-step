@@ -22,15 +22,16 @@ $(DOWNLOADDIR):
 	@mkdir -p $(DOWNLOADDIR)
 	@wget -nc $(BIN_DOWNLOAD_URL) -P $(DOWNLOADDIR)
 	@wget -nc $(LOG_DOWNLOAD_URL) -P $(DOWNLOADDIR)
+	@shasum -ca 256 shasumfile
 
 all: generate build test
 
 build clean deploy:
 	yarn $@
 
-downloads: $(DOWNLOADDIR)
+dep: $(DOWNLOADDIR)
 
-pretest: downloads
+pretest: dep
 	mkdir -p $(BIN_TEST_DIR)
 	mkdir -p $(LOG_TEST_DIR)
 	tar -xzf $(DOWNLOADDIR)/machine-tests-${BIN_TEST_VERSION}.tar.gz -C $(BIN_TEST_DIR)

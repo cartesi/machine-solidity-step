@@ -44,9 +44,11 @@ Generic targets:
   build                      - build solidity code
   deploy                     - deploy to local node
   generate                   - generate solidity code from cpp and template
-	test                       - test both binary files and log files
-	coverage                   - generate coverage report for html view
+  test                       - test both binary files and log files
+  coverage                   - generate coverage report for html view
 ```
+
+Obs: Some make targets require the installation of the node.js packages. This can be done with `yarn install`.
 
 ### Requirements
 

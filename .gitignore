@@ -9,6 +9,7 @@ deployments/localhost
 deployments/*/solcInputs/*.json
 dist
 downloads
+export
 node_modules
 res
 src/types
