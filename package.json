@@ -33,9 +33,6 @@
         "deploy:avax_testnet": "Deploy contracts to avax_testnet.",
         "prettier": "Check code format"
     },
-    "dependencies": {
-        "@cartesi/util": "^5.0.2"
-    },
     "devDependencies": {
         "@nomiclabs/hardhat-ethers": "^2.2.2",
         "@nomiclabs/hardhat-etherscan": "^3.1.7",

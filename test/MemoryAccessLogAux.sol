@@ -10,7 +10,7 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 
-import "@cartesi/util/contracts/BitsManipulation.sol";
+import "contracts/UArchCompat.sol";
 
 pragma solidity ^0.8.0;
 
@@ -20,9 +20,7 @@ library MemoryAccessLogAux {
         uint64 readAddress
     ) internal view returns (uint64) {
         return
-            BitsManipulation.uint64SwapEndian(
-                uint64(physicalMemory[readAddress])
-            );
+            UArchCompat.uint64SwapEndian(uint64(physicalMemory[readAddress]));
     }
 
     function writeWord(
@@ -30,7 +28,7 @@ library MemoryAccessLogAux {
         uint64 writeAddress,
         uint64 val
     ) internal {
-        bytes8 bytesvalue = bytes8(BitsManipulation.uint64SwapEndian(val));
+        bytes8 bytesvalue = bytes8(UArchCompat.uint64SwapEndian(val));
         physicalMemory[writeAddress] = bytesvalue;
     }
 }
