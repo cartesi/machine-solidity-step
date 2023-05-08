@@ -22,6 +22,8 @@ help:
 	@echo 'Generic targets:'
 	@echo '* all                        - build solidity code. To build from a clean clone, run: make submodules all'
 	@echo '  build                      - build solidity code'
+	@echo '  dep                        - install npm packages'
+	@echo '  depclean                   - remove npm packages'
 	@echo '  deploy                     - deploy to local node'
 	@echo '  generate                   - generate solidity code from cpp and template'
 	@echo '  test                       - test both binary files and log files'
@@ -38,7 +40,7 @@ $(LOG_DOWNLOAD_FILEPATH):
 
 all: generate build test
 
-build clean deploy:
+build clean deploy depclean:
 	yarn $@
 
 shasumfile: $(DOWNLOADFILES)
@@ -46,6 +48,9 @@ shasumfile: $(DOWNLOADFILES)
 
 checksum: $(DOWNLOADFILES)
 	@shasum -ca 256 shasumfile
+
+dep:
+	yarn install
 
 pretest: checksum
 	@mkdir -p $(BIN_TEST_DIR)
@@ -68,4 +73,4 @@ generate: $(EMULATOR_DIR)/src/uarch-execute-insn.h
 submodules:
 	git submodule update --init --recursive
 
-.PHONY: help all build clean checksum coverage deploy test generate submodules
+.PHONY: help all build clean checksum coverage dep depclean deploy test generate submodules
