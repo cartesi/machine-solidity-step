@@ -42,13 +42,15 @@ Cleaning targets:
 Generic targets:
 * all                        - build solidity code. To build from a clean clone, run: make submodules downloads all
   build                      - build solidity code
+  dep                        - install npm packages
+  depclean                   - remove npm packages
   deploy                     - deploy to local node
   generate                   - generate solidity code from cpp and template
   test                       - test both binary files and log files
   coverage                   - generate coverage report for html view
 ```
 
-Obs: Some make targets require the installation of the node.js packages. This can be done with `yarn install`.
+Obs: Some make targets require the installation of the node.js packages. This can be done with `yarn install` or `make dep`.
 
 ### Requirements
 
