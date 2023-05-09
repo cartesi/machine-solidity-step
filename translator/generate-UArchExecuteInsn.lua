@@ -40,7 +40,7 @@ local internal_fns = {"uarchExecuteInsn", "readUint32"}
 -- functions that require special treatment for unused parameter insn to silence the warning
 local unused_insn_fns = {"executeFENCE"}
 
-function readAll(file)
+local function readAll(file)
     local f = assert(io.open(file, "r"), "error opening file: " .. file)
     local content = f:read("*all")
     f:close()
@@ -48,8 +48,8 @@ function readAll(file)
 end
 
 -- get all lines from file start to keyword_start
-function read_lines_head_to_keyword(file)
-    fd = assert(io.open(file, "r"), "error opening file: " .. file)
+local function read_lines_head_to_keyword(file)
+    local fd = assert(io.open(file, "r"), "error opening file: " .. file)
     local lines = {}
     for line in fd:lines() do
         lines[#lines + 1] = line
@@ -62,8 +62,8 @@ function read_lines_head_to_keyword(file)
 end
 
 -- get all lines from keyword_end to eof
-function read_lines_keyword_to_tail(file)
-    fd = assert(io.open(file, "r"), "error opening file: " .. file)
+local function read_lines_keyword_to_tail(file)
+    local fd = assert(io.open(file, "r"), "error opening file: " .. file)
     local keyword_found = false
     local lines = {}
     for line in fd:lines() do
@@ -129,7 +129,7 @@ local function build_solidity_function(r_type, name, args)
         end
     end
 
-    local new = ""
+    local new
 
     if mutability == "" then
         new = "function " .. name .. "(" .. args .. ") " .. accessibility .. " " .. ret .. " {"
