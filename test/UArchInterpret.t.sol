@@ -52,7 +52,7 @@ contract UArchInterpretTest is Test {
             string.concat(JSON_PATH, CATALOG_PATH)
         );
 
-        for (uint i = 0; i < catalog.length; i++) {
+        for (uint256 i = 0; i < catalog.length; i++) {
             console.log("Testing %s ...", catalog[i].path);
 
             // create fresh machine state for every test
