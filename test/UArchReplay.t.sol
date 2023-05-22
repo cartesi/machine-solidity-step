@@ -41,10 +41,6 @@ contract UArchReplayTest is Test {
         string val;
     }
 
-    struct RawStep {
-        RawAccess[] rawAccesses;
-    }
-
     function setUp() public {
         state = new UArchState();
         step = new UArchStep();
@@ -59,17 +55,15 @@ contract UArchReplayTest is Test {
         // also raise memory_limit in foundry.toml per https://github.com/foundry-rs/foundry/issues/3971
         vm.pauseGasMetering();
 
-        for (uint i = 0; i < catalog.length; i++) {
+        for (uint256 i = 0; i < catalog.length; i++) {
             console.log("Replaying file %s ...", catalog[i].path);
-            RawStep[] memory rs = loadJsonLog(
+            string memory rj = loadJsonLog(
                 string.concat(JSON_PATH, catalog[i].path)
             );
-            for (uint j = 0; j < rs.length; j++) {
+            for (uint256 j = 0; j < catalog[i].steps; j++) {
                 console.log("Replaying step %d ...", j);
                 // load json log
-                IMemoryAccessLog.Access[] memory accesses = fromRawArray(
-                    rs[j].rawAccesses
-                );
+                IMemoryAccessLog.Access[] memory accesses = fromRawArray(rj, j);
                 IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
                     .AccessLogs(accesses, 0);
                 IUArchState.State memory s = IUArchState.State(
@@ -93,22 +87,26 @@ contract UArchReplayTest is Test {
 
     function loadJsonLog(
         string memory path
-    ) private view returns (RawStep[] memory) {
-        string memory json = vm.readFile(path);
-        bytes memory raw = json.parseRaw(".steps");
-        RawStep[] memory rs = abi.decode(raw, (RawStep[]));
-
-        return rs;
+    ) private view returns (string memory) {
+        return vm.readFile(path);
     }
 
     function fromRawArray(
-        RawAccess[] memory rawAccesses
+        string memory rawJson,
+        uint256 stepIndex
     ) private pure returns (IMemoryAccessLog.Access[] memory) {
-        uint arrayLength = rawAccesses.length;
+        string memory key = string.concat(
+            string.concat(".steps[", vm.toString(stepIndex)),
+            "].accesses"
+        );
+        bytes memory raw = rawJson.parseRaw(key);
+        RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
+
+        uint256 arrayLength = rawAccesses.length;
         IMemoryAccessLog.Access[]
             memory accesses = new IMemoryAccessLog.Access[](arrayLength);
 
-        for (uint i = 0; i < arrayLength; i++) {
+        for (uint256 i = 0; i < arrayLength; i++) {
             accesses[i].val = bytes8(
                 vm.parseBytes32(string.concat("0x", rawAccesses[i].val))
             );
