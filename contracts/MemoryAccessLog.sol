@@ -31,15 +31,7 @@ library MemoryAccessLog {
         uint64 readAddress
     ) external pure returns (uint64) {
         return
-            UArchCompat.uint64SwapEndian(
-                uint64(
-                    accessManager(
-                        a,
-                        readAddress,
-                        IMemoryAccessLog.AccessType.Read
-                    )
-                )
-            );
+            UArchCompat.uint64SwapEndian(uint64(accessManager(a, readAddress)));
     }
 
     function writeWord(
@@ -49,8 +41,7 @@ library MemoryAccessLog {
     ) external pure {
         bytes8 bytesValue = bytes8(UArchCompat.uint64SwapEndian(val));
         require(
-            accessManager(a, writeAddress, IMemoryAccessLog.AccessType.Write) ==
-                bytesValue,
+            accessManager(a, writeAddress) == bytesValue,
             "Written value mismatch"
         );
     }
@@ -58,14 +49,11 @@ library MemoryAccessLog {
     // takes care of read/write access
     function accessManager(
         IMemoryAccessLog.AccessLogs memory a,
-        uint64 addr,
-        IMemoryAccessLog.AccessType accessType
+        uint64 addr
     ) private pure returns (bytes8) {
         require(a.current < a.logs.length, "Too many accesses");
 
         IMemoryAccessLog.Access memory access = a.logs[a.current];
-
-        require(access.accessType == accessType, "Access type mismatch");
 
         require(
             access.position == addr,

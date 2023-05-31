@@ -25,11 +25,7 @@ contract MemoryAccessLogTest is Test {
     function testReadWord() public {
         IMemoryAccessLog.Access[]
             memory accesses = new IMemoryAccessLog.Access[](1);
-        accesses[0] = IMemoryAccessLog.Access(
-            0,
-            LITTLE_8000,
-            IMemoryAccessLog.AccessType.Read
-        );
+        accesses[0] = IMemoryAccessLog.Access(0, LITTLE_8000);
         IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
             .AccessLogs(accesses, 0);
 
@@ -42,9 +38,6 @@ contract MemoryAccessLogTest is Test {
         vm.expectRevert("Position and access address mismatch");
         accessLogs.readWord(1);
 
-        vm.expectRevert("Access type mismatch");
-        accessLogs.writeWord(0, 0x8000);
-
         accessLogs = IMemoryAccessLog.AccessLogs(accesses, 1);
         vm.expectRevert("Too many accesses");
         accessLogs.readWord(0);
@@ -53,11 +46,7 @@ contract MemoryAccessLogTest is Test {
     function testWriteWord() public {
         IMemoryAccessLog.Access[]
             memory accesses = new IMemoryAccessLog.Access[](1);
-        accesses[0] = IMemoryAccessLog.Access(
-            0,
-            LITTLE_8000,
-            IMemoryAccessLog.AccessType.Write
-        );
+        accesses[0] = IMemoryAccessLog.Access(0, LITTLE_8000);
         IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
             .AccessLogs(accesses, 0);
         // write should succeed

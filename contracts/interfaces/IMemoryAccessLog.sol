@@ -15,15 +15,9 @@
 pragma solidity >=0.8.0;
 
 interface IMemoryAccessLog {
-    enum AccessType {
-        Read,
-        Write
-    }
-
     struct Access {
         uint64 position;
         bytes8 val;
-        AccessType accessType;
     }
 
     struct AccessLogs {
