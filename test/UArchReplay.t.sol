@@ -115,11 +115,6 @@ contract UArchReplayTest is Test {
                 vm.parseBytes32(string.concat("0x", rawAccesses[i].val))
             );
             accesses[i].position = uint64(rawAccesses[i].position);
-            accesses[i].accessType = (keccak256(
-                abi.encodePacked(rawAccesses[i].accessType)
-            ) == keccak256(abi.encodePacked("read")))
-                ? IMemoryAccessLog.AccessType.Read
-                : IMemoryAccessLog.AccessType.Write;
         }
 
         return accesses;
