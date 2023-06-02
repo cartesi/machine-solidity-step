@@ -22,46 +22,79 @@ interface IUArchState {
     struct State {
         IUArchState stateInterface;
         IMemoryAccessLog.AccessLogs accessLogs;
+        bytes32 machineHash;
+        bytes32[] oldHashes;
+        bytes32[][] proofs;
+        uint256 writeCurrent;
     }
 
     function readCycle(
-        IMemoryAccessLog.AccessLogs memory a
+        IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[][] memory proofs
     ) external returns (uint64);
 
     function readHaltFlag(
-        IMemoryAccessLog.AccessLogs memory a
+        IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[][] memory proofs
     ) external returns (bool);
 
     function readPc(
-        IMemoryAccessLog.AccessLogs memory a
+        IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[][] memory proofs
     ) external returns (uint64);
 
     function readWord(
         IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[][] memory proofs,
         uint64 paddr
     ) external returns (uint64);
 
     function readX(
         IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[][] memory proofs,
         uint8 index
     ) external returns (uint64);
 
     function writeCycle(
         IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[] memory oldHashes,
+        bytes32[][] memory proofs,
+        uint256 writeCurrent,
         uint64 val
-    ) external;
+    ) external returns (bytes32);
 
-    function writePc(IMemoryAccessLog.AccessLogs memory a, uint64 val) external;
+    function writePc(
+        IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[] memory oldHashes,
+        bytes32[][] memory proofs,
+        uint256 writeCurrent,
+        uint64 val
+    ) external returns (bytes32);
 
     function writeWord(
         IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[] memory oldHashes,
+        bytes32[][] memory proofs,
+        uint256 writeCurrent,
         uint64 paddr,
         uint64 val
-    ) external;
+    ) external returns (bytes32);
 
     function writeX(
         IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[] memory oldHashes,
+        bytes32[][] memory proofs,
+        uint256 writeCurrent,
         uint8 index,
         uint64 val
-    ) external;
+    ) external returns (bytes32);
 }

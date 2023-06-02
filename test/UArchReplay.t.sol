@@ -36,13 +36,29 @@ contract UArchReplayTest is Test {
 
     struct Entry {
         string path;
+        bool proof;
         uint256 steps;
     }
 
     struct RawAccess {
         uint256 position;
+        RawProof rawProof;
         string accessType;
         string val;
+    }
+
+    struct RawProof {
+        uint256 log2Root;
+        uint256 log2Target;
+        string rootHash;
+        string[] rawSiblings;
+        uint256 targetPosition;
+        string targetHash;
+    }
+
+    struct Proof {
+        bytes32 targetHash;
+        bytes32[] siblings;
     }
 
     function setUp() public {
@@ -67,12 +83,24 @@ contract UArchReplayTest is Test {
             for (uint256 j = 0; j < catalog[i].steps; j++) {
                 console.log("Replaying step %d ...", j);
                 // load json log
-                IMemoryAccessLog.Access[] memory accesses = fromRawArray(rj, j);
+                (
+                    RawAccess[] memory rawAccesses,
+                    IMemoryAccessLog.Access[] memory accesses,
+                    bytes32[][] memory proofs,
+                    bytes32[] memory oldHashes
+                ) = fromRawArray(rj, j);
+
                 IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
                     .AccessLogs(accesses, 0);
                 IUArchState.State memory s = IUArchState.State(
                     state,
-                    accessLogs
+                    accessLogs,
+                    vm.parseBytes32(
+                        string.concat("0x", rawAccesses[0].rawProof.rootHash)
+                    ),
+                    oldHashes,
+                    proofs,
+                    0
                 );
                 step.step(s);
             }
@@ -98,7 +126,16 @@ contract UArchReplayTest is Test {
     function fromRawArray(
         string memory rawJson,
         uint256 stepIndex
-    ) private pure returns (IMemoryAccessLog.Access[] memory) {
+    )
+        private
+        pure
+        returns (
+            RawAccess[] memory,
+            IMemoryAccessLog.Access[] memory,
+            bytes32[][] memory,
+            bytes32[] memory
+        )
+    {
         string memory key = string.concat(
             string.concat(".steps[", vm.toString(stepIndex)),
             "].accesses"
@@ -109,14 +146,47 @@ contract UArchReplayTest is Test {
         uint256 arrayLength = rawAccesses.length;
         IMemoryAccessLog.Access[]
             memory accesses = new IMemoryAccessLog.Access[](arrayLength);
+        uint256 writeCount;
+        bytes32[][] memory proofs = new bytes32[][](arrayLength);
 
         for (uint256 i = 0; i < arrayLength; i++) {
             accesses[i].val = bytes8(
                 vm.parseBytes32(string.concat("0x", rawAccesses[i].val))
             );
             accesses[i].position = uint64(rawAccesses[i].position);
+            if (
+                keccak256(abi.encodePacked(rawAccesses[i].accessType)) ==
+                keccak256(abi.encodePacked("write"))
+            ) {
+                writeCount++;
+            }
+
+            uint256 siblingsLength = rawAccesses[i].rawProof.rawSiblings.length;
+            proofs[i] = new bytes32[](siblingsLength);
+
+            for (uint256 j = 0; j < siblingsLength; j++) {
+                // proofs should be loaded in reverse order
+                proofs[i][siblingsLength - j - 1] = vm.parseBytes32(
+                    string.concat("0x", rawAccesses[i].rawProof.rawSiblings[j])
+                );
+            }
         }
 
-        return accesses;
+        bytes32[] memory oldHashes = new bytes32[](writeCount);
+        writeCount = 0;
+
+        for (uint256 i = 0; i < arrayLength; i++) {
+            if (
+                keccak256(abi.encodePacked(rawAccesses[i].accessType)) ==
+                keccak256(abi.encodePacked("write"))
+            ) {
+                oldHashes[writeCount] = vm.parseBytes32(
+                    string.concat("0x", rawAccesses[i].rawProof.targetHash)
+                );
+                writeCount++;
+            }
+        }
+
+        return (rawAccesses, accesses, proofs, oldHashes);
     }
 }

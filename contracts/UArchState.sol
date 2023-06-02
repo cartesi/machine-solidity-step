@@ -26,71 +26,122 @@ contract UArchState is IUArchState, UArchConstants {
 
     function readWord(
         IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[][] memory proofs,
         uint64 paddr
     ) external pure override returns (uint64) {
-        return a.readWord(paddr);
+        return a.readWord(machineHash, proofs, paddr);
     }
 
     function readHaltFlag(
-        IMemoryAccessLog.AccessLogs memory a
+        IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[][] memory proofs
     ) external pure override returns (bool) {
-        return (a.readWord(UHALT) != 0);
+        return (a.readWord(machineHash, proofs, UHALT) != 0);
     }
 
     function readPc(
-        IMemoryAccessLog.AccessLogs memory a
+        IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[][] memory proofs
     ) external pure override returns (uint64) {
-        return a.readWord(UPC);
+        return a.readWord(machineHash, proofs, UPC);
     }
 
     function readCycle(
-        IMemoryAccessLog.AccessLogs memory a
+        IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[][] memory proofs
     ) external pure override returns (uint64) {
-        return a.readWord(UCYCLE);
+        return a.readWord(machineHash, proofs, UCYCLE);
     }
 
     function writeCycle(
         IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[] memory oldHashes,
+        bytes32[][] memory proofs,
+        uint256 writeCurrent,
         uint64 val
-    ) external pure override {
-        a.writeWord(UCYCLE, val);
+    ) external pure override returns (bytes32) {
+        return
+            a.writeWord(
+                machineHash,
+                oldHashes,
+                proofs,
+                writeCurrent,
+                UCYCLE,
+                val
+            );
     }
 
     function readX(
         IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[][] memory proofs,
         uint8 index
     ) external pure override returns (uint64) {
         uint64 paddr;
         unchecked {
             paddr = UX0 + (index << 3);
         }
-        return a.readWord(paddr);
+        return a.readWord(machineHash, proofs, paddr);
     }
 
     function writeWord(
         IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[] memory oldHashes,
+        bytes32[][] memory proofs,
+        uint256 writeCurrent,
         uint64 paddr,
         uint64 val
-    ) external pure override {
-        a.writeWord(paddr, val);
+    ) external pure override returns (bytes32) {
+        return
+            a.writeWord(
+                machineHash,
+                oldHashes,
+                proofs,
+                writeCurrent,
+                paddr,
+                val
+            );
     }
 
     function writeX(
         IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[] memory oldHashes,
+        bytes32[][] memory proofs,
+        uint256 writeCurrent,
         uint8 index,
         uint64 val
-    ) external pure override {
+    ) external pure override returns (bytes32) {
         uint64 paddr;
         unchecked {
             paddr = UX0 + (index << 3);
         }
-        a.writeWord(paddr, val);
+        return
+            a.writeWord(
+                machineHash,
+                oldHashes,
+                proofs,
+                writeCurrent,
+                paddr,
+                val
+            );
     }
 
     function writePc(
         IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[] memory oldHashes,
+        bytes32[][] memory proofs,
+        uint256 writeCurrent,
         uint64 val
-    ) external pure override {
-        a.writeWord(UPC, val);
+    ) external pure override returns (bytes32) {
+        return
+            a.writeWord(machineHash, oldHashes, proofs, writeCurrent, UPC, val);
     }
 }

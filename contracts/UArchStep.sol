@@ -24,10 +24,10 @@ import "./UArchCompat.sol";
 contract UArchStep is IUArchStep, UArchExecuteInsn {
     /// @notice Run step
     /// @param state state of machine
-    /// @return (uint64, bool) cycle number and if the machine halts
+    /// @return (uint64, bool, bytes32) cycle number and if the machine halts
     function step(
         IUArchState.State memory state
-    ) external override returns (uint64, bool) {
+    ) external override returns (uint64, bool, bytes32) {
         uint64 ucycle = UArchCompat.readCycle(state);
 
         if (UArchCompat.readHaltFlag(state)) {
@@ -35,7 +35,7 @@ contract UArchStep is IUArchStep, UArchExecuteInsn {
                 state.accessLogs.current == state.accessLogs.logs.length,
                 "access pointer should match accesses length when halt"
             );
-            return (ucycle, true);
+            return (ucycle, true, state.machineHash);
         }
         // early check if ucycle is uint64.max, so it'll be safe to uncheck increment later
         if (ucycle == type(uint64).max) {
@@ -43,7 +43,7 @@ contract UArchStep is IUArchStep, UArchExecuteInsn {
                 state.accessLogs.current == state.accessLogs.logs.length,
                 "access pointer should match accesses length when cycle is uint64.max"
             );
-            return (ucycle, false);
+            return (ucycle, false, state.machineHash);
         }
 
         uint64 upc = UArchCompat.readPc(state);
@@ -59,6 +59,6 @@ contract UArchStep is IUArchStep, UArchExecuteInsn {
             state.accessLogs.current == state.accessLogs.logs.length,
             "access pointer should match accesses length"
         );
-        return (ucycle, false);
+        return (ucycle, false, state.machineHash);
     }
 }

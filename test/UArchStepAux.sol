@@ -24,15 +24,15 @@ import "contracts/UArchCompat.sol";
 contract UArchStepAux is IUArchStep, UArchExecuteInsn {
     function step(
         IUArchState.State memory state
-    ) external override returns (uint64, bool) {
+    ) external override returns (uint64, bool, bytes32) {
         uint64 ucycle = UArchCompat.readCycle(state);
 
         if (UArchCompat.readHaltFlag(state)) {
-            return (ucycle, true);
+            return (ucycle, true, state.machineHash);
         }
         // early check if ucycle is uint64.max, so it'll be safe to uncheck increment later
         if (ucycle == type(uint64).max) {
-            return (ucycle, false);
+            return (ucycle, false, state.machineHash);
         }
 
         uint64 upc = UArchCompat.readPc(state);
@@ -44,6 +44,6 @@ contract UArchStepAux is IUArchStep, UArchExecuteInsn {
         }
         UArchCompat.writeCycle(state, ucycle);
 
-        return (ucycle, false);
+        return (ucycle, false, state.machineHash);
     }
 }

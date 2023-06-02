@@ -21,5 +21,5 @@ import "./IUArchState.sol";
 interface IUArchStep {
     function step(
         IUArchState.State memory state
-    ) external returns (uint64, bool);
+    ) external returns (uint64, bool, bytes32);
 }

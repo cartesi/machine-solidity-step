@@ -35,9 +35,10 @@ contract UArchInterpret is IUArchInterpret {
     ) external override returns (InterpreterStatus) {
         uint64 ucycle;
         bool halt;
+        bytes32 machine;
 
         while (ucycle < type(uint64).max) {
-            (ucycle, halt) = step.step(state);
+            (ucycle, halt, machine) = step.step(state);
 
             if (halt) {
                 return InterpreterStatus.Halt;

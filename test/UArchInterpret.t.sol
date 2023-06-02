@@ -78,18 +78,33 @@ contract UArchInterpretTest is Test {
                 memory accesses = new IMemoryAccessLog.Access[](0);
             IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
                 .AccessLogs(accesses, 0);
-            IUArchState.State memory state = IUArchState.State(sa, accessLogs);
+            IUArchState.State memory state = IUArchState.State(
+                sa,
+                accessLogs,
+                bytes32(0),
+                new bytes32[](0),
+                new bytes32[][](0),
+                0
+            );
 
             inter.interpret(state);
 
             assertEq(
                 // read test result from the register
-                sa.readX(accessLogs, TEST_STATUS_X),
+                sa.readX(
+                    accessLogs,
+                    bytes32(0),
+                    new bytes32[][](0),
+                    TEST_STATUS_X
+                ),
                 uint64(TEST_SUCEEDED)
             );
-            assertTrue(sa.readHaltFlag(accessLogs), "machine should halt");
+            assertTrue(
+                sa.readHaltFlag(accessLogs, bytes32(0), new bytes32[][](0)),
+                "machine should halt"
+            );
             assertEq(
-                sa.readCycle(accessLogs),
+                sa.readCycle(accessLogs, bytes32(0), new bytes32[][](0)),
                 catalog[i].cycle,
                 "cycle values should match"
             );
@@ -110,7 +125,14 @@ contract UArchInterpretTest is Test {
             memory accesses = new IMemoryAccessLog.Access[](2);
         IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
             .AccessLogs(accesses, 0);
-        IUArchState.State memory state = IUArchState.State(sa, accessLogs);
+        IUArchState.State memory state = IUArchState.State(
+            sa,
+            accessLogs,
+            bytes32(0),
+            new bytes32[](0),
+            new bytes32[][](0),
+            0
+        );
 
         IUArchInterpret.InterpreterStatus status = inter.interpret(state);
 
@@ -119,7 +141,7 @@ contract UArchInterpretTest is Test {
             "machine shouldn't halt"
         );
         assertEq(
-            sa.readCycle(accessLogs),
+            sa.readCycle(accessLogs, bytes32(0), new bytes32[][](0)),
             type(uint64).max,
             "step should not advance when cycle is uint64.max"
         );
@@ -150,7 +172,14 @@ contract UArchInterpretTest is Test {
             memory accesses = new IMemoryAccessLog.Access[](0);
         IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
             .AccessLogs(accesses, 0);
-        IUArchState.State memory state = IUArchState.State(sa, accessLogs);
+        IUArchState.State memory state = IUArchState.State(
+            sa,
+            accessLogs,
+            bytes32(0),
+            new bytes32[](0),
+            new bytes32[][](0),
+            0
+        );
 
         vm.expectRevert("illegal instruction");
         inter.interpret(state);
@@ -170,7 +199,14 @@ contract UArchInterpretTest is Test {
             memory accesses = new IMemoryAccessLog.Access[](0);
         IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
             .AccessLogs(accesses, 0);
-        IUArchState.State memory state = IUArchState.State(sa, accessLogs);
+        IUArchState.State memory state = IUArchState.State(
+            sa,
+            accessLogs,
+            bytes32(0),
+            new bytes32[](0),
+            new bytes32[][](0),
+            0
+        );
 
         vm.expectRevert("access pointer should match accesses length");
         inter.interpret(state);
