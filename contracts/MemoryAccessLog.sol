@@ -16,6 +16,7 @@ pragma solidity ^0.8.0;
 
 import "./interfaces/IMemoryAccessLog.sol";
 import "./UArchCompat.sol";
+import "./Merkle.sol";
 
 /// @title MemoryAccessLog
 /// @notice Behaves as physical memory to offer accesses to `step`
@@ -26,31 +27,68 @@ import "./UArchCompat.sol";
 /// @dev Reference: Ethereum yellowpaper - Version 69351d5
 /// @dev    Appendix H. Virtual Machine Specification
 library MemoryAccessLog {
+    using MemoryAccessLog for IMemoryAccessLog.AccessLogs;
+
     function readWord(
         IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[][] memory proofs,
         uint64 readAddress
     ) external pure returns (uint64) {
-        return
-            UArchCompat.uint64SwapEndian(uint64(accessManager(a, readAddress)));
+        bytes8 bytes8Value = a.accessManager(readAddress);
+
+        require(
+            machineHash ==
+                Merkle.getRootWithValue(
+                    a.logs[a.current].position,
+                    bytes8Value,
+                    proofs[a.current]
+                ),
+            "Read machine hash doesn't match"
+        );
+
+        return UArchCompat.uint64SwapEndian(uint64(bytes8Value));
     }
 
     function writeWord(
         IMemoryAccessLog.AccessLogs memory a,
+        bytes32 machineHash,
+        bytes32[] memory oldHashes,
+        bytes32[][] memory proofs,
+        uint256 writeCurrent,
         uint64 writeAddress,
         uint64 val
-    ) external pure {
-        bytes8 bytesValue = bytes8(UArchCompat.uint64SwapEndian(val));
+    ) external pure returns (bytes32) {
         require(
-            accessManager(a, writeAddress) == bytesValue,
+            machineHash ==
+                Merkle.getRootWithHash(
+                    a.logs[a.current].position,
+                    oldHashes[writeCurrent],
+                    proofs[a.current]
+                ),
+            "Write machine hash doesn't match"
+        );
+
+        bytes8 bytes8Value = a.accessManager(writeAddress);
+
+        require(
+            val == UArchCompat.uint64SwapEndian(uint64(bytes8Value)),
             "Written value mismatch"
         );
+
+        return
+            Merkle.getRootWithValue(
+                a.logs[a.current].position,
+                bytes8Value,
+                proofs[a.current]
+            );
     }
 
     // takes care of read/write access
     function accessManager(
         IMemoryAccessLog.AccessLogs memory a,
         uint64 addr
-    ) private pure returns (bytes8) {
+    ) internal pure returns (bytes8) {
         require(a.current < a.logs.length, "Too many accesses");
 
         IMemoryAccessLog.Access memory access = a.logs[a.current];

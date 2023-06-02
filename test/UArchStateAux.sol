@@ -28,38 +28,52 @@ contract UArchStateAux is IUArchState, UArchConstants {
 
     function readWord(
         IMemoryAccessLog.AccessLogs memory,
+        bytes32,
+        bytes32[][] memory,
         uint64 paddr
     ) external view override returns (uint64) {
         return physicalMemory.readWord(paddr);
     }
 
     function readHaltFlag(
-        IMemoryAccessLog.AccessLogs memory
+        IMemoryAccessLog.AccessLogs memory,
+        bytes32,
+        bytes32[][] memory
     ) external view override returns (bool) {
         return (physicalMemory.readWord(UHALT) != 0);
     }
 
     function readPc(
-        IMemoryAccessLog.AccessLogs memory
+        IMemoryAccessLog.AccessLogs memory,
+        bytes32,
+        bytes32[][] memory
     ) external view override returns (uint64) {
         return physicalMemory.readWord(UPC);
     }
 
     function readCycle(
-        IMemoryAccessLog.AccessLogs memory
+        IMemoryAccessLog.AccessLogs memory,
+        bytes32,
+        bytes32[][] memory
     ) external view override returns (uint64) {
         return physicalMemory.readWord(UCYCLE);
     }
 
     function writeCycle(
         IMemoryAccessLog.AccessLogs memory,
+        bytes32,
+        bytes32[] memory,
+        bytes32[][] memory,
+        uint256,
         uint64 val
-    ) external override {
-        physicalMemory.writeWord(UCYCLE, val);
+    ) external override returns (bytes32) {
+        return physicalMemory.writeWord(UCYCLE, val);
     }
 
     function readX(
         IMemoryAccessLog.AccessLogs memory,
+        bytes32,
+        bytes32[][] memory,
         uint8 index
     ) external view override returns (uint64) {
         uint64 paddr;
@@ -71,28 +85,40 @@ contract UArchStateAux is IUArchState, UArchConstants {
 
     function writeWord(
         IMemoryAccessLog.AccessLogs memory,
+        bytes32,
+        bytes32[] memory,
+        bytes32[][] memory,
+        uint256,
         uint64 paddr,
         uint64 val
-    ) external override {
-        physicalMemory.writeWord(paddr, val);
+    ) external override returns (bytes32) {
+        return physicalMemory.writeWord(paddr, val);
     }
 
     function writeX(
         IMemoryAccessLog.AccessLogs memory,
+        bytes32,
+        bytes32[] memory,
+        bytes32[][] memory,
+        uint256,
         uint8 index,
         uint64 val
-    ) external override {
+    ) external override returns (bytes32) {
         uint64 paddr;
         unchecked {
             paddr = UX0 + (index << 3);
         }
-        physicalMemory.writeWord(paddr, val);
+        return physicalMemory.writeWord(paddr, val);
     }
 
     function writePc(
         IMemoryAccessLog.AccessLogs memory,
+        bytes32,
+        bytes32[] memory,
+        bytes32[][] memory,
+        uint256,
         uint64 val
-    ) external override {
-        physicalMemory.writeWord(UPC, val);
+    ) external override returns (bytes32) {
+        return physicalMemory.writeWord(UPC, val);
     }
 }

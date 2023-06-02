@@ -26,7 +26,12 @@ library UArchCompat {
         IUArchState.State memory state,
         uint64 paddr
     ) internal returns (uint64) {
-        uint64 res = state.stateInterface.readWord(state.accessLogs, paddr);
+        uint64 res = state.stateInterface.readWord(
+            state.accessLogs,
+            state.machineHash,
+            state.proofs,
+            paddr
+        );
         unchecked {
             ++state.accessLogs.current;
         }
@@ -34,7 +39,11 @@ library UArchCompat {
     }
 
     function readPc(IUArchState.State memory state) internal returns (uint64) {
-        uint64 res = state.stateInterface.readPc(state.accessLogs);
+        uint64 res = state.stateInterface.readPc(
+            state.accessLogs,
+            state.machineHash,
+            state.proofs
+        );
         unchecked {
             ++state.accessLogs.current;
         }
@@ -44,7 +53,11 @@ library UArchCompat {
     function readHaltFlag(
         IUArchState.State memory state
     ) internal returns (bool) {
-        bool res = state.stateInterface.readHaltFlag(state.accessLogs);
+        bool res = state.stateInterface.readHaltFlag(
+            state.accessLogs,
+            state.machineHash,
+            state.proofs
+        );
         unchecked {
             ++state.accessLogs.current;
         }
@@ -54,7 +67,11 @@ library UArchCompat {
     function readCycle(
         IUArchState.State memory state
     ) internal returns (uint64) {
-        uint64 res = state.stateInterface.readCycle(state.accessLogs);
+        uint64 res = state.stateInterface.readCycle(
+            state.accessLogs,
+            state.machineHash,
+            state.proofs
+        );
         unchecked {
             ++state.accessLogs.current;
         }
@@ -62,9 +79,17 @@ library UArchCompat {
     }
 
     function writeCycle(IUArchState.State memory state, uint64 val) internal {
-        state.stateInterface.writeCycle(state.accessLogs, val);
+        state.machineHash = state.stateInterface.writeCycle(
+            state.accessLogs,
+            state.machineHash,
+            state.oldHashes,
+            state.proofs,
+            state.writeCurrent,
+            val
+        );
         unchecked {
             ++state.accessLogs.current;
+            ++state.writeCurrent;
         }
     }
 
@@ -72,7 +97,12 @@ library UArchCompat {
         IUArchState.State memory state,
         uint8 index
     ) internal returns (uint64) {
-        uint64 res = state.stateInterface.readX(state.accessLogs, index);
+        uint64 res = state.stateInterface.readX(
+            state.accessLogs,
+            state.machineHash,
+            state.proofs,
+            index
+        );
         unchecked {
             ++state.accessLogs.current;
         }
@@ -84,9 +114,18 @@ library UArchCompat {
         uint64 paddr,
         uint64 val
     ) internal {
-        state.stateInterface.writeWord(state.accessLogs, paddr, val);
+        state.machineHash = state.stateInterface.writeWord(
+            state.accessLogs,
+            state.machineHash,
+            state.oldHashes,
+            state.proofs,
+            state.writeCurrent,
+            paddr,
+            val
+        );
         unchecked {
             ++state.accessLogs.current;
+            ++state.writeCurrent;
         }
     }
 
@@ -95,16 +134,33 @@ library UArchCompat {
         uint8 index,
         uint64 val
     ) internal {
-        state.stateInterface.writeX(state.accessLogs, index, val);
+        state.machineHash = state.stateInterface.writeX(
+            state.accessLogs,
+            state.machineHash,
+            state.oldHashes,
+            state.proofs,
+            state.writeCurrent,
+            index,
+            val
+        );
         unchecked {
             ++state.accessLogs.current;
+            ++state.writeCurrent;
         }
     }
 
     function writePc(IUArchState.State memory state, uint64 val) internal {
-        state.stateInterface.writePc(state.accessLogs, val);
+        state.machineHash = state.stateInterface.writePc(
+            state.accessLogs,
+            state.machineHash,
+            state.oldHashes,
+            state.proofs,
+            state.writeCurrent,
+            val
+        );
         unchecked {
             ++state.accessLogs.current;
+            ++state.writeCurrent;
         }
     }
 

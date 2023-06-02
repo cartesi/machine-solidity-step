@@ -27,8 +27,10 @@ library MemoryAccessLogAux {
         mapping(uint64 => bytes8) storage physicalMemory,
         uint64 writeAddress,
         uint64 val
-    ) internal {
+    ) internal returns (bytes32) {
         bytes8 bytesvalue = bytes8(UArchCompat.uint64SwapEndian(val));
         physicalMemory[writeAddress] = bytesvalue;
+
+        return bytes32(0);
     }
 }

@@ -24,15 +24,4 @@ interface IMemoryAccessLog {
         Access[] logs;
         uint256 current;
     }
-
-    function readWord(
-        AccessLogs memory a,
-        uint64 readAddress
-    ) external returns (uint64);
-
-    function writeWord(
-        AccessLogs memory a,
-        uint64 writeAddress,
-        uint64 val
-    ) external;
 }
