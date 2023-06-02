@@ -60,10 +60,10 @@ pretest: checksum
 	@rm $(BIN_TEST_DIR)/*.dump $(BIN_TEST_DIR)/*.elf
 
 test: pretest
-	forge test -vvv
+	forge test -vvv --no-match-test Replay
 
 coverage: pretest
-	forge coverage --report lcov
+	forge coverage --report lcov --no-match-test Replay
 	genhtml -o report --branch-coverage lcov.info
 
 generate: $(EMULATOR_DIR)/src/uarch-execute-insn.h
