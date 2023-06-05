@@ -1,5 +1,3 @@
-> :warning: The Cartesi team keeps working internally on the next version of this repository, following its regular development roadmap. Whenever there's a new version ready or important fix, these are published to the public source tree as new releases.
-
 # Cartesi RISC-V Solidity Emulator
 
 The Cartesi RISC-V Solidity Emulator is the on-chain host implementation of the Cartesi Machine Specification. The libraries and contracts are written in Solidity, and the testing scripts are written in Solidity (with the help of [Foundry](https://github.com/foundry-rs/foundry)).
