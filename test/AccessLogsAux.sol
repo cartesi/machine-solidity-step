@@ -14,7 +14,7 @@ import "contracts/UArchCompat.sol";
 
 pragma solidity ^0.8.0;
 
-library MemoryAccessLogAux {
+library AccessLogsAux {
     function readWord(
         mapping(uint64 => bytes8) storage physicalMemory,
         uint64 readAddress
@@ -27,10 +27,19 @@ library MemoryAccessLogAux {
         mapping(uint64 => bytes8) storage physicalMemory,
         uint64 writeAddress,
         uint64 val
-    ) internal returns (bytes32) {
+    ) internal {
         bytes8 bytesvalue = bytes8(UArchCompat.uint64SwapEndian(val));
         physicalMemory[writeAddress] = bytesvalue;
+    }
 
-        return bytes32(0);
+    function newContext() internal pure returns (IAccessLogs.Context memory) {
+        return
+            IAccessLogs.Context(
+                bytes32(0),
+                new bytes32[](0),
+                new uint64[](0),
+                0,
+                0
+            );
     }
 }

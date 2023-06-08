@@ -14,12 +14,11 @@ import "forge-std/console.sol";
 import "forge-std/Test.sol";
 import "forge-std/StdJson.sol";
 import "./IUArchInterpret.sol";
+import "./AccessLogsAux.sol";
 import "./UArchStateAux.sol";
-import "./UArchStepAux.sol";
 import "./UArchInterpret.sol";
 import "contracts/UArchStep.sol";
 import "contracts/interfaces/IUArchState.sol";
-import "contracts/interfaces/IMemoryAccessLog.sol";
 
 pragma solidity ^0.8.0;
 
@@ -47,6 +46,13 @@ contract UArchInterpretTest is Test {
     IUArchStep step;
     IUArchInterpret inter;
 
+    function setUp() public {
+        // create fresh machine state for every test
+        sa = new UArchStateAux();
+        step = new UArchStep();
+        inter = new UArchInterpret(step);
+    }
+
     function testBinaries() public {
         Entry[] memory catalog = loadCatalog(
             string.concat(JSON_PATH, CATALOG_PATH)
@@ -55,11 +61,6 @@ contract UArchInterpretTest is Test {
         for (uint256 i = 0; i < catalog.length; i++) {
             console.log("Testing %s ...", catalog[i].path);
 
-            // create fresh machine state for every test
-            sa = new UArchStateAux();
-            // use `UArchStepAux` to bypass `current` check, as we don't know how many accesses are in the binary
-            step = new UArchStepAux();
-            inter = new UArchInterpret(step);
             // load ram
             loadBin(
                 PMA_UARCH_RAM_START,
@@ -70,64 +71,42 @@ contract UArchInterpretTest is Test {
             // init cycle to 0
             initCYCLE();
 
-            IMemoryAccessLog.Access[]
-                memory accesses = new IMemoryAccessLog.Access[](0);
-            IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
-                .AccessLogs(accesses, 0);
             IUArchState.State memory state = IUArchState.State(
                 sa,
-                accessLogs,
-                bytes32(0),
-                new bytes32[](0),
-                new bytes32[][](0),
-                0
+                AccessLogsAux.newContext()
             );
 
             inter.interpret(state);
 
+            (uint64 x, ) = sa.readX(AccessLogsAux.newContext(), TEST_STATUS_X);
             assertEq(
                 // read test result from the register
-                sa.readX(
-                    accessLogs,
-                    bytes32(0),
-                    new bytes32[][](0),
-                    TEST_STATUS_X
-                ),
+                x,
                 uint64(TEST_SUCEEDED)
             );
-            assertTrue(
-                sa.readHaltFlag(accessLogs, bytes32(0), new bytes32[][](0)),
-                "machine should halt"
-            );
-            assertEq(
-                sa.readCycle(accessLogs, bytes32(0), new bytes32[][](0)),
-                catalog[i].cycle,
-                "cycle values should match"
-            );
+
+            (bool halt, ) = sa.readHaltFlag(AccessLogsAux.newContext());
+            assertTrue(halt, "machine should halt");
+
+            (uint64 cycle, ) = sa.readCycle(AccessLogsAux.newContext());
+            assertEq(cycle, catalog[i].cycle, "cycle values should match");
+
+            // create fresh machine state for every test
+            sa = new UArchStateAux();
+            step = new UArchStep();
+            inter = new UArchInterpret(step);
         }
     }
 
     function testStepEarlyReturn() public {
-        // create fresh machine state for every test
-        sa = new UArchStateAux();
-        step = new UArchStep();
-        inter = new UArchInterpret(step);
         // init pc to ram start
         initPC();
         // init cycle to uint64.max
         initMaxCYCLE();
 
-        IMemoryAccessLog.Access[]
-            memory accesses = new IMemoryAccessLog.Access[](2);
-        IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
-            .AccessLogs(accesses, 0);
         IUArchState.State memory state = IUArchState.State(
             sa,
-            accessLogs,
-            bytes32(0),
-            new bytes32[](0),
-            new bytes32[][](0),
-            0
+            AccessLogsAux.newContext()
         );
 
         IUArchInterpret.InterpreterStatus status = inter.interpret(state);
@@ -136,8 +115,10 @@ contract UArchInterpretTest is Test {
             status == IUArchInterpret.InterpreterStatus.Success,
             "machine shouldn't halt"
         );
+
+        (uint64 cycle, ) = sa.readCycle(AccessLogsAux.newContext());
         assertEq(
-            sa.readCycle(accessLogs, bytes32(0), new bytes32[][](0)),
+            cycle,
             type(uint64).max,
             "step should not advance when cycle is uint64.max"
         );
@@ -154,73 +135,17 @@ contract UArchInterpretTest is Test {
     }
 
     function testIllegalInstruction() public {
-        // create fresh machine state for every test
-        sa = new UArchStateAux();
-        // use `UArchStepAux` to bypass `current` check, as we don't care in this case
-        step = new UArchStepAux();
-        inter = new UArchInterpret(step);
         // init pc to ram start
         initPC();
         // init cycle to 0
         initCYCLE();
 
-        IMemoryAccessLog.Access[]
-            memory accesses = new IMemoryAccessLog.Access[](0);
-        IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
-            .AccessLogs(accesses, 0);
         IUArchState.State memory state = IUArchState.State(
             sa,
-            accessLogs,
-            bytes32(0),
-            new bytes32[](0),
-            new bytes32[][](0),
-            0
+            AccessLogsAux.newContext()
         );
 
         vm.expectRevert("illegal instruction");
-        inter.interpret(state);
-    }
-
-    function testCurrentPointer() public {
-        // create fresh machine state for every test
-        sa = new UArchStateAux();
-        step = new UArchStep();
-        inter = new UArchInterpret(step);
-        // init pc to ram start
-        initPC();
-        // NOP = ADDI x0, x0, 0 = 0x00000013
-        sa.loadMemory(PMA_UARCH_RAM_START, bytes8(0x1300000000000000));
-
-        IMemoryAccessLog.Access[]
-            memory accesses = new IMemoryAccessLog.Access[](0);
-        IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
-            .AccessLogs(accesses, 0);
-        IUArchState.State memory state = IUArchState.State(
-            sa,
-            accessLogs,
-            bytes32(0),
-            new bytes32[](0),
-            new bytes32[][](0),
-            0
-        );
-
-        vm.expectRevert("access pointer should match accesses length");
-        inter.interpret(state);
-
-        // init cycle to uint64.max
-        initMaxCYCLE();
-
-        vm.expectRevert(
-            "access pointer should match accesses length when cycle is uint64.max"
-        );
-        inter.interpret(state);
-
-        // set machine to halt
-        initHalt();
-
-        vm.expectRevert(
-            "access pointer should match accesses length when halt"
-        );
         inter.interpret(state);
     }
 
