@@ -22,91 +22,74 @@ import "./interfaces/IUArchState.sol";
 /// The `current` value increment is `unchecked` because it's safe and impossible to exceed uint256.max accesses in one step.
 /// All `unchecked` blocks in `(u)int` functions are intentional to be consistent with C++ implementation.
 library UArchCompat {
-    function readWord(
-        IUArchState.State memory state,
-        uint64 paddr
+    function readCycle(
+        IUArchState.State memory state
     ) internal returns (uint64) {
-        uint64 res = state.stateInterface.readWord(
-            state.accessLogs,
-            state.machineHash,
-            state.proofs,
-            paddr
-        );
-        unchecked {
-            ++state.accessLogs.current;
-        }
-        return res;
-    }
+        (uint64 res, IAccessLogs.Context memory updatedLogs) = state
+            .stateInterface
+            .readCycle(state.accessLogs);
+        state.accessLogs = updatedLogs;
 
-    function readPc(IUArchState.State memory state) internal returns (uint64) {
-        uint64 res = state.stateInterface.readPc(
-            state.accessLogs,
-            state.machineHash,
-            state.proofs
-        );
-        unchecked {
-            ++state.accessLogs.current;
-        }
         return res;
     }
 
     function readHaltFlag(
         IUArchState.State memory state
     ) internal returns (bool) {
-        bool res = state.stateInterface.readHaltFlag(
-            state.accessLogs,
-            state.machineHash,
-            state.proofs
-        );
-        unchecked {
-            ++state.accessLogs.current;
-        }
+        (bool res, IAccessLogs.Context memory updatedLogs) = state
+            .stateInterface
+            .readHaltFlag(state.accessLogs);
+        state.accessLogs = updatedLogs;
+
         return res;
     }
 
-    function readCycle(
-        IUArchState.State memory state
+    function readPc(IUArchState.State memory state) internal returns (uint64) {
+        (uint64 res, IAccessLogs.Context memory updatedLogs) = state
+            .stateInterface
+            .readPc(state.accessLogs);
+        state.accessLogs = updatedLogs;
+
+        return res;
+    }
+
+    function readWord(
+        IUArchState.State memory state,
+        uint64 paddr
     ) internal returns (uint64) {
-        uint64 res = state.stateInterface.readCycle(
-            state.accessLogs,
-            state.machineHash,
-            state.proofs
-        );
-        unchecked {
-            ++state.accessLogs.current;
-        }
-        return res;
-    }
+        (uint64 res, IAccessLogs.Context memory updatedLogs) = state
+            .stateInterface
+            .readWord(state.accessLogs, paddr);
+        state.accessLogs = updatedLogs;
 
-    function writeCycle(IUArchState.State memory state, uint64 val) internal {
-        state.machineHash = state.stateInterface.writeCycle(
-            state.accessLogs,
-            state.machineHash,
-            state.oldHashes,
-            state.proofs,
-            state.writeCurrent,
-            val
-        );
-        unchecked {
-            ++state.accessLogs.current;
-            ++state.writeCurrent;
-        }
+        return res;
     }
 
     function readX(
         IUArchState.State memory state,
         uint8 index
     ) internal returns (uint64) {
-        uint64 res = state.stateInterface.readX(
-            state.accessLogs,
-            state.machineHash,
-            state.proofs,
-            index
-        );
-        unchecked {
-            ++state.accessLogs.current;
-        }
+        (uint64 res, IAccessLogs.Context memory updatedLogs) = state
+            .stateInterface
+            .readX(state.accessLogs, index);
+        state.accessLogs = updatedLogs;
+
         return res;
+    }
+
+    function writeCycle(IUArchState.State memory state, uint64 val) internal {
+        IAccessLogs.Context memory updatedLogs = state
+            .stateInterface
+            .writeCycle(state.accessLogs, val);
+        state.accessLogs = updatedLogs;
+    }
+
+    function writePc(IUArchState.State memory state, uint64 val) internal {
+        IAccessLogs.Context memory updatedLogs = state.stateInterface.writePc(
+            state.accessLogs,
+            val
+        );
+        state.accessLogs = updatedLogs;
     }
 
     function writeWord(
@@ -114,19 +97,12 @@ library UArchCompat {
         uint64 paddr,
         uint64 val
     ) internal {
-        state.machineHash = state.stateInterface.writeWord(
+        IAccessLogs.Context memory updatedLogs = state.stateInterface.writeWord(
             state.accessLogs,
-            state.machineHash,
-            state.oldHashes,
-            state.proofs,
-            state.writeCurrent,
             paddr,
             val
         );
-        unchecked {
-            ++state.accessLogs.current;
-            ++state.writeCurrent;
-        }
+        state.accessLogs = updatedLogs;
     }
 
     function writeX(
@@ -134,34 +110,12 @@ library UArchCompat {
         uint8 index,
         uint64 val
     ) internal {
-        state.machineHash = state.stateInterface.writeX(
+        IAccessLogs.Context memory updatedLogs = state.stateInterface.writeX(
             state.accessLogs,
-            state.machineHash,
-            state.oldHashes,
-            state.proofs,
-            state.writeCurrent,
             index,
             val
         );
-        unchecked {
-            ++state.accessLogs.current;
-            ++state.writeCurrent;
-        }
-    }
-
-    function writePc(IUArchState.State memory state, uint64 val) internal {
-        state.machineHash = state.stateInterface.writePc(
-            state.accessLogs,
-            state.machineHash,
-            state.oldHashes,
-            state.proofs,
-            state.writeCurrent,
-            val
-        );
-        unchecked {
-            ++state.accessLogs.current;
-            ++state.writeCurrent;
-        }
+        state.accessLogs = updatedLogs;
     }
 
     function int8ToUint64(int8 val) internal pure returns (uint64) {

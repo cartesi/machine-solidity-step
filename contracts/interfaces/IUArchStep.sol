@@ -14,10 +14,11 @@
 
 pragma solidity >=0.8.0;
 
+import "./IAccessLogs.sol";
 import "./IUArchState.sol";
 
 interface IUArchStep {
     function step(
         IUArchState.State memory state
-    ) external returns (uint64, bool, bytes32);
+    ) external returns (uint64, bool, IAccessLogs.Context memory);
 }

@@ -12,132 +12,90 @@
 
 pragma solidity ^0.8.0;
 
-import "./interfaces/IMemoryAccessLog.sol";
+import "./interfaces/IAccessLogs.sol";
 import "./interfaces/IUArchState.sol";
-import "./MemoryAccessLog.sol";
+import "./AccessLogs.sol";
 import "./UArchConstants.sol";
 
 contract UArchState is IUArchState, UArchConstants {
-    using MemoryAccessLog for IMemoryAccessLog.AccessLogs;
+    using AccessLogs for IAccessLogs.Context;
 
-    function readWord(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[][] memory proofs,
-        uint64 paddr
-    ) external pure override returns (uint64) {
-        return a.readWord(machineHash, proofs, paddr);
+    function readCycle(
+        IAccessLogs.Context memory a
+    ) external pure override returns (uint64, IAccessLogs.Context memory) {
+        uint64 cycle = a.readWord(UCYCLE);
+        return (cycle, a);
     }
 
     function readHaltFlag(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[][] memory proofs
-    ) external pure override returns (bool) {
-        return (a.readWord(machineHash, proofs, UHALT) != 0);
+        IAccessLogs.Context memory a
+    ) external pure override returns (bool, IAccessLogs.Context memory) {
+        bool halt = (a.readWord(UHALT) != 0);
+        return (halt, a);
     }
 
     function readPc(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[][] memory proofs
-    ) external pure override returns (uint64) {
-        return a.readWord(machineHash, proofs, UPC);
+        IAccessLogs.Context memory a
+    ) external pure override returns (uint64, IAccessLogs.Context memory) {
+        uint64 pc = a.readWord(UPC);
+        return (pc, a);
     }
 
-    function readCycle(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[][] memory proofs
-    ) external pure override returns (uint64) {
-        return a.readWord(machineHash, proofs, UCYCLE);
-    }
-
-    function writeCycle(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[] memory oldHashes,
-        bytes32[][] memory proofs,
-        uint256 writeCurrent,
-        uint64 val
-    ) external pure override returns (bytes32) {
-        return
-            a.writeWord(
-                machineHash,
-                oldHashes,
-                proofs,
-                writeCurrent,
-                UCYCLE,
-                val
-            );
+    function readWord(
+        IAccessLogs.Context memory a,
+        uint64 paddr
+    ) external pure override returns (uint64, IAccessLogs.Context memory) {
+        uint64 word = a.readWord(paddr);
+        return (word, a);
     }
 
     function readX(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[][] memory proofs,
+        IAccessLogs.Context memory a,
         uint8 index
-    ) external pure override returns (uint64) {
+    ) external pure override returns (uint64, IAccessLogs.Context memory) {
         uint64 paddr;
         unchecked {
             paddr = UX0 + (index << 3);
         }
-        return a.readWord(machineHash, proofs, paddr);
+        uint64 x = a.readWord(paddr);
+        return (x, a);
     }
 
-    function writeWord(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[] memory oldHashes,
-        bytes32[][] memory proofs,
-        uint256 writeCurrent,
-        uint64 paddr,
+    function writeCycle(
+        IAccessLogs.Context memory a,
         uint64 val
-    ) external pure override returns (bytes32) {
-        return
-            a.writeWord(
-                machineHash,
-                oldHashes,
-                proofs,
-                writeCurrent,
-                paddr,
-                val
-            );
-    }
-
-    function writeX(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[] memory oldHashes,
-        bytes32[][] memory proofs,
-        uint256 writeCurrent,
-        uint8 index,
-        uint64 val
-    ) external pure override returns (bytes32) {
-        uint64 paddr;
-        unchecked {
-            paddr = UX0 + (index << 3);
-        }
-        return
-            a.writeWord(
-                machineHash,
-                oldHashes,
-                proofs,
-                writeCurrent,
-                paddr,
-                val
-            );
+    ) external pure override returns (IAccessLogs.Context memory) {
+        a.writeWord(UCYCLE, val);
+        return a;
     }
 
     function writePc(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[] memory oldHashes,
-        bytes32[][] memory proofs,
-        uint256 writeCurrent,
+        IAccessLogs.Context memory a,
         uint64 val
-    ) external pure override returns (bytes32) {
-        return
-            a.writeWord(machineHash, oldHashes, proofs, writeCurrent, UPC, val);
+    ) external pure override returns (IAccessLogs.Context memory) {
+        a.writeWord(UPC, val);
+        return a;
+    }
+
+    function writeWord(
+        IAccessLogs.Context memory a,
+        uint64 paddr,
+        uint64 val
+    ) external pure override returns (IAccessLogs.Context memory) {
+        a.writeWord(paddr, val);
+        return a;
+    }
+
+    function writeX(
+        IAccessLogs.Context memory a,
+        uint8 index,
+        uint64 val
+    ) external pure override returns (IAccessLogs.Context memory) {
+        uint64 paddr;
+        unchecked {
+            paddr = UX0 + (index << 3);
+        }
+        a.writeWord(paddr, val);
+        return a;
     }
 }

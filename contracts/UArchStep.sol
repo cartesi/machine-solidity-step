@@ -16,33 +16,24 @@
 pragma solidity ^0.8.0;
 
 import "./interfaces/IUArchStep.sol";
-import "./interfaces/IUArchState.sol";
 import "./UArchExecuteInsn.sol";
 import "./UArchCompat.sol";
 
 contract UArchStep is IUArchStep, UArchExecuteInsn {
     /// @notice Run step
     /// @param state state of machine
-    /// @return (uint64, bool, bytes32) cycle number and if the machine halts
+    /// @return (uint64, bool, IAccessLogs.Context) cycle number, machine halt flag and updated IAccessLogs.Context
     function step(
         IUArchState.State memory state
-    ) external override returns (uint64, bool, bytes32) {
+    ) external override returns (uint64, bool, IAccessLogs.Context memory) {
         uint64 ucycle = UArchCompat.readCycle(state);
 
         if (UArchCompat.readHaltFlag(state)) {
-            require(
-                state.accessLogs.current == state.accessLogs.logs.length,
-                "access pointer should match accesses length when halt"
-            );
-            return (ucycle, true, state.machineHash);
+            return (ucycle, true, state.accessLogs);
         }
         // early check if ucycle is uint64.max, so it'll be safe to uncheck increment later
         if (ucycle == type(uint64).max) {
-            require(
-                state.accessLogs.current == state.accessLogs.logs.length,
-                "access pointer should match accesses length when cycle is uint64.max"
-            );
-            return (ucycle, false, state.machineHash);
+            return (ucycle, false, state.accessLogs);
         }
 
         uint64 upc = UArchCompat.readPc(state);
@@ -54,10 +45,6 @@ contract UArchStep is IUArchStep, UArchExecuteInsn {
         }
         UArchCompat.writeCycle(state, ucycle);
 
-        require(
-            state.accessLogs.current == state.accessLogs.logs.length,
-            "access pointer should match accesses length"
-        );
-        return (ucycle, false, state.machineHash);
+        return (ucycle, false, state.accessLogs);
     }
 }

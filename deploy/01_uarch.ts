@@ -25,14 +25,14 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
         log: true,
     }
 
-    const MemoryAccessLog = await deploy("MemoryAccessLog", {
+    const AccessLogs = await deploy("AccessLogs", {
         ...opts,
     });
 
     const UArchState = await deploy("UArchState", {
         ...opts,
         libraries: {
-            ["MemoryAccessLog"]: MemoryAccessLog.address,
+            ["AccessLogs"]: AccessLogs.address,
         },
     });
 
