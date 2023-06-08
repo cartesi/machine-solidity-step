@@ -14,16 +14,16 @@
 // limitations under the License.
 //
 
+/// @title IAccessLogs
+
 pragma solidity >=0.8.0;
 
-interface IMemoryAccessLog {
-    struct Access {
-        uint64 position;
-        bytes8 val;
-    }
-
-    struct AccessLogs {
-        Access[] logs;
-        uint256 current;
+interface IAccessLogs {
+    struct Context {
+        bytes32 currentRootHash;
+        bytes32[] hashes;
+        uint64[] words;
+        uint128 currentHashIndex;
+        uint128 currentWord;
     }
 }

@@ -16,85 +16,55 @@
 
 pragma solidity >=0.8.0;
 
-import "./IMemoryAccessLog.sol";
+import "./IAccessLogs.sol";
 
 interface IUArchState {
     struct State {
         IUArchState stateInterface;
-        IMemoryAccessLog.AccessLogs accessLogs;
-        bytes32 machineHash;
-        bytes32[] oldHashes;
-        bytes32[][] proofs;
-        uint256 writeCurrent;
+        IAccessLogs.Context accessLogs;
     }
 
     function readCycle(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[][] memory proofs
-    ) external returns (uint64);
+        IAccessLogs.Context memory a
+    ) external returns (uint64, IAccessLogs.Context memory);
 
     function readHaltFlag(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[][] memory proofs
-    ) external returns (bool);
+        IAccessLogs.Context memory a
+    ) external returns (bool, IAccessLogs.Context memory);
 
     function readPc(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[][] memory proofs
-    ) external returns (uint64);
+        IAccessLogs.Context memory a
+    ) external returns (uint64, IAccessLogs.Context memory);
 
     function readWord(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[][] memory proofs,
+        IAccessLogs.Context memory a,
         uint64 paddr
-    ) external returns (uint64);
+    ) external returns (uint64, IAccessLogs.Context memory);
 
     function readX(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[][] memory proofs,
+        IAccessLogs.Context memory a,
         uint8 index
-    ) external returns (uint64);
+    ) external returns (uint64, IAccessLogs.Context memory);
 
     function writeCycle(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[] memory oldHashes,
-        bytes32[][] memory proofs,
-        uint256 writeCurrent,
+        IAccessLogs.Context memory a,
         uint64 val
-    ) external returns (bytes32);
+    ) external returns (IAccessLogs.Context memory);
 
     function writePc(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[] memory oldHashes,
-        bytes32[][] memory proofs,
-        uint256 writeCurrent,
+        IAccessLogs.Context memory a,
         uint64 val
-    ) external returns (bytes32);
+    ) external returns (IAccessLogs.Context memory);
 
     function writeWord(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[] memory oldHashes,
-        bytes32[][] memory proofs,
-        uint256 writeCurrent,
+        IAccessLogs.Context memory a,
         uint64 paddr,
         uint64 val
-    ) external returns (bytes32);
+    ) external returns (IAccessLogs.Context memory);
 
     function writeX(
-        IMemoryAccessLog.AccessLogs memory a,
-        bytes32 machineHash,
-        bytes32[] memory oldHashes,
-        bytes32[][] memory proofs,
-        uint256 writeCurrent,
+        IAccessLogs.Context memory a,
         uint8 index,
         uint64 val
-    ) external returns (bytes32);
+    ) external returns (IAccessLogs.Context memory);
 }
