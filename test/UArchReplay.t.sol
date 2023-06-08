@@ -22,7 +22,7 @@ import "forge-std/Test.sol";
 import "contracts/UArchState.sol";
 import "contracts/UArchStep.sol";
 import "contracts/interfaces/IUArchStep.sol";
-import "contracts/interfaces/IMemoryAccessLog.sol";
+import "contracts/interfaces/IAccessLogs.sol";
 
 contract UArchReplayTest is Test {
     using stdJson for string;
@@ -31,7 +31,9 @@ contract UArchReplayTest is Test {
     string constant JSON_PATH = "./test/uarch-log/";
     string constant CATALOG_PATH = "catalog.json";
 
-    UArchState state;
+    uint256 constant siblingsLength = 61;
+
+    IUArchState state;
     IUArchStep step;
 
     struct Entry {
@@ -85,22 +87,16 @@ contract UArchReplayTest is Test {
                 // load json log
                 (
                     RawAccess[] memory rawAccesses,
-                    IMemoryAccessLog.Access[] memory accesses,
-                    bytes32[][] memory proofs,
-                    bytes32[] memory oldHashes
+                    IAccessLogs.Context memory accessLogs
                 ) = fromRawArray(rj, j);
 
-                IMemoryAccessLog.AccessLogs memory accessLogs = IMemoryAccessLog
-                    .AccessLogs(accesses, 0);
+                accessLogs.currentRootHash = vm.parseBytes32(
+                    string.concat("0x", rawAccesses[0].rawProof.rootHash)
+                );
+
                 IUArchState.State memory s = IUArchState.State(
                     state,
-                    accessLogs,
-                    vm.parseBytes32(
-                        string.concat("0x", rawAccesses[0].rawProof.rootHash)
-                    ),
-                    oldHashes,
-                    proofs,
-                    0
+                    accessLogs
                 );
                 step.step(s);
             }
@@ -126,16 +122,7 @@ contract UArchReplayTest is Test {
     function fromRawArray(
         string memory rawJson,
         uint256 stepIndex
-    )
-        private
-        pure
-        returns (
-            RawAccess[] memory,
-            IMemoryAccessLog.Access[] memory,
-            bytes32[][] memory,
-            bytes32[] memory
-        )
-    {
+    ) private pure returns (RawAccess[] memory, IAccessLogs.Context memory) {
         string memory key = string.concat(
             string.concat(".steps[", vm.toString(stepIndex)),
             "].accesses"
@@ -143,50 +130,63 @@ contract UArchReplayTest is Test {
         bytes memory raw = rawJson.parseRaw(key);
         RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
 
+        uint256 readCount = 0;
         uint256 arrayLength = rawAccesses.length;
-        IMemoryAccessLog.Access[]
-            memory accesses = new IMemoryAccessLog.Access[](arrayLength);
-        uint256 writeCount;
-        bytes32[][] memory proofs = new bytes32[][](arrayLength);
+        bytes32[] memory hashes = new bytes32[](
+            arrayLength * (siblingsLength + 1)
+        );
 
         for (uint256 i = 0; i < arrayLength; i++) {
-            accesses[i].val = bytes8(
-                vm.parseBytes32(string.concat("0x", rawAccesses[i].val))
+            if (
+                keccak256(abi.encodePacked(rawAccesses[i].accessType)) ==
+                keccak256(abi.encodePacked("read"))
+            ) {
+                readCount++;
+            }
+            hashes[i * (siblingsLength + 1)] = vm.parseBytes32(
+                string.concat("0x", rawAccesses[i].rawProof.targetHash)
             );
-            accesses[i].position = uint64(rawAccesses[i].position);
-            if (
-                keccak256(abi.encodePacked(rawAccesses[i].accessType)) ==
-                keccak256(abi.encodePacked("write"))
+
+            for (
+                uint256 j = i * (siblingsLength + 1) + 1;
+                j < (i + 1) * (siblingsLength + 1);
+                j++
             ) {
-                writeCount++;
-            }
-
-            uint256 siblingsLength = rawAccesses[i].rawProof.rawSiblings.length;
-            proofs[i] = new bytes32[](siblingsLength);
-
-            for (uint256 j = 0; j < siblingsLength; j++) {
                 // proofs should be loaded in reverse order
-                proofs[i][siblingsLength - j - 1] = vm.parseBytes32(
-                    string.concat("0x", rawAccesses[i].rawProof.rawSiblings[j])
+                hashes[j] = vm.parseBytes32(
+                    string.concat(
+                        "0x",
+                        rawAccesses[i].rawProof.rawSiblings[
+                            siblingsLength - (j % (siblingsLength + 1))
+                        ]
+                    )
                 );
             }
         }
 
-        bytes32[] memory oldHashes = new bytes32[](writeCount);
-        writeCount = 0;
+        uint64[] memory words = new uint64[](readCount);
+        readCount = 0;
 
         for (uint256 i = 0; i < arrayLength; i++) {
             if (
                 keccak256(abi.encodePacked(rawAccesses[i].accessType)) ==
-                keccak256(abi.encodePacked("write"))
+                keccak256(abi.encodePacked("read"))
             ) {
-                oldHashes[writeCount] = vm.parseBytes32(
-                    string.concat("0x", rawAccesses[i].rawProof.targetHash)
+                words[readCount++] = UArchCompat.uint64SwapEndian(
+                    uint64(
+                        bytes8(
+                            vm.parseBytes32(
+                                string.concat("0x", rawAccesses[i].val)
+                            )
+                        )
+                    )
                 );
-                writeCount++;
             }
         }
 
-        return (rawAccesses, accesses, proofs, oldHashes);
+        return (
+            rawAccesses,
+            IAccessLogs.Context(bytes32(0), hashes, words, 0, 0)
+        );
     }
 }

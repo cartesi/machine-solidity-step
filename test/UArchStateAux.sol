@@ -16,13 +16,13 @@
 
 pragma solidity ^0.8.0;
 
-import "./MemoryAccessLogAux.sol";
+import "./AccessLogsAux.sol";
 import "contracts/UArchConstants.sol";
-import "contracts/interfaces/IMemoryAccessLog.sol";
+import "contracts/interfaces/IAccessLogs.sol";
 import "contracts/interfaces/IUArchState.sol";
 
 contract UArchStateAux is IUArchState, UArchConstants {
-    using MemoryAccessLogAux for mapping(uint64 => bytes8);
+    using AccessLogsAux for mapping(uint64 => bytes8);
 
     mapping(uint64 => bytes8) physicalMemory;
 
@@ -30,99 +30,77 @@ contract UArchStateAux is IUArchState, UArchConstants {
         physicalMemory[paddr] = value;
     }
 
-    function readWord(
-        IMemoryAccessLog.AccessLogs memory,
-        bytes32,
-        bytes32[][] memory,
-        uint64 paddr
-    ) external view override returns (uint64) {
-        return physicalMemory.readWord(paddr);
+    function readCycle(
+        IAccessLogs.Context memory a
+    ) external view override returns (uint64, IAccessLogs.Context memory) {
+        return (physicalMemory.readWord(UCYCLE), a);
     }
 
     function readHaltFlag(
-        IMemoryAccessLog.AccessLogs memory,
-        bytes32,
-        bytes32[][] memory
-    ) external view override returns (bool) {
-        return (physicalMemory.readWord(UHALT) != 0);
+        IAccessLogs.Context memory a
+    ) external view override returns (bool, IAccessLogs.Context memory) {
+        return ((physicalMemory.readWord(UHALT) != 0), a);
     }
 
     function readPc(
-        IMemoryAccessLog.AccessLogs memory,
-        bytes32,
-        bytes32[][] memory
-    ) external view override returns (uint64) {
-        return physicalMemory.readWord(UPC);
+        IAccessLogs.Context memory a
+    ) external view override returns (uint64, IAccessLogs.Context memory) {
+        return (physicalMemory.readWord(UPC), a);
     }
 
-    function readCycle(
-        IMemoryAccessLog.AccessLogs memory,
-        bytes32,
-        bytes32[][] memory
-    ) external view override returns (uint64) {
-        return physicalMemory.readWord(UCYCLE);
-    }
-
-    function writeCycle(
-        IMemoryAccessLog.AccessLogs memory,
-        bytes32,
-        bytes32[] memory,
-        bytes32[][] memory,
-        uint256,
-        uint64 val
-    ) external override returns (bytes32) {
-        return physicalMemory.writeWord(UCYCLE, val);
+    function readWord(
+        IAccessLogs.Context memory a,
+        uint64 paddr
+    ) external view override returns (uint64, IAccessLogs.Context memory) {
+        return (physicalMemory.readWord(paddr), a);
     }
 
     function readX(
-        IMemoryAccessLog.AccessLogs memory,
-        bytes32,
-        bytes32[][] memory,
+        IAccessLogs.Context memory a,
         uint8 index
-    ) external view override returns (uint64) {
+    ) external view override returns (uint64, IAccessLogs.Context memory) {
         uint64 paddr;
         unchecked {
             paddr = UX0 + (index << 3);
         }
-        return physicalMemory.readWord(paddr);
+        return (physicalMemory.readWord(paddr), a);
     }
 
-    function writeWord(
-        IMemoryAccessLog.AccessLogs memory,
-        bytes32,
-        bytes32[] memory,
-        bytes32[][] memory,
-        uint256,
-        uint64 paddr,
+    function writeCycle(
+        IAccessLogs.Context memory a,
         uint64 val
-    ) external override returns (bytes32) {
-        return physicalMemory.writeWord(paddr, val);
-    }
-
-    function writeX(
-        IMemoryAccessLog.AccessLogs memory,
-        bytes32,
-        bytes32[] memory,
-        bytes32[][] memory,
-        uint256,
-        uint8 index,
-        uint64 val
-    ) external override returns (bytes32) {
-        uint64 paddr;
-        unchecked {
-            paddr = UX0 + (index << 3);
-        }
-        return physicalMemory.writeWord(paddr, val);
+    ) external override returns (IAccessLogs.Context memory) {
+        physicalMemory.writeWord(UCYCLE, val);
+        return a;
     }
 
     function writePc(
-        IMemoryAccessLog.AccessLogs memory,
-        bytes32,
-        bytes32[] memory,
-        bytes32[][] memory,
-        uint256,
+        IAccessLogs.Context memory a,
         uint64 val
-    ) external override returns (bytes32) {
-        return physicalMemory.writeWord(UPC, val);
+    ) external override returns (IAccessLogs.Context memory) {
+        physicalMemory.writeWord(UPC, val);
+        return a;
+    }
+
+    function writeWord(
+        IAccessLogs.Context memory a,
+        uint64 paddr,
+        uint64 val
+    ) external override returns (IAccessLogs.Context memory) {
+        physicalMemory.writeWord(paddr, val);
+        return a;
+    }
+
+    function writeX(
+        IAccessLogs.Context memory a,
+        uint8 index,
+        uint64 val
+    ) external override returns (IAccessLogs.Context memory) {
+        uint64 paddr;
+        unchecked {
+            paddr = UX0 + (index << 3);
+        }
+        physicalMemory.writeWord(paddr, val);
+        return a;
     }
 }
