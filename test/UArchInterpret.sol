@@ -18,7 +18,6 @@ pragma solidity ^0.8.0;
 
 import "./IUArchInterpret.sol";
 import "contracts/interfaces/IUArchStep.sol";
-import "contracts/interfaces/IUArchState.sol";
 
 contract UArchInterpret is IUArchInterpret {
     IUArchStep immutable step;

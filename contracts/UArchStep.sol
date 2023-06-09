@@ -18,7 +18,6 @@ pragma solidity ^0.8.0;
 
 import "./interfaces/IUArchStep.sol";
 import "./UArchExecuteInsn.sol";
-import "./UArchCompat.sol";
 
 contract UArchStep is IUArchStep, UArchExecuteInsn {
     /// @notice Run step

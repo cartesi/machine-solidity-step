@@ -19,10 +19,9 @@ pragma solidity ^0.8.0;
 import "forge-std/StdJson.sol";
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
+
 import "contracts/UArchState.sol";
 import "contracts/UArchStep.sol";
-import "contracts/interfaces/IUArchStep.sol";
-import "contracts/interfaces/IAccessLogs.sol";
 
 contract UArchReplayTest is Test {
     using stdJson for string;

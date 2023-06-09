@@ -16,7 +16,6 @@
 
 pragma solidity ^0.8.0;
 
-import "./interfaces/IAccessLogs.sol";
 import "./interfaces/IUArchState.sol";
 import "./AccessLogs.sol";
 import "./UArchConstants.sol";

@@ -16,7 +16,6 @@
 
 pragma solidity ^0.8.0;
 
-import "./interfaces/IUArchState.sol";
 import "./UArchCompat.sol";
 
 contract UArchExecuteInsn {
