@@ -34,7 +34,7 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
         ...opts,
     });
 
-    const UArchState = await deploy("UArchState", {
+    await deploy("UArchState", {
         ...opts,
         libraries: {
             ["AccessLogs"]: AccessLogs.address,
