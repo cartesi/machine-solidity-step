@@ -18,6 +18,8 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
     const { deployer } = await getNamedAccounts();
 
     const deterministicDeployment = network.name !== "iotex_testnet";
+    const step = await deployments.get("UArchStep");
+    const state = await deployments.get("UArchState");
 
     const opts: DeployOptions = {
         deterministicDeployment,
@@ -25,21 +27,12 @@ const func: DeployFunction = async (hre: HardhatRuntimeEnvironment) => {
         log: true,
     }
 
-    const AccessLogs = await deploy("AccessLogs", {
+    const MetaStep = await deploy("MetaStep", {
         ...opts,
-    });
-
-    await deploy("UArchState", {
-        ...opts,
-        libraries: {
-            ["AccessLogs"]: AccessLogs.address,
-        },
-    });
-
-    await deploy("UArchStep", {
-        ...opts
+        args: [step.address, state.address],
     });
 };
 
-func.tags = ["UArch"];
+func.tags = ["MetaStep"];
+func.dependencies = ["UArch"];
 export default func;
