@@ -13,12 +13,12 @@
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 import "forge-std/StdJson.sol";
+
 import "./IUArchInterpret.sol";
 import "./AccessLogsAux.sol";
 import "./UArchStateAux.sol";
 import "./UArchInterpret.sol";
 import "contracts/UArchStep.sol";
-import "contracts/interfaces/IUArchState.sol";
 
 pragma solidity ^0.8.0;
 
