@@ -18,8 +18,9 @@ pragma solidity ^0.8.0;
 
 import "./interfaces/IUArchState.sol";
 
-/// @dev `state.accessLogs.current` is increment here as external calls are incapable of keeping the memory state changes.
-/// The `current` value increment is `unchecked` because it's safe and impossible to exceed uint256.max accesses in one step.
+/// @dev `state.accessLogs` includes counters and machine root hash that mutate as the accesses are required.
+/// Since the stateInterface exposes external functions, the memory state won't be updated.
+/// We need to overwrite the variable from the return argument manually to reflect the updates.
 /// All `unchecked` blocks in `(u)int` functions are intentional to be consistent with C++ implementation.
 library UArchCompat {
     function readCycle(
