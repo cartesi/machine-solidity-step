@@ -18,29 +18,31 @@ pragma solidity ^0.8.0;
 
 import "./interfaces/IUArchState.sol";
 import "./AccessLogs.sol";
+import "./Memory.sol";
 import "./UArchConstants.sol";
 
 contract UArchState is IUArchState, UArchConstants {
     using AccessLogs for IAccessLogs.Context;
+    using Memory for uint64;
 
     function readCycle(
         IAccessLogs.Context memory a
     ) external pure override returns (uint64, IAccessLogs.Context memory) {
-        uint64 cycle = a.readWord(UCYCLE);
+        uint64 cycle = a.readWord(UCYCLE.toPhysicalAddress());
         return (cycle, a);
     }
 
     function readHaltFlag(
         IAccessLogs.Context memory a
     ) external pure override returns (bool, IAccessLogs.Context memory) {
-        bool halt = (a.readWord(UHALT) != 0);
+        bool halt = (a.readWord(UHALT.toPhysicalAddress()) != 0);
         return (halt, a);
     }
 
     function readPc(
         IAccessLogs.Context memory a
     ) external pure override returns (uint64, IAccessLogs.Context memory) {
-        uint64 pc = a.readWord(UPC);
+        uint64 pc = a.readWord(UPC.toPhysicalAddress());
         return (pc, a);
     }
 
@@ -48,7 +50,7 @@ contract UArchState is IUArchState, UArchConstants {
         IAccessLogs.Context memory a,
         uint64 paddr
     ) external pure override returns (uint64, IAccessLogs.Context memory) {
-        uint64 word = a.readWord(paddr);
+        uint64 word = a.readWord(paddr.toPhysicalAddress());
         return (word, a);
     }
 
@@ -60,7 +62,7 @@ contract UArchState is IUArchState, UArchConstants {
         unchecked {
             paddr = UX0 + (index << 3);
         }
-        uint64 x = a.readWord(paddr);
+        uint64 x = a.readWord(paddr.toPhysicalAddress());
         return (x, a);
     }
 
@@ -68,7 +70,7 @@ contract UArchState is IUArchState, UArchConstants {
         IAccessLogs.Context memory a,
         uint64 val
     ) external pure override returns (IAccessLogs.Context memory) {
-        a.writeWord(UCYCLE, val);
+        a.writeWord(UCYCLE.toPhysicalAddress(), val);
         return a;
     }
 
@@ -76,7 +78,7 @@ contract UArchState is IUArchState, UArchConstants {
         IAccessLogs.Context memory a,
         uint64 val
     ) external pure override returns (IAccessLogs.Context memory) {
-        a.writeWord(UPC, val);
+        a.writeWord(UPC.toPhysicalAddress(), val);
         return a;
     }
 
@@ -85,7 +87,7 @@ contract UArchState is IUArchState, UArchConstants {
         uint64 paddr,
         uint64 val
     ) external pure override returns (IAccessLogs.Context memory) {
-        a.writeWord(paddr, val);
+        a.writeWord(paddr.toPhysicalAddress(), val);
         return a;
     }
 
@@ -98,7 +100,7 @@ contract UArchState is IUArchState, UArchConstants {
         unchecked {
             paddr = UX0 + (index << 3);
         }
-        a.writeWord(paddr, val);
+        a.writeWord(paddr.toPhysicalAddress(), val);
         return a;
     }
 }

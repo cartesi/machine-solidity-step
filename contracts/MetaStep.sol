@@ -53,8 +53,8 @@ contract MetaStep is IMetaStep {
         ) {
             // if cycle is a multiple of (1 << UArchConstants.LOG2_CYCLES_TO_RESET), run uarch reset
             accessLogsAfterStep.writeRegion(
-                Memory.regionFromMemoryAddress(
-                    Memory.MemoryAddress.wrap(ustate.RESET_POSITION()),
+                Memory.regionFromPhysicalAddress(
+                    Memory.PhysicalAddress.wrap(ustate.RESET_POSITION()),
                     Memory.AlignedSize.wrap(ustate.RESET_ALIGNED_SIZE())
                 ),
                 ustate.PRESTINE_STATE()
