@@ -13,11 +13,13 @@
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 import "contracts/AccessLogs.sol";
+import "contracts/Memory.sol";
 
 pragma solidity ^0.8.0;
 
 contract AccessLogsTest is Test {
     using AccessLogs for IAccessLogs.Context;
+    using Memory for uint64;
 
     bytes32[] hashes;
     bytes32 rootHash;
@@ -49,13 +51,13 @@ contract AccessLogsTest is Test {
         );
 
         vm.expectRevert("Read value doesn't match");
-        accessLogs.readWord(position);
+        accessLogs.readWord(position.toPhysicalAddress());
 
         vm.expectRevert("Read region root doesn't match");
-        accessLogs.readWord(position + 1);
+        accessLogs.readWord((position + 1).toPhysicalAddress());
 
         words[0] = 0;
-        accessLogs.readWord(position);
+        accessLogs.readWord(position.toPhysicalAddress());
     }
 
     function testWriteWord() public {
@@ -71,14 +73,14 @@ contract AccessLogsTest is Test {
         uint64 valueWritten = 1;
 
         vm.expectRevert("Write region root doesn't match");
-        accessLogs.writeWord(position, valueWritten);
+        accessLogs.writeWord(position.toPhysicalAddress(), valueWritten);
 
         hashes[0] = (keccak256(abi.encodePacked(bytes8(0))));
         accessLogs = IAccessLogs.Context(rootHash, hashes, words, 0, 0);
         vm.expectRevert("Write region root doesn't match");
-        accessLogs.writeWord(position + 1, valueWritten);
+        accessLogs.writeWord((position + 1).toPhysicalAddress(), valueWritten);
 
         // write should succeed
-        accessLogs.writeWord(position, valueWritten);
+        accessLogs.writeWord(position.toPhysicalAddress(), valueWritten);
     }
 }

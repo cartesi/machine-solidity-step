@@ -46,24 +46,27 @@ library AccessLogs {
 
     function readLeaf(
         IAccessLogs.Context memory a,
-        uint64 readAddress
+        Memory.Stride readStride
     ) internal pure returns (bytes32) {
-        Memory.Region memory r = Memory.regionFromMemoryAddress(
-            Memory.MemoryAddress.wrap(readAddress),
-            Memory.AlignedSize.wrap(0)
+        Memory.Region memory r = Memory.regionFromStride(
+            readStride,
+            Memory.alignedSizeFromLog2(0)
         );
         return readRegion(a, r);
     }
 
     function readWord(
         IAccessLogs.Context memory a,
-        uint64 readAddress
+        Memory.PhysicalAddress readAddress
     ) internal pure returns (uint64) {
         uint64 val = a.words[a.currentWord++];
         bytes32 valHash = keccak256(
             abi.encodePacked(UArchCompat.uint64SwapEndian(val))
         );
-        bytes32 expectedValHash = readLeaf(a, readAddress);
+        bytes32 expectedValHash = readLeaf(
+            a,
+            Memory.strideFromWordAddress(readAddress)
+        );
 
         require(valHash == expectedValHash, "Read value doesn't match");
         return val;
@@ -104,24 +107,24 @@ library AccessLogs {
 
     function writeLeaf(
         IAccessLogs.Context memory a,
-        uint64 writeAddress,
+        Memory.Stride writeStride,
         bytes32 newHash
     ) internal pure {
-        Memory.Region memory r = Memory.regionFromMemoryAddress(
-            Memory.MemoryAddress.wrap(writeAddress),
-            Memory.AlignedSize.wrap(0)
+        Memory.Region memory r = Memory.regionFromStride(
+            writeStride,
+            Memory.alignedSizeFromLog2(0)
         );
         writeRegion(a, r, newHash);
     }
 
     function writeWord(
         IAccessLogs.Context memory a,
-        uint64 writeAddress,
+        Memory.PhysicalAddress writeAddress,
         uint64 newValue
     ) internal pure {
         writeLeaf(
             a,
-            writeAddress,
+            Memory.strideFromWordAddress(writeAddress),
             keccak256(abi.encodePacked(UArchCompat.uint64SwapEndian(newValue)))
         );
     }
