@@ -20,7 +20,7 @@ import "./AccessLogsAux.sol";
 import "contracts/UArchConstants.sol";
 import "contracts/interfaces/IUArchState.sol";
 
-contract UArchStateAux is IUArchState, UArchConstants {
+contract UArchStateAux is IUArchState {
     using AccessLogsAux for mapping(uint64 => bytes8);
 
     mapping(uint64 => bytes8) physicalMemory;
@@ -32,19 +32,19 @@ contract UArchStateAux is IUArchState, UArchConstants {
     function readCycle(
         AccessLogs.Context memory a
     ) external view override returns (uint64, AccessLogs.Context memory) {
-        return (physicalMemory.readWord(UCYCLE), a);
+        return (physicalMemory.readWord(UArchConstants.UCYCLE), a);
     }
 
     function readHaltFlag(
         AccessLogs.Context memory a
     ) external view override returns (bool, AccessLogs.Context memory) {
-        return ((physicalMemory.readWord(UHALT) != 0), a);
+        return ((physicalMemory.readWord(UArchConstants.UHALT) != 0), a);
     }
 
     function readPc(
         AccessLogs.Context memory a
     ) external view override returns (uint64, AccessLogs.Context memory) {
-        return (physicalMemory.readWord(UPC), a);
+        return (physicalMemory.readWord(UArchConstants.UPC), a);
     }
 
     function readWord(
@@ -60,7 +60,7 @@ contract UArchStateAux is IUArchState, UArchConstants {
     ) external view override returns (uint64, AccessLogs.Context memory) {
         uint64 paddr;
         unchecked {
-            paddr = UX0 + (index << 3);
+            paddr = UArchConstants.UX0 + (index << 3);
         }
         return (physicalMemory.readWord(paddr), a);
     }
@@ -69,7 +69,7 @@ contract UArchStateAux is IUArchState, UArchConstants {
         AccessLogs.Context memory a,
         uint64 val
     ) external override returns (AccessLogs.Context memory) {
-        physicalMemory.writeWord(UCYCLE, val);
+        physicalMemory.writeWord(UArchConstants.UCYCLE, val);
         return a;
     }
 
@@ -77,7 +77,7 @@ contract UArchStateAux is IUArchState, UArchConstants {
         AccessLogs.Context memory a,
         uint64 val
     ) external override returns (AccessLogs.Context memory) {
-        physicalMemory.writeWord(UPC, val);
+        physicalMemory.writeWord(UArchConstants.UPC, val);
         return a;
     }
 
@@ -97,7 +97,7 @@ contract UArchStateAux is IUArchState, UArchConstants {
     ) external override returns (AccessLogs.Context memory) {
         uint64 paddr;
         unchecked {
-            paddr = UX0 + (index << 3);
+            paddr = UArchConstants.UX0 + (index << 3);
         }
         physicalMemory.writeWord(paddr, val);
         return a;

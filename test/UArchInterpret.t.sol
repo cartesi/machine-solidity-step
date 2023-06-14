@@ -19,10 +19,8 @@ import "forge-std/Test.sol";
 import "forge-std/StdJson.sol";
 
 import "./IUArchInterpret.sol";
-import "./AccessLogsAux.sol";
 import "./UArchStateAux.sol";
 import "./UArchInterpret.sol";
-import "contracts/UArchStep.sol";
 
 pragma solidity ^0.8.0;
 
@@ -47,14 +45,12 @@ contract UArchInterpretTest is Test {
     string constant ROM_PATH = "./test/uarch-bin/uarch-bootstrap.bin";
 
     UArchStateAux sa;
-    IUArchStep step;
     IUArchInterpret inter;
 
     function setUp() public {
         // create fresh machine state for every test
         sa = new UArchStateAux();
-        step = new UArchStep();
-        inter = new UArchInterpret(step);
+        inter = new UArchInterpret();
     }
 
     function testBinaries() public {
@@ -97,8 +93,6 @@ contract UArchInterpretTest is Test {
 
             // create fresh machine state for every test
             sa = new UArchStateAux();
-            step = new UArchStep();
-            inter = new UArchInterpret(step);
         }
     }
 
@@ -154,19 +148,19 @@ contract UArchInterpretTest is Test {
     }
 
     function initCYCLE() private {
-        sa.loadMemory(sa.UCYCLE(), 0);
+        sa.loadMemory(UArchConstants.UCYCLE, 0);
     }
 
     function initMaxCYCLE() private {
-        sa.loadMemory(sa.UCYCLE(), 0xffffffffffffffff);
+        sa.loadMemory(UArchConstants.UCYCLE, 0xffffffffffffffff);
     }
 
     function initHalt() private {
-        sa.loadMemory(sa.UHALT(), 0x0100000000000000);
+        sa.loadMemory(UArchConstants.UHALT, 0x0100000000000000);
     }
 
     function initPC() private {
-        sa.loadMemory(sa.UPC(), LITTLE_PMA_UARCH_RAM_START);
+        sa.loadMemory(UArchConstants.UPC, LITTLE_PMA_UARCH_RAM_START);
     }
 
     function loadBin(uint64 start, string memory path) private {

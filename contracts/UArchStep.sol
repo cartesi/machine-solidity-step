@@ -16,35 +16,34 @@
 
 pragma solidity ^0.8.0;
 
-import "./interfaces/IUArchStep.sol";
 import "./UArchExecuteInsn.sol";
 
-contract UArchStep is IUArchStep, UArchExecuteInsn {
+library UArchStep {
     /// @notice Run step
     /// @param state state of machine
-    /// @return (uint64, bool, AccessLogs.Context) cycle number, machine halt flag and updated AccessLogs.Context
+    /// @return (uint64, bool) cycle number, machine halt flag
     function step(
         IUArchState.State memory state
-    ) external override returns (uint64, bool, AccessLogs.Context memory) {
+    ) internal returns (uint64, bool) {
         uint64 ucycle = UArchCompat.readCycle(state);
 
         if (UArchCompat.readHaltFlag(state)) {
-            return (ucycle, true, state.accessLogs);
+            return (ucycle, true);
         }
         // early check if ucycle is uint64.max, so it'll be safe to uncheck increment later
         if (ucycle == type(uint64).max) {
-            return (ucycle, false, state.accessLogs);
+            return (ucycle, false);
         }
 
         uint64 upc = UArchCompat.readPc(state);
-        uint32 insn = readUint32(state, upc);
-        uarchExecuteInsn(state, insn, upc);
+        uint32 insn = UArchExecuteInsn.readUint32(state, upc);
+        UArchExecuteInsn.uarchExecuteInsn(state, insn, upc);
 
         unchecked {
             ++ucycle;
         }
         UArchCompat.writeCycle(state, ucycle);
 
-        return (ucycle, false, state.accessLogs);
+        return (ucycle, false);
     }
 }

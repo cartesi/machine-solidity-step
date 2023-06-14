@@ -17,15 +17,9 @@
 pragma solidity ^0.8.0;
 
 import "./IUArchInterpret.sol";
-import "contracts/interfaces/IUArchStep.sol";
+import "contracts/UArchStep.sol";
 
 contract UArchInterpret is IUArchInterpret {
-    IUArchStep immutable step;
-
-    constructor(IUArchStep _step) {
-        step = _step;
-    }
-
     /// @notice Run interpret until machine halts.
     /// @param state state of machine
     /// @return Returns an exit code
@@ -36,7 +30,7 @@ contract UArchInterpret is IUArchInterpret {
         bool halt;
 
         while (ucycle < type(uint64).max) {
-            (ucycle, halt, ) = step.step(state);
+            (ucycle, halt) = UArchStep.step(state);
 
             if (halt) {
                 return InterpreterStatus.Halt;

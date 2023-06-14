@@ -20,28 +20,28 @@ import "./interfaces/IUArchState.sol";
 import "./Memory.sol";
 import "./UArchConstants.sol";
 
-contract UArchState is IUArchState, UArchConstants {
+contract UArchState is IUArchState {
     using AccessLogs for AccessLogs.Context;
     using Memory for uint64;
 
     function readCycle(
         AccessLogs.Context memory a
     ) external pure override returns (uint64, AccessLogs.Context memory) {
-        uint64 cycle = a.readWord(UCYCLE.toPhysicalAddress());
+        uint64 cycle = a.readWord(UArchConstants.UCYCLE.toPhysicalAddress());
         return (cycle, a);
     }
 
     function readHaltFlag(
         AccessLogs.Context memory a
     ) external pure override returns (bool, AccessLogs.Context memory) {
-        bool halt = (a.readWord(UHALT.toPhysicalAddress()) != 0);
+        bool halt = (a.readWord(UArchConstants.UHALT.toPhysicalAddress()) != 0);
         return (halt, a);
     }
 
     function readPc(
         AccessLogs.Context memory a
     ) external pure override returns (uint64, AccessLogs.Context memory) {
-        uint64 pc = a.readWord(UPC.toPhysicalAddress());
+        uint64 pc = a.readWord(UArchConstants.UPC.toPhysicalAddress());
         return (pc, a);
     }
 
@@ -59,7 +59,7 @@ contract UArchState is IUArchState, UArchConstants {
     ) external pure override returns (uint64, AccessLogs.Context memory) {
         uint64 paddr;
         unchecked {
-            paddr = UX0 + (index << 3);
+            paddr = UArchConstants.UX0 + (index << 3);
         }
         uint64 x = a.readWord(paddr.toPhysicalAddress());
         return (x, a);
@@ -69,7 +69,7 @@ contract UArchState is IUArchState, UArchConstants {
         AccessLogs.Context memory a,
         uint64 val
     ) external pure override returns (AccessLogs.Context memory) {
-        a.writeWord(UCYCLE.toPhysicalAddress(), val);
+        a.writeWord(UArchConstants.UCYCLE.toPhysicalAddress(), val);
         return a;
     }
 
@@ -77,7 +77,7 @@ contract UArchState is IUArchState, UArchConstants {
         AccessLogs.Context memory a,
         uint64 val
     ) external pure override returns (AccessLogs.Context memory) {
-        a.writeWord(UPC.toPhysicalAddress(), val);
+        a.writeWord(UArchConstants.UPC.toPhysicalAddress(), val);
         return a;
     }
 
@@ -97,7 +97,7 @@ contract UArchState is IUArchState, UArchConstants {
     ) external pure override returns (AccessLogs.Context memory) {
         uint64 paddr;
         unchecked {
-            paddr = UX0 + (index << 3);
+            paddr = UArchConstants.UX0 + (index << 3);
         }
         a.writeWord(paddr.toPhysicalAddress(), val);
         return a;

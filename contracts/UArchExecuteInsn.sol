@@ -18,7 +18,7 @@ pragma solidity ^0.8.0;
 
 import "./UArchCompat.sol";
 
-contract UArchExecuteInsn {
+library UArchExecuteInsn {
     // START OF AUTO-GENERATED CODE
 
     // Memory read/write access
