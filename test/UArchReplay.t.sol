@@ -82,7 +82,7 @@ contract UArchReplayTest is Test {
                 // load json log
                 (
                     RawAccess[] memory rawAccesses,
-                    IAccessLogs.Context memory accessLogs
+                    AccessLogs.Context memory accessLogs
                 ) = fromRawArray(rj, j);
 
                 accessLogs.currentRootHash = vm.parseBytes32(
@@ -117,7 +117,7 @@ contract UArchReplayTest is Test {
     function fromRawArray(
         string memory rawJson,
         uint256 stepIndex
-    ) private pure returns (RawAccess[] memory, IAccessLogs.Context memory) {
+    ) private pure returns (RawAccess[] memory, AccessLogs.Context memory) {
         string memory key = string.concat(
             string.concat(".steps[", vm.toString(stepIndex)),
             "].accesses"
@@ -181,7 +181,7 @@ contract UArchReplayTest is Test {
 
         return (
             rawAccesses,
-            IAccessLogs.Context(bytes32(0), hashes, words, 0, 0)
+            AccessLogs.Context(bytes32(0), hashes, words, 0, 0)
         );
     }
 }

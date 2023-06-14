@@ -32,9 +32,9 @@ library AccessLogsAux {
         physicalMemory[writeAddress] = bytesvalue;
     }
 
-    function newContext() internal pure returns (IAccessLogs.Context memory) {
+    function newContext() internal pure returns (AccessLogs.Context memory) {
         return
-            IAccessLogs.Context(
+            AccessLogs.Context(
                 bytes32(0),
                 new bytes32[](0),
                 new uint64[](0),

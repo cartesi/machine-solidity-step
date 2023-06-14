@@ -18,7 +18,7 @@ import "contracts/Memory.sol";
 pragma solidity ^0.8.0;
 
 contract AccessLogsTest is Test {
-    using AccessLogs for IAccessLogs.Context;
+    using AccessLogs for AccessLogs.Context;
     using Memory for uint64;
 
     bytes32[] hashes;
@@ -42,7 +42,7 @@ contract AccessLogsTest is Test {
     function testReadWord() public {
         uint64[] memory words = new uint64[](1);
         words[0] = 1;
-        IAccessLogs.Context memory accessLogs = IAccessLogs.Context(
+        AccessLogs.Context memory accessLogs = AccessLogs.Context(
             rootHash,
             hashes,
             words,
@@ -63,7 +63,7 @@ contract AccessLogsTest is Test {
     function testWriteWord() public {
         uint64[] memory words = new uint64[](0);
         hashes[0] = (keccak256(abi.encodePacked(bytes8(uint64(1)))));
-        IAccessLogs.Context memory accessLogs = IAccessLogs.Context(
+        AccessLogs.Context memory accessLogs = AccessLogs.Context(
             rootHash,
             hashes,
             words,
@@ -76,7 +76,7 @@ contract AccessLogsTest is Test {
         accessLogs.writeWord(position.toPhysicalAddress(), valueWritten);
 
         hashes[0] = (keccak256(abi.encodePacked(bytes8(0))));
-        accessLogs = IAccessLogs.Context(rootHash, hashes, words, 0, 0);
+        accessLogs = AccessLogs.Context(rootHash, hashes, words, 0, 0);
         vm.expectRevert("Write region root doesn't match");
         accessLogs.writeWord((position + 1).toPhysicalAddress(), valueWritten);
 

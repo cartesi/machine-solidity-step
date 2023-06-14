@@ -12,19 +12,26 @@
 
 pragma solidity ^0.8.0;
 
-import "./interfaces/IAccessLogs.sol";
 import "./Memory.sol";
 import "./UArchCompat.sol";
 
 library AccessLogs {
     using Memory for Memory.AlignedSize;
 
+    struct Context {
+        bytes32 currentRootHash;
+        bytes32[] hashes;
+        uint64[] words;
+        uint128 currentHashIndex;
+        uint128 currentWord;
+    }
+
     //
     // Read methods
     //
 
     function readRegion(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         Memory.Region memory region
     ) internal pure returns (bytes32) {
         bytes32 drive = a.hashes[a.currentHashIndex++];
@@ -45,7 +52,7 @@ library AccessLogs {
     }
 
     function readLeaf(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         Memory.Stride readStride
     ) internal pure returns (bytes32) {
         Memory.Region memory r = Memory.regionFromStride(
@@ -56,7 +63,7 @@ library AccessLogs {
     }
 
     function readWord(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         Memory.PhysicalAddress readAddress
     ) internal pure returns (uint64) {
         uint64 val = a.words[a.currentWord++];
@@ -77,7 +84,7 @@ library AccessLogs {
     //
 
     function writeRegion(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         Memory.Region memory region,
         bytes32 newHash
     ) internal pure {
@@ -106,7 +113,7 @@ library AccessLogs {
     }
 
     function writeLeaf(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         Memory.Stride writeStride,
         bytes32 newHash
     ) internal pure {
@@ -118,7 +125,7 @@ library AccessLogs {
     }
 
     function writeWord(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         Memory.PhysicalAddress writeAddress,
         uint64 newValue
     ) internal pure {

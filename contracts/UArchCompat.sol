@@ -26,7 +26,7 @@ library UArchCompat {
     function readCycle(
         IUArchState.State memory state
     ) internal returns (uint64) {
-        (uint64 res, IAccessLogs.Context memory updatedLogs) = state
+        (uint64 res, AccessLogs.Context memory updatedLogs) = state
             .stateInterface
             .readCycle(state.accessLogs);
         state.accessLogs = updatedLogs;
@@ -37,7 +37,7 @@ library UArchCompat {
     function readHaltFlag(
         IUArchState.State memory state
     ) internal returns (bool) {
-        (bool res, IAccessLogs.Context memory updatedLogs) = state
+        (bool res, AccessLogs.Context memory updatedLogs) = state
             .stateInterface
             .readHaltFlag(state.accessLogs);
         state.accessLogs = updatedLogs;
@@ -46,7 +46,7 @@ library UArchCompat {
     }
 
     function readPc(IUArchState.State memory state) internal returns (uint64) {
-        (uint64 res, IAccessLogs.Context memory updatedLogs) = state
+        (uint64 res, AccessLogs.Context memory updatedLogs) = state
             .stateInterface
             .readPc(state.accessLogs);
         state.accessLogs = updatedLogs;
@@ -58,7 +58,7 @@ library UArchCompat {
         IUArchState.State memory state,
         uint64 paddr
     ) internal returns (uint64) {
-        (uint64 res, IAccessLogs.Context memory updatedLogs) = state
+        (uint64 res, AccessLogs.Context memory updatedLogs) = state
             .stateInterface
             .readWord(state.accessLogs, paddr);
         state.accessLogs = updatedLogs;
@@ -70,7 +70,7 @@ library UArchCompat {
         IUArchState.State memory state,
         uint8 index
     ) internal returns (uint64) {
-        (uint64 res, IAccessLogs.Context memory updatedLogs) = state
+        (uint64 res, AccessLogs.Context memory updatedLogs) = state
             .stateInterface
             .readX(state.accessLogs, index);
         state.accessLogs = updatedLogs;
@@ -79,14 +79,15 @@ library UArchCompat {
     }
 
     function writeCycle(IUArchState.State memory state, uint64 val) internal {
-        IAccessLogs.Context memory updatedLogs = state
-            .stateInterface
-            .writeCycle(state.accessLogs, val);
+        AccessLogs.Context memory updatedLogs = state.stateInterface.writeCycle(
+            state.accessLogs,
+            val
+        );
         state.accessLogs = updatedLogs;
     }
 
     function writePc(IUArchState.State memory state, uint64 val) internal {
-        IAccessLogs.Context memory updatedLogs = state.stateInterface.writePc(
+        AccessLogs.Context memory updatedLogs = state.stateInterface.writePc(
             state.accessLogs,
             val
         );
@@ -98,7 +99,7 @@ library UArchCompat {
         uint64 paddr,
         uint64 val
     ) internal {
-        IAccessLogs.Context memory updatedLogs = state.stateInterface.writeWord(
+        AccessLogs.Context memory updatedLogs = state.stateInterface.writeWord(
             state.accessLogs,
             paddr,
             val
@@ -111,7 +112,7 @@ library UArchCompat {
         uint8 index,
         uint64 val
     ) internal {
-        IAccessLogs.Context memory updatedLogs = state.stateInterface.writeX(
+        AccessLogs.Context memory updatedLogs = state.stateInterface.writeX(
             state.accessLogs,
             index,
             val

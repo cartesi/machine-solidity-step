@@ -14,10 +14,10 @@
 
 pragma solidity >=0.8.0;
 
-import "./IAccessLogs.sol";
+import "../AccessLogs.sol";
 
 interface IMetaStep {
     function step(
-        IAccessLogs.Context memory accessLogs
+        AccessLogs.Context memory accessLogs
     ) external returns (uint64, bool, bytes32);
 }
