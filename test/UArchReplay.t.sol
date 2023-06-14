@@ -29,7 +29,6 @@ contract UArchReplayTest is Test {
     uint256 constant siblingsLength = 61;
 
     IUArchState state;
-    IUArchStep step;
 
     struct Entry {
         string path;
@@ -60,7 +59,6 @@ contract UArchReplayTest is Test {
 
     function setUp() public {
         state = new UArchState();
-        step = new UArchStep();
     }
 
     function testReplayLogs() public {
@@ -93,7 +91,7 @@ contract UArchReplayTest is Test {
                     state,
                     accessLogs
                 );
-                step.step(s);
+                UArchStep.step(s);
             }
         }
     }

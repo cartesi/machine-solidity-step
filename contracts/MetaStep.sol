@@ -16,19 +16,17 @@
 pragma solidity ^0.8.0;
 
 import "./interfaces/IMetaStep.sol";
-import "./interfaces/IUArchStep.sol";
+import "./interfaces/IUArchState.sol";
 import "./UArchConstants.sol";
-import "./UArchState.sol";
+import "./UArchStep.sol";
 
 contract MetaStep is IMetaStep {
     using AccessLogs for AccessLogs.Context;
 
-    UArchState immutable ustate;
-    IUArchStep immutable ustep;
+    IUArchState immutable istate;
 
-    constructor(IUArchStep stepInterface, UArchState stateImpl) {
-        ustate = stateImpl;
-        ustep = stepInterface;
+    constructor(IUArchState state) {
+        istate = state;
     }
 
     /// @notice Run meta-step
@@ -40,26 +38,25 @@ contract MetaStep is IMetaStep {
         override
         returns (uint64 cycle, bool halt, bytes32 machineState)
     {
-        AccessLogs.Context memory accessLogsAfterStep;
-        IUArchState.State memory state = IUArchState.State(ustate, accessLogs);
+        IUArchState.State memory state = IUArchState.State(istate, accessLogs);
 
-        (cycle, halt, accessLogsAfterStep) = ustep.step(state);
-        machineState = accessLogsAfterStep.currentRootHash;
+        (cycle, halt) = UArchStep.step(state);
+        machineState = accessLogs.currentRootHash;
 
         if (
             counter ==
-            (counter >> ustate.LOG2_CYCLES_TO_RESET()) <<
-                ustate.LOG2_CYCLES_TO_RESET()
+            (counter >> UArchConstants.LOG2_CYCLES_TO_RESET) <<
+                UArchConstants.LOG2_CYCLES_TO_RESET
         ) {
             // if counter is a multiple of (1 << UArchConstants.LOG2_CYCLES_TO_RESET), run uarch reset
-            accessLogsAfterStep.writeRegion(
+            accessLogs.writeRegion(
                 Memory.regionFromPhysicalAddress(
-                    Memory.PhysicalAddress.wrap(ustate.RESET_POSITION()),
-                    Memory.AlignedSize.wrap(ustate.RESET_ALIGNED_SIZE())
+                    Memory.PhysicalAddress.wrap(UArchConstants.RESET_POSITION),
+                    Memory.AlignedSize.wrap(UArchConstants.RESET_ALIGNED_SIZE)
                 ),
-                ustate.PRESTINE_STATE()
+                UArchConstants.PRESTINE_STATE
             );
-            machineState = accessLogsAfterStep.currentRootHash;
+            machineState = accessLogs.currentRootHash;
         }
     }
 }
