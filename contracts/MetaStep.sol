@@ -33,6 +33,7 @@ contract MetaStep is IMetaStep {
 
     /// @notice Run meta-step
     function step(
+        uint256 counter,
         AccessLogs.Context memory accessLogs
     )
         external
@@ -46,11 +47,11 @@ contract MetaStep is IMetaStep {
         machineState = accessLogsAfterStep.currentRootHash;
 
         if (
-            cycle ==
-            (cycle >> ustate.LOG2_CYCLES_TO_RESET()) <<
+            counter ==
+            (counter >> ustate.LOG2_CYCLES_TO_RESET()) <<
                 ustate.LOG2_CYCLES_TO_RESET()
         ) {
-            // if cycle is a multiple of (1 << UArchConstants.LOG2_CYCLES_TO_RESET), run uarch reset
+            // if counter is a multiple of (1 << UArchConstants.LOG2_CYCLES_TO_RESET), run uarch reset
             accessLogsAfterStep.writeRegion(
                 Memory.regionFromPhysicalAddress(
                     Memory.PhysicalAddress.wrap(ustate.RESET_POSITION()),
