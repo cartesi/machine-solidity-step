@@ -22,10 +22,10 @@ import "./UArchExecuteInsn.sol";
 contract UArchStep is IUArchStep, UArchExecuteInsn {
     /// @notice Run step
     /// @param state state of machine
-    /// @return (uint64, bool, IAccessLogs.Context) cycle number, machine halt flag and updated IAccessLogs.Context
+    /// @return (uint64, bool, AccessLogs.Context) cycle number, machine halt flag and updated AccessLogs.Context
     function step(
         IUArchState.State memory state
-    ) external override returns (uint64, bool, IAccessLogs.Context memory) {
+    ) external override returns (uint64, bool, AccessLogs.Context memory) {
         uint64 ucycle = UArchCompat.readCycle(state);
 
         if (UArchCompat.readHaltFlag(state)) {

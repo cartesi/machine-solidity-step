@@ -17,47 +17,46 @@
 pragma solidity ^0.8.0;
 
 import "./interfaces/IUArchState.sol";
-import "./AccessLogs.sol";
 import "./Memory.sol";
 import "./UArchConstants.sol";
 
 contract UArchState is IUArchState, UArchConstants {
-    using AccessLogs for IAccessLogs.Context;
+    using AccessLogs for AccessLogs.Context;
     using Memory for uint64;
 
     function readCycle(
-        IAccessLogs.Context memory a
-    ) external pure override returns (uint64, IAccessLogs.Context memory) {
+        AccessLogs.Context memory a
+    ) external pure override returns (uint64, AccessLogs.Context memory) {
         uint64 cycle = a.readWord(UCYCLE.toPhysicalAddress());
         return (cycle, a);
     }
 
     function readHaltFlag(
-        IAccessLogs.Context memory a
-    ) external pure override returns (bool, IAccessLogs.Context memory) {
+        AccessLogs.Context memory a
+    ) external pure override returns (bool, AccessLogs.Context memory) {
         bool halt = (a.readWord(UHALT.toPhysicalAddress()) != 0);
         return (halt, a);
     }
 
     function readPc(
-        IAccessLogs.Context memory a
-    ) external pure override returns (uint64, IAccessLogs.Context memory) {
+        AccessLogs.Context memory a
+    ) external pure override returns (uint64, AccessLogs.Context memory) {
         uint64 pc = a.readWord(UPC.toPhysicalAddress());
         return (pc, a);
     }
 
     function readWord(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         uint64 paddr
-    ) external pure override returns (uint64, IAccessLogs.Context memory) {
+    ) external pure override returns (uint64, AccessLogs.Context memory) {
         uint64 word = a.readWord(paddr.toPhysicalAddress());
         return (word, a);
     }
 
     function readX(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         uint8 index
-    ) external pure override returns (uint64, IAccessLogs.Context memory) {
+    ) external pure override returns (uint64, AccessLogs.Context memory) {
         uint64 paddr;
         unchecked {
             paddr = UX0 + (index << 3);
@@ -67,35 +66,35 @@ contract UArchState is IUArchState, UArchConstants {
     }
 
     function writeCycle(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         uint64 val
-    ) external pure override returns (IAccessLogs.Context memory) {
+    ) external pure override returns (AccessLogs.Context memory) {
         a.writeWord(UCYCLE.toPhysicalAddress(), val);
         return a;
     }
 
     function writePc(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         uint64 val
-    ) external pure override returns (IAccessLogs.Context memory) {
+    ) external pure override returns (AccessLogs.Context memory) {
         a.writeWord(UPC.toPhysicalAddress(), val);
         return a;
     }
 
     function writeWord(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         uint64 paddr,
         uint64 val
-    ) external pure override returns (IAccessLogs.Context memory) {
+    ) external pure override returns (AccessLogs.Context memory) {
         a.writeWord(paddr.toPhysicalAddress(), val);
         return a;
     }
 
     function writeX(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         uint8 index,
         uint64 val
-    ) external pure override returns (IAccessLogs.Context memory) {
+    ) external pure override returns (AccessLogs.Context memory) {
         uint64 paddr;
         unchecked {
             paddr = UX0 + (index << 3);

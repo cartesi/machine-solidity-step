@@ -16,55 +16,55 @@
 
 pragma solidity >=0.8.0;
 
-import "./IAccessLogs.sol";
+import "../AccessLogs.sol";
 
 interface IUArchState {
     struct State {
         IUArchState stateInterface;
-        IAccessLogs.Context accessLogs;
+        AccessLogs.Context accessLogs;
     }
 
     function readCycle(
-        IAccessLogs.Context memory a
-    ) external returns (uint64, IAccessLogs.Context memory);
+        AccessLogs.Context memory a
+    ) external returns (uint64, AccessLogs.Context memory);
 
     function readHaltFlag(
-        IAccessLogs.Context memory a
-    ) external returns (bool, IAccessLogs.Context memory);
+        AccessLogs.Context memory a
+    ) external returns (bool, AccessLogs.Context memory);
 
     function readPc(
-        IAccessLogs.Context memory a
-    ) external returns (uint64, IAccessLogs.Context memory);
+        AccessLogs.Context memory a
+    ) external returns (uint64, AccessLogs.Context memory);
 
     function readWord(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         uint64 paddr
-    ) external returns (uint64, IAccessLogs.Context memory);
+    ) external returns (uint64, AccessLogs.Context memory);
 
     function readX(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         uint8 index
-    ) external returns (uint64, IAccessLogs.Context memory);
+    ) external returns (uint64, AccessLogs.Context memory);
 
     function writeCycle(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         uint64 val
-    ) external returns (IAccessLogs.Context memory);
+    ) external returns (AccessLogs.Context memory);
 
     function writePc(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         uint64 val
-    ) external returns (IAccessLogs.Context memory);
+    ) external returns (AccessLogs.Context memory);
 
     function writeWord(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         uint64 paddr,
         uint64 val
-    ) external returns (IAccessLogs.Context memory);
+    ) external returns (AccessLogs.Context memory);
 
     function writeX(
-        IAccessLogs.Context memory a,
+        AccessLogs.Context memory a,
         uint8 index,
         uint64 val
-    ) external returns (IAccessLogs.Context memory);
+    ) external returns (AccessLogs.Context memory);
 }
