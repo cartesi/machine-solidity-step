@@ -18,6 +18,7 @@ import "../AccessLogs.sol";
 
 interface IMetaStep {
     function step(
+        uint256 counter,
         AccessLogs.Context memory accessLogs
     ) external returns (uint64, bool, bytes32);
 }
