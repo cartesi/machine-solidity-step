@@ -24,17 +24,17 @@ library UArchExecuteInsn {
     // Memory read/write access
 
     function readUint64(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint64 paddr
-    ) private returns (uint64) {
+    ) private pure returns (uint64) {
         require((paddr & 7) == 0, "misaligned readUint64 address");
         return UArchCompat.readWord(a, paddr);
     }
 
     function readUint32(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint64 paddr
-    ) internal returns (uint32) {
+    ) internal pure returns (uint32) {
         require((paddr & 3) == 0, "misaligned readUint32 address");
         uint64 palign = paddr & ~uint64(7);
         uint32 bitoffset = UArchCompat.uint32ShiftLeft(
@@ -46,9 +46,9 @@ library UArchExecuteInsn {
     }
 
     function readUint16(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint64 paddr
-    ) private returns (uint16) {
+    ) private pure returns (uint16) {
         require((paddr & 1) == 0, "misaligned readUint16 address");
         uint64 palign = paddr & ~uint64(7);
         uint32 bitoffset = UArchCompat.uint32ShiftLeft(
@@ -60,9 +60,9 @@ library UArchExecuteInsn {
     }
 
     function readUint8(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint64 paddr
-    ) private returns (uint8) {
+    ) private pure returns (uint8) {
         uint64 palign = paddr & ~uint64(7);
         uint32 bitoffset = UArchCompat.uint32ShiftLeft(
             uint32(paddr) & uint32(7),
@@ -73,10 +73,10 @@ library UArchExecuteInsn {
     }
 
     function writeUint64(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint64 paddr,
         uint64 val
-    ) private {
+    ) private pure {
         require((paddr & 7) == 0, "misaligned writeUint64 address");
         UArchCompat.writeWord(a, paddr, val);
     }
@@ -100,10 +100,10 @@ library UArchExecuteInsn {
     }
 
     function writeUint32(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint64 paddr,
         uint32 val
-    ) private {
+    ) private pure {
         require((paddr & 3) == 0, "misaligned writeUint32 address");
         uint64 palign = paddr & ~uint64(7);
 
@@ -117,10 +117,10 @@ library UArchExecuteInsn {
     }
 
     function writeUint16(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint64 paddr,
         uint16 val
-    ) private {
+    ) private pure {
         require((paddr & 1) == 0, "misaligned writeUint16 address");
         uint64 palign = paddr & ~uint64(7);
         uint32 bitoffset = UArchCompat.uint32ShiftLeft(
@@ -133,10 +133,10 @@ library UArchExecuteInsn {
     }
 
     function writeUint8(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint64 paddr,
         uint8 val
-    ) private {
+    ) private pure {
         uint64 palign = paddr & ~uint64(7);
         uint32 bitoffset = UArchCompat.uint32ShiftLeft(
             uint32(paddr) & uint32(7),
@@ -291,20 +291,20 @@ library UArchExecuteInsn {
 
     // Execute instruction
 
-    function advancePc(IUArchState.State memory a, uint64 pc) private {
+    function advancePc(AccessLogs.Context memory a, uint64 pc) private pure {
         uint64 newPc = UArchCompat.uint64AddUint64(pc, 4);
         return UArchCompat.writePc(a, newPc);
     }
 
-    function branch(IUArchState.State memory a, uint64 pc) private {
+    function branch(AccessLogs.Context memory a, uint64 pc) private pure {
         return UArchCompat.writePc(a, pc);
     }
 
     function executeLUI(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         int32 imm = operandImm20(insn);
         if (rd != 0) {
@@ -314,10 +314,10 @@ library UArchExecuteInsn {
     }
 
     function executeAUIPC(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm20(insn);
         uint8 rd = operandRd(insn);
         if (rd != 0) {
@@ -327,10 +327,10 @@ library UArchExecuteInsn {
     }
 
     function executeJAL(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandJimm20(insn);
         uint8 rd = operandRd(insn);
         if (rd != 0) {
@@ -340,10 +340,10 @@ library UArchExecuteInsn {
     }
 
     function executeJALR(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -356,10 +356,10 @@ library UArchExecuteInsn {
     }
 
     function executeBEQ(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandSbimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -372,10 +372,10 @@ library UArchExecuteInsn {
     }
 
     function executeBNE(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandSbimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -388,10 +388,10 @@ library UArchExecuteInsn {
     }
 
     function executeBLT(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandSbimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -404,10 +404,10 @@ library UArchExecuteInsn {
     }
 
     function executeBGE(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandSbimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -420,10 +420,10 @@ library UArchExecuteInsn {
     }
 
     function executeBLTU(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandSbimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -436,10 +436,10 @@ library UArchExecuteInsn {
     }
 
     function executeBGEU(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandSbimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -452,10 +452,10 @@ library UArchExecuteInsn {
     }
 
     function executeLB(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -468,10 +468,10 @@ library UArchExecuteInsn {
     }
 
     function executeLHU(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -484,10 +484,10 @@ library UArchExecuteInsn {
     }
 
     function executeLH(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -502,10 +502,10 @@ library UArchExecuteInsn {
     }
 
     function executeLW(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -520,10 +520,10 @@ library UArchExecuteInsn {
     }
 
     function executeLBU(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -536,10 +536,10 @@ library UArchExecuteInsn {
     }
 
     function executeSB(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandSimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -550,10 +550,10 @@ library UArchExecuteInsn {
     }
 
     function executeSH(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandSimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -564,10 +564,10 @@ library UArchExecuteInsn {
     }
 
     function executeSW(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandSimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -578,10 +578,10 @@ library UArchExecuteInsn {
     }
 
     function executeADDI(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -594,10 +594,10 @@ library UArchExecuteInsn {
     }
 
     function executeADDIW(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -610,10 +610,10 @@ library UArchExecuteInsn {
     }
 
     function executeSLTI(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -629,10 +629,10 @@ library UArchExecuteInsn {
     }
 
     function executeSLTIU(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -648,10 +648,10 @@ library UArchExecuteInsn {
     }
 
     function executeXORI(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -663,10 +663,10 @@ library UArchExecuteInsn {
     }
 
     function executeORI(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -678,10 +678,10 @@ library UArchExecuteInsn {
     }
 
     function executeANDI(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -693,10 +693,10 @@ library UArchExecuteInsn {
     }
 
     function executeSLLI(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandShamt6(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -712,10 +712,10 @@ library UArchExecuteInsn {
     }
 
     function executeSLLIW(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandShamt5(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -733,10 +733,10 @@ library UArchExecuteInsn {
     }
 
     function executeSRLI(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandShamt6(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -752,10 +752,10 @@ library UArchExecuteInsn {
     }
 
     function executeSRLW(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -769,10 +769,10 @@ library UArchExecuteInsn {
     }
 
     function executeSRLIW(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandShamt5(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -785,10 +785,10 @@ library UArchExecuteInsn {
     }
 
     function executeSRAI(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandShamt6(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -804,10 +804,10 @@ library UArchExecuteInsn {
     }
 
     function executeSRAIW(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandShamt5(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -825,10 +825,10 @@ library UArchExecuteInsn {
     }
 
     function executeADD(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -845,10 +845,10 @@ library UArchExecuteInsn {
     }
 
     function executeADDW(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -862,10 +862,10 @@ library UArchExecuteInsn {
     }
 
     function executeSUB(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -882,10 +882,10 @@ library UArchExecuteInsn {
     }
 
     function executeSUBW(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -899,10 +899,10 @@ library UArchExecuteInsn {
     }
 
     function executeSLL(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -919,10 +919,10 @@ library UArchExecuteInsn {
     }
 
     function executeSLLW(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -938,10 +938,10 @@ library UArchExecuteInsn {
     }
 
     function executeSLT(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -958,10 +958,10 @@ library UArchExecuteInsn {
     }
 
     function executeSLTU(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -978,10 +978,10 @@ library UArchExecuteInsn {
     }
 
     function executeXOR(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -994,10 +994,10 @@ library UArchExecuteInsn {
     }
 
     function executeSRL(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -1014,10 +1014,10 @@ library UArchExecuteInsn {
     }
 
     function executeSRA(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -1034,10 +1034,10 @@ library UArchExecuteInsn {
     }
 
     function executeSRAW(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -1051,10 +1051,10 @@ library UArchExecuteInsn {
     }
 
     function executeOR(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -1067,10 +1067,10 @@ library UArchExecuteInsn {
     }
 
     function executeAND(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -1083,18 +1083,18 @@ library UArchExecuteInsn {
     }
 
     function executeFENCE(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32,
         uint64 pc
-    ) private {
+    ) private pure {
         return advancePc(a, pc);
     }
 
     function executeLWU(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -1107,10 +1107,10 @@ library UArchExecuteInsn {
     }
 
     function executeLD(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
@@ -1123,10 +1123,10 @@ library UArchExecuteInsn {
     }
 
     function executeSD(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) private {
+    ) private pure {
         int32 imm = operandSimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
@@ -1188,10 +1188,10 @@ library UArchExecuteInsn {
 
     // Decode and execute one instruction
     function uarchExecuteInsn(
-        IUArchState.State memory a,
+        AccessLogs.Context memory a,
         uint32 insn,
         uint64 pc
-    ) internal {
+    ) internal pure {
         if (insnMatchOpcodeFunct3(insn, 0x13, 0x0)) {
             return executeADDI(a, insn, pc);
         } else if (insnMatchOpcodeFunct3(insn, 0x3, 0x3)) {
