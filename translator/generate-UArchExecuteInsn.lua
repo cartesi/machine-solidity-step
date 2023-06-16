@@ -109,17 +109,11 @@ local function build_solidity_function(r_type, name, args)
     end
 
     local accessibility = "private"
-    local mutability = ""
+    local mutability = "pure"
 
     for i = 1, #internal_fns do
         if name:find(internal_fns[i]) then
             accessibility = "internal"
-        end
-    end
-
-    for i = 1, #pure_fns do
-        if name:find(pure_fns[i]) then
-            mutability = "pure"
         end
     end
 
@@ -131,11 +125,7 @@ local function build_solidity_function(r_type, name, args)
 
     local new
 
-    if mutability == "" then
-        new = "function " .. name .. "(" .. args .. ") " .. accessibility .. " " .. ret .. " {"
-    else
-        new = "function " .. name .. "(" .. args .. ") " .. accessibility .. " " .. mutability .. " " .. ret .. " {"
-    end
+    new = "function " .. name .. "(" .. args .. ") " .. accessibility .. " " .. mutability .. " " .. ret .. " {"
 
     return new
 end
@@ -159,7 +149,7 @@ src = src:gsub(" +dumpInsn[^\n]+\n", "")
 src = src:gsub(" +auto note[^\n]+\n", "")
 src = src:gsub(" +%(void%) note;\n", "")
 -- replace UarchState &a
-src = src:gsub("UarchState &a", "IUArchState.State memory a")
+src = src:gsub("UarchState &a", "AccessLogs.Context memory a")
 -- replace throw
 src = src:gsub("throw std::runtime_error", "revert")
 src = src:gsub("::", ".")

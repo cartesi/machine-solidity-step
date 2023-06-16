@@ -19,15 +19,18 @@ pragma solidity ^0.8.0;
 import "./UArchExecuteInsn.sol";
 
 library UArchStep {
-    /// @notice Run step
-    /// @param state state of machine
-    /// @return (uint64, bool) cycle number, machine halt flag
-    function step(
-        IUArchState.State memory state
-    ) internal returns (uint64, bool) {
-        uint64 ucycle = UArchCompat.readCycle(state);
+    using UArchCompat for AccessLogs.Context;
+    using UArchExecuteInsn for AccessLogs.Context;
 
-        if (UArchCompat.readHaltFlag(state)) {
+    /// @notice Run step
+    /// @param accessLogs logs of machine access
+    /// @return (uint64, bool) cycle number, machine halt state
+    function step(
+        AccessLogs.Context memory accessLogs
+    ) internal pure returns (uint64, bool) {
+        uint64 ucycle = accessLogs.readCycle();
+
+        if (accessLogs.readHaltFlag()) {
             return (ucycle, true);
         }
         // early check if ucycle is uint64.max, so it'll be safe to uncheck increment later
@@ -35,14 +38,14 @@ library UArchStep {
             return (ucycle, false);
         }
 
-        uint64 upc = UArchCompat.readPc(state);
-        uint32 insn = UArchExecuteInsn.readUint32(state, upc);
-        UArchExecuteInsn.uarchExecuteInsn(state, insn, upc);
+        uint64 upc = accessLogs.readPc();
+        uint32 insn = accessLogs.readUint32(upc);
+        accessLogs.uarchExecuteInsn(insn, upc);
 
         unchecked {
             ++ucycle;
         }
-        UArchCompat.writeCycle(state, ucycle);
+        accessLogs.writeCycle(ucycle);
 
         return (ucycle, false);
     }

@@ -15,32 +15,17 @@
 
 pragma solidity ^0.8.0;
 
-import "./interfaces/IMetaStep.sol";
-import "./interfaces/IUArchState.sol";
-import "./UArchConstants.sol";
 import "./UArchStep.sol";
 
-contract MetaStep is IMetaStep {
+contract MetaStep {
     using AccessLogs for AccessLogs.Context;
-
-    IUArchState immutable istate;
-
-    constructor(IUArchState state) {
-        istate = state;
-    }
 
     /// @notice Run meta-step
     function step(
         uint256 counter,
         AccessLogs.Context memory accessLogs
-    )
-        external
-        override
-        returns (uint64 cycle, bool halt, bytes32 machineState)
-    {
-        IUArchState.State memory state = IUArchState.State(istate, accessLogs);
-
-        (cycle, halt) = UArchStep.step(state);
+    ) internal pure returns (uint64 cycle, bool halt, bytes32 machineState) {
+        (cycle, halt) = UArchStep.step(accessLogs);
         machineState = accessLogs.currentRootHash;
 
         if (

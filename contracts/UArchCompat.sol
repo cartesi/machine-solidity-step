@@ -16,108 +16,71 @@
 
 pragma solidity ^0.8.0;
 
-import "./interfaces/IUArchState.sol";
+import "./UArchState.sol";
 
-/// @dev `state.accessLogs` includes counters and machine root hash that mutate as the accesses are required.
-/// Since the stateInterface exposes external functions, the memory state won't be updated.
-/// We need to overwrite the variable from the return argument manually to reflect the updates.
-/// All `unchecked` blocks in `(u)int` functions are intentional to be consistent with C++ implementation.
 library UArchCompat {
-    function readCycle(
-        IUArchState.State memory state
-    ) internal returns (uint64) {
-        (uint64 res, AccessLogs.Context memory updatedLogs) = state
-            .stateInterface
-            .readCycle(state.accessLogs);
-        state.accessLogs = updatedLogs;
+    using UArchState for AccessLogs.Context;
 
-        return res;
+    function readCycle(
+        AccessLogs.Context memory accessLogs
+    ) internal pure returns (uint64) {
+        return accessLogs.readCycle();
     }
 
     function readHaltFlag(
-        IUArchState.State memory state
-    ) internal returns (bool) {
-        (bool res, AccessLogs.Context memory updatedLogs) = state
-            .stateInterface
-            .readHaltFlag(state.accessLogs);
-        state.accessLogs = updatedLogs;
-
-        return res;
+        AccessLogs.Context memory accessLogs
+    ) internal pure returns (bool) {
+        return accessLogs.readHaltFlag();
     }
 
-    function readPc(IUArchState.State memory state) internal returns (uint64) {
-        (uint64 res, AccessLogs.Context memory updatedLogs) = state
-            .stateInterface
-            .readPc(state.accessLogs);
-        state.accessLogs = updatedLogs;
-
-        return res;
+    function readPc(
+        AccessLogs.Context memory accessLogs
+    ) internal pure returns (uint64) {
+        return accessLogs.readPc();
     }
 
     function readWord(
-        IUArchState.State memory state,
+        AccessLogs.Context memory accessLogs,
         uint64 paddr
-    ) internal returns (uint64) {
-        (uint64 res, AccessLogs.Context memory updatedLogs) = state
-            .stateInterface
-            .readWord(state.accessLogs, paddr);
-        state.accessLogs = updatedLogs;
-
-        return res;
+    ) internal pure returns (uint64) {
+        return accessLogs.readWord(paddr);
     }
 
     function readX(
-        IUArchState.State memory state,
+        AccessLogs.Context memory accessLogs,
         uint8 index
-    ) internal returns (uint64) {
-        (uint64 res, AccessLogs.Context memory updatedLogs) = state
-            .stateInterface
-            .readX(state.accessLogs, index);
-        state.accessLogs = updatedLogs;
-
-        return res;
+    ) internal pure returns (uint64) {
+        return accessLogs.readX(index);
     }
 
-    function writeCycle(IUArchState.State memory state, uint64 val) internal {
-        AccessLogs.Context memory updatedLogs = state.stateInterface.writeCycle(
-            state.accessLogs,
-            val
-        );
-        state.accessLogs = updatedLogs;
+    function writeCycle(
+        AccessLogs.Context memory accessLogs,
+        uint64 val
+    ) internal pure {
+        accessLogs.writeCycle(val);
     }
 
-    function writePc(IUArchState.State memory state, uint64 val) internal {
-        AccessLogs.Context memory updatedLogs = state.stateInterface.writePc(
-            state.accessLogs,
-            val
-        );
-        state.accessLogs = updatedLogs;
+    function writePc(
+        AccessLogs.Context memory accessLogs,
+        uint64 val
+    ) internal pure {
+        accessLogs.writePc(val);
     }
 
     function writeWord(
-        IUArchState.State memory state,
+        AccessLogs.Context memory accessLogs,
         uint64 paddr,
         uint64 val
-    ) internal {
-        AccessLogs.Context memory updatedLogs = state.stateInterface.writeWord(
-            state.accessLogs,
-            paddr,
-            val
-        );
-        state.accessLogs = updatedLogs;
+    ) internal pure {
+        accessLogs.writeWord(paddr, val);
     }
 
     function writeX(
-        IUArchState.State memory state,
+        AccessLogs.Context memory accessLogs,
         uint8 index,
         uint64 val
-    ) internal {
-        AccessLogs.Context memory updatedLogs = state.stateInterface.writeX(
-            state.accessLogs,
-            index,
-            val
-        );
-        state.accessLogs = updatedLogs;
+    ) internal pure {
+        accessLogs.writeX(index, val);
     }
 
     function int8ToUint64(int8 val) internal pure returns (uint64) {
