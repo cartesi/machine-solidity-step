@@ -63,6 +63,8 @@ contract UArchReplayTest is Test {
         // all tests combined can easily run out of gas, stop metering
         // also raise memory_limit in foundry.toml per https://github.com/foundry-rs/foundry/issues/3971
         vm.pauseGasMetering();
+        // create a large buffer and reuse it
+        bytes memory buffer = new bytes(100 * (siblingsLength + 1) * 32);
 
         for (uint256 i = 0; i < catalog.length; i++) {
             console.log("Replaying file %s ...", catalog[i].path);
@@ -72,16 +74,9 @@ contract UArchReplayTest is Test {
             for (uint256 j = 0; j < catalog[i].steps; j++) {
                 console.log("Replaying step %d ...", j);
                 // load json log
-                (
-                    RawAccess[] memory rawAccesses,
-                    AccessLogs.Context memory accessLogs
-                ) = fromRawArray(rj, j);
+                bytes32 rootHash = loadBufferFromRawJson(buffer, rj, j);
 
-                accessLogs.currentRootHash = vm.parseBytes32(
-                    string.concat("0x", rawAccesses[0].rawProof.rootHash)
-                );
-
-                UArchStep.step(accessLogs);
+                UArchStep.step(AccessLogs.Context(rootHash, buffer, 0));
             }
         }
     }
@@ -102,10 +97,11 @@ contract UArchReplayTest is Test {
         return vm.readFile(path);
     }
 
-    function fromRawArray(
+    function loadBufferFromRawJson(
+        bytes memory buffer,
         string memory rawJson,
         uint256 stepIndex
-    ) private pure returns (RawAccess[] memory, AccessLogs.Context memory) {
+    ) private pure returns (bytes32) {
         string memory key = string.concat(
             string.concat(".steps[", vm.toString(stepIndex)),
             "].accesses"
@@ -124,10 +120,6 @@ contract UArchReplayTest is Test {
                 readCount++;
             }
         }
-
-        bytes memory buffer = new bytes(
-            arrayLength * (siblingsLength + 1) * 32 + readCount * 8
-        );
 
         uint128 pointer = 0;
 
@@ -181,6 +173,9 @@ contract UArchReplayTest is Test {
             }
         }
 
-        return (rawAccesses, AccessLogs.Context(bytes32(0), buffer, 0));
+        return
+            vm.parseBytes32(
+                string.concat("0x", rawAccesses[0].rawProof.rootHash)
+            );
     }
 }
