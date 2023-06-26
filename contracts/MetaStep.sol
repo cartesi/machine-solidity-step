@@ -45,12 +45,8 @@ library MetaStep {
         }
 
         require(
-            accessLogs.hashes.length == accessLogs.currentHashIndex,
-            "all logs should be consumed"
-        );
-        require(
-            accessLogs.words.length == accessLogs.currentWord,
-            "all words should be consumed"
+            accessLogs.buffer.length == accessLogs.pointer,
+            "buffer should be fully consumed"
         );
     }
 }

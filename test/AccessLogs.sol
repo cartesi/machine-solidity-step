@@ -16,25 +16,25 @@ import "contracts/Memory.sol";
 import "contracts/UArchConstants.sol";
 
 ///@dev This library mocks the `contracts/AccessLogs.sol` yet with a very different implementation.
-/// `bytes32[] hashes` simulates the memory space with two separate regions.
-/// The first 9 `bytes32` represents register space 0x320 - 0x440, where 0x438 is UX31, and 0x440 should never be accessed
-/// Starting from the 10th `bytes32`, it represents memory space 0x70000000 -
+/// `bytes buffer` simulates the memory space with two separate regions.
+/// The first 280 bytes are reserved for register space: 0x320 - 0x438 (35 * 8)
+/// Following next will be continuous memory space: 0x70000000 -
 
 library AccessLogs {
+    using AccessLogs for bytes;
+
     struct Context {
         bytes32 currentRootHash;
-        bytes32[] hashes;
-        uint64[] words;
-        uint128 currentHashIndex;
-        uint128 currentWord;
+        bytes buffer;
+        uint128 pointer;
     }
 
     function readWord(
         AccessLogs.Context memory a,
         Memory.PhysicalAddress readAddress
     ) internal pure returns (uint64) {
-        (bytes8 val, , ) = accessWord(a, readAddress);
-        return uint64SwapEndian(uint64(val));
+        (bytes32 val, ) = accessWord(a, readAddress);
+        return uint64SwapEndian(uint64(bytes8(val)));
     }
 
     function writeWord(
@@ -42,16 +42,14 @@ library AccessLogs {
         Memory.PhysicalAddress writeAddress,
         uint64 val
     ) internal pure {
-        (, uint64 index, uint8 offset) = accessWord(a, writeAddress);
+        (bytes32 bytes32Value, uint128 index) = accessWord(a, writeAddress);
         bytes8 bytesValue = bytes8(uint64SwapEndian(val));
-        a.hashes[index] =
-            a.hashes[index] &
-            ~(bytes32(
-                0xffffffffffffffff000000000000000000000000000000000000000000000000
-            ) >> (offset * 8 * 8));
-        a.hashes[index] =
-            a.hashes[index] |
-            (bytes32(bytesValue) >> (offset * 8 * 8));
+        bytes32Value =
+            bytes32Value &
+            0x0000000000000000ffffffffffffffffffffffffffffffffffffffffffffffff;
+        bytes32Value = bytes32Value | bytes32(bytesValue);
+
+        a.buffer.writeBytes32(index, bytes32Value);
     }
 
     function writeRegion(
@@ -75,26 +73,44 @@ library AccessLogs {
         return output;
     }
 
+    function writeBytes32(
+        bytes memory data,
+        uint128 offset,
+        bytes32 val
+    ) internal pure {
+        assembly {
+            mstore(add(data, add(offset, 32)), val)
+        }
+    }
+
+    function toBytes32(
+        bytes memory data,
+        uint128 offset
+    ) internal pure returns (bytes32) {
+        bytes32 temp;
+        // Get 32 bytes from data
+        assembly {
+            temp := mload(add(data, add(offset, 32)))
+        }
+        return temp;
+    }
+
     function accessWord(
         AccessLogs.Context memory a,
         Memory.PhysicalAddress paddr
-    ) private pure returns (bytes8 val, uint64 index, uint8 offset) {
+    ) private pure returns (bytes32 val, uint128 index) {
         uint64 position = Memory.PhysicalAddress.unwrap(paddr);
-        uint64 distance;
         if (
             position >= UArchConstants.UCYCLE &&
             position <= UArchConstants.UX0 + (31 << 3)
         ) {
-            // takes the first 9 slots
-            distance = (position - UArchConstants.UCYCLE) / 8;
+            index = (position - UArchConstants.UCYCLE);
         } else if (position >= 0x70000000) {
-            // takes slots from 10th
-            distance = (position - 0x70000000 + 9 * 32) / 8;
+            index = (position - 0x70000000) + 35 * 8;
         } else {
             revert("invalid memory access");
         }
-        index = distance / 4;
-        offset = uint8(distance % 4);
-        val = bytes8(a.hashes[index] << (offset * 8 * 8));
+
+        val = a.buffer.toBytes32(index);
     }
 }
