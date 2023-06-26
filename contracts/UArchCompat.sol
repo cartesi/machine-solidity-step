@@ -16,71 +16,75 @@
 
 pragma solidity ^0.8.0;
 
-import "./UArchState.sol";
+import "./UArchConstants.sol";
+import "accesslogs/AccessLogs.sol";
 
 library UArchCompat {
-    using UArchState for AccessLogs.Context;
+    using AccessLogs for AccessLogs.Context;
+    using Memory for uint64;
 
     function readCycle(
-        AccessLogs.Context memory accessLogs
+        AccessLogs.Context memory a
     ) internal pure returns (uint64) {
-        return accessLogs.readCycle();
+        return a.readWord(UArchConstants.UCYCLE.toPhysicalAddress());
     }
 
     function readHaltFlag(
-        AccessLogs.Context memory accessLogs
+        AccessLogs.Context memory a
     ) internal pure returns (bool) {
-        return accessLogs.readHaltFlag();
+        return (a.readWord(UArchConstants.UHALT.toPhysicalAddress()) != 0);
     }
 
     function readPc(
-        AccessLogs.Context memory accessLogs
+        AccessLogs.Context memory a
     ) internal pure returns (uint64) {
-        return accessLogs.readPc();
+        return a.readWord(UArchConstants.UPC.toPhysicalAddress());
     }
 
     function readWord(
-        AccessLogs.Context memory accessLogs,
+        AccessLogs.Context memory a,
         uint64 paddr
     ) internal pure returns (uint64) {
-        return accessLogs.readWord(paddr);
+        return a.readWord(paddr.toPhysicalAddress());
     }
 
     function readX(
-        AccessLogs.Context memory accessLogs,
+        AccessLogs.Context memory a,
         uint8 index
     ) internal pure returns (uint64) {
-        return accessLogs.readX(index);
+        uint64 paddr;
+        unchecked {
+            paddr = UArchConstants.UX0 + (index << 3);
+        }
+        return a.readWord(paddr.toPhysicalAddress());
     }
 
-    function writeCycle(
-        AccessLogs.Context memory accessLogs,
-        uint64 val
-    ) internal pure {
-        accessLogs.writeCycle(val);
+    function writeCycle(AccessLogs.Context memory a, uint64 val) internal pure {
+        a.writeWord(UArchConstants.UCYCLE.toPhysicalAddress(), val);
     }
 
-    function writePc(
-        AccessLogs.Context memory accessLogs,
-        uint64 val
-    ) internal pure {
-        accessLogs.writePc(val);
+    function writePc(AccessLogs.Context memory a, uint64 val) internal pure {
+        a.writeWord(UArchConstants.UPC.toPhysicalAddress(), val);
     }
 
     function writeWord(
-        AccessLogs.Context memory accessLogs,
+        AccessLogs.Context memory a,
         uint64 paddr,
         uint64 val
     ) internal pure {
-        accessLogs.writeWord(paddr, val);
+        a.writeWord(paddr.toPhysicalAddress(), val);
     }
 
     function writeX(
-        AccessLogs.Context memory accessLogs,
+        AccessLogs.Context memory a,
         uint8 index,
         uint64 val
     ) internal pure {
-        accessLogs.writeX(index, val);
+        uint64 paddr;
+        unchecked {
+            paddr = UArchConstants.UX0 + (index << 3);
+        }
+        a.writeWord(paddr.toPhysicalAddress(), val);
     }
 
     function int8ToUint64(int8 val) internal pure returns (uint64) {
@@ -193,20 +197,5 @@ library UArchCompat {
         uint32 count
     ) internal pure returns (int32) {
         return v >> (count & 0x1f);
-    }
-
-    /// @notice Swap byte order of unsigned ints with 64 bytes
-    /// @param num number to have bytes swapped
-    function uint64SwapEndian(uint64 num) internal pure returns (uint64) {
-        uint64 output = ((num & 0x00000000000000ff) << 56) |
-            ((num & 0x000000000000ff00) << 40) |
-            ((num & 0x0000000000ff0000) << 24) |
-            ((num & 0x00000000ff000000) << 8) |
-            ((num & 0x000000ff00000000) >> 8) |
-            ((num & 0x0000ff0000000000) >> 24) |
-            ((num & 0x00ff000000000000) >> 40) |
-            ((num & 0xff00000000000000) >> 56);
-
-        return output;
     }
 }

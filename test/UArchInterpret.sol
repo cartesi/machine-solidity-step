@@ -12,21 +12,25 @@
 
 pragma solidity ^0.8.0;
 
-import "./IUArchInterpret.sol";
 import "contracts/UArchStep.sol";
 
-contract UArchInterpret is IUArchInterpret {
+library UArchInterpret {
+    enum InterpreterStatus {
+        Success,
+        Halt
+    }
+
     /// @notice Run interpret until machine halts.
-    /// @param state state of machine
+    /// @param accessLogs logs of machine access
     /// @return Returns an exit code
     function interpret(
-        IUArchState.State memory state
-    ) external override returns (InterpreterStatus) {
+        AccessLogs.Context memory accessLogs
+    ) internal pure returns (InterpreterStatus) {
         uint64 ucycle;
         bool halt;
 
         while (ucycle < type(uint64).max) {
-            (ucycle, halt) = UArchStep.step(state);
+            (ucycle, halt) = UArchStep.step(accessLogs);
 
             if (halt) {
                 return InterpreterStatus.Halt;

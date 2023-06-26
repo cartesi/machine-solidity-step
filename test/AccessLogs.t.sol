@@ -12,7 +12,8 @@
 
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
-import "contracts/AccessLogs.sol";
+
+import "accesslogs/AccessLogs.sol";
 import "contracts/Memory.sol";
 
 pragma solidity ^0.8.0;
@@ -82,5 +83,12 @@ contract AccessLogsTest is Test {
 
         // write should succeed
         accessLogs.writeWord(position.toPhysicalAddress(), valueWritten);
+    }
+
+    function testEndianSwap() public {
+        assertEq(AccessLogs.uint64SwapEndian(0x8000), 0x0080000000000000);
+        assertEq(AccessLogs.uint64SwapEndian(0x70000000), 0x0000007000000000);
+        assertEq(AccessLogs.uint64SwapEndian(0x0080000000000000), 0x8000);
+        assertEq(AccessLogs.uint64SwapEndian(0x0000007000000000), 0x70000000);
     }
 }

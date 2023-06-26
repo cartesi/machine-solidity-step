@@ -17,7 +17,7 @@ pragma solidity ^0.8.0;
 
 import "./UArchStep.sol";
 
-contract MetaStep {
+library MetaStep {
     using AccessLogs for AccessLogs.Context;
 
     /// @notice Run meta-step
@@ -43,5 +43,14 @@ contract MetaStep {
             );
             machineState = accessLogs.currentRootHash;
         }
+
+        require(
+            accessLogs.hashes.length == accessLogs.currentHashIndex,
+            "all logs should be consumed"
+        );
+        require(
+            accessLogs.words.length == accessLogs.currentWord,
+            "all words should be consumed"
+        );
     }
 }

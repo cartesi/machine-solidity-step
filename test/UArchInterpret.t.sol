@@ -14,24 +14,23 @@ import "forge-std/console.sol";
 import "forge-std/Test.sol";
 import "forge-std/StdJson.sol";
 
-import "./IUArchInterpret.sol";
-import "./UArchStateAux.sol";
 import "./UArchInterpret.sol";
 
 pragma solidity ^0.8.0;
 
 contract UArchInterpretTest is Test {
     using stdJson for string;
+    using Memory for uint64;
+    using AccessLogs for AccessLogs.Context;
 
     struct Entry {
         uint256 cycle;
         string path;
     }
 
+    uint8 constant REGISTERS_LENGTH = 9;
     uint8 constant TEST_STATUS_X = 1;
     uint64 constant PMA_UARCH_RAM_START = 0x70000000;
-    // little endian constants
-    bytes8 constant LITTLE_PMA_UARCH_RAM_START = 0x0000007000000000;
     // test result code
     bytes8 constant TEST_SUCEEDED = 0x00000000be1e7aaa; // Indicates that test has passed
     bytes8 constant TEST_FAILED = 0x00000000deadbeef; // Indicates that test has failed
@@ -40,15 +39,6 @@ contract UArchInterpretTest is Test {
     string constant CATALOG_PATH = "rv64ui-uarch-catalog.json";
     string constant ROM_PATH = "./test/uarch-bin/uarch-bootstrap.bin";
 
-    UArchStateAux sa;
-    IUArchInterpret inter;
-
-    function setUp() public {
-        // create fresh machine state for every test
-        sa = new UArchStateAux();
-        inter = new UArchInterpret();
-    }
-
     function testBinaries() public {
         Entry[] memory catalog = loadCatalog(
             string.concat(JSON_PATH, CATALOG_PATH)
@@ -56,61 +46,52 @@ contract UArchInterpretTest is Test {
 
         for (uint256 i = 0; i < catalog.length; i++) {
             console.log("Testing %s ...", catalog[i].path);
+            AccessLogs.Context memory a = newAccessLogsContext();
 
-            // load ram
+            // load ramAccessLogs
             loadBin(
+                a,
                 PMA_UARCH_RAM_START,
                 string.concat(JSON_PATH, catalog[i].path)
             );
             // init pc to ram start
-            initPC();
+            UArchCompat.writePc(a, PMA_UARCH_RAM_START);
             // init cycle to 0
-            initCYCLE();
+            UArchCompat.writeCycle(a, 0);
 
-            IUArchState.State memory state = IUArchState.State(
-                sa,
-                AccessLogsAux.newContext()
-            );
+            UArchInterpret.interpret(a);
 
-            inter.interpret(state);
-
-            (uint64 x, ) = sa.readX(AccessLogsAux.newContext(), TEST_STATUS_X);
+            uint64 x = UArchCompat.readX(a, TEST_STATUS_X);
             assertEq(
                 // read test result from the register
                 x,
                 uint64(TEST_SUCEEDED)
             );
 
-            (bool halt, ) = sa.readHaltFlag(AccessLogsAux.newContext());
+            bool halt = UArchCompat.readHaltFlag(a);
             assertTrue(halt, "machine should halt");
 
-            (uint64 cycle, ) = sa.readCycle(AccessLogsAux.newContext());
+            uint64 cycle = UArchCompat.readCycle(a);
             assertEq(cycle, catalog[i].cycle, "cycle values should match");
-
-            // create fresh machine state for every test
-            sa = new UArchStateAux();
         }
     }
 
     function testStepEarlyReturn() public {
+        AccessLogs.Context memory a = newAccessLogsContext();
+
         // init pc to ram start
-        initPC();
+        UArchCompat.writePc(a, PMA_UARCH_RAM_START);
         // init cycle to uint64.max
-        initMaxCYCLE();
+        UArchCompat.writeCycle(a, type(uint64).max);
 
-        IUArchState.State memory state = IUArchState.State(
-            sa,
-            AccessLogsAux.newContext()
-        );
-
-        IUArchInterpret.InterpreterStatus status = inter.interpret(state);
+        UArchInterpret.InterpreterStatus status = UArchInterpret.interpret(a);
 
         assertTrue(
-            status == IUArchInterpret.InterpreterStatus.Success,
+            status == UArchInterpret.InterpreterStatus.Success,
             "machine shouldn't halt"
         );
 
-        (uint64 cycle, ) = sa.readCycle(AccessLogsAux.newContext());
+        uint64 cycle = UArchCompat.readCycle(a);
         assertEq(
             cycle,
             type(uint64).max,
@@ -118,48 +99,38 @@ contract UArchInterpretTest is Test {
         );
 
         // set machine to halt
-        initHalt();
+        initHalt(a);
 
-        status = inter.interpret(state);
+        status = UArchInterpret.interpret(a);
 
         assertTrue(
-            status == IUArchInterpret.InterpreterStatus.Halt,
+            status == UArchInterpret.InterpreterStatus.Halt,
             "machine should halt"
         );
     }
 
     function testIllegalInstruction() public {
-        // init pc to ram start
-        initPC();
-        // init cycle to 0
-        initCYCLE();
+        AccessLogs.Context memory a = newAccessLogsContext();
+        a.hashes = new bytes32[](10);
 
-        IUArchState.State memory state = IUArchState.State(
-            sa,
-            AccessLogsAux.newContext()
-        );
+        // init pc to ram start
+        UArchCompat.writePc(a, PMA_UARCH_RAM_START);
+        // init cycle to 0
+        UArchCompat.writeCycle(a, 0);
 
         vm.expectRevert("illegal instruction");
-        inter.interpret(state);
+        UArchInterpret.interpret(a);
     }
 
-    function initCYCLE() private {
-        sa.loadMemory(UArchConstants.UCYCLE, 0);
+    function initHalt(AccessLogs.Context memory a) private pure {
+        a.writeWord(UArchConstants.UHALT.toPhysicalAddress(), 1);
     }
 
-    function initMaxCYCLE() private {
-        sa.loadMemory(UArchConstants.UCYCLE, 0xffffffffffffffff);
-    }
-
-    function initHalt() private {
-        sa.loadMemory(UArchConstants.UHALT, 0x0100000000000000);
-    }
-
-    function initPC() private {
-        sa.loadMemory(UArchConstants.UPC, LITTLE_PMA_UARCH_RAM_START);
-    }
-
-    function loadBin(uint64 start, string memory path) private {
+    function loadBin(
+        AccessLogs.Context memory a,
+        uint64 start,
+        string memory path
+    ) private view {
         bytes memory bytesData = vm.readFileBinary(path);
 
         // pad bytes to multiple of 8
@@ -171,6 +142,13 @@ contract UArchInterpretTest is Test {
             bytesData = bytes.concat(bytesData, bytes_missing);
         }
 
+        // allocate array for memory
+        uint256 newHashesSize = bytesData.length / 8 / 4 + REGISTERS_LENGTH;
+        newHashesSize = ((bytesData.length / 8) % 4 == 0)
+            ? newHashesSize
+            : newHashesSize + 1;
+        a.hashes = new bytes32[](newHashesSize);
+
         // load the data into AccessState
         for (uint64 i = 0; i < bytesData.length / 8; i++) {
             bytes8 bytes8Data;
@@ -180,7 +158,7 @@ contract UArchInterpretTest is Test {
                 tempBytes8 = tempBytes8 >> (j * 8);
                 bytes8Data = bytes8Data | tempBytes8;
             }
-            sa.loadMemory(start + offset, bytes8Data);
+            writeWordBytes8(a, start + offset, bytes8Data);
         }
     }
 
@@ -192,5 +170,31 @@ contract UArchInterpretTest is Test {
         Entry[] memory catalog = abi.decode(raw, (Entry[]));
 
         return catalog;
+    }
+
+    function newAccessLogsContext()
+        private
+        pure
+        returns (AccessLogs.Context memory)
+    {
+        return
+            AccessLogs.Context(
+                bytes32(0),
+                new bytes32[](REGISTERS_LENGTH),
+                new uint64[](0),
+                0,
+                0
+            );
+    }
+
+    function writeWordBytes8(
+        AccessLogs.Context memory a,
+        uint64 writeAddress,
+        bytes8 bytes8Val
+    ) private pure {
+        a.writeWord(
+            writeAddress.toPhysicalAddress(),
+            AccessLogs.uint64SwapEndian(uint64(bytes8Val))
+        );
     }
 }

@@ -16,7 +16,6 @@ import "forge-std/StdJson.sol";
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
-import "contracts/UArchState.sol";
 import "contracts/UArchStep.sol";
 
 contract UArchReplayTest is Test {
@@ -27,8 +26,6 @@ contract UArchReplayTest is Test {
     string constant CATALOG_PATH = "catalog.json";
 
     uint256 constant siblingsLength = 61;
-
-    IUArchState state;
 
     struct Entry {
         string path;
@@ -57,10 +54,6 @@ contract UArchReplayTest is Test {
         bytes32[] siblings;
     }
 
-    function setUp() public {
-        state = new UArchState();
-    }
-
     function testReplayLogs() public {
         Entry[] memory catalog = loadCatalog(
             string.concat(JSON_PATH, CATALOG_PATH)
@@ -87,11 +80,7 @@ contract UArchReplayTest is Test {
                     string.concat("0x", rawAccesses[0].rawProof.rootHash)
                 );
 
-                IUArchState.State memory s = IUArchState.State(
-                    state,
-                    accessLogs
-                );
-                UArchStep.step(s);
+                UArchStep.step(accessLogs);
             }
         }
     }
@@ -165,7 +154,7 @@ contract UArchReplayTest is Test {
                 keccak256(abi.encodePacked(rawAccesses[i].accessType)) ==
                 keccak256(abi.encodePacked("read"))
             ) {
-                words[readCount++] = UArchCompat.uint64SwapEndian(
+                words[readCount++] = AccessLogs.uint64SwapEndian(
                     uint64(
                         bytes8(
                             vm.parseBytes32(

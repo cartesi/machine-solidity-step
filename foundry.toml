@@ -4,8 +4,9 @@ out = 'foundry_artifacts'
 libs = ["node_modules", "lib"]
 gas_reports = ["*"]
 memory_limit = 11149934592
-fs_permissions = [{access = "read", path = "./test/uarch-bin/"}, {access = "read", path = "./test/uarch-log/"}]
+fs_permissions = [{access = "read", path = "./test/uarch-log/"}]
 remappings = [
+    'accesslogs/=contracts/',
     '@cartesi/=node_modules/@cartesi/',
     '@ensdomains/=node_modules/@ensdomains/',
     '@openzeppelin/=node_modules/@openzeppelin/',
@@ -14,6 +15,18 @@ remappings = [
     'hardhat/=node_modules/hardhat/',
 ]
 
-# See more config options https://github.com/foundry-rs/foundry/tree/master/config
-# To run forge tests, install forge cli and run below command
-# forge install foundry-rs/forge-std --no-commit
+[profile.mock]
+src = 'contracts'
+out = 'foundry_artifacts'
+libs = ["node_modules", "lib"]
+gas_reports = ["*"]
+fs_permissions = [{access = "read", path = "./test/uarch-bin/"}]
+remappings = [
+    'accesslogs/=test/',
+    '@cartesi/=node_modules/@cartesi/',
+    '@ensdomains/=node_modules/@ensdomains/',
+    '@openzeppelin/=node_modules/@openzeppelin/',
+    'eth-gas-reporter/=node_modules/eth-gas-reporter/',
+    'hardhat-deploy/=node_modules/hardhat-deploy/',
+    'hardhat/=node_modules/hardhat/',
+]

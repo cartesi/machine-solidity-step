@@ -138,10 +138,5 @@ contract UArchCompatTest is Test {
         assertEq(UArchCompat.int8ToUint64(int8(1)), 1);
         assertEq(UArchCompat.int8ToUint64(int8(127)), 127);
         assertEq(UArchCompat.int8ToUint64(int8(-128)), 0xffffffffffffff80);
-
-        assertEq(UArchCompat.uint64SwapEndian(0x8000), 0x0080000000000000);
-        assertEq(UArchCompat.uint64SwapEndian(0x70000000), 0x0000007000000000);
-        assertEq(UArchCompat.uint64SwapEndian(0x0080000000000000), 0x8000);
-        assertEq(UArchCompat.uint64SwapEndian(0x0000007000000000), 0x70000000);
     }
 }
