@@ -23,6 +23,7 @@ import "forge-std/Test.sol";
 import "contracts/UArchStep.sol";
 
 contract UArchReplayTest is Test {
+    using AccessLogs for bytes;
     using stdJson for string;
 
     // configure the tests
@@ -118,9 +119,6 @@ contract UArchReplayTest is Test {
 
         uint256 readCount = 0;
         uint256 arrayLength = rawAccesses.length;
-        bytes32[] memory hashes = new bytes32[](
-            arrayLength * (siblingsLength + 1)
-        );
 
         for (uint256 i = 0; i < arrayLength; i++) {
             if (
@@ -129,9 +127,33 @@ contract UArchReplayTest is Test {
             ) {
                 readCount++;
             }
-            hashes[i * (siblingsLength + 1)] = vm.parseBytes32(
-                string.concat("0x", rawAccesses[i].rawProof.targetHash)
+        }
+
+        bytes memory buffer = new bytes(
+            arrayLength * (siblingsLength + 1) * 32 + readCount * 8
+        );
+
+        uint128 pointer = 0;
+
+        for (uint256 i = 0; i < arrayLength; i++) {
+            if (
+                keccak256(abi.encodePacked(rawAccesses[i].accessType)) ==
+                keccak256(abi.encodePacked("read"))
+            ) {
+                bytes8 word = bytes8(
+                    vm.parseBytes32(string.concat("0x", rawAccesses[i].val))
+                );
+                buffer.writeBytes32(pointer, bytes32(word));
+                pointer += 8;
+            }
+
+            buffer.writeBytes32(
+                pointer,
+                vm.parseBytes32(
+                    string.concat("0x", rawAccesses[i].rawProof.targetHash)
+                )
             );
+            pointer += 32;
 
             for (
                 uint256 j = i * (siblingsLength + 1) + 1;
@@ -139,40 +161,30 @@ contract UArchReplayTest is Test {
                 j++
             ) {
                 // proofs should be loaded in reverse order
-                hashes[j] = vm.parseBytes32(
-                    string.concat(
-                        "0x",
-                        rawAccesses[i].rawProof.rawSiblings[
-                            siblingsLength - (j % (siblingsLength + 1))
-                        ]
+                buffer.writeBytes32(
+                    pointer,
+                    vm.parseBytes32(
+                        string.concat(
+                            "0x",
+                            rawAccesses[i].rawProof.rawSiblings[
+                                siblingsLength - (j % (siblingsLength + 1))
+                            ]
+                        )
                     )
                 );
+                pointer += 32;
             }
         }
-
-        uint64[] memory words = new uint64[](readCount);
-        readCount = 0;
 
         for (uint256 i = 0; i < arrayLength; i++) {
             if (
                 keccak256(abi.encodePacked(rawAccesses[i].accessType)) ==
                 keccak256(abi.encodePacked("read"))
             ) {
-                words[readCount++] = AccessLogs.uint64SwapEndian(
-                    uint64(
-                        bytes8(
-                            vm.parseBytes32(
-                                string.concat("0x", rawAccesses[i].val)
-                            )
-                        )
-                    )
-                );
+                readCount++;
             }
         }
 
-        return (
-            rawAccesses,
-            AccessLogs.Context(bytes32(0), hashes, words, 0, 0)
-        );
+        return (rawAccesses, AccessLogs.Context(bytes32(0), buffer, 0));
     }
 }

@@ -14,15 +14,18 @@ pragma solidity ^0.8.0;
 
 import "./Memory.sol";
 
+///@dev bytes buffer layouts differently for `readWord` and `writeWord`,
+///`readWord` [8 bytes as uint64 value, 32 bytes as drive hash, 61 * 32 bytes as sibling proofs]
+///`writeWord` [32 bytes as old drive hash, 32 * 61 bytes as sibling proofs]
+
 library AccessLogs {
+    using AccessLogs for bytes;
     using Memory for Memory.AlignedSize;
 
     struct Context {
         bytes32 currentRootHash;
-        bytes32[] hashes;
-        uint64[] words;
-        uint128 currentHashIndex;
-        uint128 currentWord;
+        bytes buffer;
+        uint128 pointer;
     }
 
     //
@@ -33,14 +36,15 @@ library AccessLogs {
         AccessLogs.Context memory a,
         Memory.Region memory region
     ) internal pure returns (bytes32) {
-        bytes32 drive = a.hashes[a.currentHashIndex++];
+        bytes32 drive = a.buffer.toBytes32(a.pointer);
+        a.pointer += 32;
         (bytes32 rootHash, uint8 siblingCount) = getRoot(
             region,
             drive,
-            a.hashes,
-            a.currentHashIndex
+            a.buffer,
+            a.pointer
         );
-        a.currentHashIndex += siblingCount;
+        a.pointer += uint128(siblingCount) * 32;
 
         require(
             a.currentRootHash == rootHash,
@@ -65,7 +69,10 @@ library AccessLogs {
         AccessLogs.Context memory a,
         Memory.PhysicalAddress readAddress
     ) internal pure returns (uint64) {
-        uint64 val = a.words[a.currentWord++];
+        uint64 val = uint64SwapEndian(
+            uint64(bytes8(a.buffer.toBytes32(a.pointer)))
+        );
+        a.pointer += 8;
         bytes32 valHash = keccak256(abi.encodePacked(uint64SwapEndian(val)));
         bytes32 expectedValHash = readLeaf(
             a,
@@ -85,12 +92,13 @@ library AccessLogs {
         Memory.Region memory region,
         bytes32 newHash
     ) internal pure {
-        bytes32 oldDrive = a.hashes[a.currentHashIndex++];
+        bytes32 oldDrive = a.buffer.toBytes32(a.pointer);
+        a.pointer += 32;
         (bytes32 rootHash, uint8 siblingCount) = getRoot(
             region,
             oldDrive,
-            a.hashes,
-            a.currentHashIndex
+            a.buffer,
+            a.pointer
         );
 
         require(
@@ -98,14 +106,9 @@ library AccessLogs {
             "Write region root doesn't match"
         );
 
-        (bytes32 newRootHash, ) = getRoot(
-            region,
-            newHash,
-            a.hashes,
-            a.currentHashIndex
-        );
+        (bytes32 newRootHash, ) = getRoot(region, newHash, a.buffer, a.pointer);
+        a.pointer += uint128(siblingCount) * 32;
 
-        a.currentHashIndex += siblingCount;
         a.currentRootHash = newRootHash;
     }
 
@@ -142,7 +145,7 @@ library AccessLogs {
     function getRoot(
         Memory.Region memory region,
         bytes32 drive,
-        bytes32[] memory siblings,
+        bytes memory siblings,
         uint128 offset
     ) internal pure returns (bytes32, uint8) {
         // require that multiplier makes sense!
@@ -158,11 +161,11 @@ library AccessLogs {
         for (uint64 i = 0; i < nodesCount; i++) {
             if (isEven(stride >> i)) {
                 drive = keccak256(
-                    abi.encodePacked(drive, siblings[i + offset])
+                    abi.encodePacked(drive, siblings.toBytes32(i * 32 + offset))
                 );
             } else {
                 drive = keccak256(
-                    abi.encodePacked(siblings[i + offset], drive)
+                    abi.encodePacked(siblings.toBytes32(i * 32 + offset), drive)
                 );
             }
         }
@@ -183,5 +186,27 @@ library AccessLogs {
             ((num & 0xff00000000000000) >> 56);
 
         return output;
+    }
+
+    function writeBytes32(
+        bytes memory data,
+        uint128 offset,
+        bytes32 val
+    ) internal pure {
+        assembly {
+            mstore(add(data, add(offset, 32)), val)
+        }
+    }
+
+    function toBytes32(
+        bytes memory data,
+        uint128 offset
+    ) internal pure returns (bytes32) {
+        bytes32 temp;
+        // Get 32 bytes from data
+        assembly {
+            temp := mload(add(data, add(offset, 32)))
+        }
+        return temp;
     }
 }

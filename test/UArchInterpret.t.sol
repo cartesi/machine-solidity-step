@@ -32,7 +32,7 @@ contract UArchInterpretTest is Test {
         string path;
     }
 
-    uint8 constant REGISTERS_LENGTH = 9;
+    uint8 constant REGISTERS_LENGTH = 35;
     uint8 constant TEST_STATUS_X = 1;
     uint64 constant PMA_UARCH_RAM_START = 0x70000000;
     // test result code
@@ -115,7 +115,6 @@ contract UArchInterpretTest is Test {
 
     function testIllegalInstruction() public {
         AccessLogs.Context memory a = newAccessLogsContext();
-        a.hashes = new bytes32[](10);
 
         // init pc to ram start
         UArchCompat.writePc(a, PMA_UARCH_RAM_START);
@@ -147,11 +146,10 @@ contract UArchInterpretTest is Test {
         }
 
         // allocate array for memory
-        uint256 newHashesSize = bytesData.length / 8 / 4 + REGISTERS_LENGTH;
-        newHashesSize = ((bytesData.length / 8) % 4 == 0)
-            ? newHashesSize
-            : newHashesSize + 1;
-        a.hashes = new bytes32[](newHashesSize);
+        uint256 newBufferSize = bytesData.length +
+            uint128(REGISTERS_LENGTH) *
+            8;
+        a.buffer = new bytes(newBufferSize);
 
         // load the data into AccessState
         for (uint64 i = 0; i < bytesData.length / 8; i++) {
@@ -184,9 +182,7 @@ contract UArchInterpretTest is Test {
         return
             AccessLogs.Context(
                 bytes32(0),
-                new bytes32[](REGISTERS_LENGTH),
-                new uint64[](0),
-                0,
+                new bytes(uint128(REGISTERS_LENGTH) * 8),
                 0
             );
     }
