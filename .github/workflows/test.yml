@@ -46,5 +46,8 @@ jobs:
       - run: yarn prettier
       - run: yarn build
 
-      - name: Run uarch tests
-        run: forge test -vvv --no-match-test Replay
+      - name: Run unit tests
+        run: forge test -vvv --no-match-contract "UArchInterpret|UArchReplay"
+
+      - name: Run interpret test
+        run: forge clean && FOUNDRY_PROFILE=mock forge test -vvv --match-contract UArchInterpret

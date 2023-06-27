@@ -27,7 +27,6 @@ help:
 	@echo '  deploy                     - deploy to local node'
 	@echo '  generate                   - generate solidity code from cpp and template'
 	@echo '  test                       - test both binary files and log files'
-	@echo '  coverage                   - generate coverage report for html view'
 
 $(BIN_DOWNLOAD_FILEPATH):
 	@mkdir -p $(DOWNLOADDIR)
@@ -60,11 +59,10 @@ pretest: checksum
 	@rm $(BIN_TEST_DIR)/*.dump $(BIN_TEST_DIR)/*.elf
 
 test: pretest
-	forge test -vvv --no-match-test Replay
-
-coverage: pretest
-	forge coverage --report lcov --no-match-test Replay
-	genhtml -o report --branch-coverage lcov.info
+	forge clean
+	forge test -vvv --no-match-contract "UArchInterpret|UArchReplay"
+	forge clean
+	FOUNDRY_PROFILE=mock forge test -vvv --match-contract UArchInterpret
 
 generate: $(EMULATOR_DIR)/src/uarch-execute-insn.h
 	EMULATOR_DIR=$(EMULATOR_DIR) lua translator/generate-UArchExecuteInsn.lua
@@ -73,4 +71,4 @@ generate: $(EMULATOR_DIR)/src/uarch-execute-insn.h
 submodules:
 	git submodule update --init --recursive
 
-.PHONY: help all build clean checksum coverage dep depclean deploy test generate submodules
+.PHONY: help all build clean checksum dep depclean deploy test generate submodules
