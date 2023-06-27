@@ -50,4 +50,6 @@ jobs:
         run: forge test -vvv --no-match-contract "UArchInterpret|UArchReplay"
 
       - name: Run interpret test
-        run: forge clean && FOUNDRY_PROFILE=mock forge test -vvv --match-contract UArchInterpret
+        run: |
+          ./helper_scripts/generate_AccessLogs.sh mock
+          forge test -vvv --match-contract UArchInterpret

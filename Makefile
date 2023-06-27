@@ -68,7 +68,7 @@ test: pretest
 
 test-replay: pretest
 	./helper_scripts/generate_AccessLogs.sh prod
-	forge test -vvv --match-contract UArchReplay
+	./helper_scripts/test_replays.sh
 	yarn prettier -w
 
 generate: $(EMULATOR_DIR)/src/uarch-execute-insn.h
