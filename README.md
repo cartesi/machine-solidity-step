@@ -47,7 +47,6 @@ Generic targets:
   deploy                     - deploy to local node
   generate                   - generate solidity code from cpp and template
   test                       - test both binary files and log files
-  coverage                   - generate coverage report for html view
 ```
 
 Obs: Some make targets require the installation of the node.js packages. This can be done with `yarn install` or `make dep`.
@@ -80,23 +79,7 @@ There are two types of tests that can be run on the Solidity Emulator.
 
 Run all tests:
 
-    forge test
-
-### Generate coverage report
-
-To generate a test coverage, run:
-
-```
-forge coverage
-```
-
-To generate a pretty visual report with html, run:
-
-```
-make coverage
-```
-
-And then open `report/contracts/index.html` with your browser.
+    make test
 
 ## Contributing
 

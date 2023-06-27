@@ -1,9 +1,6 @@
 /artifacts
 /foundry_artifacts
 cache
-coverage
-report
-lcov.info
 build
 deployments/localhost
 deployments/*/solcInputs/*.json
