@@ -1,3 +1,5 @@
+// THIS IS AUTO GENERATED, ONLY EDIT THE TEMPLATE
+
 // Copyright 2023 Cartesi Pte. Ltd.
 
 // SPDX-License-Identifier: Apache-2.0
@@ -18,7 +20,7 @@ import "forge-std/Test.sol";
 
 import "contracts/UArchStep.sol";
 
-contract UArchReplayTest is Test {
+contract UArchReplay_@X@_Test is Test {
     using AccessLogs for bytes;
     using stdJson for string;
 
@@ -55,7 +57,7 @@ contract UArchReplayTest is Test {
         bytes32[] siblings;
     }
 
-    function testReplayLogs() public {
+    function testReplay_@X@() public {
         Entry[] memory catalog = loadCatalog(
             string.concat(JSON_PATH, CATALOG_PATH)
         );
@@ -67,6 +69,10 @@ contract UArchReplayTest is Test {
         bytes memory buffer = new bytes(100 * (siblingsLength + 1) * 32);
 
         for (uint256 i = 0; i < catalog.length; i++) {
+            if (keccak256(abi.encodePacked(catalog[i].path)) !=
+                keccak256(abi.encodePacked("@PATH@"))) {
+                continue;
+            }
             console.log("Replaying file %s ...", catalog[i].path);
             string memory rj = loadJsonLog(
                 string.concat(JSON_PATH, catalog[i].path)

@@ -47,4 +47,6 @@ jobs:
       - run: yarn build
 
       - name: Run uarch tests
-        run: forge test -vvv --no-match-test Replay
+        run: |
+          forge test -vvv --no-match-test Replay
+          test/test-replays.sh  

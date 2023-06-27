@@ -18,3 +18,4 @@ test/uarch-log
 *.abi
 *.log
 /out
+test/UArchReplay_*.t.sol
