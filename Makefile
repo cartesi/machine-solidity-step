@@ -26,7 +26,8 @@ help:
 	@echo '  depclean                   - remove npm packages'
 	@echo '  deploy                     - deploy to local node'
 	@echo '  generate                   - generate solidity code from cpp and template'
-	@echo '  test                       - test both binary files and log files'
+	@echo '  test                       - test both binary files and general functionalities'
+	@echo '  test-replay                - test log files'
 
 $(BIN_DOWNLOAD_FILEPATH):
 	@mkdir -p $(DOWNLOADDIR)
@@ -59,16 +60,22 @@ pretest: checksum
 	@rm $(BIN_TEST_DIR)/*.dump $(BIN_TEST_DIR)/*.elf
 
 test: pretest
-	forge clean
+	./helper_scripts/generate_AccessLogs.sh mock
+	forge test -vvv --match-contract UArchInterpret
+	./helper_scripts/generate_AccessLogs.sh prod
 	forge test -vvv --no-match-contract "UArchInterpret|UArchReplay"
-	forge clean
-	FOUNDRY_PROFILE=mock forge test -vvv --match-contract UArchInterpret
+	yarn prettier -w
+
+test-replay: pretest
+	./helper_scripts/generate_AccessLogs.sh prod
+	forge test -vvv --match-contract UArchReplay
+	yarn prettier -w
 
 generate: $(EMULATOR_DIR)/src/uarch-execute-insn.h
-	EMULATOR_DIR=$(EMULATOR_DIR) lua translator/generate-UArchExecuteInsn.lua
+	EMULATOR_DIR=$(EMULATOR_DIR) lua helper_scripts/generate_UArchExecuteInsn.lua
 	yarn prettier -w
 
 submodules:
 	git submodule update --init --recursive
 
-.PHONY: help all build clean checksum dep depclean deploy test generate submodules
+.PHONY: help all build clean checksum dep depclean deploy test test-replay generate submodules

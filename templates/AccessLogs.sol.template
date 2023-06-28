@@ -64,6 +64,8 @@ library AccessLogs {
         return temp;
     }
 
+    // START OF PRODUCTION CODE
+
     ///@dev bytes buffer layouts differently for `readWord` and `writeWord`,
     ///`readWord` [8 bytes as uint64 value, 32 bytes as drive hash, 61 * 32 bytes as sibling proofs]
     ///`writeWord` [32 bytes as old drive hash, 32 * 61 bytes as sibling proofs]
@@ -212,4 +214,63 @@ library AccessLogs {
 
         return (drive, nodesCount);
     }
+
+    // END OF PRODUCTION CODE
+
+    // START OF MOCK CODE
+
+    ///@dev This library mocks the `contracts/AccessLogs.sol` yet with a very different implementation.
+    /// `bytes buffer` simulates the memory space with two separate regions.
+    /// The first 280 bytes are reserved for register space: 0x320 - 0x438 (35 * 8)
+    /// Following next will be continuous memory space: 0x70000000 -
+
+    function readWord(
+        AccessLogs.Context memory a,
+        Memory.PhysicalAddress readAddress
+    ) internal pure returns (uint64) {
+        (bytes32 val, ) = accessWord(a, readAddress);
+        return uint64SwapEndian(uint64(bytes8(val)));
+    }
+
+    function writeWord(
+        AccessLogs.Context memory a,
+        Memory.PhysicalAddress writeAddress,
+        uint64 val
+    ) internal pure {
+        (bytes32 bytes32Value, uint128 index) = accessWord(a, writeAddress);
+        bytes8 bytesValue = bytes8(uint64SwapEndian(val));
+        bytes32Value =
+            bytes32Value &
+            0x0000000000000000ffffffffffffffffffffffffffffffffffffffffffffffff;
+        bytes32Value = bytes32Value | bytes32(bytesValue);
+
+        a.buffer.writeBytes32(index, bytes32Value);
+    }
+
+    function writeRegion(
+        AccessLogs.Context memory a,
+        Memory.Region memory region,
+        bytes32 newHash
+    ) internal pure {}
+
+    function accessWord(
+        AccessLogs.Context memory a,
+        Memory.PhysicalAddress paddr
+    ) private pure returns (bytes32 val, uint128 index) {
+        uint64 position = Memory.PhysicalAddress.unwrap(paddr);
+        if (
+            position >= UArchConstants.UCYCLE &&
+            position <= UArchConstants.UX0 + (31 << 3)
+        ) {
+            index = (position - UArchConstants.UCYCLE);
+        } else if (position >= 0x70000000) {
+            index = (position - 0x70000000) + 35 * 8;
+        } else {
+            revert("invalid memory access");
+        }
+
+        val = a.buffer.toBytes32(index);
+    }
+
+    // END OF MOCK CODE
 }

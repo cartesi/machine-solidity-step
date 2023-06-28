@@ -13,7 +13,7 @@
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
-import "accesslogs/AccessLogs.sol";
+import "contracts/AccessLogs.sol";
 import "contracts/Memory.sol";
 
 pragma solidity ^0.8.0;

@@ -14,6 +14,10 @@
 // limitations under the License.
 //
 
+/// @title UArchConstants
+/// @notice Contains constants for micro-architecture retrieved from C++ implementation
+/// @dev This file is generated from helper_scripts/generate_UArchExecuteInsn.lua, one should not modify the content directly
+
 pragma solidity ^0.8.0;
 
 library UArchConstants {
@@ -26,7 +30,6 @@ library UArchConstants {
     uint64 constant LOG2_CYCLES_TO_RESET = 10;
     uint64 constant RESET_POSITION = 100;
     uint8 constant RESET_ALIGNED_SIZE = 32;
-    bytes32 constant PRESTINE_STATE =
-        0x1234567812345678123456781234567812345678123456781234567812345678;
+    bytes32 constant PRESTINE_STATE = 0x1234567812345678123456781234567812345678123456781234567812345678;
     // END OF AUTO-GENERATED CODE
 }

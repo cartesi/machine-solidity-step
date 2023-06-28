@@ -17,7 +17,7 @@
 pragma solidity ^0.8.0;
 
 import "./UArchConstants.sol";
-import "accesslogs/AccessLogs.sol";
+import "./AccessLogs.sol";
 
 library UArchCompat {
     using AccessLogs for AccessLogs.Context;
