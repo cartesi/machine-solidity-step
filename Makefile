@@ -22,9 +22,6 @@ help:
 	@echo 'Generic targets:'
 	@echo '* all                        - build solidity code. To build from a clean clone, run: make submodules all'
 	@echo '  build                      - build solidity code'
-	@echo '  dep                        - install npm packages'
-	@echo '  depclean                   - remove npm packages'
-	@echo '  deploy                     - deploy to local node'
 	@echo '  generate                   - generate solidity code from cpp and template'
 	@echo '  test                       - test both binary files and general functionalities'
 	@echo '  test-replay                - test log files'
@@ -38,19 +35,19 @@ $(LOG_DOWNLOAD_FILEPATH):
 	@wget -nc $(LOG_DOWNLOAD_URL) -P $(DOWNLOADDIR)
 	@shasum -ca 256 shasumfile
 
-all: generate build test
+all: build test
 
-build clean deploy depclean:
-	yarn $@
+build: generate
+	forge build
+
+clean:
+	rm -rf cache foundry_artifacts
 
 shasumfile: $(DOWNLOADFILES)
 	shasum -a 256 $^ > $@
 
 checksum: $(DOWNLOADFILES)
 	@shasum -ca 256 shasumfile
-
-dep:
-	yarn install
 
 pretest: checksum
 	@mkdir -p $(BIN_TEST_DIR)
@@ -64,18 +61,19 @@ test: pretest
 	forge test -vvv --match-contract UArchInterpret
 	./helper_scripts/generate_AccessLogs.sh prod
 	forge test -vvv --no-match-contract "UArchInterpret|UArchReplay"
-	yarn prettier -w
+	forge fmt
 
 test-replay: pretest
 	./helper_scripts/generate_AccessLogs.sh prod
 	./helper_scripts/test_replays.sh
-	yarn prettier -w
+	forge fmt
 
 generate: $(EMULATOR_DIR)/src/uarch-execute-insn.h
 	EMULATOR_DIR=$(EMULATOR_DIR) lua helper_scripts/generate_UArchExecuteInsn.lua
-	yarn prettier -w
+	./helper_scripts/generate_AccessLogs.sh prod
+	forge fmt
 
 submodules:
 	git submodule update --init --recursive
 
-.PHONY: help all build clean checksum dep depclean deploy test test-replay generate submodules
+.PHONY: help all build clean checksum deploy test test-replay generate submodules

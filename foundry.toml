@@ -13,3 +13,8 @@ remappings = [
     'hardhat-deploy/=node_modules/hardhat-deploy/',
     'hardhat/=node_modules/hardhat/',
 ]
+
+[fmt]
+line_length = 80
+ignore = ["test/UArchReplay_*"]
+tab_width = 4

@@ -11,9 +11,6 @@ jobs:
         with:
           submodules: recursive
           token: ${{ secrets.CI_TOKEN }}
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "16"
 
       - name: Download uarch test bin files
         uses: Legion2/download-release-action@v2.1.0
@@ -41,10 +38,6 @@ jobs:
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
-
-      - run: yarn install
-      - run: yarn prettier
-      - run: yarn build
 
       - name: Run unit tests
         run: forge test -vvv --no-match-contract "UArchInterpret|UArchReplay"
