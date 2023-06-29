@@ -25,10 +25,11 @@ library Memory {
         AlignedSize alignedSize;
     }
 
-    function regionFromStride(
-        Stride stride,
-        AlignedSize alignedSize
-    ) internal pure returns (Region memory) {
+    function regionFromStride(Stride stride, AlignedSize alignedSize)
+        internal
+        pure
+        returns (Region memory)
+    {
         stride.validateStrideLength(alignedSize);
         return Region(stride, alignedSize);
     }
@@ -41,9 +42,11 @@ library Memory {
         return regionFromStride(stride, alignedSize);
     }
 
-    function regionFromWordAddress(
-        PhysicalAddress startAddress
-    ) internal pure returns (Region memory) {
+    function regionFromWordAddress(PhysicalAddress startAddress)
+        internal
+        pure
+        returns (Region memory)
+    {
         return regionFromPhysicalAddress(startAddress, alignedSizeFromLog2(0));
     }
 
@@ -59,6 +62,7 @@ library Memory {
     type Stride is uint64;
 
     uint64 constant MAX_STRIDE = MAX_SIZE - 1;
+
     using Memory for Stride;
 
     function strideFromPhysicalAddress(
@@ -76,16 +80,18 @@ library Memory {
         return Stride.wrap(stride);
     }
 
-    function strideFromWordAddress(
-        PhysicalAddress startAddress
-    ) internal pure returns (Stride) {
+    function strideFromWordAddress(PhysicalAddress startAddress)
+        internal
+        pure
+        returns (Stride)
+    {
         return strideFromPhysicalAddress(startAddress, alignedSizeFromLog2(0));
     }
 
-    function validateStrideLength(
-        Stride stride,
-        AlignedSize alignedSize
-    ) internal pure {
+    function validateStrideLength(Stride stride, AlignedSize alignedSize)
+        internal
+        pure
+    {
         uint64 s = alignedSize.size();
         assert(Stride.unwrap(stride) * s < MAX_STRIDE);
     }
@@ -99,6 +105,7 @@ library Memory {
     type AlignedSize is uint8;
 
     uint64 constant MAX_SIZE = (1 << 61);
+
     using Memory for AlignedSize;
 
     function alignedSizeFromLog2(uint8 s) internal pure returns (AlignedSize) {
@@ -115,9 +122,11 @@ library Memory {
 
     type PhysicalAddress is uint64;
 
-    function toPhysicalAddress(
-        uint64 uint64Address
-    ) internal pure returns (PhysicalAddress) {
+    function toPhysicalAddress(uint64 uint64Address)
+        internal
+        pure
+        returns (PhysicalAddress)
+    {
         return PhysicalAddress.wrap(uint64Address);
     }
 }

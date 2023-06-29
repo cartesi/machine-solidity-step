@@ -27,9 +27,11 @@ library UArchInterpret {
     /// @notice Run interpret until machine halts.
     /// @param accessLogs logs of machine access
     /// @return Returns an exit code
-    function interpret(
-        AccessLogs.Context memory accessLogs
-    ) internal pure returns (InterpreterStatus) {
+    function interpret(AccessLogs.Context memory accessLogs)
+        internal
+        pure
+        returns (InterpreterStatus)
+    {
         uint64 ucycle;
         bool halt;
 

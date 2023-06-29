@@ -21,17 +21,18 @@ library MetaStep {
     using AccessLogs for AccessLogs.Context;
 
     /// @notice Run meta-step
-    function step(
-        uint256 counter,
-        AccessLogs.Context memory accessLogs
-    ) internal pure returns (uint64 cycle, bool halt, bytes32 machineState) {
+    function step(uint256 counter, AccessLogs.Context memory accessLogs)
+        internal
+        pure
+        returns (uint64 cycle, bool halt, bytes32 machineState)
+    {
         (cycle, halt) = UArchStep.step(accessLogs);
         machineState = accessLogs.currentRootHash;
 
         if (
-            counter ==
-            (counter >> UArchConstants.LOG2_CYCLES_TO_RESET) <<
-                UArchConstants.LOG2_CYCLES_TO_RESET
+            counter
+                == (counter >> UArchConstants.LOG2_CYCLES_TO_RESET)
+                    << UArchConstants.LOG2_CYCLES_TO_RESET
         ) {
             // if counter is a multiple of (1 << UArchConstants.LOG2_CYCLES_TO_RESET), run uarch reset
             accessLogs.writeRegion(

@@ -55,23 +55,16 @@ contract AccessLogsTest is Test {
         vm.expectRevert("Read region root doesn't match");
         accessLogs.readWord((position + 1).toPhysicalAddress());
 
-        accessLogs = AccessLogs.Context(
-            rootHash,
-            readBufferFromHashes(bytes32(0)),
-            0
-        );
+        accessLogs =
+            AccessLogs.Context(rootHash, readBufferFromHashes(bytes32(0)), 0);
         accessLogs.readWord(position.toPhysicalAddress());
     }
 
     function testWriteWord() public {
-        hashes[0] = (
-            keccak256(abi.encodePacked(bytes8(uint64(1).uint64SwapEndian())))
-        );
-        AccessLogs.Context memory accessLogs = AccessLogs.Context(
-            rootHash,
-            writeBufferFromHashes(),
-            0
-        );
+        hashes[0] =
+            (keccak256(abi.encodePacked(bytes8(uint64(1).uint64SwapEndian()))));
+        AccessLogs.Context memory accessLogs =
+            AccessLogs.Context(rootHash, writeBufferFromHashes(), 0);
         uint64 valueWritten = 1;
 
         vm.expectRevert("Write region root doesn't match");
@@ -93,9 +86,11 @@ contract AccessLogsTest is Test {
         assertEq(AccessLogs.uint64SwapEndian(0x0000007000000000), 0x70000000);
     }
 
-    function readBufferFromHashes(
-        bytes32 word
-    ) private view returns (bytes memory) {
+    function readBufferFromHashes(bytes32 word)
+        private
+        view
+        returns (bytes memory)
+    {
         bytes memory buffer = new bytes(62 * 32 + 8);
         uint128 pointer = 0;
         buffer.writeBytes32(pointer, word);

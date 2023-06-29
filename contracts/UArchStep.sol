@@ -25,9 +25,11 @@ library UArchStep {
     /// @notice Run step
     /// @param accessLogs logs of machine access
     /// @return (uint64, bool) cycle number, machine halt state
-    function step(
-        AccessLogs.Context memory accessLogs
-    ) internal pure returns (uint64, bool) {
+    function step(AccessLogs.Context memory accessLogs)
+        internal
+        pure
+        returns (uint64, bool)
+    {
         uint64 ucycle = accessLogs.readCycle();
 
         if (accessLogs.readHaltFlag()) {

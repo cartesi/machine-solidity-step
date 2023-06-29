@@ -23,35 +23,43 @@ library UArchCompat {
     using AccessLogs for AccessLogs.Context;
     using Memory for uint64;
 
-    function readCycle(
-        AccessLogs.Context memory a
-    ) internal pure returns (uint64) {
+    function readCycle(AccessLogs.Context memory a)
+        internal
+        pure
+        returns (uint64)
+    {
         return a.readWord(UArchConstants.UCYCLE.toPhysicalAddress());
     }
 
-    function readHaltFlag(
-        AccessLogs.Context memory a
-    ) internal pure returns (bool) {
+    function readHaltFlag(AccessLogs.Context memory a)
+        internal
+        pure
+        returns (bool)
+    {
         return (a.readWord(UArchConstants.UHALT.toPhysicalAddress()) != 0);
     }
 
-    function readPc(
-        AccessLogs.Context memory a
-    ) internal pure returns (uint64) {
+    function readPc(AccessLogs.Context memory a)
+        internal
+        pure
+        returns (uint64)
+    {
         return a.readWord(UArchConstants.UPC.toPhysicalAddress());
     }
 
-    function readWord(
-        AccessLogs.Context memory a,
-        uint64 paddr
-    ) internal pure returns (uint64) {
+    function readWord(AccessLogs.Context memory a, uint64 paddr)
+        internal
+        pure
+        returns (uint64)
+    {
         return a.readWord(paddr.toPhysicalAddress());
     }
 
-    function readX(
-        AccessLogs.Context memory a,
-        uint8 index
-    ) internal pure returns (uint64) {
+    function readX(AccessLogs.Context memory a, uint8 index)
+        internal
+        pure
+        returns (uint64)
+    {
         uint64 paddr;
         unchecked {
             paddr = UArchConstants.UX0 + (index << 3);
@@ -59,7 +67,10 @@ library UArchCompat {
         return a.readWord(paddr.toPhysicalAddress());
     }
 
-    function writeCycle(AccessLogs.Context memory a, uint64 val) internal pure {
+    function writeCycle(AccessLogs.Context memory a, uint64 val)
+        internal
+        pure
+    {
         a.writeWord(UArchConstants.UCYCLE.toPhysicalAddress(), val);
     }
 
@@ -67,19 +78,17 @@ library UArchCompat {
         a.writeWord(UArchConstants.UPC.toPhysicalAddress(), val);
     }
 
-    function writeWord(
-        AccessLogs.Context memory a,
-        uint64 paddr,
-        uint64 val
-    ) internal pure {
+    function writeWord(AccessLogs.Context memory a, uint64 paddr, uint64 val)
+        internal
+        pure
+    {
         a.writeWord(paddr.toPhysicalAddress(), val);
     }
 
-    function writeX(
-        AccessLogs.Context memory a,
-        uint8 index,
-        uint64 val
-    ) internal pure {
+    function writeX(AccessLogs.Context memory a, uint8 index, uint64 val)
+        internal
+        pure
+    {
         uint64 paddr;
         unchecked {
             paddr = UArchConstants.UX0 + (index << 3);
@@ -111,10 +120,11 @@ library UArchCompat {
         return res;
     }
 
-    function uint64SubUint64(
-        uint64 a,
-        uint64 b
-    ) internal pure returns (uint64) {
+    function uint64SubUint64(uint64 a, uint64 b)
+        internal
+        pure
+        returns (uint64)
+    {
         uint64 res;
         unchecked {
             res = a - b;
@@ -122,10 +132,11 @@ library UArchCompat {
         return res;
     }
 
-    function uint64AddUint64(
-        uint64 a,
-        uint64 b
-    ) internal pure returns (uint64) {
+    function uint64AddUint64(uint64 a, uint64 b)
+        internal
+        pure
+        returns (uint64)
+    {
         uint64 res;
         unchecked {
             res = a + b;
@@ -157,45 +168,51 @@ library UArchCompat {
         return res;
     }
 
-    function uint64ShiftRight(
-        uint64 v,
-        uint32 count
-    ) internal pure returns (uint64) {
+    function uint64ShiftRight(uint64 v, uint32 count)
+        internal
+        pure
+        returns (uint64)
+    {
         return v >> (count & 0x3f);
     }
 
-    function uint64ShiftLeft(
-        uint64 v,
-        uint32 count
-    ) internal pure returns (uint64) {
+    function uint64ShiftLeft(uint64 v, uint32 count)
+        internal
+        pure
+        returns (uint64)
+    {
         return v << (count & 0x3f);
     }
 
-    function int64ShiftRight(
-        int64 v,
-        uint32 count
-    ) internal pure returns (int64) {
+    function int64ShiftRight(int64 v, uint32 count)
+        internal
+        pure
+        returns (int64)
+    {
         return v >> (count & 0x3f);
     }
 
-    function uint32ShiftRight(
-        uint32 v,
-        uint32 count
-    ) internal pure returns (uint32) {
+    function uint32ShiftRight(uint32 v, uint32 count)
+        internal
+        pure
+        returns (uint32)
+    {
         return v >> (count & 0x1f);
     }
 
-    function uint32ShiftLeft(
-        uint32 v,
-        uint32 count
-    ) internal pure returns (uint32) {
+    function uint32ShiftLeft(uint32 v, uint32 count)
+        internal
+        pure
+        returns (uint32)
+    {
         return v << (count & 0x1f);
     }
 
-    function int32ShiftRight(
-        int32 v,
-        uint32 count
-    ) internal pure returns (int32) {
+    function int32ShiftRight(int32 v, uint32 count)
+        internal
+        pure
+        returns (int32)
+    {
         return v >> (count & 0x1f);
     }
 }

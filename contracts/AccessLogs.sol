@@ -30,32 +30,30 @@ library AccessLogs {
     /// @notice Swap byte order of unsigned ints with 64 bytes
     /// @param num number to have bytes swapped
     function uint64SwapEndian(uint64 num) internal pure returns (uint64) {
-        uint64 output = ((num & 0x00000000000000ff) << 56) |
-            ((num & 0x000000000000ff00) << 40) |
-            ((num & 0x0000000000ff0000) << 24) |
-            ((num & 0x00000000ff000000) << 8) |
-            ((num & 0x000000ff00000000) >> 8) |
-            ((num & 0x0000ff0000000000) >> 24) |
-            ((num & 0x00ff000000000000) >> 40) |
-            ((num & 0xff00000000000000) >> 56);
+        uint64 output = ((num & 0x00000000000000ff) << 56)
+            | ((num & 0x000000000000ff00) << 40)
+            | ((num & 0x0000000000ff0000) << 24) | ((num & 0x00000000ff000000) << 8)
+            | ((num & 0x000000ff00000000) >> 8) | ((num & 0x0000ff0000000000) >> 24)
+            | ((num & 0x00ff000000000000) >> 40)
+            | ((num & 0xff00000000000000) >> 56);
 
         return output;
     }
 
-    function writeBytes32(
-        bytes memory data,
-        uint128 offset,
-        bytes32 val
-    ) internal pure {
+    function writeBytes32(bytes memory data, uint128 offset, bytes32 val)
+        internal
+        pure
+    {
         assembly {
             mstore(add(data, add(offset, 32)), val)
         }
     }
 
-    function toBytes32(
-        bytes memory data,
-        uint128 offset
-    ) internal pure returns (bytes32) {
+    function toBytes32(bytes memory data, uint128 offset)
+        internal
+        pure
+        returns (bytes32)
+    {
         bytes32 temp;
         // Get 32 bytes from data
         assembly {
@@ -71,37 +69,28 @@ library AccessLogs {
     //
     // Read methods
     //
-
     function readRegion(
         AccessLogs.Context memory a,
         Memory.Region memory region
     ) internal pure returns (bytes32) {
         bytes32 drive = a.buffer.toBytes32(a.pointer);
         a.pointer += 32;
-        (bytes32 rootHash, uint8 siblingCount) = getRoot(
-            region,
-            drive,
-            a.buffer,
-            a.pointer
-        );
+        (bytes32 rootHash, uint8 siblingCount) =
+            getRoot(region, drive, a.buffer, a.pointer);
         a.pointer += uint128(siblingCount) * 32;
 
-        require(
-            a.currentRootHash == rootHash,
-            "Read region root doesn't match"
-        );
+        require(a.currentRootHash == rootHash, "Read region root doesn't match");
 
         return drive;
     }
 
-    function readLeaf(
-        AccessLogs.Context memory a,
-        Memory.Stride readStride
-    ) internal pure returns (bytes32) {
-        Memory.Region memory r = Memory.regionFromStride(
-            readStride,
-            Memory.alignedSizeFromLog2(0)
-        );
+    function readLeaf(AccessLogs.Context memory a, Memory.Stride readStride)
+        internal
+        pure
+        returns (bytes32)
+    {
+        Memory.Region memory r =
+            Memory.regionFromStride(readStride, Memory.alignedSizeFromLog2(0));
         return readRegion(a, r);
     }
 
@@ -109,15 +98,12 @@ library AccessLogs {
         AccessLogs.Context memory a,
         Memory.PhysicalAddress readAddress
     ) internal pure returns (uint64) {
-        uint64 val = uint64SwapEndian(
-            uint64(bytes8(a.buffer.toBytes32(a.pointer)))
-        );
+        uint64 val =
+            uint64SwapEndian(uint64(bytes8(a.buffer.toBytes32(a.pointer))));
         a.pointer += 8;
         bytes32 valHash = keccak256(abi.encodePacked(uint64SwapEndian(val)));
-        bytes32 expectedValHash = readLeaf(
-            a,
-            Memory.strideFromWordAddress(readAddress)
-        );
+        bytes32 expectedValHash =
+            readLeaf(a, Memory.strideFromWordAddress(readAddress));
 
         require(valHash == expectedValHash, "Read value doesn't match");
         return val;
@@ -126,7 +112,6 @@ library AccessLogs {
     //
     // Write methods
     //
-
     function writeRegion(
         AccessLogs.Context memory a,
         Memory.Region memory region,
@@ -134,19 +119,14 @@ library AccessLogs {
     ) internal pure {
         bytes32 oldDrive = a.buffer.toBytes32(a.pointer);
         a.pointer += 32;
-        (bytes32 rootHash, uint8 siblingCount) = getRoot(
-            region,
-            oldDrive,
-            a.buffer,
-            a.pointer
-        );
+        (bytes32 rootHash, uint8 siblingCount) =
+            getRoot(region, oldDrive, a.buffer, a.pointer);
 
         require(
-            a.currentRootHash == rootHash,
-            "Write region root doesn't match"
+            a.currentRootHash == rootHash, "Write region root doesn't match"
         );
 
-        (bytes32 newRootHash, ) = getRoot(region, newHash, a.buffer, a.pointer);
+        (bytes32 newRootHash,) = getRoot(region, newHash, a.buffer, a.pointer);
         a.pointer += uint128(siblingCount) * 32;
 
         a.currentRootHash = newRootHash;
@@ -157,10 +137,8 @@ library AccessLogs {
         Memory.Stride writeStride,
         bytes32 newHash
     ) internal pure {
-        Memory.Region memory r = Memory.regionFromStride(
-            writeStride,
-            Memory.alignedSizeFromLog2(0)
-        );
+        Memory.Region memory r =
+            Memory.regionFromStride(writeStride, Memory.alignedSizeFromLog2(0));
         writeRegion(a, r, newHash);
     }
 
@@ -190,10 +168,7 @@ library AccessLogs {
     ) internal pure returns (bytes32, uint8) {
         // require that multiplier makes sense!
         uint8 logOfSize = region.alignedSize.log2();
-        require(
-            logOfSize <= LOG2RANGE,
-            "Cannot be bigger than the tree itself"
-        );
+        require(logOfSize <= LOG2RANGE, "Cannot be bigger than the tree itself");
 
         uint64 stride = Memory.Stride.unwrap(region.stride);
         uint8 nodesCount = LOG2RANGE - logOfSize;

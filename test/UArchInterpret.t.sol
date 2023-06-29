@@ -44,9 +44,8 @@ contract UArchInterpretTest is Test {
     string constant ROM_PATH = "./test/uarch-bin/uarch-bootstrap.bin";
 
     function testBinaries() public {
-        Entry[] memory catalog = loadCatalog(
-            string.concat(JSON_PATH, CATALOG_PATH)
-        );
+        Entry[] memory catalog =
+            loadCatalog(string.concat(JSON_PATH, CATALOG_PATH));
 
         for (uint256 i = 0; i < catalog.length; i++) {
             console.log("Testing %s ...", catalog[i].path);
@@ -138,17 +137,14 @@ contract UArchInterpretTest is Test {
 
         // pad bytes to multiple of 8
         if (bytesData.length % 8 != 0) {
-            uint number_of_bytes_missing = ((bytesData.length / 8) + 1) *
-                8 -
-                bytesData.length;
+            uint256 number_of_bytes_missing =
+                ((bytesData.length / 8) + 1) * 8 - bytesData.length;
             bytes memory bytes_missing = new bytes(number_of_bytes_missing);
             bytesData = bytes.concat(bytesData, bytes_missing);
         }
 
         // allocate array for memory
-        uint256 newBufferSize = bytesData.length +
-            uint128(REGISTERS_LENGTH) *
-            8;
+        uint256 newBufferSize = bytesData.length + uint128(REGISTERS_LENGTH) * 8;
         a.buffer = new bytes(newBufferSize);
 
         // load the data into AccessState
@@ -164,9 +160,11 @@ contract UArchInterpretTest is Test {
         }
     }
 
-    function loadCatalog(
-        string memory path
-    ) private view returns (Entry[] memory) {
+    function loadCatalog(string memory path)
+        private
+        view
+        returns (Entry[] memory)
+    {
         string memory json = vm.readFile(path);
         bytes memory raw = json.parseRaw("");
         Entry[] memory catalog = abi.decode(raw, (Entry[]));
@@ -179,12 +177,9 @@ contract UArchInterpretTest is Test {
         pure
         returns (AccessLogs.Context memory)
     {
-        return
-            AccessLogs.Context(
-                bytes32(0),
-                new bytes(uint128(REGISTERS_LENGTH) * 8),
-                0
-            );
+        return AccessLogs.Context(
+            bytes32(0), new bytes(uint128(REGISTERS_LENGTH) * 8), 0
+        );
     }
 
     function writeWordBytes8(
