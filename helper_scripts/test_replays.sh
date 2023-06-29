@@ -9,7 +9,7 @@ done
 
 for i in test/uarch-log/rv64ui*; do
 	BASE=`basename $i .json | sed "s/-/_/g"`
-	forge test -vvv --match-contract UArchReplay_${BASE}_Test
+	forge test -vv --match-contract UArchReplay_${BASE}_Test
 	if [ $? != 0 ]; then
 		exit 1
 	fi

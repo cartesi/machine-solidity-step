@@ -40,9 +40,9 @@ jobs:
           version: nightly
 
       - name: Run unit tests
-        run: forge test -vvv --no-match-contract "UArchInterpret|UArchReplay"
+        run: forge test -vv --no-match-contract "UArchInterpret|UArchReplay"
 
       - name: Run interpret test
         run: |
           ./helper_scripts/generate_AccessLogs.sh mock
-          forge test -vvv --match-contract UArchInterpret
+          forge test -vv --match-contract UArchInterpret

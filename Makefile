@@ -58,9 +58,9 @@ pretest: checksum
 
 test: pretest
 	./helper_scripts/generate_AccessLogs.sh mock
-	forge test -vvv --match-contract UArchInterpret
+	forge test -vv --match-contract UArchInterpret
 	./helper_scripts/generate_AccessLogs.sh prod
-	forge test -vvv --no-match-contract "UArchInterpret|UArchReplay"
+	forge test -vv --no-match-contract "UArchInterpret|UArchReplay"
 	forge fmt
 
 test-replay: pretest
