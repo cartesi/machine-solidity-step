@@ -62,7 +62,7 @@ library AccessLogs {
         return temp;
     }
 
-    ///@dev bytes buffer layouts differently for `readWord` and `writeWord`,
+    /// @dev bytes buffer layouts differently for `readWord` and `writeWord`,
     ///`readWord` [8 bytes as uint64 value, 32 bytes as drive hash, 61 * 32 bytes as sibling proofs]
     ///`writeWord` [32 bytes as old drive hash, 32 * 61 bytes as sibling proofs]
 

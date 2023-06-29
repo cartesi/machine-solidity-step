@@ -66,7 +66,7 @@ library AccessLogs {
 
     // START OF PRODUCTION CODE
 
-    ///@dev bytes buffer layouts differently for `readWord` and `writeWord`,
+    /// @dev bytes buffer layouts differently for `readWord` and `writeWord`,
     ///`readWord` [8 bytes as uint64 value, 32 bytes as drive hash, 61 * 32 bytes as sibling proofs]
     ///`writeWord` [32 bytes as old drive hash, 32 * 61 bytes as sibling proofs]
 
@@ -219,9 +219,9 @@ library AccessLogs {
 
     // START OF MOCK CODE
 
-    ///@dev This library mocks the `src/AccessLogs.sol` yet with a very different implementation.
+    /// @dev This library mocks the `src/AccessLogs.sol` yet with a very different implementation.
     /// `bytes buffer` simulates the memory space with two separate regions.
-    /// The first 280 bytes are reserved for register space: 0x320 - 0x438 (35 * 8)
+    /// The first 280 bytes are reserved for register space: 0x320 - 0x438 (35 registers * 8 bytes)
     /// Following next will be continuous memory space: 0x70000000 -
 
     function readWord(
