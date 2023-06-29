@@ -1,6 +1,6 @@
 # Cartesi RISC-V Solidity Emulator
 
-The Cartesi RISC-V Solidity Emulator is the on-chain host implementation of the Cartesi Machine Specification. The libraries and contracts are written in Solidity, and the testing scripts are written in Solidity (with the help of [Foundry](https://github.com/foundry-rs/foundry)).
+The Cartesi RISC-V Solidity Emulator is the on-chain host implementation of the Cartesi Machine Specification. The libraries and contracts are written in Solidity, and the testing scripts are written in Solidity (with the help of [Foundry](https://github.com/foundry-rs/foundry)). **_Do not recommend running `forge` command directly, as there are many scripts and templates working together. Please use `make` instead._**
 
 For Cartesi's design to work, this implementation must have the exact transition function as the off-chain [Cartesi RISC-V Emulator](https://github.com/cartesi/machine-emulator), meaning that if given the same initial state (s[i]) both implementation's step functions should reach a bit by bit consistent state s[i + 1].
 
@@ -8,11 +8,11 @@ Since the cost of storing a full Cartesi Machine state within the blockchain is 
 
 Cartesi uses Merkle tree operations and properties to ensure that the blockchain has the ability to correctly verify a state transition without having full state-access. However, the RISC-V Solidity emulator abstracts these operations away and acts as if it knows the full contents of a machine state - it uses the Memory Manager interface to fetch or write any necessary words to memory.
 
-## UArch State
+## AccessLogs
 
-The `IUArchState.State` struct is consumed by the RISC-V Solidity emulator as if the entire state content was available - since the off and on-chain emulators match down to the order in which accesses are logged. When a dispute arises, Alice packs her off-chain state access log referent to the disagreement step in an struct `IUArchState.State`, which will guide the execution of a `step` (i.e state transition function).
+The `AccessLogs.Context` struct is consumed by the RISC-V Solidity emulator as if the entire state content was available - since the off and on-chain emulators match down to the order in which accesses are logged. When a dispute arises, Alice packs her off-chain state access log referent to the disagreement step in an struct `AccessLogs.Context`, which will guide the execution of a `step` (i.e state transition function).
 
-The `UArchState` contract implements the RISC-V Solidity emulator all necessary read and write operations.
+The `AccessLogs` library implements the RISC-V Solidity emulator all necessary read and write operations.
 
 It also makes sure that all accesses performed by the `step` function match the ones provided by Alice and are consistent with the Merkle proofs provided by her. If that is not the case, Alice loses the dispute.
 
@@ -38,23 +38,18 @@ Run `make help` for a list of target options. Here are some of them:
 Cleaning targets:
   clean                      - clean the cache artifacts
 Generic targets:
-* all                        - build solidity code. To build from a clean clone, run: make submodules downloads all
+* all                        - build solidity code. To build from a clean clone, run: make submodules all
   build                      - build solidity code
-  dep                        - install npm packages
-  depclean                   - remove npm packages
-  deploy                     - deploy to local node
   generate                   - generate solidity code from cpp and template
-  test                       - test both binary files and log files
+  test                       - test both binary files and general functionalities'
+  test-replay                - test log files'
 ```
-
-Obs: Some make targets require the installation of the node.js packages. This can be done with `yarn install` or `make dep`.
 
 ### Requirements
 
 -   Foundry 0.2.0
 -   GNU Make >= 3.81
 -   Lua 5.3.5
--   Yarn 1.22.19
 
 Different version of tools maybe working but is not guaranteed.
 
@@ -62,11 +57,7 @@ Different version of tools maybe working but is not guaranteed.
 
 Install dependencies and build:
 
-    yarn
-
-Launch a local hardhat node with all contracts deployed:
-
-    yarn start
+    make submodules all
 
 ### Run tests
 
@@ -78,6 +69,8 @@ There are two types of tests that can be run on the Solidity Emulator.
 Run all tests:
 
     make test
+
+    make test-replay (this one is very time consuming)
 
 ## Contributing
 
