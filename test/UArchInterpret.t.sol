@@ -52,11 +52,7 @@ contract UArchInterpretTest is Test {
             AccessLogs.Context memory a = newAccessLogsContext();
 
             // load ramAccessLogs
-            loadBin(
-                a,
-                PMA_UARCH_RAM_START,
-                string.concat(JSON_PATH, catalog[i].path)
-            );
+            loadBin(a, string.concat(JSON_PATH, catalog[i].path));
             // init pc to ram start
             UArchCompat.writePc(a, PMA_UARCH_RAM_START);
             // init cycle to 0
@@ -128,36 +124,12 @@ contract UArchInterpretTest is Test {
         a.writeWord(UArchConstants.UHALT.toPhysicalAddress(), 1);
     }
 
-    function loadBin(
-        AccessLogs.Context memory a,
-        uint64 start,
-        string memory path
-    ) private view {
+    function loadBin(AccessLogs.Context memory a, string memory path)
+        private
+        view
+    {
         bytes memory bytesData = vm.readFileBinary(path);
-
-        // pad bytes to multiple of 8
-        if (bytesData.length % 8 != 0) {
-            uint256 number_of_bytes_missing =
-                ((bytesData.length / 8) + 1) * 8 - bytesData.length;
-            bytes memory bytes_missing = new bytes(number_of_bytes_missing);
-            bytesData = bytes.concat(bytesData, bytes_missing);
-        }
-
-        // allocate array for memory
-        uint256 newBufferSize = bytesData.length + uint128(REGISTERS_LENGTH) * 8;
-        a.buffer = new bytes(newBufferSize);
-
-        // load the data into AccessState
-        for (uint64 i = 0; i < bytesData.length / 8; i++) {
-            bytes8 bytes8Data;
-            uint64 offset = i * 8;
-            for (uint64 j = 0; j < 8; j++) {
-                bytes8 tempBytes8 = bytesData[offset + j];
-                tempBytes8 = tempBytes8 >> (j * 8);
-                bytes8Data = bytes8Data | tempBytes8;
-            }
-            writeWordBytes8(a, start + offset, bytes8Data);
-        }
+        a.buffer = bytes.concat(a.buffer, bytesData);
     }
 
     function loadCatalog(string memory path)
