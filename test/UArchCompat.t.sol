@@ -16,7 +16,7 @@
 
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
-import "contracts/UArchCompat.sol";
+import "src/UArchCompat.sol";
 
 pragma solidity ^0.8.0;
 

@@ -219,7 +219,7 @@ library AccessLogs {
 
     // START OF MOCK CODE
 
-    ///@dev This library mocks the `contracts/AccessLogs.sol` yet with a very different implementation.
+    ///@dev This library mocks the `src/AccessLogs.sol` yet with a very different implementation.
     /// `bytes buffer` simulates the memory space with two separate regions.
     /// The first 280 bytes are reserved for register space: 0x320 - 0x438 (35 * 8)
     /// Following next will be continuous memory space: 0x70000000 -

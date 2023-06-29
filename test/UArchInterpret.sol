@@ -16,7 +16,7 @@
 
 pragma solidity ^0.8.0;
 
-import "contracts/UArchStep.sol";
+import "src/UArchStep.sol";
 
 library UArchInterpret {
     enum InterpreterStatus {

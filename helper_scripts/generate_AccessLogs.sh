@@ -4,7 +4,7 @@ END_PRODUCTION="END OF PRODUCTION CODE"
 START_MOCK="START OF MOCK CODE"
 END_MOCK="END OF MOCK CODE"
 TEMPLATE_FILE="templates/AccessLogs.sol.template"
-TARGET_FILE="contracts/AccessLogs.sol"
+TARGET_FILE="src/AccessLogs.sol"
 
 if [ "$1" == "-h" ] || ([ "$1" != "prod" ] && [ "$1" != "mock" ] && [ $# -gt 0 ] ) || [ $# -gt 1 ]; then
   echo "Usage: `basename $0` <prod|mock>"

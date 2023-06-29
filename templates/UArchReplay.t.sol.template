@@ -22,7 +22,7 @@ import "forge-std/StdJson.sol";
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
-import "contracts/UArchStep.sol";
+import "src/UArchStep.sol";
 
 contract UArchReplay_@X@_Test is Test {
     using AccessLogs for bytes;
