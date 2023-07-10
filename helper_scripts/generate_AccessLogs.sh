@@ -11,10 +11,10 @@ if [ "$1" == "-h" ] || ([ "$1" != "prod" ] && [ "$1" != "mock" ] && [ $# -gt 0 ]
   exit 0
 fi
 
-start_prod=`cat "$TEMPLATE_FILE" | grep "$START_PRODUCTION" -n | grep -Eo "[0-9]*"`
-end_prod=`cat "$TEMPLATE_FILE" | grep "$END_PRODUCTION" -n | grep -Eo "[0-9]*"`
-start_mock=`cat "$TEMPLATE_FILE" | grep "$START_MOCK" -n | grep -Eo "[0-9]*"`
-end_mock=`cat "$TEMPLATE_FILE" | grep "$END_MOCK" -n | grep -Eo "[0-9]*"`
+start_prod=`cat "$TEMPLATE_FILE" | grep "$START_PRODUCTION" -n | grep -o "[0-9]*"`
+end_prod=`cat "$TEMPLATE_FILE" | grep "$END_PRODUCTION" -n | grep -o "[0-9]*"`
+start_mock=`cat "$TEMPLATE_FILE" | grep "$START_MOCK" -n | grep -o "[0-9]*"`
+end_mock=`cat "$TEMPLATE_FILE" | grep "$END_MOCK" -n | grep -o "[0-9]*"`
 
 if [ "$1" == "prod" ] || [ $# -eq 0 ]; then
     sed -e "${start_mock},${end_mock}d;${start_prod}d;${end_prod}d;" $TEMPLATE_FILE > $TARGET_FILE

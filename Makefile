@@ -69,7 +69,7 @@ test-replay: pretest
 	forge fmt
 
 generate: $(EMULATOR_DIR)/src/uarch-execute-insn.h
-	EMULATOR_DIR=$(EMULATOR_DIR) lua helper_scripts/generate_UArchExecuteInsn.lua
+	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchExecuteInsn.sh
 	./helper_scripts/generate_AccessLogs.sh prod
 	forge fmt
 
