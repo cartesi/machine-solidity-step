@@ -44,5 +44,6 @@ jobs:
 
       - name: Run interpret test
         run: |
-          ./helper_scripts/generate_AccessLogs.sh mock
+          bash ${GITHUB_WORKSPACE}/helper_scripts/generate_AccessLogs.sh mock
           forge test -vv --match-contract UArchInterpret
+        shell: bash
