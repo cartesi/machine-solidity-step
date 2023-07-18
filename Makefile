@@ -70,6 +70,7 @@ test-replay: pretest
 
 generate: $(EMULATOR_DIR)/src/uarch-execute-insn.h
 	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchExecuteInsn.sh
+	./helper_scripts/generate_UArchConstants.sh
 	./helper_scripts/generate_AccessLogs.sh prod
 	forge fmt
 

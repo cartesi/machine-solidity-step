@@ -45,6 +45,10 @@ Generic targets:
   test-replay                - test log files'
 ```
 
+### Prerequisite
+
+-   Build [Cartesi docker image](https://github.com/cartesi/machine-emulator#getting-started)
+
 ### Requirements
 
 -   Foundry 0.2.0
