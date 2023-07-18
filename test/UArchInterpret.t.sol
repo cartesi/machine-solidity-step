@@ -32,7 +32,7 @@ contract UArchInterpretTest is Test {
         string path;
     }
 
-    uint8 constant REGISTERS_LENGTH = 35;
+    uint8 constant REGISTERS_LENGTH = 42;
     uint8 constant TEST_STATUS_X = 1;
     uint64 constant PMA_UARCH_RAM_START = 0x70000000;
     // test result code
@@ -83,11 +83,11 @@ contract UArchInterpretTest is Test {
         // init cycle to uint64.max
         UArchCompat.writeCycle(a, type(uint64).max);
 
-        UArchInterpret.InterpreterStatus status = UArchInterpret.interpret(a);
+        UArchStep.uarch_step_status status = UArchInterpret.interpret(a);
 
         assertTrue(
-            status == UArchInterpret.InterpreterStatus.Success,
-            "machine shouldn't halt"
+            status == UArchStep.uarch_step_status.cycle_overflow,
+            "machine should be cycle overflow"
         );
 
         uint64 cycle = UArchCompat.readCycle(a);
@@ -97,13 +97,15 @@ contract UArchInterpretTest is Test {
             "step should not advance when cycle is uint64.max"
         );
 
+        // reset cycle to 0
+        UArchCompat.writeCycle(a, 0);
         // set machine to halt
-        initHalt(a);
+        UArchCompat.setHaltFlag(a);
 
         status = UArchInterpret.interpret(a);
 
         assertTrue(
-            status == UArchInterpret.InterpreterStatus.Halt,
+            status == UArchStep.uarch_step_status.uarch_halted,
             "machine should halt"
         );
     }
@@ -118,10 +120,6 @@ contract UArchInterpretTest is Test {
 
         vm.expectRevert("illegal instruction");
         UArchInterpret.interpret(a);
-    }
-
-    function initHalt(AccessLogs.Context memory a) private pure {
-        a.writeWord(UArchConstants.UHALT.toPhysicalAddress(), 1);
     }
 
     function loadBin(AccessLogs.Context memory a, string memory path)

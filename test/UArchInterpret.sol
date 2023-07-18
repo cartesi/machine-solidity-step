@@ -19,29 +19,27 @@ pragma solidity ^0.8.0;
 import "src/UArchStep.sol";
 
 library UArchInterpret {
-    enum InterpreterStatus {
-        Success,
-        Halt
-    }
-
     /// @notice Run interpret until machine halts.
     /// @param accessLogs logs of machine access
     /// @return Returns an exit code
     function interpret(AccessLogs.Context memory accessLogs)
         internal
         pure
-        returns (InterpreterStatus)
+        returns (UArchStep.uarch_step_status)
     {
-        uint64 ucycle;
-        bool halt;
+        UArchStep.uarch_step_status status;
 
-        while (ucycle < type(uint64).max) {
-            (ucycle, halt) = UArchStep.step(accessLogs);
+        while (status != UArchStep.uarch_step_status.cycle_overflow) {
+            status = UArchStep.step(accessLogs);
 
-            if (halt) {
-                return InterpreterStatus.Halt;
+            if (
+                status == UArchStep.uarch_step_status.success_and_uarch_halted
+                    || status == UArchStep.uarch_step_status.uarch_halted
+                    || status == UArchStep.uarch_step_status.halted
+            ) {
+                return status;
             }
         }
-        return InterpreterStatus.Success;
+        return status;
     }
 }
