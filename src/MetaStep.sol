@@ -24,10 +24,10 @@ library MetaStep {
     function step(uint256 counter, AccessLogs.Context memory accessLogs)
         internal
         pure
-        returns (uint64 cycle, bool halt, bytes32 machineState)
+        returns (UArchStep.uarch_step_status)
     {
-        (cycle, halt) = UArchStep.step(accessLogs);
-        machineState = accessLogs.currentRootHash;
+        (UArchStep.uarch_step_status status) = UArchStep.step(accessLogs);
+        bytes32 machineState = accessLogs.currentRootHash;
 
         if (
             counter
@@ -49,5 +49,7 @@ library MetaStep {
             accessLogs.buffer.length == accessLogs.pointer,
             "buffer should be fully consumed"
         );
+
+        return status;
     }
 }
