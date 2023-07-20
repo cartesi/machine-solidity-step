@@ -21,7 +21,7 @@ pragma solidity ^0.8.0;
 
 contract AccessLogsTest is Test {
     using AccessLogs for AccessLogs.Context;
-    using AccessLogs for uint64;
+    using AccessLogs for bytes8;
     using Buffer for Buffer.Context;
     using BufferAux for Buffer.Context;
     using Memory for uint64;
@@ -33,9 +33,13 @@ contract AccessLogsTest is Test {
     function setUp() public {
         // the hashes include 62 elements, the hash at access position, and other 61 siblings
         // hash value at access position
-        hashes.push(keccak256(abi.encodePacked(bytes8(0))));
+        hashes.push(
+            keccak256(abi.encodePacked(bytes8(0x0000000000000001).swapEndian()))
+        );
         // direct sibling hash
-        hashes.push(keccak256(abi.encodePacked(bytes8(uint64(1)))));
+        hashes.push(
+            keccak256(abi.encodePacked(bytes8(0x0000000000000002).swapEndian()))
+        );
         for (uint256 i = 2; i < 62; i++) {
             hashes.push(
                 keccak256(abi.encodePacked(hashes[i - 1], hashes[i - 2]))
@@ -45,15 +49,18 @@ contract AccessLogsTest is Test {
     }
 
     function testReadWord() public view {
-        AccessLogs.Context memory accessLogs =
-            AccessLogs.Context(rootHash, readBufferFromHashes(bytes8(0)));
+        AccessLogs.Context memory accessLogs = AccessLogs.Context(
+            rootHash,
+            readBufferFromHashes(bytes8(0x0000000000000001).swapEndian())
+        );
 
         accessLogs.readWord(position.toPhysicalAddress());
     }
 
     function testReadWordRoot() public {
         AccessLogs.Context memory accessLogs = AccessLogs.Context(
-            rootHash, readBufferFromHashes(bytes8(uint64(1).uint64SwapEndian()))
+            rootHash,
+            readBufferFromHashes(bytes8(0x0000000000000001).swapEndian())
         );
 
         vm.expectRevert("Read region root doesn't match");
@@ -62,7 +69,8 @@ contract AccessLogsTest is Test {
 
     function testReadWordValue() public {
         AccessLogs.Context memory accessLogs = AccessLogs.Context(
-            rootHash, readBufferFromHashes(bytes8(uint64(1).uint64SwapEndian()))
+            rootHash,
+            readBufferFromHashes(bytes8(0x0000000000000002).swapEndian())
         );
 
         vm.expectRevert("Read value doesn't match");
@@ -79,7 +87,9 @@ contract AccessLogsTest is Test {
     }
 
     function testWriteWordRootValue() public {
-        hashes[0] = (keccak256(abi.encodePacked(bytes8(uint64(1)))));
+        hashes[0] = (
+            keccak256(abi.encodePacked(bytes8(0x0000000000000002).swapEndian()))
+        );
         AccessLogs.Context memory accessLogs =
             AccessLogs.Context(rootHash, writeBufferFromHashes());
         uint64 valueWritten = 1;
@@ -98,10 +108,18 @@ contract AccessLogsTest is Test {
     }
 
     function testEndianSwap() public {
-        assertEq(AccessLogs.uint64SwapEndian(0x8000), 0x0080000000000000);
-        assertEq(AccessLogs.uint64SwapEndian(0x70000000), 0x0000007000000000);
-        assertEq(AccessLogs.uint64SwapEndian(0x0080000000000000), 0x8000);
-        assertEq(AccessLogs.uint64SwapEndian(0x0000007000000000), 0x70000000);
+        assertEq(
+            bytes8(0x0000000000008000).swapEndian(), bytes8(0x0080000000000000)
+        );
+        assertEq(
+            bytes8(0x0000000070000000).swapEndian(), bytes8(0x0000007000000000)
+        );
+        assertEq(
+            bytes8(0x0080000000000000).swapEndian(), bytes8(0x0000000000008000)
+        );
+        assertEq(
+            bytes8(0x0000007000000000).swapEndian(), bytes8(0x0000000070000000)
+        );
     }
 
     function readBufferFromHashes(bytes8 word)
