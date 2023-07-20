@@ -23,9 +23,11 @@ import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
 import "src/UArchStep.sol";
+import "./BufferAux.sol";
 
 contract UArchReplay_@X@_Test is Test {
-    using AccessLogs for bytes;
+    using Buffer for Buffer.Context;
+    using BufferAux for Buffer.Context;
     using stdJson for string;
 
     // configure the tests
@@ -86,7 +88,7 @@ contract UArchReplay_@X@_Test is Test {
                 // load json log
                 bytes32 rootHash = loadBufferFromRawJson(buffer, rj, j);
 
-                UArchStep.step(AccessLogs.Context(rootHash, buffer, 0));
+                UArchStep.step(AccessLogs.Context(rootHash, Buffer.Context(buffer, 0)));
             }
         }
     }
@@ -108,7 +110,7 @@ contract UArchReplay_@X@_Test is Test {
     }
 
     function loadBufferFromRawJson(
-        bytes memory buffer,
+        bytes memory data,
         string memory rawJson,
         uint256 stepIndex
     ) private pure returns (bytes32) {
@@ -131,7 +133,7 @@ contract UArchReplay_@X@_Test is Test {
             }
         }
 
-        uint128 pointer = 0;
+        Buffer.Context memory buffer = Buffer.Context(data, 0);
 
         for (uint256 i = 0; i < arrayLength; i++) {
             if (
@@ -141,17 +143,14 @@ contract UArchReplay_@X@_Test is Test {
                 bytes8 word = bytes8(
                     vm.parseBytes32(string.concat("0x", rawAccesses[i].val))
                 );
-                buffer.writeBytes32(pointer, bytes32(word));
-                pointer += 8;
+                buffer.writeBytes8(word);
             }
 
             buffer.writeBytes32(
-                pointer,
                 vm.parseBytes32(
                     string.concat("0x", rawAccesses[i].rawProof.targetHash)
                 )
             );
-            pointer += 32;
 
             for (
                 uint256 j = i * (siblingsLength + 1) + 1;
@@ -160,7 +159,6 @@ contract UArchReplay_@X@_Test is Test {
             ) {
                 // proofs should be loaded in reverse order
                 buffer.writeBytes32(
-                    pointer,
                     vm.parseBytes32(
                         string.concat(
                             "0x",
@@ -170,7 +168,6 @@ contract UArchReplay_@X@_Test is Test {
                         )
                     )
                 );
-                pointer += 32;
             }
         }
 

@@ -52,7 +52,7 @@ contract UArchInterpretTest is Test {
             AccessLogs.Context memory a = newAccessLogsContext();
 
             // load ramAccessLogs
-            loadBin(a, string.concat(JSON_PATH, catalog[i].path));
+            loadBin(a.buffer, string.concat(JSON_PATH, catalog[i].path));
             // init pc to ram start
             UArchCompat.writePc(a, PMA_UARCH_RAM_START);
             // init cycle to 0
@@ -122,12 +122,12 @@ contract UArchInterpretTest is Test {
         UArchInterpret.interpret(a);
     }
 
-    function loadBin(AccessLogs.Context memory a, string memory path)
+    function loadBin(Buffer.Context memory buffer, string memory path)
         private
         view
     {
         bytes memory bytesData = vm.readFileBinary(path);
-        a.buffer = bytes.concat(a.buffer, bytesData);
+        buffer.data = bytes.concat(buffer.data, bytesData);
     }
 
     function loadCatalog(string memory path)
@@ -148,18 +148,8 @@ contract UArchInterpretTest is Test {
         returns (AccessLogs.Context memory)
     {
         return AccessLogs.Context(
-            bytes32(0), new bytes(uint128(REGISTERS_LENGTH) * 8), 0
-        );
-    }
-
-    function writeWordBytes8(
-        AccessLogs.Context memory a,
-        uint64 writeAddress,
-        bytes8 bytes8Val
-    ) private pure {
-        a.writeWord(
-            writeAddress.toPhysicalAddress(),
-            AccessLogs.uint64SwapEndian(uint64(bytes8Val))
+            bytes32(0),
+            Buffer.Context(new bytes(uint128(REGISTERS_LENGTH) * 8), 0)
         );
     }
 }

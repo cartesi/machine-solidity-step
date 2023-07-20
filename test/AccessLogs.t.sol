@@ -15,13 +15,15 @@ import "forge-std/Test.sol";
 
 import "src/AccessLogs.sol";
 import "src/Memory.sol";
+import "./BufferAux.sol";
 
 pragma solidity ^0.8.0;
 
 contract AccessLogsTest is Test {
     using AccessLogs for AccessLogs.Context;
     using AccessLogs for uint64;
-    using AccessLogs for bytes;
+    using Buffer for Buffer.Context;
+    using BufferAux for Buffer.Context;
     using Memory for uint64;
 
     bytes32[] hashes;
@@ -33,50 +35,66 @@ contract AccessLogsTest is Test {
         // hash value at access position
         hashes.push(keccak256(abi.encodePacked(bytes8(0))));
         // direct sibling hash
-        hashes.push(keccak256(abi.encodePacked(bytes8(0))));
+        hashes.push(keccak256(abi.encodePacked(bytes8(uint64(1)))));
         for (uint256 i = 2; i < 62; i++) {
             hashes.push(
-                keccak256(abi.encodePacked(hashes[i - 1], hashes[i - 1]))
+                keccak256(abi.encodePacked(hashes[i - 1], hashes[i - 2]))
             );
         }
-        rootHash = keccak256(abi.encodePacked(hashes[61], hashes[61]));
+        rootHash = rootFromHashes(hashes[0]);
     }
 
-    function testReadWord() public {
+    function testReadWord() public view {
+        AccessLogs.Context memory accessLogs =
+            AccessLogs.Context(rootHash, readBufferFromHashes(bytes8(0)));
+
+        accessLogs.readWord(position.toPhysicalAddress());
+    }
+
+    function testReadWordRoot() public {
         AccessLogs.Context memory accessLogs = AccessLogs.Context(
-            rootHash,
-            readBufferFromHashes(bytes32(bytes8(uint64(1).uint64SwapEndian()))),
-            0
+            rootHash, readBufferFromHashes(bytes8(uint64(1).uint64SwapEndian()))
+        );
+
+        vm.expectRevert("Read region root doesn't match");
+        accessLogs.readWord((position + 8).toPhysicalAddress());
+    }
+
+    function testReadWordValue() public {
+        AccessLogs.Context memory accessLogs = AccessLogs.Context(
+            rootHash, readBufferFromHashes(bytes8(uint64(1).uint64SwapEndian()))
         );
 
         vm.expectRevert("Read value doesn't match");
         accessLogs.readWord(position.toPhysicalAddress());
-
-        vm.expectRevert("Read region root doesn't match");
-        accessLogs.readWord((position + 1).toPhysicalAddress());
-
-        accessLogs =
-            AccessLogs.Context(rootHash, readBufferFromHashes(bytes32(0)), 0);
-        accessLogs.readWord(position.toPhysicalAddress());
     }
 
-    function testWriteWord() public {
-        hashes[0] =
-            (keccak256(abi.encodePacked(bytes8(uint64(1).uint64SwapEndian()))));
+    function testWriteWord() public view {
         AccessLogs.Context memory accessLogs =
-            AccessLogs.Context(rootHash, writeBufferFromHashes(), 0);
+            AccessLogs.Context(rootHash, writeBufferFromHashes());
+        uint64 valueWritten = 1;
+
+        // // write should succeed
+        accessLogs.writeWord(position.toPhysicalAddress(), valueWritten);
+    }
+
+    function testWriteWordRootValue() public {
+        hashes[0] = (keccak256(abi.encodePacked(bytes8(uint64(1)))));
+        AccessLogs.Context memory accessLogs =
+            AccessLogs.Context(rootHash, writeBufferFromHashes());
         uint64 valueWritten = 1;
 
         vm.expectRevert("Write region root doesn't match");
         accessLogs.writeWord(position.toPhysicalAddress(), valueWritten);
+    }
 
-        hashes[0] = (keccak256(abi.encodePacked(bytes8(0))));
-        accessLogs = AccessLogs.Context(rootHash, writeBufferFromHashes(), 0);
+    function testWriteWordRootPosition() public {
+        AccessLogs.Context memory accessLogs =
+            AccessLogs.Context(rootHash, writeBufferFromHashes());
+        uint64 valueWritten = 1;
+
         vm.expectRevert("Write region root doesn't match");
-        accessLogs.writeWord((position + 1).toPhysicalAddress(), valueWritten);
-
-        // write should succeed
-        accessLogs.writeWord(position.toPhysicalAddress(), valueWritten);
+        accessLogs.writeWord((position + 8).toPhysicalAddress(), valueWritten);
     }
 
     function testEndianSwap() public {
@@ -86,33 +104,59 @@ contract AccessLogsTest is Test {
         assertEq(AccessLogs.uint64SwapEndian(0x0000007000000000), 0x70000000);
     }
 
-    function readBufferFromHashes(bytes32 word)
+    function readBufferFromHashes(bytes8 word)
         private
         view
-        returns (bytes memory)
+        returns (Buffer.Context memory)
     {
-        bytes memory buffer = new bytes(62 * 32 + 8);
-        uint128 pointer = 0;
-        buffer.writeBytes32(pointer, word);
-        pointer += 8;
+        Buffer.Context memory buffer =
+            Buffer.Context(new bytes((62 << 5) + 8), 0);
+        buffer.writeBytes8(word);
 
         for (uint256 i = 0; i < 62; i++) {
-            buffer.writeBytes32(pointer, hashes[i]);
-            pointer += 32;
+            buffer.writeBytes32(hashes[i]);
         }
+
+        // reset offset for replay
+        buffer.offset = 0;
 
         return buffer;
     }
 
-    function writeBufferFromHashes() private view returns (bytes memory) {
-        bytes memory buffer = new bytes(62 * 32);
-        uint128 pointer = 0;
+    function writeBufferFromHashes()
+        private
+        view
+        returns (Buffer.Context memory)
+    {
+        Buffer.Context memory buffer = Buffer.Context(new bytes(62 << 5), 0);
 
         for (uint256 i = 0; i < 62; i++) {
-            buffer.writeBytes32(pointer, hashes[i]);
-            pointer += 32;
+            buffer.writeBytes32(hashes[i]);
         }
 
+        // reset offset for replay
+        buffer.offset = 0;
+
         return buffer;
+    }
+
+    function rootFromHashes(bytes32 drive) private view returns (bytes32) {
+        Buffer.Context memory buffer = Buffer.Context(new bytes(61 << 5), 0);
+
+        for (uint256 i = 0; i < 61; i++) {
+            buffer.writeBytes32(hashes[i + 1]);
+        }
+
+        // reset offset for replay
+        buffer.offset = 0;
+        (bytes32 root,) = buffer.peekRoot(
+            Memory.regionFromStride(
+                Memory.strideFromWordAddress(position.toPhysicalAddress()),
+                Memory.alignedSizeFromLog2(0)
+            ),
+            drive
+        );
+
+        return root;
     }
 }

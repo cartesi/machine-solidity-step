@@ -46,7 +46,7 @@ library MetaStep {
         }
 
         require(
-            accessLogs.buffer.length == accessLogs.pointer,
+            accessLogs.buffer.data.length == accessLogs.buffer.offset,
             "buffer should be fully consumed"
         );
 
