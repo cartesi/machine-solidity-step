@@ -53,7 +53,7 @@ library AccessLogs {
         Memory.Region memory region
     ) internal pure returns (bytes32) {
         bytes32 drive = a.buffer.consumeBytes32();
-        (bytes32 rootHash,) = a.buffer.getRoot(region, drive);
+        bytes32 rootHash = a.buffer.getRoot(region, drive);
 
         require(a.currentRootHash == rootHash, "Read region root doesn't match");
 
@@ -98,7 +98,7 @@ library AccessLogs {
             a.currentRootHash == rootHash, "Write region root doesn't match"
         );
 
-        (bytes32 newRootHash,) = a.buffer.getRoot(region, newHash);
+        bytes32 newRootHash = a.buffer.getRoot(region, newHash);
 
         a.currentRootHash = newRootHash;
     }

@@ -55,7 +55,7 @@ library AccessLogs {
         Memory.Region memory region
     ) internal pure returns (bytes32) {
         bytes32 drive = a.buffer.consumeBytes32();
-        (bytes32 rootHash,) = a.buffer.getRoot(region, drive);
+        bytes32 rootHash = a.buffer.getRoot(region, drive);
 
         require(a.currentRootHash == rootHash, "Read region root doesn't match");
 
@@ -100,7 +100,7 @@ library AccessLogs {
             a.currentRootHash == rootHash, "Write region root doesn't match"
         );
 
-        (bytes32 newRootHash,) = a.buffer.getRoot(region, newHash);
+        bytes32 newRootHash = a.buffer.getRoot(region, newHash);
 
         a.currentRootHash = newRootHash;
     }
@@ -140,7 +140,7 @@ library AccessLogs {
         AccessLogs.Context memory a,
         Memory.PhysicalAddress readAddress
     ) internal pure returns (uint64) {
-        (bytes32 val,) = accessWord(a, readAddress);
+        bytes32 b32 = accessWord(a, readAddress);
         return uint64(swapEndian(bytes8(val)));
     }
 
@@ -149,7 +149,7 @@ library AccessLogs {
         Memory.PhysicalAddress writeAddress,
         uint64 val
     ) internal pure {
-        (bytes32 b32,) = accessWord(a, writeAddress);
+        bytes32 b32 = accessWord(a, writeAddress);
         bytes8 b8 = swapEndian(bytes8(val));
         b32 = b32
             & 0x0000000000000000ffffffffffffffffffffffffffffffffffffffffffffffff;
@@ -172,7 +172,8 @@ library AccessLogs {
     function accessWord(
         AccessLogs.Context memory a,
         Memory.PhysicalAddress paddr
-    ) private pure returns (bytes32 val, uint128 index) {
+    ) private pure returns (bytes32 val) {
+        uint64 index;
         uint64 position = Memory.PhysicalAddress.unwrap(paddr);
         if (
             position >= UArchConstants.IFLAGS

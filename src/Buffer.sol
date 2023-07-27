@@ -95,11 +95,11 @@ library Buffer {
         Buffer.Context memory buffer,
         Memory.Region memory region,
         bytes32 drive
-    ) internal pure returns (bytes32, uint8) {
+    ) internal pure returns (bytes32) {
         (bytes32 root, uint8 nodesCount) = buffer.peekRoot(region, drive);
         buffer.offset += uint128(nodesCount) << 5;
 
-        return (root, nodesCount);
+        return root;
     }
 
     uint8 constant LOG2RANGE = 61;
