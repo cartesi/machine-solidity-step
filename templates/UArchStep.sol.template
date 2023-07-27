@@ -16,7 +16,8 @@
 
 /// @title UArchStep
 /// @notice State transition function that takes the machine from micro-state s[i] to s[i + 1]
-/// @dev This file is generated from helper_scripts/generate_UArchExecuteInsn.sh, one should not modify the content directly
+//:#include macro.pp
+DEV_COMMENT(templates/UArchStep.sol.template)
 
 pragma solidity ^0.8.0;
 

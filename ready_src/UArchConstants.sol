@@ -16,7 +16,7 @@
 
 /// @title UArchConstants
 /// @notice Contains constants for micro-architecture
-/// @dev This file is generated from helper_scripts/generate_UArchConstants.sh, one should not modify the content directly
+/// @dev This file is generated from templates/UArchConstants.sol.template, one should not modify the content directly
 
 pragma solidity ^0.8.0;
 

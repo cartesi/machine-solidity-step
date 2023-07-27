@@ -11,6 +11,10 @@ jobs:
         with:
           submodules: recursive
           token: ${{ secrets.CI_TOKEN }}
+      - uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: gpp
+          version: 2.27
 
       - name: Download uarch test bin files
         uses: Legion2/download-release-action@v2.1.0

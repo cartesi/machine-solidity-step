@@ -16,7 +16,7 @@
 
 pragma solidity ^0.8.0;
 
-import "src/UArchStep.sol";
+import "ready_src/UArchStep.sol";
 
 library UArchInterpret {
     /// @notice Run interpret until machine halts.

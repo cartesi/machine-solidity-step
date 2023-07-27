@@ -16,7 +16,7 @@
 
 /// @title UArchStep
 /// @notice State transition function that takes the machine from micro-state s[i] to s[i + 1]
-/// @dev This file is generated from helper_scripts/generate_UArchExecuteInsn.sh, one should not modify the content directly
+/// @dev This file is generated from templates/UArchStep.sol.template, one should not modify the content directly
 
 pragma solidity ^0.8.0;
 
@@ -96,12 +96,12 @@ library UArchStep {
         UArchCompat.writeWord(a, paddr, val);
     }
 
-    /// \brief Copies bits from a uint64 word, starting at bit 0, to another uint64 word at the specified bit offset.
-    /// \param from Source of bits to copy, starting at offset 0.
-    /// \param count Number of bits to copy.
-    /// \param to Destination of copy.
-    /// \param offset Bit offset in destination to copy bits to.
-    /// \return The uint64 word containing the copy result.
+    /// brief Copies bits from a uint64 word, starting at bit 0, to another uint64 word at the specified bit offset.
+    /// param from Source of bits to copy, starting at offset 0.
+    /// param count Number of bits to copy.
+    /// param to Destination of copy.
+    /// param offset Bit offset in destination to copy bits to.
+    /// return The uint64 word containing the copy result.
     function copyBits(uint32 from, uint32 count, uint64 to, uint32 offset)
         private
         pure
@@ -1049,7 +1049,7 @@ library UArchStep {
         return advancePc(a, pc);
     }
 
-    /// \brief Returns true if the opcode field of an instruction matches the provided argument
+    /// brief Returns true if the opcode field of an instruction matches the provided argument
     function insnMatchOpcode(uint32 insn, uint32 opcode)
         private
         pure
@@ -1058,7 +1058,7 @@ library UArchStep {
         return ((insn & 0x7f)) == opcode;
     }
 
-    /// \brief Returns true if the opcode and funct3 fields of an instruction match the provided arguments
+    /// brief Returns true if the opcode and funct3 fields of an instruction match the provided arguments
     function insnMatchOpcodeFunct3(uint32 insn, uint32 opcode, uint32 funct3)
         private
         pure
@@ -1069,7 +1069,7 @@ library UArchStep {
             (insn & mask) == (UArchCompat.uint32ShiftLeft(funct3, 12) | opcode);
     }
 
-    /// \brief Returns true if the opcode, funct3 and funct7 fields of an instruction match the provided arguments
+    /// brief Returns true if the opcode, funct3 and funct7 fields of an instruction match the provided arguments
     function insnMatchOpcodeFunct3Funct7(
         uint32 insn,
         uint32 opcode,
@@ -1084,7 +1084,7 @@ library UArchStep {
             );
     }
 
-    /// \brief Returns true if the opcode, funct3 and 6 most significant bits of funct7 fields of an instruction match the
+    /// brief Returns true if the opcode, funct3 and 6 most significant bits of funct7 fields of an instruction match the
     /// provided arguments
     function insnMatchOpcodeFunct3Funct7Sr1(
         uint32 insn,

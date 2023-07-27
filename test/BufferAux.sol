@@ -10,11 +10,9 @@
 // CONDITIONS OF ANY KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations under the License.
 
-/// @dev This file is generated from helper_scripts/generate_AccessLogs.sh, one should not modify the content directly
-
 pragma solidity ^0.8.0;
 
-import "src/Buffer.sol";
+import "ready_src/Buffer.sol";
 
 library BufferAux {
     using BufferAux for Buffer.Context;

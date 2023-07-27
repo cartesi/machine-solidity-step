@@ -22,7 +22,7 @@ import "forge-std/StdJson.sol";
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
-import "src/UArchStep.sol";
+import "ready_src/UArchStep.sol";
 import "./BufferAux.sol";
 
 contract UArchReplay_@X@_Test is Test {

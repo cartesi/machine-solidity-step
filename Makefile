@@ -68,9 +68,9 @@ test-replay: pretest
 	./helper_scripts/test_replays.sh
 	forge fmt
 
-generate: $(EMULATOR_DIR)/src/uarch-execute-insn.h
-	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchExecuteInsn.sh
-	./helper_scripts/generate_UArchConstants.sh
+generate: $(EMULATOR_DIR)/src/uarch-step.h $(EMULATOR_DIR)/src/uarch-step.cpp
+	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchStep.sh
+	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchConstants.sh
 	./helper_scripts/generate_AccessLogs.sh prod
 	forge fmt
 

@@ -1,5 +1,6 @@
 [profile.default]
-out = 'foundry_artifacts'
+src = "ready_src"
+out = "foundry_artifacts"
 libs = ["node_modules", "lib"]
 gas_reports = ["*"]
 memory_limit = 11149934592
@@ -7,5 +8,5 @@ fs_permissions = [{access = "read", path = "./test/uarch-log/"}, {access = "read
 
 [fmt]
 line_length = 80
-ignore = ["test/UArchReplay_*"]
+ignore = ["test/UArchReplay_*", "src/"]
 tab_width = 4
