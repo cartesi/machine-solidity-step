@@ -48,13 +48,13 @@ contract AccessLogsTest is Test {
         rootHash = rootFromHashes(hashes[0]);
     }
 
-    function testReadWord() public view {
+    function testReadWord() public {
         AccessLogs.Context memory accessLogs = AccessLogs.Context(
             rootHash,
             readBufferFromHashes(bytes8(0x0000000000000001).swapEndian())
         );
 
-        accessLogs.readWord(position.toPhysicalAddress());
+        assertEq(accessLogs.readWord(position.toPhysicalAddress()), 1);
     }
 
     function testReadWordRoot() public {

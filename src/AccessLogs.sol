@@ -26,6 +26,22 @@ library AccessLogs {
         Buffer.Context buffer;
     }
 
+    function machineWordToSolidityUint64(bytes8 word)
+        internal
+        pure
+        returns (uint64)
+    {
+        return uint64(swapEndian(word));
+    }
+
+    function solidityUint64ToMachineWord(uint64 val)
+        internal
+        pure
+        returns (bytes8)
+    {
+        return swapEndian(bytes8(val));
+    }
+
     /// @notice Swap byte order of unsigned ints with 64 bits
     /// @param end1 bytes8 to have bytes swapped
     function swapEndian(bytes8 end1) internal pure returns (bytes8) {
@@ -80,7 +96,7 @@ library AccessLogs {
             readLeaf(a, Memory.strideFromWordAddress(readAddress));
 
         require(valHash == expectedValHash, "Read value doesn't match");
-        return uint64(swapEndian(b8));
+        return machineWordToSolidityUint64(b8);
     }
 
     //
@@ -121,7 +137,7 @@ library AccessLogs {
         writeLeaf(
             a,
             Memory.strideFromWordAddress(writeAddress),
-            keccak256(abi.encodePacked(swapEndian(bytes8(newValue))))
+            keccak256(abi.encodePacked(solidityUint64ToMachineWord(newValue)))
         );
     }
 }
