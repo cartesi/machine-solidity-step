@@ -57,6 +57,8 @@ library Buffer {
         uint256 offset = buffer.offset;
 
         // Get 32 bytes from data
+        // The 32 is added to offset because we are accessing a byte array.
+        // And an array in solidity always starts with its length which is a 32 byte-long variable.
         assembly {
             temp := mload(add(data, add(offset, 32)))
         }

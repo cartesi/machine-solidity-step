@@ -42,6 +42,8 @@ library BufferAux {
         bytes memory data = buffer.data;
         uint256 offset = buffer.offset;
 
+        // The 32 is added to offset because we are accessing a byte array.
+        // And an array in solidity always starts with its length which is a 32 byte-long variable.
         assembly {
             mstore(add(data, add(offset, 32)), val)
         }
