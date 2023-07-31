@@ -18,12 +18,19 @@ DOWNLOADFILES := $(BIN_DOWNLOAD_FILEPATH) $(LOG_DOWNLOAD_FILEPATH)
 
 help:
 	@echo 'Cleaning targets:'
-	@echo '  clean                      - clean the cache artifacts'
+	@echo '  clean                      - clean the cache artifacts and generated files'
 	@echo 'Generic targets:'
 	@echo '* all                        - build solidity code. To build from a clean clone, run: make submodules all'
 	@echo '  build                      - build solidity code'
-	@echo '  generate                   - generate solidity code from cpp and template'
-	@echo '  test                       - test both binary files and general functionalities'
+	@echo '  generate-all               - generate all solidity code'
+	@echo '  generate-step              - generate solidity-step code from cpp'
+	@echo '  generate-mock              - generate mock library code'
+	@echo '  generate-prod              - generate production library code'
+	@echo '  generate-replay            - generate replay tests'
+	@echo '  pretest                    - download necessary files for tests'
+	@echo '  test-all                   - test all'
+	@echo '  test-mock                  - test binary files with mock library'
+	@echo '  test-prod                  - test production code'
 	@echo '  test-replay                - test log files'
 
 $(BIN_DOWNLOAD_FILEPATH):
@@ -35,13 +42,14 @@ $(LOG_DOWNLOAD_FILEPATH):
 	@wget -nc $(LOG_DOWNLOAD_URL) -P $(DOWNLOADDIR)
 	@shasum -ca 256 shasumfile
 
-all: build test
+all: build test-all
 
-build: generate
+build: generate-all
 	forge build
 
 clean:
-	rm -rf cache foundry_artifacts
+	rm -rf src/UArchConstants.sol src/UArchStep.sol test/UArchReplay_*.t.sol
+	forge clean
 
 shasumfile: $(DOWNLOADFILES)
 	shasum -a 256 $^ > $@
@@ -56,25 +64,36 @@ pretest: checksum
 	@tar -xzf $(LOG_DOWNLOAD_FILEPATH) -C $(LOG_TEST_DIR)
 	@rm $(BIN_TEST_DIR)/*.dump $(BIN_TEST_DIR)/*.elf
 
-test: pretest
-	./helper_scripts/generate_AccessLogs.sh mock
+test-all: | pretest test-mock test-prod test-replay fmt
+
+test-mock: | pretest generate-mock
 	forge test -vv --match-contract UArchInterpret
-	./helper_scripts/generate_AccessLogs.sh prod
+
+test-prod: | pretest generate-prod
 	forge test -vv --no-match-contract "UArchInterpret|UArchReplay"
-	forge fmt
 
-test-replay: pretest
+test-replay: | pretest generate-prod generate-replay
+	forge test -vv --match-contract UArchReplay
+
+generate-all: generate-step generate-prod fmt
+
+generate-mock:
+	./helper_scripts/generate_AccessLogs.sh mock
+
+generate-prod:
 	./helper_scripts/generate_AccessLogs.sh prod
-	./helper_scripts/test_replays.sh
-	forge fmt
 
-generate: $(EMULATOR_DIR)/src/uarch-step.h $(EMULATOR_DIR)/src/uarch-step.cpp
+generate-replay:
+	./helper_scripts/generate_ReplayTests.sh
+
+generate-step: $(EMULATOR_DIR)/src/uarch-step.h $(EMULATOR_DIR)/src/uarch-step.cpp
 	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchStep.sh
 	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchConstants.sh
-	./helper_scripts/generate_AccessLogs.sh prod
+
+fmt:
 	forge fmt
 
 submodules:
 	git submodule update --init --recursive
 
-.PHONY: help all build clean checksum deploy test test-replay generate submodules
+.PHONY: help all build clean checksum fmt generate-all generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay

@@ -36,13 +36,20 @@ Run `make help` for a list of target options. Here are some of them:
 
 ```
 Cleaning targets:
-  clean                      - clean the cache artifacts
+  clean                      - clean the cache artifacts and generated files
 Generic targets:
 * all                        - build solidity code. To build from a clean clone, run: make submodules all
   build                      - build solidity code
-  generate                   - generate solidity code from cpp and template
-  test                       - test both binary files and general functionalities'
-  test-replay                - test log files'
+  generate-all               - generate all solidity code
+  generate-step              - generate solidity-step code from cpp
+  generate-mock              - generate mock library code
+  generate-prod              - generate production library code
+  generate-replay            - generate replay tests
+  pretest                    - download necessary files for tests
+  test-all                   - test all
+  test-mock                  - test binary files with mock library
+  test-prod                  - test production code
+  test-replay                - test log files
 ```
 
 ### Prerequisite
@@ -72,9 +79,9 @@ There are two types of tests that can be run on the Solidity Emulator.
 
 Run all tests:
 
-    make test
+    make test-all
 
-    make test-replay (this one is very time consuming)
+(**_target test-replay is very time consuming_**)
 
 ## Contributing
 

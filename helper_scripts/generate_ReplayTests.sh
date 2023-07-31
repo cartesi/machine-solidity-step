@@ -6,11 +6,3 @@ for i in test/uarch-log/rv64ui*; do
 	P=`basename $i`
 	sed -i "s/@PATH@/$P/g" test/UArchReplay_$BASE.t.sol
 done
-
-for i in test/uarch-log/rv64ui*; do
-	BASE=`basename $i .json | sed "s/-/_/g"`
-	forge test -vv --match-contract UArchReplay_${BASE}_Test
-	if [ $? != 0 ]; then
-		exit 1
-	fi
-done
