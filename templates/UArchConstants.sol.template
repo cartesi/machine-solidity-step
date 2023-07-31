@@ -13,7 +13,7 @@
 /// @title UArchConstants
 /// @notice Contains constants for micro-architecture
 //:#include macro.pp
-DEV_COMMENT(templates/UArchConstants.sol.template)
+/// DEV_COMMENT(templates/UArchConstants.sol.template)
 
 pragma solidity ^0.8.0;
 

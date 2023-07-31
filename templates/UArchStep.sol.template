@@ -17,7 +17,7 @@
 /// @title UArchStep
 /// @notice State transition function that takes the machine from micro-state s[i] to s[i + 1]
 //:#include macro.pp
-DEV_COMMENT(templates/UArchStep.sol.template)
+/// DEV_COMMENT(templates/UArchStep.sol.template)
 
 pragma solidity ^0.8.0;
 

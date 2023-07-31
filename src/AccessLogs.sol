@@ -11,7 +11,7 @@
 // specific language governing permissions and limitations under the License.
 
 //:#include macro.pp
-DEV_COMMENT(src/AccessLogs.sol)
+/// DEV_COMMENT(src/AccessLogs.sol)
 
 pragma solidity ^0.8.0;
 
