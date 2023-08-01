@@ -28,10 +28,18 @@ library Buffer {
         pure
         returns (bytes8)
     {
-        bytes8 b8 = bytes8(buffer.peekBytes32());
+        bytes8 b8 = buffer.peekBytes8();
         buffer.offset += 8;
 
         return b8;
+    }
+
+    function peekBytes8(Buffer.Context memory buffer)
+        internal
+        pure
+        returns (bytes8)
+    {
+        return bytes8(buffer.peekBytes32());
     }
 
     function consumeBytes32(Buffer.Context memory buffer)
