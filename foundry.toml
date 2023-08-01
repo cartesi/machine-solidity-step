@@ -8,5 +8,5 @@ fs_permissions = [{access = "read", path = "./test/uarch-log/"}, {access = "read
 
 [fmt]
 line_length = 80
-ignore = ["test/UArchReplay_*", "src/"]
+ignore = ["test/UArchReplay_*"]
 tab_width = 4
