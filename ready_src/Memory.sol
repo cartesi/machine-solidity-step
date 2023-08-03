@@ -71,10 +71,12 @@ library Memory {
     ) internal pure returns (Stride) {
         uint64 s = alignedSize.size();
         uint64 addr = PhysicalAddress.unwrap(startAddress);
-        // assert memory address is word-aligned
+        // assert memory address is word-aligned (8-byte long)
         assert(addr & 7 == 0);
         uint64 position = PhysicalAddress.unwrap(startAddress) >> 3;
-        // assert memory address and size are aligned
+        // assert position and size are aligned
+        // position has to be a multiple of size
+        // equivalent to: size = 2^a, position = 2^b, position = size * 2^c, where c >= 0
         assert(((s - 1) & position) == 0);
         uint64 stride = position / s;
         return Stride.wrap(stride);
