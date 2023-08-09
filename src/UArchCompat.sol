@@ -39,14 +39,6 @@ library UArchCompat {
         return (a.readWord(UArchConstants.UHALT.toPhysicalAddress()) != 0);
     }
 
-    function readIflags(AccessLogs.Context memory a)
-        internal
-        pure
-        returns (uint64)
-    {
-        return a.readWord(UArchConstants.IFLAGS.toPhysicalAddress());
-    }
-
     function readPc(AccessLogs.Context memory a)
         internal
         pure

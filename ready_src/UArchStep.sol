@@ -23,11 +23,6 @@ pragma solidity ^0.8.0;
 import "./UArchCompat.sol";
 
 library UArchStep {
-    uint64 constant IFLAGS_H_SHIFT = 0;
-    uint64 constant IFLAGS_Y_SHIFT = 1;
-    uint64 constant IFLAGS_H_MASK = uint64(1 << IFLAGS_H_SHIFT);
-    uint64 constant IFLAGS_Y_MASK = uint64(1 << IFLAGS_Y_SHIFT);
-
     // START OF AUTO-GENERATED CODE
 
     enum UArchStepStatus {

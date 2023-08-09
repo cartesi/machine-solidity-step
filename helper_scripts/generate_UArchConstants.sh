@@ -9,8 +9,7 @@ KEYWORD_END="END OF AUTO-GENERATED CODE"
 MACHINE_CMD_TEMPLATE="docker run -w /opt/cartesi/lib/lua/5.4 \
                         -it cartesi/machine-emulator:devel lua \
                         -e 'print(string.format(\"%x\", require(\"cartesi\").machine.%API(\"%ARG\")))'"
-CONSTANTS_ARR=( "IFLAGS;get_csr_address;iflags" \
-                "UCYCLE;get_csr_address;uarch_cycle" \
+CONSTANTS_ARR=( "UCYCLE;get_csr_address;uarch_cycle" \
                 "UHALT;get_csr_address;uarch_halt_flag" \
                 "UPC;get_csr_address;uarch_pc" \
                 "UX0;get_uarch_x_address;0")

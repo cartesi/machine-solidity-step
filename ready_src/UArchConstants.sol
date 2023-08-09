@@ -23,7 +23,6 @@ pragma solidity ^0.8.0;
 library UArchConstants {
     // START OF AUTO-GENERATED CODE
 
-    uint64 constant IFLAGS = 0x2e8;
     uint64 constant UCYCLE = 0x320;
     uint64 constant UHALT = 0x328;
     uint64 constant UPC = 0x330;

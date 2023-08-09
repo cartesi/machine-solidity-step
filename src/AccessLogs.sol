@@ -148,7 +148,7 @@ library AccessLogs {
 
     /// @dev This library mocks the `src/AccessLogs.sol` yet with a very different implementation.
     /// `bytes buffer` simulates the memory space with two separate regions.
-    /// The first 280 bytes are reserved for register space: 0x2E8 - 0x438 (42 registers * 8 bytes)
+    /// The first 280 bytes are reserved for register space: 0x320 - 0x438 (35 registers * 8 bytes)
     /// Following next will be continuous memory space: 0x70000000 -
 
     function readWord(
@@ -193,12 +193,12 @@ library AccessLogs {
         uint64 index;
         uint64 position = Memory.PhysicalAddress.unwrap(paddr);
         if (
-            position >= UArchConstants.IFLAGS
+            position >= UArchConstants.UCYCLE
                 && position <= UArchConstants.UX0 + (31 << 3)
         ) {
-            index = (position - UArchConstants.IFLAGS);
+            index = (position - UArchConstants.UCYCLE);
         } else if (position >= 0x70000000) {
-            index = (position - 0x70000000) + (42 << 3);
+            index = (position - 0x70000000) + (35 << 3);
         } else {
             revert("invalid memory access");
         }
