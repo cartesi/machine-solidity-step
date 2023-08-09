@@ -2,13 +2,13 @@ EMULATOR_DIR ?= ../emulator
 TEST_DIR := test
 DOWNLOADDIR := downloads
 
-BIN_TEST_VERSION ?= v0.28.0
+BIN_TEST_VERSION ?= v0.29.0
 BIN_TEST_DIR := $(TEST_DIR)/uarch-bin
 BIN_TEST_FILE := machine-tests-$(BIN_TEST_VERSION).tar.gz
 BIN_DOWNLOAD_URL := https://github.com/cartesi/machine-tests/releases/download/$(BIN_TEST_VERSION)/$(BIN_TEST_FILE)
 BIN_DOWNLOAD_FILEPATH := $(DOWNLOADDIR)/$(BIN_TEST_FILE)
 
-LOG_TEST_VERSION ?= v0.14.0
+LOG_TEST_VERSION ?= v0.15.0
 LOG_TEST_DIR := $(TEST_DIR)/uarch-log
 LOG_TEST_FILE := uarch-riscv-tests-json-logs-$(LOG_TEST_VERSION).tar.gz
 LOG_DOWNLOAD_URL := https://github.com/cartesi/machine-emulator/releases/download/$(LOG_TEST_VERSION)/$(LOG_TEST_FILE)

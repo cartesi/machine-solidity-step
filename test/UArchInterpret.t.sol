@@ -83,10 +83,10 @@ contract UArchInterpretTest is Test {
         // init cycle to uint64.max
         UArchCompat.writeCycle(a, type(uint64).max);
 
-        UArchStep.uarch_step_status status = UArchInterpret.interpret(a);
+        UArchStep.UArchStepStatus status = UArchInterpret.interpret(a);
 
         assertTrue(
-            status == UArchStep.uarch_step_status.cycle_overflow,
+            status == UArchStep.UArchStepStatus.CycleOverflow,
             "machine should be cycle overflow"
         );
 
@@ -105,7 +105,7 @@ contract UArchInterpretTest is Test {
         status = UArchInterpret.interpret(a);
 
         assertTrue(
-            status == UArchStep.uarch_step_status.uarch_halted,
+            status == UArchStep.UArchStepStatus.UArchHalted,
             "machine should halt"
         );
     }

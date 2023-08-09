@@ -25,18 +25,14 @@ library UArchInterpret {
     function interpret(AccessLogs.Context memory accessLogs)
         internal
         pure
-        returns (UArchStep.uarch_step_status)
+        returns (UArchStep.UArchStepStatus)
     {
-        UArchStep.uarch_step_status status;
+        UArchStep.UArchStepStatus status;
 
-        while (status != UArchStep.uarch_step_status.cycle_overflow) {
+        while (status != UArchStep.UArchStepStatus.CycleOverflow) {
             status = UArchStep.step(accessLogs);
 
-            if (
-                status == UArchStep.uarch_step_status.success_and_uarch_halted
-                    || status == UArchStep.uarch_step_status.uarch_halted
-                    || status == UArchStep.uarch_step_status.halted
-            ) {
+            if (status == UArchStep.UArchStepStatus.UArchHalted) {
                 return status;
             }
         }

@@ -46,7 +46,7 @@ cpp_src=`echo "${BASH_REMATCH[1]}" \
         | sed "s/throw std::runtime_error/revert/g" \
         | sed "s/::/./g" \
         | sed "s/UINT64_MAX/type(uint64).max/g" \
-        | sed -E "s/uarch_step_status uarch_step/static inline uarch_step_status step/g" \
+        | sed -E "s/UArchStepStatus uarch_step/static inline UArchStepStatus step/g" \
         | sed -E "s/static inline (\w+) ($INTERNAL_FN)\(([^\n]*)\) \{/function \2\(\3\) internal pure returns \(\1\)\{/g" \
         | sed -E "s/static inline (\w+) (\w+)\(([^\n]*)\) \{/function \2\(\3\) private pure returns \(\1\)\{/g" \
         | sed -E "s/([^\n]*) $UNUSED_INSN_FN([^\n]*) uint32 insn,([^\n]*)/\1 $UNUSED_INSN_FN\2 uint32,\3/g" \

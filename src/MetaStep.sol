@@ -24,9 +24,9 @@ library MetaStep {
     function step(uint256 counter, AccessLogs.Context memory accessLogs)
         internal
         pure
-        returns (UArchStep.uarch_step_status)
+        returns (UArchStep.UArchStepStatus)
     {
-        (UArchStep.uarch_step_status status) = UArchStep.step(accessLogs);
+        UArchStep.UArchStepStatus status = UArchStep.step(accessLogs);
         bytes32 machineState = accessLogs.currentRootHash;
 
         if (

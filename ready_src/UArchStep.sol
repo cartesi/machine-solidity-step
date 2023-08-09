@@ -30,13 +30,10 @@ library UArchStep {
 
     // START OF AUTO-GENERATED CODE
 
-    enum uarch_step_status {
-        success, // one micro instruction was executed successfully
-        success_and_uarch_halted, // one micro instruction was executed successfully and microarchitecture was halted
-        cycle_overflow, // already at fixed point: uarch cycle has reached its maximum value
-        uarch_halted, // already at fixed point: microarchitecture is halted
-        halted, // already at fixed point: iflags.H is set
-        yielded_manually // already at fixed point: iflags.Y is set
+    enum UArchStepStatus {
+        Success, // one micro instruction was executed successfully
+        CycleOverflow, // already at fixed point: uarch cycle has reached its maximum value
+        UArchHalted // already at fixed point: microarchitecture is halted
     }
 
     // Memory read/write access
@@ -1209,34 +1206,20 @@ library UArchStep {
         revert("illegal instruction");
     }
 
-    function getIflagsH(uint64 iflags) private pure returns (bool) {
-        return (iflags & IFLAGS_H_MASK) != 0;
-    }
-
-    function getIflagsY(uint64 iflags) private pure returns (bool) {
-        return (iflags & IFLAGS_Y_MASK) != 0;
-    }
-
     function step(AccessLogs.Context memory a)
         internal
         pure
-        returns (uarch_step_status)
+        returns (UArchStepStatus)
     {
         // This must be the first read in order to match the first log access in machine.verify_state_transition
         uint64 cycle = UArchCompat.readCycle(a);
-        // do not advance if machine is at a fixed point
+        // do not advance if cycle will overflow
         if (cycle == type(uint64).max) {
-            return uarch_step_status.cycle_overflow;
+            return UArchStepStatus.CycleOverflow;
         }
+        // do not advance if machine is halted
         if (UArchCompat.readHaltFlag(a)) {
-            return uarch_step_status.uarch_halted;
-        }
-        uint64 iflags = UArchCompat.readIflags(a);
-        if (getIflagsH(iflags)) {
-            return uarch_step_status.halted;
-        }
-        if (getIflagsY(iflags)) {
-            return uarch_step_status.yielded_manually;
+            return UArchStepStatus.UArchHalted;
         }
         // execute next instruction
         uint64 pc = UArchCompat.readPc(a);
@@ -1244,13 +1227,7 @@ library UArchStep {
         executeInsn(a, insn, pc);
         cycle = cycle + 1;
         UArchCompat.writeCycle(a, cycle);
-        // halt if iflags.H or iflags.Y was set by the last instruction
-        iflags = UArchCompat.readIflags(a);
-        if (getIflagsH(iflags) || getIflagsY(iflags)) {
-            UArchCompat.setHaltFlag(a);
-            return uarch_step_status.success_and_uarch_halted;
-        }
-        return uarch_step_status.success;
+        return UArchStepStatus.Success;
     }
 
     // Explicit instantiation for uarch_state_access

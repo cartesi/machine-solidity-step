@@ -25,7 +25,7 @@ h=`head -n $start $TEMPLATE_FILE`
 t=`tail -n -$last $TEMPLATE_FILE`
 
 cd $EMULATOR_DIR
-make build-ubuntu-image
+make build-debian-image
 
 constants=""
 for c in ${CONSTANTS_ARR[@]}; do
