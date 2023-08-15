@@ -1,6 +1,7 @@
 EMULATOR_DIR ?= ../emulator
 TEST_DIR := test
 DOWNLOADDIR := downloads
+READY_SRC_DIR := ready_src
 
 BIN_TEST_VERSION ?= v0.29.0
 BIN_TEST_DIR := $(TEST_DIR)/uarch-bin
@@ -15,6 +16,7 @@ LOG_DOWNLOAD_URL := https://github.com/cartesi/machine-emulator/releases/downloa
 LOG_DOWNLOAD_FILEPATH := $(DOWNLOADDIR)/$(LOG_TEST_FILE)
 
 DOWNLOADFILES := $(BIN_DOWNLOAD_FILEPATH) $(LOG_DOWNLOAD_FILEPATH)
+GENERATEDFILES := $(READY_SRC_DIR)/*.sol
 
 help:
 	@echo 'Cleaning targets:'
@@ -51,7 +53,7 @@ clean:
 	rm -rf src/UArchConstants.sol src/UArchStep.sol test/UArchReplay_*.t.sol
 	forge clean
 
-shasumfile: $(DOWNLOADFILES)
+shasumfile: $(DOWNLOADFILES) $(GENERATEDFILES)
 	shasum -a 256 $^ > $@
 
 checksum: $(DOWNLOADFILES)
