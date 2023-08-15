@@ -24,7 +24,6 @@ help:
 	@echo 'Generic targets:'
 	@echo '* all                        - build solidity code. To build from a clean clone, run: make submodules all'
 	@echo '  build                      - build solidity code'
-	@echo '  generate-all               - generate all solidity code'
 	@echo '  generate-step              - generate solidity-step code from cpp'
 	@echo '  generate-mock              - generate mock library code'
 	@echo '  generate-prod              - generate production library code'
@@ -46,7 +45,7 @@ $(LOG_DOWNLOAD_FILEPATH):
 
 all: build test-all
 
-build: generate-all
+build: generate-step
 	forge build
 
 clean:
@@ -66,31 +65,41 @@ pretest: checksum
 	@tar -xzf $(LOG_DOWNLOAD_FILEPATH) -C $(LOG_TEST_DIR)
 	@rm $(BIN_TEST_DIR)/*.dump $(BIN_TEST_DIR)/*.elf
 
-test-all: | pretest test-mock test-prod test-replay fmt
+test-all: pretest
+	$(MAKE) test-mock
+	$(MAKE) test-prod
+	$(MAKE) test-replay
 
-test-mock: | pretest generate-mock
+test-mock: pretest
+	$(MAKE) generate-mock
 	forge test -vv --match-contract UArchInterpret
+	$(MAKE) generate-prod
 
-test-prod: | pretest generate-prod
+test-prod: pretest
+	$(MAKE) generate-prod
 	forge test -vv --no-match-contract "UArchInterpret|UArchReplay"
 
-test-replay: | pretest generate-prod generate-replay
+test-replay: pretest
+	$(MAKE) generate-prod
+	$(MAKE) generate-replay
 	forge test -vv --match-contract UArchReplay
-
-generate-all: generate-step generate-prod fmt
 
 generate-mock:
 	./helper_scripts/generate_AccessLogs.sh mock
+	$(MAKE) fmt
 
 generate-prod:
 	./helper_scripts/generate_AccessLogs.sh prod
+	$(MAKE) fmt
 
 generate-replay:
 	./helper_scripts/generate_ReplayTests.sh
+	$(MAKE) fmt
 
 generate-step: $(EMULATOR_DIR)/src/uarch-step.h $(EMULATOR_DIR)/src/uarch-step.cpp
 	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchStep.sh
 	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchConstants.sh
+	$(MAKE) generate-prod
 
 fmt:
 	forge fmt
@@ -98,4 +107,4 @@ fmt:
 submodules:
 	git submodule update --init --recursive
 
-.PHONY: help all build clean checksum fmt generate-all generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay
+.PHONY: help all build clean checksum fmt generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay

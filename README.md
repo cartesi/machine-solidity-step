@@ -40,7 +40,6 @@ Cleaning targets:
 Generic targets:
 * all                        - build solidity code. To build from a clean clone, run: make submodules all
   build                      - build solidity code
-  generate-all               - generate all solidity code
   generate-step              - generate solidity-step code from cpp
   generate-mock              - generate mock library code
   generate-prod              - generate production library code
