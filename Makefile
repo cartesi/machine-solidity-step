@@ -41,7 +41,6 @@ $(BIN_DOWNLOAD_FILEPATH):
 $(LOG_DOWNLOAD_FILEPATH):
 	@mkdir -p $(DOWNLOADDIR)
 	@wget -nc $(LOG_DOWNLOAD_URL) -P $(DOWNLOADDIR)
-	@shasum -ca 256 shasumfile
 
 all: build test-all
 
@@ -52,20 +51,29 @@ clean:
 	rm -rf src/UArchConstants.sol src/UArchStep.sol test/UArchReplay_*.t.sol
 	forge clean
 
-shasumfile: $(DOWNLOADFILES) $(GENERATEDFILES)
+shasum-download: $(DOWNLOADFILES)
 	shasum -a 256 $^ > $@
 
-checksum: $(DOWNLOADFILES)
-	@shasum -ca 256 shasumfile
+shasum-generated: $(GENERATEDFILES)
+	shasum -a 256 $^ > $@
 
-pretest: checksum
+checksum-download: $(DOWNLOADFILES)
+	@shasum -ca 256 shasum-download
+
+checksum-mock:
+	@shasum -ca 256 shasum-mock
+
+checksum-prod:
+	@shasum -ca 256 shasum-prod
+
+pretest: checksum-download
 	@mkdir -p $(BIN_TEST_DIR)
 	@mkdir -p $(LOG_TEST_DIR)
 	@tar -xzf $(BIN_DOWNLOAD_FILEPATH) -C $(BIN_TEST_DIR)
 	@tar -xzf $(LOG_DOWNLOAD_FILEPATH) -C $(LOG_TEST_DIR)
 	@rm $(BIN_TEST_DIR)/*.dump $(BIN_TEST_DIR)/*.elf
 
-test-all: pretest
+test-all:
 	$(MAKE) test-mock
 	$(MAKE) test-prod
 	$(MAKE) test-replay
@@ -73,7 +81,6 @@ test-all: pretest
 test-mock: pretest
 	$(MAKE) generate-mock
 	forge test -vv --match-contract UArchInterpret
-	$(MAKE) generate-prod
 
 test-prod: pretest
 	$(MAKE) generate-prod
@@ -87,10 +94,12 @@ test-replay: pretest
 generate-mock:
 	./helper_scripts/generate_AccessLogs.sh mock
 	$(MAKE) fmt
+	$(MAKE) checksum-mock
 
 generate-prod:
 	./helper_scripts/generate_AccessLogs.sh prod
 	$(MAKE) fmt
+	$(MAKE) checksum-prod
 
 generate-replay:
 	./helper_scripts/generate_ReplayTests.sh
@@ -107,4 +116,4 @@ fmt:
 submodules:
 	git submodule update --init --recursive
 
-.PHONY: help all build clean checksum fmt generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay
+.PHONY: help all build clean checksum-download checksum-mock checksum-prod fmt generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay
