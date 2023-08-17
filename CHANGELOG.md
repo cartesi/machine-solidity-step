@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.1] - 2023-08-17
+### Changed
+- Updated to machine-emulator 0.15.1
+
 ## [0.9.0] - 2023-08-16
 ### Fixed
 - Fix lua-check warnings
@@ -40,7 +44,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [0.2.0]
 - [0.1.0]
 
-[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.9.1
 [0.9.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.9.0
 [0.8.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.8.0
 [0.7.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.7.0
