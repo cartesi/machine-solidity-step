@@ -59,6 +59,7 @@ Generic targets:
 
 -   Foundry 0.2.0
 -   GNU Make >= 3.81
+-   GNU sed >= 4.9
 -   GPP >= 2.27
 
 Different version of tools maybe working but is not guaranteed.
