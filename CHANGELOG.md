@@ -5,30 +5,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Fixed `0.9.0` CHANGELOG
+- Fixed `package.json` version
 
 ## [0.9.1] - 2023-08-17
 ### Changed
-- Updated to machine-emulator 0.15.1
+- Updated to `machine-emulator 0.15.1`
 
 ## [0.9.0] - 2023-08-16
-### Fixed
-- Fix lua-check warnings
-- Fix peer dependencies warning
-- Replace `@types/commander` with `commaner`
-- Remove and update npm packages for security reason
-
 ### Added
-- Added `dep` and `depclean` target
+- Added `MetaStep` framework, yet without actual implementation
 
 ### Changed
 - Updated license/copyright notice in all source code
-- Removed npm-scripts-info package
-- Rewrited test to get rid of --via-ir option
+- Rewrote lua script in bash
+- Rewrote test to get rid of --via-ir option
+- Rewrote log tests with template
+- Removed all `npm` dependencies
 - Started using node LTS 18.x
-- Updated and remove packages
 - Replaced `downloads` with `checksum` in Makefile
-- Dropped solidity-util dependency
-- Updated to machine-emulator 0.15.0
+- Dropped `solidity-util` dependency
+- Updated to `machine-emulator 0.15.0`
+- Updated `step` function to use generic interface and parameters
+- Updated all smart contracts to be pure interal libraries
+- Configured constants from docker runtime
 - Enabled all tests on CI
 
 ## [0.8.0] - 2023-05-04
