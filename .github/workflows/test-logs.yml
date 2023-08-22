@@ -1,0 +1,40 @@
+name: Test logs and proofs
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+env:
+  UARCH_LOG_TEST_VERSION: v0.15.2
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          token: ${{ secrets.CI_TOKEN }}
+      - uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: gpp
+          version: 2.27
+
+      - name: Download uarch test log files
+        uses: Legion2/download-release-action@v2.1.0
+        with:
+          repository: ${{ github.repository_owner }}/machine-emulator
+          tag: ${{ env.UARCH_LOG_TEST_VERSION }}
+          file: uarch-riscv-tests-json-logs-${{ env.UARCH_LOG_TEST_VERSION }}.tar.gz
+          token: ${{ secrets.CI_TOKEN }}
+
+      - name: Untar uarch test logs
+        run: mkdir -p test/uarch-log && tar -xzf uarch-riscv-tests-json-logs-${UARCH_LOG_TEST_VERSION}.tar.gz -C test/uarch-log
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Run replay tests
+        run: make test-replay

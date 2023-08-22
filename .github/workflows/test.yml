@@ -2,7 +2,6 @@ name: Test
 on: [push]
 env:
   UARCH_BIN_TEST_VERSION: v0.29.0
-  UARCH_LOG_TEST_VERSION: v0.15.2
 jobs:
   test:
     runs-on: ubuntu-22.04
@@ -24,24 +23,15 @@ jobs:
           file: machine-tests-${{ env.UARCH_BIN_TEST_VERSION }}.tar.gz
           token: ${{ secrets.CI_TOKEN }}
 
-      - name: Download uarch test log files
-        uses: Legion2/download-release-action@v2.1.0
-        with:
-          repository: ${{ github.repository_owner }}/machine-emulator
-          tag: ${{ env.UARCH_LOG_TEST_VERSION }}
-          file: uarch-riscv-tests-json-logs-${{ env.UARCH_LOG_TEST_VERSION }}.tar.gz
-          token: ${{ secrets.CI_TOKEN }}
-
       - name: Untar uarch test bins
         run: mkdir -p test/uarch-bin && tar -xzf machine-tests-${UARCH_BIN_TEST_VERSION}.tar.gz -C test/uarch-bin && rm test/uarch-bin/*.dump
-
-      - name: Untar uarch test logs
-        run: mkdir -p test/uarch-log && tar -xzf uarch-riscv-tests-json-logs-${UARCH_LOG_TEST_VERSION}.tar.gz -C test/uarch-log
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: nightly
 
-      - name: Run all tests
-        run: make test-all
+      - name: Run mock and production tests
+        run: |
+          make test-mock
+          make test-prod
