@@ -4,16 +4,16 @@ DOWNLOADDIR := downloads
 READY_SRC_DIR := ready_src
 
 BIN_TEST_VERSION ?= v0.29.0
-BIN_TEST_DIR := $(TEST_DIR)/uarch-bin
-BIN_TEST_FILE := machine-tests-$(BIN_TEST_VERSION).tar.gz
-BIN_DOWNLOAD_URL := https://github.com/cartesi/machine-tests/releases/download/$(BIN_TEST_VERSION)/$(BIN_TEST_FILE)
-BIN_DOWNLOAD_FILEPATH := $(DOWNLOADDIR)/$(BIN_TEST_FILE)
+BIN_TEST_DIR ?= $(TEST_DIR)/uarch-bin
+BIN_TEST_FILE ?= machine-tests-$(BIN_TEST_VERSION).tar.gz
+BIN_DOWNLOAD_URL ?= https://github.com/cartesi/machine-tests/releases/download/$(BIN_TEST_VERSION)/$(BIN_TEST_FILE)
+BIN_DOWNLOAD_FILEPATH ?= $(DOWNLOADDIR)/$(BIN_TEST_FILE)
 
 LOG_TEST_VERSION ?= v0.15.2
-LOG_TEST_DIR := $(TEST_DIR)/uarch-log
-LOG_TEST_FILE := uarch-riscv-tests-json-logs-$(LOG_TEST_VERSION).tar.gz
-LOG_DOWNLOAD_URL := https://github.com/cartesi/machine-emulator/releases/download/$(LOG_TEST_VERSION)/$(LOG_TEST_FILE)
-LOG_DOWNLOAD_FILEPATH := $(DOWNLOADDIR)/$(LOG_TEST_FILE)
+LOG_TEST_DIR ?= $(TEST_DIR)/uarch-log
+LOG_TEST_FILE ?= uarch-riscv-tests-json-logs-$(LOG_TEST_VERSION).tar.gz
+LOG_DOWNLOAD_URL ?= https://github.com/cartesi/machine-emulator/releases/download/$(LOG_TEST_VERSION)/$(LOG_TEST_FILE)
+LOG_DOWNLOAD_FILEPATH ?= $(DOWNLOADDIR)/$(LOG_TEST_FILE)
 
 DOWNLOADFILES := $(BIN_DOWNLOAD_FILEPATH) $(LOG_DOWNLOAD_FILEPATH)
 GENERATEDFILES := $(READY_SRC_DIR)/*.sol
@@ -25,6 +25,8 @@ help:
 	@echo '* all                        - build solidity code. To build from a clean clone, run: make submodules all'
 	@echo '  build                      - build solidity code'
 	@echo '  generate-step              - generate solidity-step code from cpp'
+	@echo '  generate-reset             - generate solidity-reset code from cpp'
+	@echo '  generate-constants         - generate solidity-constants code by querying the cartesi machine'
 	@echo '  generate-mock              - generate mock library code'
 	@echo '  generate-prod              - generate production library code'
 	@echo '  generate-replay            - generate replay tests'
@@ -44,11 +46,11 @@ $(LOG_DOWNLOAD_FILEPATH):
 
 all: build test-all
 
-build: generate-step
+build: generate-step generate-reset generate-constants
 	forge build
 
 clean:
-	rm -rf src/UArchConstants.sol src/UArchStep.sol test/UArchReplay_*.t.sol
+	rm -rf src/UArchConstants.sol src/UArchStep.sol src/UArchReset.sol test/UArchReplay_*.t.sol
 	forge clean
 
 shasum-download: $(DOWNLOADFILES)
@@ -70,6 +72,9 @@ pretest: checksum-download
 	@mkdir -p $(BIN_TEST_DIR)
 	@mkdir -p $(LOG_TEST_DIR)
 	@tar -xzf $(BIN_DOWNLOAD_FILEPATH) -C $(BIN_TEST_DIR)
+	echo "opa opa"
+	echo $(LOG_DOWNLOAD_FILEPATH)
+	echo $(LOG_TEST_DIR)
 	@tar -xzf $(LOG_DOWNLOAD_FILEPATH) -C $(LOG_TEST_DIR)
 	@rm $(BIN_TEST_DIR)/*.dump $(BIN_TEST_DIR)/*.elf
 
@@ -105,10 +110,14 @@ generate-replay:
 	./helper_scripts/generate_ReplayTests.sh
 	$(MAKE) fmt
 
+generate-constants: $(EMULATOR_DIR)
+	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchConstants.sh
+
 generate-step: $(EMULATOR_DIR)/src/uarch-step.h $(EMULATOR_DIR)/src/uarch-step.cpp
 	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchStep.sh
-	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchConstants.sh
-	$(MAKE) generate-prod
+
+generate-reset: $(EMULATOR_DIR)/src/uarch-reset-state.cpp
+	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchReset.sh
 
 fmt:
 	forge fmt
@@ -116,4 +125,4 @@ fmt:
 submodules:
 	git submodule update --init --recursive
 
-.PHONY: help all build clean checksum-download checksum-mock checksum-prod fmt generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay
+.PHONY: help all build clean checksum-download checksum-mock checksum-prod fmt generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay generate-constants generate-reset

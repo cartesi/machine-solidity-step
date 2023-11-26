@@ -20,6 +20,7 @@
 pragma solidity ^0.8.0;
 
 import "./UArchStep.sol";
+import "./UArchReset.sol";
 
 library MetaStep {
     using AccessLogs for AccessLogs.Context;
@@ -39,13 +40,7 @@ library MetaStep {
                     << UArchConstants.LOG2_CYCLES_TO_RESET
         ) {
             // if counter is a multiple of (1 << UArchConstants.LOG2_CYCLES_TO_RESET), run uarch reset
-            accessLogs.writeRegion(
-                Memory.regionFromPhysicalAddress(
-                    Memory.PhysicalAddress.wrap(UArchConstants.RESET_POSITION),
-                    Memory.AlignedSize.wrap(UArchConstants.RESET_ALIGNED_SIZE)
-                ),
-                UArchConstants.PRESTINE_STATE
-            );
+            UArchReset.reset(accessLogs);
             machineState = accessLogs.currentRootHash;
         }
 

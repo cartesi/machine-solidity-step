@@ -1206,7 +1206,7 @@ library UArchStep {
         pure
         returns (UArchStepStatus)
     {
-        // This must be the first read in order to match the first log access in machine.verify_state_transition
+        // This must be the first read in order to match the first log access in machine.verify_uarch_step_state_transition
         uint64 cycle = UArchCompat.readCycle(a);
         // do not advance if cycle will overflow
         if (cycle == type(uint64).max) {
@@ -1225,11 +1225,11 @@ library UArchStep {
         return UArchStepStatus.Success;
     }
 
-    // Explicit instantiation for uarch_state_access
+    // Explicit instantiation for uarch_step_state_access
 
-    // Explicit instantiation for uarch_record_state_access
+    // Explicit instantiation for uarch_record_step_state_access
 
-    // Explicit instantiation for uarch_replay_state_access
+    // Explicit instantiation for uarch_replay_step_state_access
 
     // END OF AUTO-GENERATED CODE
 }
