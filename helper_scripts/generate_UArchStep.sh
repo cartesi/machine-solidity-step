@@ -1,4 +1,5 @@
 #!/bin/bash
+SED=${SED:-"sed"}
 EMULATOR_DIR=${EMULATOR_DIR:-"../emulator"}
 CPP_STEP_PATH=${EMULATOR_DIR}"/src/uarch-step.cpp"
 CPP_STEP_H_PATH=${EMULATOR_DIR}"/src/uarch-step.h"
@@ -30,28 +31,28 @@ pattern="enum class (.*) : int \{(.*)\};"
 h_src=`echo "enum ${BASH_REMATCH[1]} {${BASH_REMATCH[2]}}"`
 
 # get function names from UArchCompat.sol
-COMPAT_FNS=`cat $COMPAT_FILE | grep -o "function [^(]*(" | sed "s/function//g" | sed "s/(//g"`
-COMPAT_FNS=`echo $COMPAT_FNS | sed -E "s/( |\n)/|/g"`
+COMPAT_FNS=`cat $COMPAT_FILE | grep -o "function [^(]*(" | $SED "s/function//g" | $SED "s/(//g"`
+COMPAT_FNS=`echo $COMPAT_FNS | $SED -E "s/( |\n)/|/g"`
 
 cpp_src=`cat "$CPP_STEP_PATH"`
 pattern="namespace cartesi \{(.*)\}"
 [[ $cpp_src =~ $pattern ]]
 # replace cpp specific syntaxes with solidity ones
 cpp_src=`echo "${BASH_REMATCH[1]}" \
-        | sed "/template/d" \
-        | sed "/dumpInsn/d" \
-        | sed "/note/d" \
-        | sed "s/constexpr//g" \
-        | sed "s/UarchState &a/AccessLogs.Context memory a/g" \
-        | sed "s/throw std::runtime_error/revert/g" \
-        | sed "s/::/./g" \
-        | sed "s/UINT64_MAX/type(uint64).max/g" \
-        | sed -E "s/UArchStepStatus uarch_step/static inline UArchStepStatus step/g" \
-        | sed -E "s/static inline (\w+) ($INTERNAL_FN)\(([^\n]*)\) \{/function \2\(\3\) internal pure returns \(\1\)\{/g" \
-        | sed -E "s/static inline (\w+) (\w+)\(([^\n]*)\) \{/function \2\(\3\) private pure returns \(\1\)\{/g" \
-        | sed -E "s/([^\n]*) $UNUSED_INSN_FN([^\n]*) uint32 insn,([^\n]*)/\1 $UNUSED_INSN_FN\2 uint32,\3/g" \
-        | sed -E "s/($COMPAT_FNS)/UArchCompat.\1/g" \
-        | sed "s/ returns (void)//g"`
+        | $SED "/template/d" \
+        | $SED "/dumpInsn/d" \
+        | $SED "/note/d" \
+        | $SED "s/constexpr//g" \
+        | $SED "s/UarchState &a/AccessLogs.Context memory a/g" \
+        | $SED "s/throw std::runtime_error/revert/g" \
+        | $SED "s/::/./g" \
+        | $SED "s/UINT64_MAX/type(uint64).max/g" \
+        | $SED -E "s/UArchStepStatus uarch_step/static inline UArchStepStatus step/g" \
+        | $SED -E "s/static inline (\w+) ($INTERNAL_FN)\(([^\n]*)\) \{/function \2\(\3\) internal pure returns \(\1\)\{/g" \
+        | $SED -E "s/static inline (\w+) (\w+)\(([^\n]*)\) \{/function \2\(\3\) private pure returns \(\1\)\{/g" \
+        | $SED -E "s/([^\n]*) $UNUSED_INSN_FN([^\n]*) uint32 insn,([^\n]*)/\1 $UNUSED_INSN_FN\2 uint32,\3/g" \
+        | $SED -E "s/($COMPAT_FNS)/UArchCompat.\1/g" \
+        | $SED "s/ returns (void)//g"`
 
 # compose the solidity file from all components
 echo -e "$h" "\n\n$h_src" > $TARGET_FILE

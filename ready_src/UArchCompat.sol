@@ -99,6 +99,16 @@ library UArchCompat {
         a.writeWord(paddr.toPhysicalAddress(), val);
     }
 
+    function resetState(AccessLogs.Context memory a) internal pure {
+        a.writeRegion(
+            Memory.regionFromPhysicalAddress(
+                Memory.PhysicalAddress.wrap(UArchConstants.RESET_POSITION),
+                Memory.AlignedSize.wrap(UArchConstants.RESET_ALIGNED_SIZE)
+            ),
+            UArchConstants.PRESTINE_STATE
+        );
+    }
+
     function int8ToUint64(int8 val) internal pure returns (uint64) {
         return uint64(int64(val));
     }

@@ -13,7 +13,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-
 pragma solidity ^0.8.0;
 
 import "./UArchConstants.sol";
@@ -98,6 +97,16 @@ library UArchCompat {
             paddr = UArchConstants.UX0 + (index << 3);
         }
         a.writeWord(paddr.toPhysicalAddress(), val);
+    }
+
+    function resetState(AccessLogs.Context memory a) internal pure {
+        a.writeRegion(
+            Memory.regionFromPhysicalAddress(
+                Memory.PhysicalAddress.wrap(UArchConstants.RESET_POSITION),
+                Memory.AlignedSize.wrap(UArchConstants.RESET_ALIGNED_SIZE)
+            ),
+            UArchConstants.PRESTINE_STATE
+        );
     }
 
     function int8ToUint64(int8 val) internal pure returns (uint64) {

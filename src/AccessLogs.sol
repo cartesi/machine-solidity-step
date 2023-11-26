@@ -197,12 +197,12 @@ library AccessLogs {
         uint64 index;
         uint64 position = Memory.PhysicalAddress.unwrap(paddr);
         if (
-            position >= UArchConstants.UCYCLE
-                && position <= UArchConstants.UX0 + (31 << 3)
+            position >= UArchConstants.UARCH_SHADOW_START_ADDRESS
+                && position <= UArchConstants.UARCH_SHADOW_START_ADDRESS + UArchConstants.UARCH_SHADOW_LENGTH
         ) {
-            index = (position - UArchConstants.UCYCLE);
-        } else if (position >= 0x70000000) {
-            index = (position - 0x70000000) + (35 << 3);
+            index = (position - UArchConstants.UARCH_SHADOW_START_ADDRESS);
+        } else if (position >= UArchConstants.UARCH_RAM_START_ADDRESS) {
+            index = (position - UArchConstants.UARCH_RAM_START_ADDRESS) + (35 << 3);
         } else {
             revert("invalid memory access");
         }

@@ -14,16 +14,16 @@
 // limitations under the License.
 //
 
-/// @title UArchConstants
-/// @notice Contains constants for micro-architecture
+/// @title UArchReset
+/// @notice Reset microarchitecture to pristine state
 //:#include macro.pp
-/// DEV_COMMENT(templates/UArchConstants.sol.template)
+/// DEV_COMMENT(templates/UArchReset.sol.template)
 
 pragma solidity ^0.8.0;
 
-library UArchConstants {
+import "./UArchCompat.sol";
+
+library UArchReset {
     // START OF AUTO-GENERATED CODE
     // END OF AUTO-GENERATED CODE
-
-    uint64 constant LOG2_CYCLES_TO_RESET = 10;
 }

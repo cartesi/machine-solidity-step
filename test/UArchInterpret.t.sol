@@ -33,7 +33,7 @@ contract UArchInterpretTest is Test {
 
     uint8 constant REGISTERS_LENGTH = 35;
     uint8 constant TEST_STATUS_X = 1;
-    uint64 constant PMA_UARCH_RAM_START = 0x70000000;
+    uint64 constant PMA_UARCH_RAM_START = 0x600000; // TODO use the UArchConstants.UARCH_RAM_START_ADDRESS
     // test result code
     bytes8 constant TEST_SUCEEDED = 0x00000000be1e7aaa; // Indicates that test has passed
     bytes8 constant TEST_FAILED = 0x00000000deadbeef; // Indicates that test has failed
