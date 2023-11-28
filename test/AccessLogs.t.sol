@@ -65,7 +65,7 @@ contract AccessLogsTest is Test {
             readBufferFromHashes(bytes8(0x0000000000000001).swapEndian())
         );
 
-        // loxa vm.expectRevert("Read region root doesn't match");
+        vm.expectRevert("Read region root doesn't match");
         accessLogs.readWord((position + 8).toPhysicalAddress());
     }
 
