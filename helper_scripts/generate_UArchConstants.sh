@@ -17,13 +17,14 @@ t=`tail -n -$last $TEMPLATE_FILE`
 
  cd $EMULATOR_DIR
  make build-debian-image
+ cd -
 
-# run the Lua script that instantiates the cartesi module and 
+# run the Lua script that instantiates the cartesi module and
 # outputs the uarch constants values
-constants=$(docker run \
+constants=$(docker run --rm \
    -v`pwd`:/opt/cartesi/machine-solidity-step  \
    -w /opt/cartesi/machine-solidity-step \
-   -it cartesi/machine-emulator:devel \
+   cartesi/machine-emulator:devel \
    /opt/cartesi/machine-solidity-step/helper_scripts/generate_UArchConstants.lua)
 
 # compose the solidity file from all components
