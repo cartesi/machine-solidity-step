@@ -15,7 +15,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-
 pragma solidity ^0.8.0;
 
 import "forge-std/StdJson.sol";
@@ -37,10 +36,11 @@ contract UArchReplay_@X@_Test is Test {
     uint256 constant siblingsLength = 61;
 
     struct Entry {
+        string finalRootHash;
+        string initialRootHash;
         string path;
         bool proof;
         uint256 proofsFrequency;
-        string rootHash;
         uint256 steps;
     }
 
@@ -55,9 +55,8 @@ contract UArchReplay_@X@_Test is Test {
     }
 
     function testReplay_@X@() public {
-        Entry[] memory catalog = loadCatalog(
-            string.concat(JSON_PATH, CATALOG_PATH)
-        );
+        Entry[] memory catalog =
+            loadCatalog(string.concat(JSON_PATH, CATALOG_PATH));
 
         // all tests combined can easily run out of gas, stop metering
         // also raise memory_limit in foundry.toml per https://github.com/foundry-rs/foundry/issues/3971
@@ -66,39 +65,50 @@ contract UArchReplay_@X@_Test is Test {
         bytes memory buffer = new bytes(100 * (siblingsLength + 1) * 32);
 
         for (uint256 i = 0; i < catalog.length; i++) {
-            if (keccak256(abi.encodePacked(catalog[i].path)) !=
-                keccak256(abi.encodePacked("@PATH@"))) {
+            if (
+                keccak256(abi.encodePacked(catalog[i].path))
+                    != keccak256(abi.encodePacked("@PATH@"))
+            ) {
                 continue;
             }
             console.log("Replaying file %s ...", catalog[i].path);
-            require(catalog[i].proofsFrequency == 1, "require proof in every step");
-
-            string memory rj = loadJsonLog(
-                string.concat(JSON_PATH, catalog[i].path)
+            require(
+                catalog[i].proofsFrequency == 1, "require proof in every step"
             );
 
-            bytes32 initialRootHash = vm.parseBytes32(
-                string.concat("0x", catalog[i].rootHash)
-            );
-            // The initial root hash should be sufficient for verigying and
-            // the current hash and computing the next root hash.
+            string memory rj =
+                loadJsonLog(string.concat(JSON_PATH, catalog[i].path));
+
+            bytes32 initialRootHash =
+                vm.parseBytes32(string.concat("0x", catalog[i].initialRootHash));
+            bytes32 finalRootHash =
+                vm.parseBytes32(string.concat("0x", catalog[i].finalRootHash));
 
             for (uint256 j = 0; j < catalog[i].steps; j++) {
                 console.log("Replaying step %d ...", j);
                 // load json log
                 loadBufferFromRawJson(buffer, rj, j);
 
-                // initialRootHash is passed just to  allow the file to compile.
-                // It is possible to compute the root hash for this particular access by rolling up the
-                // value hash up the tree with the sibling hashes
-                UArchStep.step(AccessLogs.Context(initialRootHash, Buffer.Context(buffer, 0)));
+                AccessLogs.Context memory accessLogs = AccessLogs.Context(
+                    initialRootHash, Buffer.Context(buffer, 0)
+                );
+
+                // initialRootHash is passed and will be updated through out the step
+                UArchStep.step(accessLogs);
+                initialRootHash = accessLogs.currentRootHash;
             }
+
+            assertEq(
+                initialRootHash, finalRootHash, "final root hashes should match"
+            );
         }
     }
 
-    function loadCatalog(
-        string memory path
-    ) private view returns (Entry[] memory) {
+    function loadCatalog(string memory path)
+        private
+        view
+        returns (Entry[] memory)
+    {
         string memory json = vm.readFile(path);
         bytes memory raw = json.parseRaw("");
         Entry[] memory catalog = abi.decode(raw, (Entry[]));
@@ -106,9 +116,11 @@ contract UArchReplay_@X@_Test is Test {
         return catalog;
     }
 
-    function loadJsonLog(
-        string memory path
-    ) private view returns (string memory) {
+    function loadJsonLog(string memory path)
+        private
+        view
+        returns (string memory)
+    {
         return vm.readFile(path);
     }
 
@@ -118,28 +130,19 @@ contract UArchReplay_@X@_Test is Test {
         uint256 stepIndex
     ) private pure {
         string memory key = string.concat(
-            string.concat(".steps[", vm.toString(stepIndex)),
-            "].accesses"
+            string.concat(".steps[", vm.toString(stepIndex)), "].accesses"
         );
         bytes memory raw = rawJson.parseRaw(key);
         RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
         uint256 readCount = 0;
         uint256 arrayLength = rawAccesses.length;
-         for (uint256 i = 0; i < arrayLength; i++) {
-             if (
-                 keccak256(abi.encodePacked(rawAccesses[i].accessType)) ==
-                 keccak256(abi.encodePacked("read"))
-             ) {
-                 readCount++;
-             }
-         }
 
         Buffer.Context memory buffer = Buffer.Context(data, 0);
 
         for (uint256 i = 0; i < arrayLength; i++) {
             if (
-                keccak256(abi.encodePacked(rawAccesses[i].accessType)) ==
-                keccak256(abi.encodePacked("read"))
+                keccak256(abi.encodePacked(rawAccesses[i].accessType))
+                    == keccak256(abi.encodePacked("read"))
             ) {
                 bytes8 word = bytes8(
                     vm.parseBytes(string.concat("0x", rawAccesses[i].val))
@@ -148,42 +151,16 @@ contract UArchReplay_@X@_Test is Test {
             }
 
             buffer.writeBytes32(
-                vm.parseBytes32(
-                    string.concat("0x", rawAccesses[i].readHash)
-                )
+                vm.parseBytes32(string.concat("0x", rawAccesses[i].readHash))
             );
 
-            for (
-                uint256 j = i * (siblingsLength + 1) + 1;
-                j < (i + 1) * (siblingsLength + 1);
-                j++
-            ) {
+            for (uint256 j = 0; j < siblingsLength; j++) {
                 buffer.writeBytes32(
                     vm.parseBytes32(
-                        string.concat(
-                            "0x",
-                            rawAccesses[i].rawSiblings[
-                                (j % siblingsLength )
-                            ]
-                        )
+                        string.concat("0x", rawAccesses[i].rawSiblings[j])
                     )
                 );
             }
         }
-
-         for (uint256 i = 0; i < arrayLength; i++) {
-             if (
-                 keccak256(abi.encodePacked(rawAccesses[i].accessType)) ==
-                 keccak256(abi.encodePacked("read"))
-             ) {
-                 readCount++;
-             }
-        }
-
-        // proof with root hash is no longer present in the access log
-        // return
-        //     vm.parseBytes32(
-        //         string.concat("0x", rawAccesses[0].rawProof.rootHash)
-        //     );
     }
 }
