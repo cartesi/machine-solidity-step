@@ -5,10 +5,11 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
+
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: nightly
+          version: nightly-5be158ba6dc7c798a6f032026fe60fc01686b33b
 
       - run: forge build
       - run: forge fmt --check

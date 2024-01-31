@@ -49,6 +49,7 @@ build: generate-step
 
 clean:
 	rm -rf src/UArchConstants.sol src/UArchStep.sol test/UArchReplay_*.t.sol
+	rm -rf $(BIN_TEST_DIR) $(LOG_TEST_DIR) $(DOWNLOADDIR)
 	forge clean
 
 shasum-download: $(DOWNLOADFILES)

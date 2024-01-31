@@ -1,8 +1,5 @@
 name: Test
 on: [push]
-env:
-  UARCH_BIN_TEST_VERSION: v0.29.0
-  UARCH_LOG_TEST_VERSION: v0.15.3
 jobs:
   test:
     runs-on: ubuntu-22.04
@@ -10,38 +7,17 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-          token: ${{ secrets.CI_TOKEN }}
-      - uses: awalsh128/cache-apt-pkgs-action@latest
+
+      - name: Install gpp
+        uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: gpp
           version: 2.27
 
-      - name: Download uarch test bin files
-        uses: Legion2/download-release-action@v2.1.0
-        with:
-          repository: ${{ github.repository_owner }}/machine-tests
-          tag: ${{ env.UARCH_BIN_TEST_VERSION }}
-          file: machine-tests-${{ env.UARCH_BIN_TEST_VERSION }}.tar.gz
-          token: ${{ secrets.CI_TOKEN }}
-
-      - name: Download uarch test log files
-        uses: Legion2/download-release-action@v2.1.0
-        with:
-          repository: ${{ github.repository_owner }}/machine-emulator
-          tag: ${{ env.UARCH_LOG_TEST_VERSION }}
-          file: uarch-riscv-tests-json-logs-${{ env.UARCH_LOG_TEST_VERSION }}.tar.gz
-          token: ${{ secrets.CI_TOKEN }}
-
-      - name: Untar uarch test bins
-        run: mkdir -p test/uarch-bin && tar -xzf machine-tests-${UARCH_BIN_TEST_VERSION}.tar.gz -C test/uarch-bin && rm test/uarch-bin/*.dump
-
-      - name: Untar uarch test logs
-        run: mkdir -p test/uarch-log && tar -xzf uarch-riscv-tests-json-logs-${UARCH_LOG_TEST_VERSION}.tar.gz -C test/uarch-log
-
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: nightly
+          version: nightly-5be158ba6dc7c798a6f032026fe60fc01686b33b
 
       - name: Run all tests
         run: make test-all
