@@ -2,7 +2,7 @@ name: Test
 on: [push]
 env:
   UARCH_BIN_TEST_VERSION: v0.29.0
-  UARCH_LOG_TEST_VERSION: v0.15.2
+  UARCH_LOG_TEST_VERSION: v0.15.3
 jobs:
   test:
     runs-on: ubuntu-22.04
