@@ -34,7 +34,7 @@ library UArchConstants {
     uint64 constant RESET_POSITION = 0x400000;
     uint8 constant RESET_ALIGNED_SIZE = 22;
     bytes32 constant PRESTINE_STATE =
-        0x990691da914eed5270e1aee557bd190fb0c79b67f8f6d87ee2c491c525fe2c98;
+        0xf3ca81afcb4afed7dd6a6f1fadbe0a62aecc71fe9009040dfd700229de88b266;
     // END OF AUTO-GENERATED CODE
 
     uint64 constant LOG2_CYCLES_TO_RESET = 10;

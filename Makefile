@@ -3,19 +3,19 @@ TEST_DIR := test
 DOWNLOADDIR := downloads
 READY_SRC_DIR := ready_src
 
-BIN_TEST_VERSION ?= v0.29.0
-BIN_TEST_DIR ?= $(TEST_DIR)/uarch-bin
-BIN_TEST_FILE ?= machine-tests-$(BIN_TEST_VERSION).tar.gz
-BIN_DOWNLOAD_URL ?= https://github.com/cartesi/machine-tests/releases/download/$(BIN_TEST_VERSION)/$(BIN_TEST_FILE)
-BIN_DOWNLOAD_FILEPATH ?= $(DOWNLOADDIR)/$(BIN_TEST_FILE)
+EMULATOR_VERSION ?= v0.16.0
 
-LOG_TEST_VERSION ?= v0.15.3
-LOG_TEST_DIR := $(TEST_DIR)/uarch-log
-LOG_TEST_FILE := uarch-riscv-tests-json-logs-$(LOG_TEST_VERSION).tar.gz
-LOG_DOWNLOAD_URL := https://github.com/cartesi/machine-emulator/releases/download/$(LOG_TEST_VERSION)/$(LOG_TEST_FILE)
+TESTS_DATA_FILE ?= cartesi-machine-tests-data-$(EMULATOR_VERSION).deb
+TESTS_DATA_DOWNLOAD_URL := https://github.com/cartesi/machine-emulator/releases/download/$(EMULATOR_VERSION)/$(TESTS_DATA_FILE)
+TESTS_DATA_DOWNLOAD_FILEPATH ?= $(DOWNLOADDIR)/$(TESTS_DATA_FILE)
+TESTS_DATA_DIR ?= $(TEST_DIR)/uarch-bin
+
+LOG_TEST_FILE ?= uarch-riscv-tests-json-logs-$(EMULATOR_VERSION).tar.gz
+LOG_DOWNLOAD_URL := https://github.com/cartesi/machine-emulator/releases/download/$(EMULATOR_VERSION)/$(LOG_TEST_FILE)
 LOG_DOWNLOAD_FILEPATH := $(DOWNLOADDIR)/$(LOG_TEST_FILE)
+LOG_TEST_DIR := $(TEST_DIR)/uarch-log
 
-DOWNLOADFILES := $(BIN_DOWNLOAD_FILEPATH) $(LOG_DOWNLOAD_FILEPATH)
+DOWNLOADFILES := $(TESTS_DATA_DOWNLOAD_FILEPATH) $(LOG_DOWNLOAD_FILEPATH)
 GENERATEDFILES := $(READY_SRC_DIR)/*.sol
 
 help:
@@ -36,9 +36,9 @@ help:
 	@echo '  test-prod                  - test production code'
 	@echo '  test-replay                - test log files'
 
-$(BIN_DOWNLOAD_FILEPATH):
+$(TESTS_DATA_DOWNLOAD_FILEPATH):
 	@mkdir -p $(DOWNLOADDIR)
-	@wget -nc $(BIN_DOWNLOAD_URL) -P $(DOWNLOADDIR)
+	@wget -nc $(TESTS_DATA_DOWNLOAD_URL) -P $(DOWNLOADDIR)
 
 $(LOG_DOWNLOAD_FILEPATH):
 	@mkdir -p $(DOWNLOADDIR)
@@ -51,7 +51,7 @@ build: generate-step generate-reset generate-constants
 
 clean:
 	rm -rf src/UArchConstants.sol src/UArchStep.sol test/UArchReplay_*.t.sol
-	rm -rf $(BIN_TEST_DIR) $(LOG_TEST_DIR) $(DOWNLOADDIR)
+	rm -rf $(TESTS_DATA_DIR) $(LOG_TEST_DIR) $(DOWNLOADDIR)
 	forge clean
 
 shasum-download: $(DOWNLOADFILES)
@@ -70,14 +70,10 @@ checksum-prod:
 	@shasum -ca 256 shasum-prod
 
 pretest: checksum-download
-	@mkdir -p $(BIN_TEST_DIR)
-	@mkdir -p $(LOG_TEST_DIR)
-	@tar -xzf $(BIN_DOWNLOAD_FILEPATH) -C $(BIN_TEST_DIR)
-	echo "opa opa"
-	echo $(LOG_DOWNLOAD_FILEPATH)
-	echo $(LOG_TEST_DIR)
-	@tar -xzf $(LOG_DOWNLOAD_FILEPATH) -C $(LOG_TEST_DIR)
-	@rm $(BIN_TEST_DIR)/*.dump $(BIN_TEST_DIR)/*.elf
+	mkdir -p $(TESTS_DATA_DIR) $(LOG_TEST_DIR)
+	ar p $(TESTS_DATA_DOWNLOAD_FILEPATH) data.tar.xz | tar -xJf - --strip-components=7 -C $(TESTS_DATA_DIR) ./usr/share/cartesi-machine/tests/data/uarch
+	tar -xzf $(LOG_DOWNLOAD_FILEPATH) --strip-components=1 -C $(LOG_TEST_DIR)
+	rm -f $(TESTS_DATA_DIR)/*.dump $(TESTS_DATA_DIR)/*.elf
 
 test-all:
 	$(MAKE) test-mock
