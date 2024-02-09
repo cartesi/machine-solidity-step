@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] - 2024-02-09
+### Added 
+- Support for uarch reset
+
+### Changed
+- Updated machine-emulator version to v0.16.0
+- Activated immediate error exit in all test scripts
+- Updated shasum-mock
+
+### Fixed
+- Fixed replay tests with new log format
+- Fixed mistakenly commented test code
+- Changed directory back before retrieving constants
+
 ## [0.9.3] - 2024-01-31
 ### Changed
 - Updated to `machine-emulator 0.15.3`
@@ -40,7 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dropped `solidity-util` dependency
 - Updated to `machine-emulator 0.15.0`
 - Updated `step` function to use generic interface and parameters
-- Updated all smart contracts to be pure interal libraries
+- Updated all smart contracts to be pure internal libraries
 - Configured constants from docker runtime
 - Enabled all tests on CI
 
@@ -57,7 +71,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [0.2.0]
 - [0.1.0]
 
-[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.9.3...HEAD
+[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.10.0
 [0.9.3]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.9.3
 [0.9.2]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.9.2
 [0.9.1]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.9.1
