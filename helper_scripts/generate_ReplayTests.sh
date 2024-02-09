@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 SED=${SED:-"sed"}
 
 for i in test/uarch-log/rv64ui*; do

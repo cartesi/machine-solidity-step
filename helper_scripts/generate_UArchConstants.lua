@@ -1,6 +1,6 @@
 #!/usr/bin/lua5.4
 
--- This scripts generates a snipet of solidity code to be inserted
+-- This scripts generates a snippet of solidity code to be inserted
 -- in the UarchConstants.sol file.
 
 local cartesi = require("cartesi")

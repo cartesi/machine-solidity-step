@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e
+
 SED=${SED:-"sed"}
 EMULATOR_DIR=${EMULATOR_DIR:-"../emulator"}
 CPP_RESET_PATH=${EMULATOR_DIR}"/src/uarch-reset-state.cpp"

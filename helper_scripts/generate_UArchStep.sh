@@ -1,4 +1,7 @@
 #!/bin/bash
+
+set -e
+
 SED=${SED:-"sed"}
 EMULATOR_DIR=${EMULATOR_DIR:-"../emulator"}
 CPP_STEP_PATH=${EMULATOR_DIR}"/src/uarch-step.cpp"
