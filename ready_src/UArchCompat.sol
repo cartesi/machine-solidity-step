@@ -102,8 +102,8 @@ library UArchCompat {
     function resetState(AccessLogs.Context memory a) internal pure {
         a.writeRegion(
             Memory.regionFromPhysicalAddress(
-                Memory.PhysicalAddress.wrap(UArchConstants.RESET_POSITION),
-                Memory.AlignedSize.wrap(UArchConstants.RESET_ALIGNED_SIZE)
+                UArchConstants.RESET_POSITION.toPhysicalAddress(),
+                Memory.alignedSizeFromLog2(UArchConstants.RESET_ALIGNED_SIZE)
             ),
             UArchConstants.PRESTINE_STATE
         );

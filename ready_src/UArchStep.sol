@@ -29,6 +29,7 @@ library UArchStep {
         Success, // one micro instruction was executed successfully
         CycleOverflow, // already at fixed point: uarch cycle has reached its maximum value
         UArchHalted // already at fixed point: microarchitecture is halted
+
     }
 
     // Memory read/write access
