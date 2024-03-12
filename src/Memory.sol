@@ -80,7 +80,7 @@ library Memory {
         // assert position and size are aligned
         // position has to be a multiple of size
         // equivalent to: size = 2^a, position = 2^b, position = size * 2^c, where c >= 0
-        assert(((s - 1) & position) == 0);
+        assert(((s - 1) & addr) == 0);
         uint64 stride = position / s;
         return Stride.wrap(stride);
     }
