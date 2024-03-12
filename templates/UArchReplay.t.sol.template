@@ -134,7 +134,6 @@ contract UArchReplay_@X@_Test is Test {
         );
         bytes memory raw = rawJson.parseRaw(key);
         RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
-        uint256 readCount = 0;
         uint256 arrayLength = rawAccesses.length;
 
         Buffer.Context memory buffer = Buffer.Context(data, 0);

@@ -86,12 +86,12 @@ test-mock: pretest
 
 test-prod: pretest
 	$(MAKE) generate-prod
-	forge test --use 0.8.21 -vv --no-match-contract "UArchInterpret|UArchReplay"
+	forge test --use 0.8.21 -vv --no-match-contract "UArchInterpret|UArchReplay|UArchReset"
 
 test-replay: pretest
 	$(MAKE) generate-prod
 	$(MAKE) generate-replay
-	forge test --use 0.8.21 -vv --match-contract UArchReplay
+	forge test --use 0.8.21 -vv --match-contract "UArchReplay|UArchReset"
 
 generate-mock:
 	./helper_scripts/generate_AccessLogs.sh mock
