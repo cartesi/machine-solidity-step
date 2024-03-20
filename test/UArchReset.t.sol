@@ -56,10 +56,10 @@ contract UArchReset_Test is Test {
         bytes memory buffer = new bytes(100 * (siblingsLength + 1) * 32);
         string memory rj = loadJsonLog(resetLog);
         bytes32 initialRootHash = bytes32(
-            0xb9fbeba37a3a62da4b20fbdcfca24893485643dfb8885b800e08f1cb389e8e5e
+            0xe6924ad1b17f3e77b62b33d0e43f16066cd4fcd8c5531369fcf71936a93fe271
         );
         bytes32 finalRootHash = bytes32(
-            0xda5cc789efd69f0edb94a23753fbd767cf91b203c3055d2339b8db8760f2093e
+            0xc4a80b24909990e42edabfe9bfb3b90974173e22735a0c191f8809c45e22da66
         );
 
         // load json log

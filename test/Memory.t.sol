@@ -39,7 +39,7 @@ contract MemoryTest is Test {
                     Memory.alignedSizeFromLog2(l)
                 );
 
-                if ((1 << l) == (paddr)) {
+                if ((1 << l) == (paddr >> 3)) {
                     // address has to be aligned with stride size
                     vm.expectRevert();
                     uint64(paddr + paddr / 2).toPhysicalAddress()
