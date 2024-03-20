@@ -21,8 +21,8 @@ import "forge-std/StdJson.sol";
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
-import "ready_src/UArchConstants.sol";
-import "ready_src/UArchReset.sol";
+import "src/UArchConstants.sol";
+import "src/UArchReset.sol";
 import "./BufferAux.sol";
 
 contract UArchReset_Test is Test {

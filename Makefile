@@ -1,7 +1,7 @@
 EMULATOR_DIR ?= ../emulator
 TEST_DIR := test
 DOWNLOADDIR := downloads
-READY_SRC_DIR := ready_src
+SRC_DIR := src
 
 EMULATOR_VERSION ?= v0.16.1
 
@@ -16,7 +16,7 @@ LOG_DOWNLOAD_FILEPATH := $(DOWNLOADDIR)/$(LOG_TEST_FILE)
 LOG_TEST_DIR := $(TEST_DIR)/uarch-log
 
 DOWNLOADFILES := $(TESTS_DATA_DOWNLOAD_FILEPATH) $(LOG_DOWNLOAD_FILEPATH)
-GENERATEDFILES := $(READY_SRC_DIR)/*.sol
+GENERATEDFILES := $(SRC_DIR)/*.sol
 
 help:
 	@echo 'Cleaning targets:'
@@ -50,7 +50,7 @@ build: generate-step generate-reset generate-constants
 	forge build --use 0.8.21
 
 clean:
-	rm -rf src/UArchConstants.sol src/UArchStep.sol test/UArchReplay_*.t.sol
+	rm -rf src/AccessLogs.sol test/UArchReplay_*.t.sol
 	rm -rf $(TESTS_DATA_DIR) $(LOG_TEST_DIR) $(DOWNLOADDIR)
 	forge clean
 
@@ -117,7 +117,7 @@ generate-reset: $(EMULATOR_DIR)/src/uarch-reset-state.cpp
 	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchReset.sh
 
 fmt:
-	forge fmt
+	forge fmt src test
 
 submodules:
 	git submodule update --init --recursive

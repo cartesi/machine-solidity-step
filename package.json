@@ -10,8 +10,8 @@
         "cartesi"
     ],
     "files": [
-        "src/*",
-        "ready_src/*"
+        "templates/*",
+        "src/*"
     ],
     "license": "Apache-2.0"
 }

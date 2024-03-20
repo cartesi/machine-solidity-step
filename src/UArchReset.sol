@@ -16,7 +16,8 @@
 
 /// @title UArchReset
 /// @notice Reset microarchitecture to pristine state
-/// @dev This file is generated from templates/UArchReset.sol.template, one should not modify the content directly
+//:#include macro.pp
+/// DEV_COMMENT(templates/UArchReset.sol.template)
 
 pragma solidity ^0.8.0;
 
