@@ -103,7 +103,9 @@ library UArchCompat {
         a.writeRegion(
             Memory.regionFromPhysicalAddress(
                 UArchConstants.RESET_POSITION.toPhysicalAddress(),
-                Memory.alignedSizeFromLog2(UArchConstants.RESET_ALIGNED_SIZE)
+                Memory.alignedSizeFromLog2(
+                    UArchConstants.RESET_ALIGNED_SIZE - 3
+                )
             ),
             UArchConstants.PRESTINE_STATE
         );
