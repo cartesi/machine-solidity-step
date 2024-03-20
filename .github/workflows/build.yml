@@ -12,4 +12,4 @@ jobs:
           version: nightly-7545c7a2857a873fa1909ec4174032c4e4702116
 
       - run: forge build
-      - run: forge fmt --check
+      - run: forge fmt --check src test

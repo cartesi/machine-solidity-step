@@ -16,7 +16,8 @@
 
 /// @title UArchConstants
 /// @notice Contains constants for micro-architecture
-/// @dev This file is generated from templates/UArchConstants.sol.template, one should not modify the content directly
+//:#include macro.pp
+/// DEV_COMMENT(templates/UArchConstants.sol.template)
 
 pragma solidity ^0.8.0;
 

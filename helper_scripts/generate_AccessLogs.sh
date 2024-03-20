@@ -10,16 +10,14 @@ if [ "$1" == "-h" ] || ([ "$1" != "prod" ] && [ "$1" != "mock" ] && [ $# -gt 0 ]
 fi
 
 if [ "$1" == "prod" ] || [ $# -eq 0 ]; then
-    find src -type f -name '*.sol' | $SED 's/src\///' | xargs -I {} gpp \
-            -U "" "" "(" "," ")" "(" ")" "//:#" "\\" \
-            -M "//:#" "\n" " " " " "\n" "(" ")" \
-            -I "src" \
-            src/{} -o ready_src/{}
+    gpp -U "" "" "(" "," ")" "(" ")" "//:#" "\\" \
+        -M "//:#" "\n" " " " " "\n" "(" ")" \
+        -I "templates" \
+        templates/AccessLogs.sol.template -o src/AccessLogs.sol
 else
-    find src -type f -name '*.sol' | $SED 's/src\///' | xargs -I {} gpp \
-            -U "" "" "(" "," ")" "(" ")" "//:#" "\\" \
-            -M "//:#" "\n" " " " " "\n" "(" ")" \
-            -I "src" \
-            src/{} -o ready_src/{} \
-            -Dtest
+    gpp -U "" "" "(" "," ")" "(" ")" "//:#" "\\" \
+        -M "//:#" "\n" " " " " "\n" "(" ")" \
+        -I "templates" \
+        templates/AccessLogs.sol.template -o src/AccessLogs.sol \
+        -Dtest
 fi
