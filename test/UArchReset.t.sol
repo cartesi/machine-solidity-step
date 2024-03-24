@@ -21,10 +21,11 @@ import "forge-std/StdJson.sol";
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
-import "src/UArchStep.sol";
+import "src/UArchConstants.sol";
+import "src/UArchReset.sol";
 import "./BufferAux.sol";
 
-contract UArchReplay_@X@_Test is Test {
+contract UArchReset_Test is Test {
     using Buffer for Buffer.Context;
     using BufferAux for Buffer.Context;
     using stdJson for string;
@@ -32,8 +33,9 @@ contract UArchReplay_@X@_Test is Test {
     // configure the tests
     string constant JSON_PATH = "./test/uarch-log/";
     string constant CATALOG_PATH = "catalog.json";
+    string constant RESET_PATH = "uarch-reset.json";
 
-    uint256 constant siblingsLength = 61;
+    uint256 constant siblingsLength = 42;
 
     struct Entry {
         string finalRootHash;
@@ -51,12 +53,13 @@ contract UArchReplay_@X@_Test is Test {
         string readHash;
         string[] rawSiblings;
         string accessType;
-        string val;
     }
+    // string val; omit val because it's not used in reset
 
-    function testReplay_@X@() public {
+    function testReset() public {
         Entry[] memory catalog =
             loadCatalog(string.concat(JSON_PATH, CATALOG_PATH));
+        string memory resetLog = string.concat(JSON_PATH, RESET_PATH);
 
         // all tests combined can easily run out of gas, stop metering
         // also raise memory_limit in foundry.toml per https://github.com/foundry-rs/foundry/issues/3971
@@ -67,7 +70,7 @@ contract UArchReplay_@X@_Test is Test {
         for (uint256 i = 0; i < catalog.length; i++) {
             if (
                 keccak256(abi.encodePacked(catalog[i].path))
-                    != keccak256(abi.encodePacked("@PATH@"))
+                    != keccak256(abi.encodePacked("uarch-reset-steps.json"))
             ) {
                 continue;
             }
@@ -76,32 +79,29 @@ contract UArchReplay_@X@_Test is Test {
                 catalog[i].proofsFrequency == 1, "require proof in every step"
             );
 
-            string memory rj =
-                loadJsonLog(string.concat(JSON_PATH, catalog[i].path));
+            string memory rj = loadJsonLog(resetLog);
 
             bytes32 initialRootHash =
                 vm.parseBytes32(string.concat("0x", catalog[i].initialRootHash));
             bytes32 finalRootHash =
                 vm.parseBytes32(string.concat("0x", catalog[i].finalRootHash));
 
-            for (uint256 j = 0; j < catalog[i].steps; j++) {
-                console.log("Replaying step %d ...", j);
-                // load json log
-                loadBufferFromRawJson(buffer, rj, j);
+            loadBufferFromRawJson(buffer, rj);
 
-                AccessLogs.Context memory accessLogs = AccessLogs.Context(
-                    initialRootHash, Buffer.Context(buffer, 0)
-                );
+            AccessLogs.Context memory accessLogs =
+                AccessLogs.Context(initialRootHash, Buffer.Context(buffer, 0));
 
-                // initialRootHash is passed and will be updated through out the step
-                UArchStep.step(accessLogs);
-                initialRootHash = accessLogs.currentRootHash;
-            }
+            // initialRootHash is passed and will be updated through out the step
+            UArchReset.reset(accessLogs);
 
             assertEq(
-                initialRootHash, finalRootHash, "final root hashes should match"
+                accessLogs.currentRootHash,
+                finalRootHash,
+                "final root hash must match"
             );
         }
+
+        // load json log
     }
 
     function loadCatalog(string memory path)
@@ -124,42 +124,44 @@ contract UArchReplay_@X@_Test is Test {
         return vm.readFile(path);
     }
 
-    function loadBufferFromRawJson(
-        bytes memory data,
-        string memory rawJson,
-        uint256 stepIndex
-    ) private pure {
-        string memory key = string.concat(
-            string.concat(".steps[", vm.toString(stepIndex)), "].accesses"
-        );
+    function loadBufferFromRawJson(bytes memory data, string memory rawJson)
+        private
+    {
+        string memory key = ".accesses";
         bytes memory raw = rawJson.parseRaw(key);
         RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
         uint256 arrayLength = rawAccesses.length;
+        assertEq(arrayLength, 1, "should be only 1 access in reset");
 
         Buffer.Context memory buffer = Buffer.Context(data, 0);
 
-        for (uint256 i = 0; i < arrayLength; i++) {
-            if (
-                keccak256(abi.encodePacked(rawAccesses[i].accessType))
-                    == keccak256(abi.encodePacked("read"))
-            ) {
-                bytes8 word = bytes8(
-                    vm.parseBytes(string.concat("0x", rawAccesses[i].val))
-                );
-                buffer.writeBytes8(word);
-            }
+        if (
+            keccak256(abi.encodePacked(rawAccesses[0].accessType))
+                == keccak256(abi.encodePacked("read"))
+        ) {
+            revert("should'nt have read access in reset");
+        }
+        assertEq(
+            rawAccesses[0].position,
+            UArchConstants.RESET_POSITION,
+            "position should be (0x400000)"
+        );
+        assertEq(
+            rawAccesses[0].log2Size,
+            UArchConstants.RESET_ALIGNED_SIZE,
+            "log2Size should be 22"
+        );
 
+        buffer.writeBytes32(
+            vm.parseBytes32(string.concat("0x", rawAccesses[0].readHash))
+        );
+
+        for (uint256 i = 0; i < siblingsLength; i++) {
             buffer.writeBytes32(
-                vm.parseBytes32(string.concat("0x", rawAccesses[i].readHash))
+                vm.parseBytes32(
+                    string.concat("0x", rawAccesses[0].rawSiblings[i])
+                )
             );
-
-            for (uint256 j = 0; j < siblingsLength; j++) {
-                buffer.writeBytes32(
-                    vm.parseBytes32(
-                        string.concat("0x", rawAccesses[i].rawSiblings[j])
-                    )
-                );
-            }
         }
     }
 }

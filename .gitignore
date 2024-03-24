@@ -6,7 +6,4 @@ test/uarch-log
 .vscode
 *.log
 test/UArchReplay_*.t.sol
-src/UArchConstants.sol
-src/UArchStep.sol
-src/UArchReset.sol
 .DS_Store
