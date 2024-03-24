@@ -32,9 +32,19 @@ contract UArchReset_Test is Test {
 
     // configure the tests
     string constant JSON_PATH = "./test/uarch-log/";
+    string constant CATALOG_PATH = "catalog.json";
     string constant RESET_PATH = "uarch-reset.json";
 
     uint256 constant siblingsLength = 42;
+
+    struct Entry {
+        string finalRootHash;
+        string initialRootHash;
+        string path;
+        bool proof;
+        uint256 proofsFrequency;
+        uint256 steps;
+    }
 
     struct RawAccess {
         uint256 position;
@@ -47,6 +57,8 @@ contract UArchReset_Test is Test {
     // string val; omit val because it's not used in reset
 
     function testReset() public {
+        Entry[] memory catalog =
+            loadCatalog(string.concat(JSON_PATH, CATALOG_PATH));
         string memory resetLog = string.concat(JSON_PATH, RESET_PATH);
 
         // all tests combined can easily run out of gas, stop metering
@@ -54,28 +66,54 @@ contract UArchReset_Test is Test {
         vm.pauseGasMetering();
         // create a large buffer and reuse it
         bytes memory buffer = new bytes(100 * (siblingsLength + 1) * 32);
-        string memory rj = loadJsonLog(resetLog);
-        bytes32 initialRootHash = bytes32(
-            0xe6924ad1b17f3e77b62b33d0e43f16066cd4fcd8c5531369fcf71936a93fe271
-        );
-        bytes32 finalRootHash = bytes32(
-            0xc4a80b24909990e42edabfe9bfb3b90974173e22735a0c191f8809c45e22da66
-        );
+
+        for (uint256 i = 0; i < catalog.length; i++) {
+            if (
+                keccak256(abi.encodePacked(catalog[i].path))
+                    != keccak256(abi.encodePacked("uarch-reset-steps.json"))
+            ) {
+                continue;
+            }
+            console.log("Replaying file %s ...", catalog[i].path);
+            require(
+                catalog[i].proofsFrequency == 1, "require proof in every step"
+            );
+
+            string memory rj = loadJsonLog(resetLog);
+
+            bytes32 initialRootHash =
+                vm.parseBytes32(string.concat("0x", catalog[i].initialRootHash));
+            bytes32 finalRootHash =
+                vm.parseBytes32(string.concat("0x", catalog[i].finalRootHash));
+
+            loadBufferFromRawJson(buffer, rj);
+
+            AccessLogs.Context memory accessLogs =
+                AccessLogs.Context(initialRootHash, Buffer.Context(buffer, 0));
+
+            // initialRootHash is passed and will be updated through out the step
+            UArchReset.reset(accessLogs);
+
+            assertEq(
+                accessLogs.currentRootHash,
+                finalRootHash,
+                "final root hash must match"
+            );
+        }
 
         // load json log
-        loadBufferFromRawJson(buffer, rj);
+    }
 
-        AccessLogs.Context memory accessLogs =
-            AccessLogs.Context(initialRootHash, Buffer.Context(buffer, 0));
+    function loadCatalog(string memory path)
+        private
+        view
+        returns (Entry[] memory)
+    {
+        string memory json = vm.readFile(path);
+        bytes memory raw = json.parseRaw("");
+        Entry[] memory catalog = abi.decode(raw, (Entry[]));
 
-        // initialRootHash is passed and will be updated through out the step
-        UArchReset.reset(accessLogs);
-
-        assertEq(
-            accessLogs.currentRootHash,
-            finalRootHash,
-            "final root hash must match"
-        );
+        return catalog;
     }
 
     function loadJsonLog(string memory path)
