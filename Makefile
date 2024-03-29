@@ -47,7 +47,7 @@ $(LOG_DOWNLOAD_FILEPATH):
 all: build test-all
 
 build: generate-step generate-reset generate-constants
-	forge build
+	forge build --use 0.8.21
 
 clean:
 	rm -rf src/UArchConstants.sol src/UArchStep.sol test/UArchReplay_*.t.sol
@@ -82,16 +82,16 @@ test-all:
 
 test-mock: pretest
 	$(MAKE) generate-mock
-	forge test -vv --match-contract UArchInterpret
+	forge test --use 0.8.21 -vv --match-contract UArchInterpret
 
 test-prod: pretest
 	$(MAKE) generate-prod
-	forge test -vv --no-match-contract "UArchInterpret|UArchReplay"
+	forge test --use 0.8.21 -vv --no-match-contract "UArchInterpret|UArchReplay"
 
 test-replay: pretest
 	$(MAKE) generate-prod
 	$(MAKE) generate-replay
-	forge test -vv --match-contract UArchReplay
+	forge test --use 0.8.21 -vv --match-contract UArchReplay
 
 generate-mock:
 	./helper_scripts/generate_AccessLogs.sh mock
