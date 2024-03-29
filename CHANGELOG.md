@@ -6,8 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.1] - 2024-03-29
+### Changed
+- Updated machine-emulator version to v0.16.1
+- Locked Solc version used with forge
+
 ## [0.10.0] - 2024-02-09
-### Added 
+### Added
 - Support for uarch reset
 
 ### Changed
@@ -71,7 +76,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [0.2.0]
 - [0.1.0]
 
-[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.10.1...HEAD
+[0.10.1]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.10.1
 [0.10.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.10.0
 [0.9.3]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.9.3
 [0.9.2]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.9.2

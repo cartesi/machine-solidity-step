@@ -1,6 +1,6 @@
 {
     "name": "@cartesi/machine-solidity-step",
-    "version": "0.9.3",
+    "version": "0.10.1",
     "description": "Machine Solidity UArch Interpret",
     "repository": {
         "type": "git",
