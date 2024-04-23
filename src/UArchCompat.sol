@@ -230,4 +230,13 @@ library UArchCompat {
     {
         return v >> (count & 0x1f);
     }
+
+    function throwRuntimeError(
+        AccessLogs.Context memory, /* a */
+        string memory text
+    ) internal pure {
+        revert(text);
+    }
+
+    function putChar(AccessLogs.Context memory a, uint8 c) internal pure {}
 }

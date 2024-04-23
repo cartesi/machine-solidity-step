@@ -36,22 +36,23 @@ contract UArchReplay_@X@_Test is Test {
     uint256 constant siblingsLength = 61;
 
     struct Entry {
+        string binaryFilename;
         string finalRootHash;
         string initialRootHash;
-        string path;
+        string logFilename;
         bool proof;
         uint256 proofsFrequency;
         uint256 steps;
     }
 
     struct RawAccess {
-        uint256 position;
+        uint256 addressAccess;
         string hash;
-        uint256 log2Size;
-        string readHash;
-        string[] rawSiblings;
-        string accessType;
-        string val;
+        uint256 log2_size;
+        string read_hash;
+        string[] sibling_hashes;
+        string typeAccess;
+        string value;
     }
 
     function testReplay_@X@() public {
@@ -66,18 +67,18 @@ contract UArchReplay_@X@_Test is Test {
 
         for (uint256 i = 0; i < catalog.length; i++) {
             if (
-                keccak256(abi.encodePacked(catalog[i].path))
+                keccak256(abi.encodePacked(catalog[i].logFilename))
                     != keccak256(abi.encodePacked("@PATH@"))
             ) {
                 continue;
             }
-            console.log("Replaying file %s ...", catalog[i].path);
+            console.log("Replaying log file %s ...", catalog[i].logFilename);
             require(
                 catalog[i].proofsFrequency == 1, "require proof in every step"
             );
 
             string memory rj =
-                loadJsonLog(string.concat(JSON_PATH, catalog[i].path));
+                loadJsonLog(string.concat(JSON_PATH, catalog[i].logFilename));
 
             bytes32 initialRootHash =
                 vm.parseBytes32(string.concat("0x", catalog[i].initialRootHash));
@@ -140,23 +141,23 @@ contract UArchReplay_@X@_Test is Test {
 
         for (uint256 i = 0; i < arrayLength; i++) {
             if (
-                keccak256(abi.encodePacked(rawAccesses[i].accessType))
+                keccak256(abi.encodePacked(rawAccesses[i].typeAccess))
                     == keccak256(abi.encodePacked("read"))
             ) {
                 bytes8 word = bytes8(
-                    vm.parseBytes(string.concat("0x", rawAccesses[i].val))
+                    vm.parseBytes(string.concat("0x", rawAccesses[i].value))
                 );
                 buffer.writeBytes8(word);
             }
 
             buffer.writeBytes32(
-                vm.parseBytes32(string.concat("0x", rawAccesses[i].readHash))
+                vm.parseBytes32(string.concat("0x", rawAccesses[i].read_hash))
             );
 
             for (uint256 j = 0; j < siblingsLength; j++) {
                 buffer.writeBytes32(
                     vm.parseBytes32(
-                        string.concat("0x", rawAccesses[i].rawSiblings[j])
+                        string.concat("0x", rawAccesses[i].sibling_hashes[j])
                     )
                 );
             }

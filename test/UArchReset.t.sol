@@ -33,14 +33,15 @@ contract UArchReset_Test is Test {
     // configure the tests
     string constant JSON_PATH = "./test/uarch-log/";
     string constant CATALOG_PATH = "catalog.json";
-    string constant RESET_PATH = "uarch-reset.json";
+    string constant RESET_PATH = "uarch-reset-steps.json";
 
     uint256 constant siblingsLength = 42;
 
     struct Entry {
+        string binaryFilename;
         string finalRootHash;
         string initialRootHash;
-        string path;
+        string logFilename;
         bool proof;
         uint256 proofsFrequency;
         uint256 steps;
@@ -69,12 +70,12 @@ contract UArchReset_Test is Test {
 
         for (uint256 i = 0; i < catalog.length; i++) {
             if (
-                keccak256(abi.encodePacked(catalog[i].path))
+                keccak256(abi.encodePacked(catalog[i].logFilename))
                     != keccak256(abi.encodePacked("uarch-reset-steps.json"))
             ) {
                 continue;
             }
-            console.log("Replaying file %s ...", catalog[i].path);
+            console.log("Replaying log file %s ...", catalog[i].logFilename);
             require(
                 catalog[i].proofsFrequency == 1, "require proof in every step"
             );

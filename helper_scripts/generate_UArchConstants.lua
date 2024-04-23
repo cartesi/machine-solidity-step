@@ -26,5 +26,7 @@ out:write('    uint64 constant UARCH_RAM_LENGTH = 0x' .. hex(cartesi.UARCH_RAM_L
 out:write('    uint64 constant RESET_POSITION = 0x' .. hex(cartesi.UARCH_STATE_START_ADDRESS) .. ';\n')
 out:write('    uint8 constant RESET_ALIGNED_SIZE = ' .. cartesi.UARCH_STATE_LOG2_SIZE .. ';\n')
 out:write('    bytes32 constant PRESTINE_STATE = 0x' .. hexstring(cartesi.UARCH_PRISTINE_STATE_HASH) .. ';\n')
+out:write('    uint64 constant UARCH_ECALL_FN_HALT = ' .. cartesi.UARCH_ECALL_FN_HALT .. ';\n')
+out:write('    uint64 constant UARCH_ECALL_FN_PUTCHAR = ' .. cartesi.UARCH_ECALL_FN_PUTCHAR .. ';\n')
 
 out:close()
