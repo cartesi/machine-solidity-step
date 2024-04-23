@@ -3,7 +3,7 @@ TEST_DIR := test
 DOWNLOADDIR := downloads
 SRC_DIR := src
 
-EMULATOR_VERSION ?= v0.16.1
+EMULATOR_VERSION ?= v0.17.0
 
 TESTS_DATA_FILE ?= cartesi-machine-tests-data-$(EMULATOR_VERSION).deb
 TESTS_DATA_DOWNLOAD_URL := https://github.com/cartesi/machine-emulator/releases/download/$(EMULATOR_VERSION)/$(TESTS_DATA_FILE)
@@ -17,6 +17,7 @@ LOG_TEST_DIR := $(TEST_DIR)/uarch-log
 
 DOWNLOADFILES := $(TESTS_DATA_DOWNLOAD_FILEPATH) $(LOG_DOWNLOAD_FILEPATH)
 GENERATEDFILES := $(SRC_DIR)/*.sol
+DEPDIRS = $(TESTS_DATA_DIR) $(LOG_TEST_DIR)
 
 help:
 	@echo 'Cleaning targets:'
@@ -36,59 +37,31 @@ help:
 	@echo '  test-prod                  - test production code'
 	@echo '  test-replay                - test log files'
 
-$(TESTS_DATA_DOWNLOAD_FILEPATH):
-	@mkdir -p $(DOWNLOADDIR)
-	@wget -nc $(TESTS_DATA_DOWNLOAD_URL) -P $(DOWNLOADDIR)
-
-$(LOG_DOWNLOAD_FILEPATH):
-	@mkdir -p $(DOWNLOADDIR)
-	@wget -nc $(LOG_DOWNLOAD_URL) -P $(DOWNLOADDIR)
 
 all: build test-all
 
-build: generate-step generate-reset generate-constants
-	forge build --use 0.8.21
+build: generate-step generate-reset generate-constants generate-prod
+	forge build  --use 0.8.21
 
 clean:
-	rm -rf src/AccessLogs.sol test/UArchReplay_*.t.sol
-	rm -rf $(TESTS_DATA_DIR) $(LOG_TEST_DIR) $(DOWNLOADDIR)
+	rm -rf test/UArchReplay_*.t.sol
+	rm -rf $(DEPDIRS) $(DOWNLOADDIR)
 	forge clean
-
-shasum-download: $(DOWNLOADFILES)
-	shasum -a 256 $^ > $@
-
-shasum-generated: $(GENERATEDFILES)
-	shasum -a 256 $^ > $@
-
-checksum-download: $(DOWNLOADFILES)
-	@shasum -ca 256 shasum-download
-
-checksum-mock:
-	@shasum -ca 256 shasum-mock
-
-checksum-prod:
-	@shasum -ca 256 shasum-prod
-
-pretest: checksum-download
-	mkdir -p $(TESTS_DATA_DIR) $(LOG_TEST_DIR)
-	ar p $(TESTS_DATA_DOWNLOAD_FILEPATH) data.tar.xz | tar -xJf - --strip-components=7 -C $(TESTS_DATA_DIR) ./usr/share/cartesi-machine/tests/data/uarch
-	tar -xzf $(LOG_DOWNLOAD_FILEPATH) --strip-components=1 -C $(LOG_TEST_DIR)
-	rm -f $(TESTS_DATA_DIR)/*.dump $(TESTS_DATA_DIR)/*.elf
 
 test-all:
 	$(MAKE) test-mock
-	$(MAKE) test-prod
 	$(MAKE) test-replay
+	$(MAKE) test-prod
 
-test-mock: pretest
+test-mock: dep
 	$(MAKE) generate-mock
 	forge test --use 0.8.21 -vv --match-contract UArchInterpret
 
-test-prod: pretest
+test-prod: dep
 	$(MAKE) generate-prod
 	forge test --use 0.8.21 -vv --no-match-contract "UArchInterpret|UArchReplay|UArchReset"
 
-test-replay: pretest
+test-replay: dep
 	$(MAKE) generate-prod
 	$(MAKE) generate-replay
 	forge test --use 0.8.21 -vv --match-contract "UArchReplay|UArchReset"
@@ -96,12 +69,10 @@ test-replay: pretest
 generate-mock:
 	./helper_scripts/generate_AccessLogs.sh mock
 	$(MAKE) fmt
-	$(MAKE) checksum-mock
 
 generate-prod:
 	./helper_scripts/generate_AccessLogs.sh prod
 	$(MAKE) fmt
-	$(MAKE) checksum-prod
 
 generate-replay:
 	./helper_scripts/generate_ReplayTests.sh
@@ -119,7 +90,33 @@ generate-reset: $(EMULATOR_DIR)/src/uarch-reset-state.cpp
 fmt:
 	forge fmt src test
 
+
+download: $(DOWNLOADDIR)
+
+dep: $(DEPDIRS)
+
+$(DOWNLOADDIR):
+	@mkdir -p $(DOWNLOADDIR)
+	@wget -nc $(TESTS_DATA_DOWNLOAD_URL) -P $(DOWNLOADDIR)
+	@wget -nc $(LOG_DOWNLOAD_URL) -P $(DOWNLOADDIR)
+	$(MAKE) checksum-download
+
+shasum-download: 
+	shasum -a 256 $(DOWNLOADFILES) > shasum-download
+
+checksum-download:
+	@shasum -ca 256 shasum-download
+
+$(TESTS_DATA_DIR): | download
+	@mkdir -p $(TESTS_DATA_DIR)
+	@ar p $(TESTS_DATA_DOWNLOAD_FILEPATH) data.tar.xz | tar -xJf - --strip-components=7 -C $(TESTS_DATA_DIR) ./usr/share/cartesi-machine/tests/data/uarch
+	@rm -f $(TESTS_DATA_DIR)/*.dump $(TESTS_DATA_DIR)/*.elf
+
+$(LOG_TEST_DIR): | download
+	@mkdir -p $(LOG_TEST_DIR)
+	@tar -xzf $(LOG_DOWNLOAD_FILEPATH) --strip-components=1 -C $(LOG_TEST_DIR)
+
 submodules:
 	git submodule update --init --recursive
 
-.PHONY: help all build clean checksum-download checksum-mock checksum-prod fmt generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay generate-constants generate-reset
+.PHONY: help all build clean checksum-download shasum-download fmt generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay generate-constants generate-reset

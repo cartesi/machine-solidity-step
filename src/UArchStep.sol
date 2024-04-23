@@ -993,7 +993,7 @@ library UArchStep {
         return advancePc(a, pc);
     }
 
-    function executeFENCE(AccessLogs.Context memory a, uint32, uint64 pc)
+    function executeFENCE(AccessLogs.Context memory a, uint64 pc)
         private
         pure
     {
@@ -1041,6 +1041,26 @@ library UArchStep {
         uint64 rs2val = UArchCompat.readX(a, rs2);
         writeUint64(a, UArchCompat.uint64AddInt32(rs1val, imm), rs2val);
         return advancePc(a, pc);
+    }
+
+    function executeECALL(AccessLogs.Context memory a, uint64 pc)
+        private
+        pure
+    {
+        uint64 fn = UArchCompat.readX(a, 17); // a7 contains the function number
+        if (fn == UArchConstants.UARCH_ECALL_FN_HALT) {
+            return UArchCompat.setHaltFlag(a);
+        } else if (fn == UArchConstants.UARCH_ECALL_FN_PUTCHAR) {
+            uint64 character = UArchCompat.readX(a, 16); // a6 contains the character to print
+            UArchCompat.putChar(a, uint8(character));
+        } else {
+            UArchCompat.throwRuntimeError(a, "unsupported ecall function");
+        }
+        return advancePc(a, pc);
+    }
+
+    function executeEBREAK(AccessLogs.Context memory a) private pure {
+        UArchCompat.throwRuntimeError(a, "uarch aborted");
     }
 
     /// \brief Returns true if the opcode field of an instruction matches the provided argument
@@ -1198,9 +1218,13 @@ library UArchStep {
         } else if (insnMatchOpcodeFunct3(insn, 0x13, 0x2)) {
             return executeSLTI(a, insn, pc);
         } else if (insnMatchOpcodeFunct3(insn, 0xf, 0x0)) {
-            return executeFENCE(a, insn, pc);
+            return executeFENCE(a, pc);
+        } else if (insn == uint32(0x73)) {
+            return executeECALL(a, pc);
+        } else if (insn == uint32(0x100073)) {
+            return executeEBREAK(a);
         }
-        revert("illegal instruction");
+        UArchCompat.throwRuntimeError(a, "illegal instruction");
     }
 
     function step(AccessLogs.Context memory a)
@@ -1227,11 +1251,11 @@ library UArchStep {
         return UArchStepStatus.Success;
     }
 
-    // Explicit instantiation for uarch_step_state_access
+    // Explicit instantiation for uarch_state_access
 
-    // Explicit instantiation for uarch_record_step_state_access
+    // Explicit instantiation for uarch_record_state_access
 
-    // Explicit instantiation for uarch_replay_step_state_access
+    // Explicit instantiation for uarch_replay_state_access
 
     // END OF AUTO-GENERATED CODE
 }

@@ -14,6 +14,16 @@
 // limitations under the License.
 //
 
+//:#ifdef test
+// ***********************************************************
+// WARNING: DO NOT COMMIT THIS FILE!
+// This is the mock version of AccessLogs.
+// It is intended solely for running the test binary programs.
+// To generate production AccessLogs, run:
+// make generate-prod
+// ***********************************************************
+//:#endif
+
 //:#include macro.pp
 /// DEV_COMMENT(templates/AccessLogs.sol.template)
 
