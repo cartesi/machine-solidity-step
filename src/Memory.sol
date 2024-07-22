@@ -90,7 +90,7 @@ library Memory {
         pure
         returns (Stride)
     {
-        return strideFromPhysicalAddress(startAddress, alignedSizeFromLog2(0));
+        return strideFromPhysicalAddress(startAddress, alignedSizeFromLog2(2));
     }
 
     function validateStrideLength(Stride stride, AlignedSize alignedSize)

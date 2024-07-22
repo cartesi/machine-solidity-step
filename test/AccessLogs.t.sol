@@ -33,16 +33,21 @@ contract AccessLogsTest is Test {
     uint64 position = 800;
 
     function setUp() public {
-        // the hashes include 62 elements, the hash at access position, and other 61 siblings
+        // the hashes include 60 elements, the hash at access position, and other 59 siblings
         // hash value at access position
         hashes.push(
-            keccak256(abi.encodePacked(bytes8(0x0000000000000001).swapEndian()))
+            keccak256(
+                abi.encodePacked(
+                    makeLeaf(bytes8(0x0000000000000001).swapEndian(), position)
+                )
+            )
         );
+
         // direct sibling hash
         hashes.push(
             keccak256(abi.encodePacked(bytes8(0x0000000000000002).swapEndian()))
         );
-        for (uint256 i = 2; i < 62; i++) {
+        for (uint256 i = 2; i < 60; i++) {
             hashes.push(
                 keccak256(abi.encodePacked(hashes[i - 1], hashes[i - 2]))
             );
@@ -66,7 +71,7 @@ contract AccessLogsTest is Test {
         );
 
         vm.expectRevert("Read region root doesn't match");
-        accessLogs.readWord((position + 8).toPhysicalAddress());
+        accessLogs.readWord((position + 32).toPhysicalAddress());
     }
 
     function testReadWordValue() public {
@@ -80,9 +85,9 @@ contract AccessLogsTest is Test {
     }
 
     function testWriteWord() public view {
-        AccessLogs.Context memory accessLogs =
-            AccessLogs.Context(rootHash, writeBufferFromHashes());
         uint64 valueWritten = 1;
+        AccessLogs.Context memory accessLogs =
+            AccessLogs.Context(rootHash, writeBufferFromHashes(valueWritten));
 
         // // write should succeed
         accessLogs.writeWord(position.toPhysicalAddress(), valueWritten);
@@ -92,21 +97,21 @@ contract AccessLogsTest is Test {
         hashes[0] = (
             keccak256(abi.encodePacked(bytes8(0x0000000000000002).swapEndian()))
         );
-        AccessLogs.Context memory accessLogs =
-            AccessLogs.Context(rootHash, writeBufferFromHashes());
         uint64 valueWritten = 1;
+        AccessLogs.Context memory accessLogs =
+            AccessLogs.Context(rootHash, writeBufferFromHashes(valueWritten));
 
         vm.expectRevert("Write region root doesn't match");
         accessLogs.writeWord(position.toPhysicalAddress(), valueWritten);
     }
 
     function testWriteWordRootPosition() public {
-        AccessLogs.Context memory accessLogs =
-            AccessLogs.Context(rootHash, writeBufferFromHashes());
         uint64 valueWritten = 1;
+        AccessLogs.Context memory accessLogs =
+            AccessLogs.Context(rootHash, writeBufferFromHashes(valueWritten));
 
         vm.expectRevert("Write region root doesn't match");
-        accessLogs.writeWord((position + 8).toPhysicalAddress(), valueWritten);
+        accessLogs.writeWord((position + 32).toPhysicalAddress(), valueWritten);
     }
 
     function testEndianSwap() public {
@@ -124,16 +129,28 @@ contract AccessLogsTest is Test {
         );
     }
 
+    function makeLeaf(bytes8 word, uint64 wordPosition)
+        public
+        view
+        returns (bytes32)
+    {
+        uint64 leafPosition = wordPosition & ~uint64(31);
+        uint64 offset = position - leafPosition;
+        bytes32 b32 = bytes32(word) << (offset << 3);
+        return b32;
+    }
+
     function readBufferFromHashes(bytes8 word)
         private
         view
         returns (Buffer.Context memory)
     {
+        bytes32 b32 = makeLeaf(word, position);
         Buffer.Context memory buffer =
-            Buffer.Context(new bytes((62 << 5) + 8), 0);
-        buffer.writeBytes8(word);
+            Buffer.Context(new bytes((59 << 5) + 32 + 32), 0);
+        buffer.writeBytes32(b32); // leaf containing the readd word
 
-        for (uint256 i = 0; i < 62; i++) {
+        for (uint256 i = 0; i < 60; i++) {
             buffer.writeBytes32(hashes[i]);
         }
 
@@ -143,27 +160,19 @@ contract AccessLogsTest is Test {
         return buffer;
     }
 
-    function writeBufferFromHashes()
+    function writeBufferFromHashes(uint64 valueWritten)
         private
         view
         returns (Buffer.Context memory)
     {
-        Buffer.Context memory buffer = Buffer.Context(new bytes(62 << 5), 0);
-
-        for (uint256 i = 0; i < 62; i++) {
-            buffer.writeBytes32(hashes[i]);
-        }
-
-        // reset offset for replay
-        buffer.offset = 0;
-
-        return buffer;
+        bytes8 b8 = bytes8(valueWritten);
+        return readBufferFromHashes(b8.swapEndian());
     }
 
     function rootFromHashes(bytes32 drive) private view returns (bytes32) {
-        Buffer.Context memory buffer = Buffer.Context(new bytes(61 << 5), 0);
+        Buffer.Context memory buffer = Buffer.Context(new bytes(59 << 5), 0);
 
-        for (uint256 i = 0; i < 61; i++) {
+        for (uint256 i = 0; i < 59; i++) {
             buffer.writeBytes32(hashes[i + 1]);
         }
 
@@ -172,7 +181,7 @@ contract AccessLogsTest is Test {
         (bytes32 root,) = buffer.peekRoot(
             Memory.regionFromStride(
                 Memory.strideFromWordAddress(position.toPhysicalAddress()),
-                Memory.alignedSizeFromLog2(0)
+                Memory.alignedSizeFromLog2(2)
             ),
             drive
         );

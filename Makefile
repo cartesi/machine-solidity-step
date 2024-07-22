@@ -3,7 +3,7 @@ TEST_DIR := test
 DOWNLOADDIR := downloads
 SRC_DIR := src
 
-EMULATOR_VERSION ?= v0.17.0
+EMULATOR_VERSION ?= v0.18.0-test4
 
 TESTS_DATA_FILE ?= cartesi-machine-tests-data-$(EMULATOR_VERSION).deb
 TESTS_DATA_DOWNLOAD_URL := https://github.com/cartesi/machine-emulator/releases/download/$(EMULATOR_VERSION)/$(TESTS_DATA_FILE)

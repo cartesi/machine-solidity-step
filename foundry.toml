@@ -5,6 +5,7 @@ libs = ["node_modules", "lib"]
 gas_reports = ["*"]
 memory_limit = 11149934592
 fs_permissions = [{access = "read", path = "./test/uarch-log/"}, {access = "read", path = "./test/uarch-bin/"}]
+gas_limit = "18446744073709551615"
 
 [fmt]
 line_length = 80

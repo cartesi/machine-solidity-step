@@ -7,3 +7,4 @@ test/uarch-log
 *.log
 test/UArchReplay_*.t.sol
 .DS_Store
+tests/*

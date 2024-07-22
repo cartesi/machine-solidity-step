@@ -74,9 +74,8 @@ library AccessLogs {
 
     //:#ifndef test
 
-    /// @dev bytes buffer layouts differently for `readWord` and `writeWord`,
-    ///`readWord` [8 bytes as uint64 value, 32 bytes as drive hash, 61 * 32 bytes as sibling proofs]
-    ///`writeWord` [32 bytes as old drive hash, 32 * 61 bytes as sibling proofs]
+    /// @dev bytes buffer layout is the same for `readWord` and `writeWord`,
+    /// [32 bytes as read data], [59 * 32 bytes as sibling hashes]
 
     //
     // Read methods
@@ -99,7 +98,7 @@ library AccessLogs {
         returns (bytes32)
     {
         Memory.Region memory r =
-            Memory.regionFromStride(readStride, Memory.alignedSizeFromLog2(0));
+            Memory.regionFromStride(readStride, Memory.alignedSizeFromLog2(2));
         return readRegion(a, r);
     }
 
@@ -107,13 +106,18 @@ library AccessLogs {
         AccessLogs.Context memory a,
         Memory.PhysicalAddress readAddress
     ) internal pure returns (uint64) {
-        bytes8 b8 = a.buffer.consumeBytes8();
-        bytes32 valHash = keccak256(abi.encodePacked(b8));
+        bytes32 readData = a.buffer.consumeBytes32();
+        bytes32 valHash = keccak256(abi.encodePacked(readData));
+        Memory.PhysicalAddress leafAddress =  Memory.PhysicalAddress.wrap(Memory.PhysicalAddress.unwrap(readAddress) & ~uint64(31));
+        uint64 offset = Memory.PhysicalAddress.unwrap(readAddress) - Memory.PhysicalAddress.unwrap(leafAddress);
+        
+        bytes8 readValue = bytes8(readData << (offset << 3));
+
         bytes32 expectedValHash =
-            readLeaf(a, Memory.strideFromWordAddress(readAddress));
+            readLeaf(a, Memory.strideFromWordAddress(leafAddress));
 
         require(valHash == expectedValHash, "Read value doesn't match");
-        return machineWordToSolidityUint64(b8);
+        return machineWordToSolidityUint64(readValue);
     }
 
     //
@@ -142,7 +146,7 @@ library AccessLogs {
         bytes32 newHash
     ) internal pure {
         Memory.Region memory r =
-            Memory.regionFromStride(writeStride, Memory.alignedSizeFromLog2(0));
+            Memory.regionFromStride(writeStride, Memory.alignedSizeFromLog2(2));
         writeRegion(a, r, newHash);
     }
 
@@ -151,10 +155,18 @@ library AccessLogs {
         Memory.PhysicalAddress writeAddress,
         uint64 newValue
     ) internal pure {
+        bytes32 writtenData = a.buffer.consumeBytes32();
+        Memory.PhysicalAddress leafAddress =  Memory.PhysicalAddress.wrap(Memory.PhysicalAddress.unwrap(writeAddress) & ~uint64(31));
+        uint64 offset = Memory.PhysicalAddress.unwrap(writeAddress) - Memory.PhysicalAddress.unwrap(leafAddress);
+        
+        uint64 expectedNewValue = machineWordToSolidityUint64(bytes8(writtenData << (offset << 3)));
+
+        require(newValue == expectedNewValue, "Access log value does not contain the expected written value");
+
         writeLeaf(
             a,
-            Memory.strideFromWordAddress(writeAddress),
-            keccak256(abi.encodePacked(solidityUint64ToMachineWord(newValue)))
+            Memory.strideFromWordAddress(leafAddress),
+            keccak256(abi.encodePacked(writtenData))
         );
     }
 

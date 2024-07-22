@@ -33,7 +33,7 @@ contract UArchReplay_@X@_Test is Test {
     string constant JSON_PATH = "./test/uarch-log/";
     string constant CATALOG_PATH = "catalog.json";
 
-    uint256 constant siblingsLength = 61;
+    uint256 constant siblingsLength = 59;
 
     struct Entry {
         string binaryFilename;
@@ -84,12 +84,10 @@ contract UArchReplay_@X@_Test is Test {
                 vm.parseBytes32(string.concat("0x", catalog[i].initialRootHash));
             bytes32 finalRootHash =
                 vm.parseBytes32(string.concat("0x", catalog[i].finalRootHash));
-
             for (uint256 j = 0; j < catalog[i].steps; j++) {
                 console.log("Replaying step %d ...", j);
                 // load json log
                 loadBufferFromRawJson(buffer, rj, j);
-
                 AccessLogs.Context memory accessLogs = AccessLogs.Context(
                     initialRootHash, Buffer.Context(buffer, 0)
                 );
@@ -140,20 +138,14 @@ contract UArchReplay_@X@_Test is Test {
         Buffer.Context memory buffer = Buffer.Context(data, 0);
 
         for (uint256 i = 0; i < arrayLength; i++) {
-            if (
-                keccak256(abi.encodePacked(rawAccesses[i].typeAccess))
-                    == keccak256(abi.encodePacked("read"))
-            ) {
-                bytes8 word = bytes8(
-                    vm.parseBytes(string.concat("0x", rawAccesses[i].value))
-                );
-                buffer.writeBytes8(word);
-            }
+            bytes32 word = bytes32(
+                vm.parseBytes32(string.concat("0x", rawAccesses[i].value))
+            );
+            buffer.writeBytes32(word);
 
             buffer.writeBytes32(
                 vm.parseBytes32(string.concat("0x", rawAccesses[i].read_hash))
             );
-
             for (uint256 j = 0; j < siblingsLength; j++) {
                 buffer.writeBytes32(
                     vm.parseBytes32(
