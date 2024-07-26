@@ -24,6 +24,7 @@ import "./UArchConstants.sol";
 library AccessLogs {
     using Buffer for Buffer.Context;
     using Memory for Memory.AlignedSize;
+    using Memory for Memory.PhysicalAddress;
 
     struct Context {
         bytes32 currentRootHash;
@@ -85,7 +86,7 @@ library AccessLogs {
         returns (bytes32)
     {
         Memory.Region memory r =
-            Memory.regionFromStride(readStride, Memory.alignedSizeFromLog2(2));
+            Memory.regionFromStride(readStride, Memory.alignedSizeFromLog2(0));
         return readRegion(a, r);
     }
 
@@ -95,16 +96,13 @@ library AccessLogs {
     ) internal pure returns (uint64) {
         bytes32 readData = a.buffer.consumeBytes32();
         bytes32 valHash = keccak256(abi.encodePacked(readData));
-        Memory.PhysicalAddress leafAddress = Memory.PhysicalAddress.wrap(
-            Memory.PhysicalAddress.unwrap(readAddress) & ~uint64(31)
-        );
-        uint64 offset = Memory.PhysicalAddress.unwrap(readAddress)
-            - Memory.PhysicalAddress.unwrap(leafAddress);
 
-        bytes8 readValue = bytes8(readData << (offset << 3));
+        (Memory.PhysicalAddress leafAddress, uint64 offset) =
+            readAddress.truncateToLeaf();
+        bytes8 readValue = getBytes8FromBytes32AtOffset(readData, offset);
 
         bytes32 expectedValHash =
-            readLeaf(a, Memory.strideFromWordAddress(leafAddress));
+            readLeaf(a, Memory.strideFromLeafAddress(leafAddress));
 
         require(valHash == expectedValHash, "Read value doesn't match");
         return machineWordToSolidityUint64(readValue);
@@ -136,7 +134,7 @@ library AccessLogs {
         bytes32 newHash
     ) internal pure {
         Memory.Region memory r =
-            Memory.regionFromStride(writeStride, Memory.alignedSizeFromLog2(2));
+            Memory.regionFromStride(writeStride, Memory.alignedSizeFromLog2(0));
         writeRegion(a, r, newHash);
     }
 
@@ -146,14 +144,12 @@ library AccessLogs {
         uint64 newValue
     ) internal pure {
         bytes32 writtenData = a.buffer.consumeBytes32();
-        Memory.PhysicalAddress leafAddress = Memory.PhysicalAddress.wrap(
-            Memory.PhysicalAddress.unwrap(writeAddress) & ~uint64(31)
-        );
-        uint64 offset = Memory.PhysicalAddress.unwrap(writeAddress)
-            - Memory.PhysicalAddress.unwrap(leafAddress);
 
-        uint64 expectedNewValue =
-            machineWordToSolidityUint64(bytes8(writtenData << (offset << 3)));
+        (Memory.PhysicalAddress leafAddress, uint64 offset) =
+            writeAddress.truncateToLeaf();
+        uint64 expectedNewValue = machineWordToSolidityUint64(
+            getBytes8FromBytes32AtOffset(writtenData, offset)
+        );
 
         require(
             newValue == expectedNewValue,
@@ -162,8 +158,16 @@ library AccessLogs {
 
         writeLeaf(
             a,
-            Memory.strideFromWordAddress(leafAddress),
+            Memory.strideFromLeafAddress(leafAddress),
             keccak256(abi.encodePacked(writtenData))
         );
+    }
+
+    function getBytes8FromBytes32AtOffset(bytes32 source, uint64 offset)
+        internal
+        pure
+        returns (bytes8)
+    {
+        return bytes8(source << (offset << Memory.LOG2_WORD));
     }
 }

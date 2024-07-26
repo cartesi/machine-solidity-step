@@ -147,8 +147,8 @@ contract AccessLogsTest is Test {
     {
         bytes32 b32 = makeLeaf(word, position);
         Buffer.Context memory buffer =
-            Buffer.Context(new bytes((59 << 5) + 32 + 32), 0);
-        buffer.writeBytes32(b32); // leaf containing the readd word
+            Buffer.Context(new bytes((59 << Memory.LOG2_LEAF) + 32 + 32), 0);
+        buffer.writeBytes32(b32); // leaf containing the read word
 
         for (uint256 i = 0; i < 60; i++) {
             buffer.writeBytes32(hashes[i]);
@@ -170,7 +170,8 @@ contract AccessLogsTest is Test {
     }
 
     function rootFromHashes(bytes32 drive) private view returns (bytes32) {
-        Buffer.Context memory buffer = Buffer.Context(new bytes(59 << 5), 0);
+        Buffer.Context memory buffer =
+            Buffer.Context(new bytes(59 << Memory.LOG2_LEAF), 0);
 
         for (uint256 i = 0; i < 59; i++) {
             buffer.writeBytes32(hashes[i + 1]);
@@ -180,8 +181,8 @@ contract AccessLogsTest is Test {
         buffer.offset = 0;
         (bytes32 root,) = buffer.peekRoot(
             Memory.regionFromStride(
-                Memory.strideFromWordAddress(position.toPhysicalAddress()),
-                Memory.alignedSizeFromLog2(2)
+                Memory.strideFromLeafAddress(position.toPhysicalAddress()),
+                Memory.alignedSizeFromLog2(0)
             ),
             drive
         );
