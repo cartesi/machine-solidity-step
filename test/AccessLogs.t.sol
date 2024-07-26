@@ -180,8 +180,8 @@ contract AccessLogsTest is Test {
         buffer.offset = 0;
         (bytes32 root,) = buffer.peekRoot(
             Memory.regionFromStride(
-                Memory.strideFromWordAddress(position.toPhysicalAddress()),
-                Memory.alignedSizeFromLog2(2)
+                Memory.strideFromLeafAddress(position.toPhysicalAddress()),
+                Memory.alignedSizeFromLog2(0)
             ),
             drive
         );

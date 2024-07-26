@@ -81,10 +81,13 @@ library Buffer {
     ) internal pure returns (bytes32, uint8) {
         // require that multiplier makes sense!
         uint8 logOfSize = region.alignedSize.log2();
-        require(logOfSize <= LOG2RANGE, "Cannot be bigger than the tree itself");
+        require(
+            logOfSize <= Memory.LOG2_MAX_SIZE,
+            "Cannot be bigger than the tree itself"
+        );
 
         uint64 stride = Memory.Stride.unwrap(region.stride);
-        uint8 nodesCount = LOG2RANGE - logOfSize;
+        uint8 nodesCount = Memory.LOG2_MAX_SIZE - logOfSize;
 
         for (uint64 i = 0; i < nodesCount; i++) {
             Buffer.Context memory siblings =
@@ -112,8 +115,6 @@ library Buffer {
 
         return root;
     }
-
-    uint8 constant LOG2RANGE = 61;
 
     function isEven(uint64 x) private pure returns (bool) {
         return x % 2 == 0;

@@ -104,7 +104,7 @@ library UArchCompat {
             Memory.regionFromPhysicalAddress(
                 UArchConstants.RESET_POSITION.toPhysicalAddress(),
                 Memory.alignedSizeFromLog2(
-                    UArchConstants.RESET_ALIGNED_SIZE - 3
+                    UArchConstants.RESET_ALIGNED_SIZE - Memory.LOG2_LEAF
                 )
             ),
             UArchConstants.PRESTINE_STATE

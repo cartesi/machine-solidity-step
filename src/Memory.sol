@@ -18,8 +18,8 @@ pragma solidity ^0.8.0;
 library Memory {
     // Specifies a memory region and it's merkle hash.
     // The size is given in the number of leaves in the tree,
-    // and therefore are word-sized.
-    // This means a `alignedSize` specifies a region the size of a word.
+    // and therefore are leaf-sized.
+    // This means a `alignedSize` specifies a region the size of a leaf.
     // The address has to be aligned to a power-of-two.
     // By using an stride, we can guarantee that the address is aligned.
     // The address is given by `stride * (1 << log2s)`.
@@ -45,7 +45,7 @@ library Memory {
         return regionFromStride(stride, alignedSize);
     }
 
-    function regionFromWordAddress(PhysicalAddress startAddress)
+    function regionFromLeafAddress(PhysicalAddress startAddress)
         internal
         pure
         returns (Region memory)
@@ -53,7 +53,6 @@ library Memory {
         return regionFromPhysicalAddress(startAddress, alignedSizeFromLog2(0));
     }
 
-    //
     // Stride and PhysicalAddress
     //
     // When using memory address and a size in merkle trees to refer to a memory region,
@@ -74,23 +73,26 @@ library Memory {
     ) internal pure returns (Stride) {
         uint64 s = alignedSize.size();
         uint64 addr = PhysicalAddress.unwrap(startAddress);
-        // assert memory address is word-aligned (8-byte long)
-        assert(addr & 7 == 0);
-        uint64 position = PhysicalAddress.unwrap(startAddress) >> 3;
+
+        // assert memory address is leaf-aligned (32-byte long)
+        assert(addr & LEAF_MASK == 0);
+        uint64 position = PhysicalAddress.unwrap(startAddress) >> LOG2_LEAF;
+
         // assert position and size are aligned
         // position has to be a multiple of size
         // equivalent to: size = 2^a, position = 2^b, position = size * 2^c, where c >= 0
         assert(((s - 1) & position) == 0);
         uint64 stride = position / s;
+
         return Stride.wrap(stride);
     }
 
-    function strideFromWordAddress(PhysicalAddress startAddress)
+    function strideFromLeafAddress(PhysicalAddress startAddress)
         internal
         pure
         returns (Stride)
     {
-        return strideFromPhysicalAddress(startAddress, alignedSizeFromLog2(2));
+        return strideFromPhysicalAddress(startAddress, alignedSizeFromLog2(0));
     }
 
     function validateStrideLength(Stride stride, AlignedSize alignedSize)
@@ -101,7 +103,6 @@ library Memory {
         assert(Stride.unwrap(stride) * s < MAX_STRIDE);
     }
 
-    //
     // AlignedSize
     //
     // The size is given in the number of leaves in the tree,
@@ -109,7 +110,10 @@ library Memory {
 
     type AlignedSize is uint8;
 
-    uint64 constant MAX_SIZE = (1 << 61);
+    uint8 constant LOG2_LEAF = 5;
+    uint8 constant LOG2_MAX_SIZE = 64 - LOG2_LEAF;
+    uint64 constant LEAF_MASK = uint64(1 << LOG2_LEAF) - 1;
+    uint64 constant MAX_SIZE = uint64(1 << LOG2_MAX_SIZE);
 
     using Memory for AlignedSize;
 
@@ -133,5 +137,23 @@ library Memory {
         returns (PhysicalAddress)
     {
         return PhysicalAddress.wrap(uint64Address);
+    }
+
+    function truncateToLeaf(PhysicalAddress addr)
+        internal
+        pure
+        returns (PhysicalAddress)
+    {
+        uint64 r = Memory.PhysicalAddress.unwrap(addr) & ~LEAF_MASK;
+        return Memory.PhysicalAddress.wrap(r);
+    }
+
+    function minus(PhysicalAddress lhs, PhysicalAddress rhs)
+        internal
+        pure
+        returns (uint64)
+    {
+        return Memory.PhysicalAddress.unwrap(lhs)
+            - Memory.PhysicalAddress.unwrap(rhs);
     }
 }
