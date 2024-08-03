@@ -62,9 +62,8 @@ library AccessLogs {
         return end2;
     }
 
-    /// @dev bytes buffer layout is the different for `readWord` and `writeWord`,
-    /// readWord: [32 bytes as read data], [59 * 32 bytes as sibling hashes]
-    /// writeWord [32 bytes as written hash] [32 bytes as read data], [59 * 32 bytes as sibling hashes]
+    /// @dev bytes buffer layout is the same for `readWord` and `writeWord`,
+    /// [32 bytes as read data], [59 * 32 bytes as sibling hashes]
 
     //
     // Read methods
@@ -96,18 +95,17 @@ library AccessLogs {
         Memory.PhysicalAddress readAddress
     ) internal pure returns (uint64) {
         bytes32 readData = a.buffer.consumeBytes32();
-        bytes32 computedReadHash = keccak256(abi.encodePacked(readData));
-        (Memory.PhysicalAddress leafAddress, uint64 wordOffset) =
-            readAddress.truncateToLeaf();
-        bytes8 word = getBytes8FromBytes32AtOffset(readData, wordOffset);
+        bytes32 valHash = keccak256(abi.encodePacked(readData));
 
-        bytes32 expectedReadHash =
+        (Memory.PhysicalAddress leafAddress, uint64 offset) =
+            readAddress.truncateToLeaf();
+        bytes8 readValue = getBytes8FromBytes32AtOffset(readData, offset);
+
+        bytes32 expectedValHash =
             readLeaf(a, Memory.strideFromLeafAddress(leafAddress));
 
-        require(
-            computedReadHash == expectedReadHash, "Read value doesn't match"
-        );
-        return machineWordToSolidityUint64(word);
+        require(valHash == expectedValHash, "Read value doesn't match");
+        return machineWordToSolidityUint64(readValue);
     }
 
     //
@@ -145,28 +143,27 @@ library AccessLogs {
         Memory.PhysicalAddress writeAddress,
         uint64 newValue
     ) internal pure {
-        (Memory.PhysicalAddress leafAddress, uint64 wordOffset) =
+        (Memory.PhysicalAddress leafAddress, uint64 offset) =
             writeAddress.truncateToLeaf();
-        bytes32 writtenHash = a.buffer.consumeBytes32();
-        bytes32 readData = a.buffer.consumeBytes32();
 
-        // check if read data hashes to the same read hash that is next in the buffer
-        bytes32 computedReadHash = keccak256(abi.encodePacked(readData));
-        bytes32 loggedReadHash = a.buffer.peekBytes32();
-        require(
-            computedReadHash == loggedReadHash,
-            "logged and computed read hashes mismatch"
+        Memory.Region memory region = Memory.regionFromStride(
+            Memory.strideFromLeafAddress(leafAddress),
+            Memory.alignedSizeFromLog2(0)
         );
 
-        // construct the written data by patching the verified read data
-        bytes32 computedWrittenData = setBytes8InBytes32AtOffset(
-            readData, wordOffset, solidityUint64ToMachineWord(newValue)
-        );
-        bytes32 computedWrittenHash =
-            keccak256(abi.encodePacked(computedWrittenData));
-        require(computedWrittenHash == writtenHash, "Written hash mismatch");
+        bytes32 oldLeaf = a.buffer.consumeBytes32();
+        (bytes32 rootHash,) =
+            a.buffer.peekRoot(region, keccak256(abi.encodePacked(oldLeaf)));
 
-        writeLeaf(a, Memory.strideFromLeafAddress(leafAddress), writtenHash);
+        require(a.currentRootHash == rootHash, "Write word root doesn't match");
+
+        bytes32 newLeaf = setBytes8ToBytes32AtOffset(
+            solidityUint64ToMachineWord(newValue), oldLeaf, offset
+        );
+
+        bytes32 newRootHash =
+            a.buffer.getRoot(region, keccak256(abi.encodePacked(newLeaf)));
+        a.currentRootHash = newRootHash;
     }
 
     function getBytes8FromBytes32AtOffset(bytes32 source, uint64 offset)
@@ -177,16 +174,17 @@ library AccessLogs {
         return bytes8(source << (offset << Memory.LOG2_WORD));
     }
 
-    function setBytes8InBytes32AtOffset(
-        bytes32 target,
-        uint64 offset,
-        bytes8 source
+    function setBytes8ToBytes32AtOffset(
+        bytes8 word,
+        bytes32 leaf,
+        uint64 offset
     ) internal pure returns (bytes32) {
-        bytes32 erase_mask = bytes32(bytes8(type(uint64).max));
-        erase_mask = erase_mask >> (offset << Memory.LOG2_WORD);
-        erase_mask = ~erase_mask;
-        bytes32 result = target & erase_mask;
-        result = result | (bytes32(source) >> (offset << Memory.LOG2_WORD));
-        return result;
+        uint256 wordOffset = offset << Memory.LOG2_WORD;
+        bytes32 toWrite = bytes32(word) >> wordOffset;
+
+        bytes32 wordMask = bytes32(~bytes8(0));
+        bytes32 mask = ~(wordMask >> wordOffset);
+
+        return (leaf & mask) | toWrite;
     }
 }
