@@ -47,12 +47,12 @@ contract UArchReplay_@X@_Test is Test {
 
     struct RawAccess {
         uint256 addressAccess;
-        string hash;
         uint256 log2_size;
         string read_hash;
+        string read_value;
         string[] sibling_hashes;
         string typeAccess;
-        string value;
+        string written_hash;
     }
 
     function testReplay_@X@() public {
@@ -91,7 +91,6 @@ contract UArchReplay_@X@_Test is Test {
                 AccessLogs.Context memory accessLogs = AccessLogs.Context(
                     initialRootHash, Buffer.Context(buffer, 0)
                 );
-
                 // initialRootHash is passed and will be updated through out the step
                 UArchStep.step(accessLogs);
                 initialRootHash = accessLogs.currentRootHash;
@@ -138,8 +137,16 @@ contract UArchReplay_@X@_Test is Test {
         Buffer.Context memory buffer = Buffer.Context(data, 0);
 
         for (uint256 i = 0; i < arrayLength; i++) {
+            if (
+                keccak256(abi.encodePacked(rawAccesses[i].typeAccess))
+                    == keccak256(abi.encodePacked("write"))
+            ) {
+                buffer.writeBytes32(
+                    vm.parseBytes32(string.concat("0x", rawAccesses[i].written_hash))
+                );
+            }
             bytes32 word = bytes32(
-                vm.parseBytes32(string.concat("0x", rawAccesses[i].value))
+                vm.parseBytes32(string.concat("0x", rawAccesses[i].read_value))
             );
             buffer.writeBytes32(word);
 

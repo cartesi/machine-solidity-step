@@ -48,12 +48,13 @@ contract UArchReset_Test is Test {
     }
 
     struct RawAccess {
-        uint256 position;
-        string hash;
-        uint256 log2Size;
-        string readHash;
-        string[] rawSiblings;
-        string accessType;
+        uint256 addressAccess;
+        uint256 log2_size;
+        string read_hash;
+        string read_value;
+        string[] sibling_hashes;
+        string typeAccess;
+        string written_hash;
     }
     // string val; omit val because it's not used in reset
 
@@ -137,30 +138,30 @@ contract UArchReset_Test is Test {
         Buffer.Context memory buffer = Buffer.Context(data, 0);
 
         if (
-            keccak256(abi.encodePacked(rawAccesses[0].accessType))
+            keccak256(abi.encodePacked(rawAccesses[0].typeAccess))
                 == keccak256(abi.encodePacked("read"))
         ) {
             revert("should'nt have read access in reset");
         }
         assertEq(
-            rawAccesses[0].position,
+            rawAccesses[0].addressAccess,
             UArchConstants.RESET_POSITION,
             "position should be (0x400000)"
         );
         assertEq(
-            rawAccesses[0].log2Size,
+            rawAccesses[0].log2_size,
             UArchConstants.RESET_ALIGNED_SIZE,
             "log2Size should be 22"
         );
 
         buffer.writeBytes32(
-            vm.parseBytes32(string.concat("0x", rawAccesses[0].readHash))
+            vm.parseBytes32(string.concat("0x", rawAccesses[0].read_hash))
         );
 
         for (uint256 i = 0; i < siblingsLength; i++) {
             buffer.writeBytes32(
                 vm.parseBytes32(
-                    string.concat("0x", rawAccesses[0].rawSiblings[i])
+                    string.concat("0x", rawAccesses[0].sibling_hashes[i])
                 )
             );
         }

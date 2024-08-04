@@ -18,9 +18,9 @@ let last=total-end+1
 h=`head -n $start $TEMPLATE_FILE`
 t=`tail -n -$last $TEMPLATE_FILE`
 
-# cd $EMULATOR_DIR
-# make build-emulator-image
-# cd -
+cd $EMULATOR_DIR
+make build-emulator-image
+cd -
 
 # run the Lua script that instantiates the cartesi module and
 # outputs the uarch constants values
