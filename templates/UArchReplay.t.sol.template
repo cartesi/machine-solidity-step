@@ -137,22 +137,16 @@ contract UArchReplay_@X@_Test is Test {
         Buffer.Context memory buffer = Buffer.Context(data, 0);
 
         for (uint256 i = 0; i < arrayLength; i++) {
-            if (
-                keccak256(abi.encodePacked(rawAccesses[i].typeAccess))
-                    == keccak256(abi.encodePacked("write"))
-            ) {
+            if (rawAccesses[i].log2_size == 3) {
                 buffer.writeBytes32(
-                    vm.parseBytes32(string.concat("0x", rawAccesses[i].written_hash))
+                    vm.parseBytes32(string.concat("0x", rawAccesses[i].read_value))
+                );
+            } else {
+                buffer.writeBytes32(
+                    vm.parseBytes32(string.concat("0x", rawAccesses[i].read_hash))
                 );
             }
-            bytes32 word = bytes32(
-                vm.parseBytes32(string.concat("0x", rawAccesses[i].read_value))
-            );
-            buffer.writeBytes32(word);
 
-            buffer.writeBytes32(
-                vm.parseBytes32(string.concat("0x", rawAccesses[i].read_hash))
-            );
             for (uint256 j = 0; j < siblingsLength; j++) {
                 buffer.writeBytes32(
                     vm.parseBytes32(

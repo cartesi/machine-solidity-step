@@ -94,18 +94,21 @@ library AccessLogs {
         AccessLogs.Context memory a,
         Memory.PhysicalAddress readAddress
     ) internal pure returns (uint64) {
-        bytes32 readData = a.buffer.consumeBytes32();
-        bytes32 valHash = keccak256(abi.encodePacked(readData));
-
-        (Memory.PhysicalAddress leafAddress, uint64 offset) =
+        (Memory.PhysicalAddress leafAddress, uint64 wordOffset) =
             readAddress.truncateToLeaf();
-        bytes8 readValue = getBytes8FromBytes32AtOffset(readData, offset);
 
-        bytes32 expectedValHash =
-            readLeaf(a, Memory.strideFromLeafAddress(leafAddress));
+        Memory.Region memory region = Memory.regionFromStride(
+            Memory.strideFromLeafAddress(leafAddress),
+            Memory.alignedSizeFromLog2(0)
+        );
 
-        require(valHash == expectedValHash, "Read value doesn't match");
-        return machineWordToSolidityUint64(readValue);
+        bytes32 leaf = a.buffer.consumeBytes32();
+        bytes32 rootHash =
+            a.buffer.getRoot(region, keccak256(abi.encodePacked(leaf)));
+        require(a.currentRootHash == rootHash, "Read word root doesn't match");
+
+        bytes8 word = getBytes8FromBytes32AtOffset(leaf, wordOffset);
+        return machineWordToSolidityUint64(word);
     }
 
     //
@@ -143,7 +146,7 @@ library AccessLogs {
         Memory.PhysicalAddress writeAddress,
         uint64 newValue
     ) internal pure {
-        (Memory.PhysicalAddress leafAddress, uint64 offset) =
+        (Memory.PhysicalAddress leafAddress, uint64 wordOffset) =
             writeAddress.truncateToLeaf();
 
         Memory.Region memory region = Memory.regionFromStride(
@@ -158,7 +161,7 @@ library AccessLogs {
         require(a.currentRootHash == rootHash, "Write word root doesn't match");
 
         bytes32 newLeaf = setBytes8ToBytes32AtOffset(
-            solidityUint64ToMachineWord(newValue), oldLeaf, offset
+            solidityUint64ToMachineWord(newValue), oldLeaf, wordOffset
         );
 
         bytes32 newRootHash =
