@@ -43,6 +43,13 @@ contract AccessLogsTest is Test {
         }
     }
 
+    function verifyWord(bytes32 h, uint64 p, uint64 w) internal {
+        (Buffer.Context memory buffer,) =
+            makeReadBuffer(bytes8(w).swapEndian(), false);
+        AccessLogs.Context memory accessLogs = AccessLogs.Context(h, buffer);
+        assertEq(accessLogs.readWord(p.toPhysicalAddress()), w);
+    }
+
     function testReadWordHappyPath() public {
         (Buffer.Context memory buffer, bytes32 rootHash) = makeReadBuffer(
             bytes8(0x0000000000000001).swapEndian(),
@@ -62,7 +69,7 @@ contract AccessLogsTest is Test {
         );
         AccessLogs.Context memory accessLogs =
             AccessLogs.Context(rootHash, buffer);
-        vm.expectRevert("Read region root doesn't match");
+        vm.expectRevert("Read word root doesn't match");
         accessLogs.readWord((position + 32).toPhysicalAddress());
     }
 
@@ -75,67 +82,51 @@ contract AccessLogsTest is Test {
         AccessLogs.Context memory accessLogs =
             AccessLogs.Context(rootHash, buffer);
 
-        vm.expectRevert("Read value doesn't match");
+        vm.expectRevert("Read word root doesn't match");
         accessLogs.readWord(position.toPhysicalAddress());
     }
 
-    function testWriteWordHappyPath() public view {
-        uint64 wordWritten = 1;
+    function testWriteWordHappyPath() public {
+        uint64 wordWritten = 3;
         (Buffer.Context memory buffer, bytes32 rootHash) = makeWriteBuffer(
             initialReadLeaf,
-            bytes8(wordWritten).swapEndian(), /* withReadValueMismatch= */
-            false,
-            /* withWrittenValueMismatch= */
+            // bytes8(wordWritten).swapEndian(),
+            /* withReadValueMismatch= */
             false
         );
         AccessLogs.Context memory accessLogs =
             AccessLogs.Context(rootHash, buffer);
         accessLogs.writeWord(position.toPhysicalAddress(), wordWritten);
+        verifyWord(accessLogs.currentRootHash, position, wordWritten);
     }
 
     function testWriteWordBadRegion() public {
-        uint64 wordWritten = 1;
+        uint64 wordWritten = 3;
         (Buffer.Context memory buffer, bytes32 rootHash) = makeWriteBuffer(
             initialReadLeaf,
-            bytes8(wordWritten).swapEndian(), /* withReadValueMismatch= */
-            false,
-            /* withWrittenValueMismatch= */
+            /* withReadValueMismatch= */
             false
         );
         AccessLogs.Context memory accessLogs =
             AccessLogs.Context(rootHash, buffer);
-        vm.expectRevert("Write region root doesn't match");
+        vm.expectRevert("Write word root doesn't match");
         accessLogs.writeWord((position + 32).toPhysicalAddress(), wordWritten);
+        verifyWord(accessLogs.currentRootHash, position, wordWritten);
     }
 
     function testWriteWordReadMismatch() public {
-        uint64 wordWritten = 1;
+        uint64 wordWritten = 3;
         (Buffer.Context memory buffer, bytes32 rootHash) = makeWriteBuffer(
             initialReadLeaf,
-            bytes8(wordWritten).swapEndian(), /* withReadValueMismatch= */
-            true,
-            /* withWrittenValueMismatch= */
-            false
-        );
-        AccessLogs.Context memory accessLogs =
-            AccessLogs.Context(rootHash, buffer);
-        vm.expectRevert("logged and computed read hashes mismatch");
-        accessLogs.writeWord(position.toPhysicalAddress(), wordWritten);
-    }
-
-    function testWriteWordWriteMismatch() public {
-        uint64 wordWritten = 1;
-        (Buffer.Context memory buffer, bytes32 rootHash) = makeWriteBuffer(
-            initialReadLeaf,
-            bytes8(wordWritten).swapEndian(), /* withReadValueMismatch= */
-            false,
-            /* withWrittenValueMismatch= */
+            // bytes8(wordWritten).swapEndian(),
+            /* withReadValueMismatch= */
             true
         );
         AccessLogs.Context memory accessLogs =
             AccessLogs.Context(rootHash, buffer);
-        vm.expectRevert("Written hash mismatch");
+        vm.expectRevert("Write word root doesn't match");
         accessLogs.writeWord(position.toPhysicalAddress(), wordWritten);
+        verifyWord(accessLogs.currentRootHash, position, wordWritten);
     }
 
     function testEndianSwap() public {
@@ -196,7 +187,7 @@ contract AccessLogsTest is Test {
         if (withReadValueMismatch) {
             readHash = keccak256(abi.encodePacked(bytes8(readHash)));
         }
-        buffer.writeBytes32(readHash);
+
         for (uint256 i = 0; i < 59; i++) {
             buffer.writeBytes32(siblingHashes[i]);
         }
@@ -206,21 +197,14 @@ contract AccessLogsTest is Test {
         return (buffer, rootHash);
     }
 
-    function makeWriteBuffer(
-        bytes32 readLeaf,
-        bytes8 writtenWord,
-        bool withReadValueMismatch,
-        bool withWrittenValueMismatch
-    ) private view returns (Buffer.Context memory, bytes32) {
+    function makeWriteBuffer(bytes32 readLeaf, bool withReadValueMismatch)
+        private
+        view
+        returns (Buffer.Context memory, bytes32)
+    {
         Buffer.Context memory buffer = Buffer.Context(
             new bytes((59 << Memory.LOG2_LEAF) + 32 + 32 + 32), 0
         );
-        bytes32 writtenLeaf = patchLeaf(readLeaf, writtenWord, position);
-        bytes32 writtenHash = keccak256(abi.encodePacked(writtenLeaf));
-        if (withWrittenValueMismatch) {
-            writtenHash = keccak256(abi.encodePacked(bytes8(writtenHash)));
-        }
-        buffer.writeBytes32(writtenHash);
 
         // write leaf data, leaf hash and sibling hashes
         buffer.writeBytes32(readLeaf);
@@ -228,7 +212,7 @@ contract AccessLogsTest is Test {
         if (withReadValueMismatch) {
             readHash = keccak256(abi.encodePacked(bytes8(readHash)));
         }
-        buffer.writeBytes32(readHash);
+
         for (uint256 i = 0; i < 59; i++) {
             buffer.writeBytes32(siblingHashes[i]);
         }
