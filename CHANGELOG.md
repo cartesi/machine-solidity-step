@@ -6,12 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.0] - 2024-08-12
+### Changed
+- Updated machine-emulator version to v0.18.0
+- Refactored AccessLogs.writeWord()
+- Increased tree leaf log2 size to 5
+
 ## [0.11.0] - 2024-04-24
 ### Added
 - Added `uarch-reset` test
 - Added support to ECALL and EBREAK
 
 ### Changed
+- Updated machine-emulator version to v0.17.0
 - Restructured code as `templates` and `src`
 - Updated reset test and constants
 - Updated foundry version and shasum files
@@ -89,7 +96,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [0.2.0]
 - [0.1.0]
 
-[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.12.0
 [0.11.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.11.0
 [0.10.1]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.10.1
 [0.10.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.10.0
