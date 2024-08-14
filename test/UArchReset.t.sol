@@ -141,7 +141,7 @@ contract UArchReset_Test is Test {
             keccak256(abi.encodePacked(rawAccesses[0].typeAccess))
                 == keccak256(abi.encodePacked("read"))
         ) {
-            revert("should'nt have read access in reset");
+            revert("shouldn't have read access in reset");
         }
         assertEq(
             rawAccesses[0].addressAccess,
