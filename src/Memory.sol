@@ -59,7 +59,7 @@ library Memory {
     // the address/size have to be aligned to a power-of-two.
     // By using stride instead, we can guarantee that the address is aligned.
     // The address is given by `stride * (1 << log2s)`.
-    // For convenince, we give both address and stride types, as well as conversion methods
+    // For convenience, we give both address and stride types, as well as conversion methods
 
     type Stride is uint64;
 
