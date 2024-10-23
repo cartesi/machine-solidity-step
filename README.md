@@ -28,7 +28,7 @@ The `UArchExecuteInsn` contract consists of the machine instruction logic, such 
 
 ## Compatibility Layer
 
-The `UArchCompat` contract is taking care of all the differences in the two implementations. Ranging from programming languages (Cpp versus Solidity) to architectural differences (RISC-V versus EVM).
+The `EmulatorCompat` contract is taking care of all the differences in the two implementations. Ranging from programming languages (Cpp versus Solidity) to architectural differences (RISC-V versus EVM).
 
 ## Getting Started
 

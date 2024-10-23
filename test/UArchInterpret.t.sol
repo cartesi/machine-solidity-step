@@ -18,7 +18,7 @@ import "forge-std/Test.sol";
 import "forge-std/StdJson.sol";
 
 import "./UArchInterpret.sol";
-import "src/UArchConstants.sol";
+import "src/EmulatorConstants.sol";
 
 pragma solidity ^0.8.0;
 
@@ -66,23 +66,23 @@ contract UArchInterpretTest is Test {
                 string.concat(BINARIES_PATH, catalog[i].binaryFilename)
             );
             // init pc to ram start
-            UArchCompat.writePc(a, UArchConstants.UARCH_RAM_START_ADDRESS);
+            EmulatorCompat.writePc(a, EmulatorConstants.UARCH_RAM_START_ADDRESS);
             // init cycle to 0
-            UArchCompat.writeCycle(a, 0);
+            EmulatorCompat.writeCycle(a, 0);
 
             UArchInterpret.interpret(a);
 
-            uint64 x = UArchCompat.readX(a, TEST_STATUS_X);
+            uint64 x = EmulatorCompat.readX(a, TEST_STATUS_X);
             assertEq(
                 // read test result from the register
                 x,
                 uint64(TEST_SUCEEDED)
             );
 
-            bool halt = UArchCompat.readHaltFlag(a);
+            bool halt = EmulatorCompat.readHaltFlag(a);
             assertTrue(halt, "machine should halt");
 
-            uint64 cycle = UArchCompat.readCycle(a);
+            uint64 cycle = EmulatorCompat.readCycle(a);
             assertEq(cycle, catalog[i].steps, "cycle values should match");
         }
     }
@@ -91,9 +91,9 @@ contract UArchInterpretTest is Test {
         AccessLogs.Context memory a = newAccessLogsContext();
 
         // init pc to ram start
-        UArchCompat.writePc(a, UArchConstants.UARCH_RAM_START_ADDRESS);
+        EmulatorCompat.writePc(a, EmulatorConstants.UARCH_RAM_START_ADDRESS);
         // init cycle to uint64.max
-        UArchCompat.writeCycle(a, type(uint64).max);
+        EmulatorCompat.writeCycle(a, type(uint64).max);
 
         UArchStep.UArchStepStatus status = UArchInterpret.interpret(a);
 
@@ -102,7 +102,7 @@ contract UArchInterpretTest is Test {
             "machine should be cycle overflow"
         );
 
-        uint64 cycle = UArchCompat.readCycle(a);
+        uint64 cycle = EmulatorCompat.readCycle(a);
         assertEq(
             cycle,
             type(uint64).max,
@@ -110,9 +110,9 @@ contract UArchInterpretTest is Test {
         );
 
         // reset cycle to 0
-        UArchCompat.writeCycle(a, 0);
+        EmulatorCompat.writeCycle(a, 0);
         // set machine to halt
-        UArchCompat.setHaltFlag(a);
+        EmulatorCompat.setHaltFlag(a);
 
         status = UArchInterpret.interpret(a);
 
@@ -126,9 +126,9 @@ contract UArchInterpretTest is Test {
         AccessLogs.Context memory a = newAccessLogsContext();
 
         // init pc to ram start
-        UArchCompat.writePc(a, UArchConstants.UARCH_RAM_START_ADDRESS);
+        EmulatorCompat.writePc(a, EmulatorConstants.UARCH_RAM_START_ADDRESS);
         // init cycle to 0
-        UArchCompat.writeCycle(a, 0);
+        EmulatorCompat.writeCycle(a, 0);
 
         vm.expectRevert("illegal instruction");
         UArchInterpret.interpret(a);

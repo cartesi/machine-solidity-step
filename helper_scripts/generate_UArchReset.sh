@@ -8,11 +8,11 @@ CPP_RESET_PATH=${EMULATOR_DIR}"/src/uarch-reset-state.cpp"
 
 TEMPLATE_FILE="./templates/UArchReset.sol.template"
 TARGET_FILE="src/UArchReset.sol"
-COMPAT_FILE="src/UArchCompat.sol"
+COMPAT_FILE="src/EmulatorCompat.sol"
 KEYWORD_START="START OF AUTO-GENERATED CODE"
 KEYWORD_END="END OF AUTO-GENERATED CODE"
 
-# get function names from UArchCompat.sol
+# get function names from EmulatorCompat.sol
 COMPAT_FNS=`cat $COMPAT_FILE | grep -o "function [^(]*(" | $SED "s/function//g" | $SED "s/(//g"`
 COMPAT_FNS=`echo $COMPAT_FNS | $SED -E "s/( |\n)/|/g"`
 
@@ -33,7 +33,7 @@ pattern="namespace cartesi \{(.*)\}"
 cpp_src=`echo "${BASH_REMATCH[1]}" \
         | $SED "/Explicit instantiatio/d" \
         | $SED "/template/d" \
-        | $SED -E "s/($COMPAT_FNS)/UArchCompat.\1/g" \
+        | $SED -E "s/($COMPAT_FNS)/EmulatorCompat.\1/g" \
         | $SED "s/void uarch_reset_state(UarchState &a) {/function reset(AccessLogs.Context memory a) internal pure {/"`
 
 # compose the solidity file from all components
