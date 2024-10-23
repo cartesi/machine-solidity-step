@@ -14,16 +14,17 @@
 // limitations under the License.
 //
 
-/// @title UArchReset
-/// @notice Reset microarchitecture to pristine state
+/// @title EmulatorConstants
+/// @notice Contains constants for machine emulator
 //:#include macro.pp
-/// DEV_COMMENT(templates/UArchReset.sol.template)
+/// DEV_COMMENT(templates/EmulatorConstants.sol.template)
 
 pragma solidity ^0.8.0;
 
-import "./EmulatorCompat.sol";
-
-library UArchReset {
+library EmulatorConstants {
     // START OF AUTO-GENERATED CODE
     // END OF AUTO-GENERATED CODE
+
+    uint32 constant IFLAGS_Y_SHIFT = 1;
+    uint64 constant LOG2_CYCLES_TO_RESET = 10;
 }

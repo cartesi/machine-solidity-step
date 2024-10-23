@@ -4,8 +4,8 @@ set -e
 
 EMULATOR_DIR=${EMULATOR_DIR:-"../emulator"}
 
-TEMPLATE_FILE="./templates/UArchConstants.sol.template"
-TARGET_FILE="src/UArchConstants.sol"
+TEMPLATE_FILE="./templates/EmulatorConstants.sol.template"
+TARGET_FILE="src/EmulatorConstants.sol"
 KEYWORD_START="START OF AUTO-GENERATED CODE"
 KEYWORD_END="END OF AUTO-GENERATED CODE"
 
@@ -28,7 +28,7 @@ constants=$(docker run --rm \
    -v`pwd`:/opt/cartesi/machine-solidity-step  \
    -w /opt/cartesi/machine-solidity-step \
    cartesi/machine-emulator:devel \
-   /opt/cartesi/machine-solidity-step/helper_scripts/generate_UArchConstants.lua)
+   /opt/cartesi/machine-solidity-step/helper_scripts/generate_EmulatorConstants.lua)
 
 # compose the solidity file from all components
 echo -e "$h" "\n\n$constants" > $TARGET_FILE

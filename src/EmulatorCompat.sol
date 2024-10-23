@@ -15,10 +15,10 @@
 //
 pragma solidity ^0.8.0;
 
-import "./UArchConstants.sol";
+import "./EmulatorConstants.sol";
 import "./AccessLogs.sol";
 
-library UArchCompat {
+library EmulatorCompat {
     using AccessLogs for AccessLogs.Context;
     using Memory for uint64;
 
@@ -27,7 +27,9 @@ library UArchCompat {
         pure
         returns (uint64)
     {
-        return a.readWord(UArchConstants.UCYCLE.toPhysicalAddress());
+        return a.readWord(
+            EmulatorConstants.UARCH_CYCLE_ADDRESS.toPhysicalAddress()
+        );
     }
 
     function readHaltFlag(AccessLogs.Context memory a)
@@ -35,7 +37,11 @@ library UArchCompat {
         pure
         returns (bool)
     {
-        return (a.readWord(UArchConstants.UHALT.toPhysicalAddress()) != 0);
+        return (
+            a.readWord(
+                EmulatorConstants.UARCH_HALT_FLAG_ADDRESS.toPhysicalAddress()
+            ) != 0
+        );
     }
 
     function readPc(AccessLogs.Context memory a)
@@ -43,7 +49,8 @@ library UArchCompat {
         pure
         returns (uint64)
     {
-        return a.readWord(UArchConstants.UPC.toPhysicalAddress());
+        return
+            a.readWord(EmulatorConstants.UARCH_PC_ADDRESS.toPhysicalAddress());
     }
 
     function readWord(AccessLogs.Context memory a, uint64 paddr)
@@ -61,7 +68,7 @@ library UArchCompat {
     {
         uint64 paddr;
         unchecked {
-            paddr = UArchConstants.UX0 + (index << 3);
+            paddr = EmulatorConstants.UARCH_X0_ADDRESS + (index << 3);
         }
         return a.readWord(paddr.toPhysicalAddress());
     }
@@ -70,15 +77,19 @@ library UArchCompat {
         internal
         pure
     {
-        a.writeWord(UArchConstants.UCYCLE.toPhysicalAddress(), val);
+        a.writeWord(
+            EmulatorConstants.UARCH_CYCLE_ADDRESS.toPhysicalAddress(), val
+        );
     }
 
     function setHaltFlag(AccessLogs.Context memory a) internal pure {
-        a.writeWord(UArchConstants.UHALT.toPhysicalAddress(), 1);
+        a.writeWord(
+            EmulatorConstants.UARCH_HALT_FLAG_ADDRESS.toPhysicalAddress(), 1
+        );
     }
 
     function writePc(AccessLogs.Context memory a, uint64 val) internal pure {
-        a.writeWord(UArchConstants.UPC.toPhysicalAddress(), val);
+        a.writeWord(EmulatorConstants.UARCH_PC_ADDRESS.toPhysicalAddress(), val);
     }
 
     function writeWord(AccessLogs.Context memory a, uint64 paddr, uint64 val)
@@ -94,7 +105,7 @@ library UArchCompat {
     {
         uint64 paddr;
         unchecked {
-            paddr = UArchConstants.UX0 + (index << 3);
+            paddr = EmulatorConstants.UARCH_X0_ADDRESS + (index << 3);
         }
         a.writeWord(paddr.toPhysicalAddress(), val);
     }
@@ -102,12 +113,44 @@ library UArchCompat {
     function resetState(AccessLogs.Context memory a) internal pure {
         a.writeRegion(
             Memory.regionFromPhysicalAddress(
-                UArchConstants.RESET_POSITION.toPhysicalAddress(),
+                EmulatorConstants.UARCH_STATE_START_ADDRESS.toPhysicalAddress(),
                 Memory.alignedSizeFromLog2(
-                    UArchConstants.RESET_ALIGNED_SIZE - Memory.LOG2_LEAF
+                    EmulatorConstants.UARCH_STATE_LOG2_SIZE - Memory.LOG2_LEAF
                 )
             ),
-            UArchConstants.PRESTINE_STATE
+            EmulatorConstants.UARCH_PRISTINE_STATE_HASH
+        );
+    }
+
+    function readIflagsY(AccessLogs.Context memory a)
+        internal
+        pure
+        returns (bool)
+    {
+        uint64 iflags =
+            a.readWord(EmulatorConstants.IFLAGS_ADDRESS.toPhysicalAddress());
+        if (uint64ShiftRight(iflags, EmulatorConstants.IFLAGS_Y_SHIFT) & 1 == 0)
+        {
+            return false;
+        }
+        return true;
+    }
+
+    function resetIflagsY(AccessLogs.Context memory a) internal pure {
+        uint64 iflags =
+            a.readWord(EmulatorConstants.IFLAGS_ADDRESS.toPhysicalAddress());
+        iflags = iflags & ~uint64ShiftLeft(1, EmulatorConstants.IFLAGS_Y_SHIFT);
+        a.writeWord(
+            EmulatorConstants.IFLAGS_ADDRESS.toPhysicalAddress(), iflags
+        );
+    }
+
+    function writeHtifFromhost(AccessLogs.Context memory a, uint64 val)
+        internal
+        pure
+    {
+        a.writeWord(
+            EmulatorConstants.HTIF_FROMHOST_ADDRESS.toPhysicalAddress(), val
         );
     }
 
@@ -239,4 +282,14 @@ library UArchCompat {
     }
 
     function putChar(AccessLogs.Context memory a, uint8 c) internal pure {}
+
+    function uint32Log2(uint32 value) external pure returns (uint32) {
+        require(value > 0, "EmulatorCompat: log2(0) is undefined");
+        uint32 result = 0;
+        while (value > 1) {
+            value >>= 1;
+            result++;
+        }
+        return result;
+    }
 }

@@ -30,7 +30,7 @@
 pragma solidity ^0.8.0;
 
 import "./Buffer.sol";
-import "./UArchConstants.sol";
+import "./EmulatorConstants.sol";
 
 library AccessLogs {
     using Buffer for Buffer.Context;
@@ -135,7 +135,7 @@ library AccessLogs {
     ) internal pure {
         bytes32 oldDrive = a.buffer.consumeBytes32();
         (bytes32 rootHash,) = a.buffer.peekRoot(region, oldDrive);
-
+        
         require(
             a.currentRootHash == rootHash, "Write region root doesn't match"
         );
@@ -255,12 +255,12 @@ library AccessLogs {
         uint64 index;
         uint64 position = Memory.PhysicalAddress.unwrap(paddr);
         if (
-            position >= UArchConstants.UARCH_SHADOW_START_ADDRESS
-                && position <= UArchConstants.UARCH_SHADOW_START_ADDRESS + UArchConstants.UARCH_SHADOW_LENGTH
+            position >= EmulatorConstants.UARCH_SHADOW_START_ADDRESS
+                && position <= EmulatorConstants.UARCH_SHADOW_START_ADDRESS + EmulatorConstants.UARCH_SHADOW_LENGTH
         ) {
-            index = (position - UArchConstants.UARCH_SHADOW_START_ADDRESS);
-        } else if (position >= UArchConstants.UARCH_RAM_START_ADDRESS) {
-            index = (position - UArchConstants.UARCH_RAM_START_ADDRESS) + (35 << 3);
+            index = (position - EmulatorConstants.UARCH_SHADOW_START_ADDRESS);
+        } else if (position >= EmulatorConstants.UARCH_RAM_START_ADDRESS) {
+            index = (position - EmulatorConstants.UARCH_RAM_START_ADDRESS) + (35 << 3);
         } else {
             revert("invalid memory access");
         }

@@ -21,7 +21,7 @@
 
 pragma solidity ^0.8.0;
 
-import "./UArchCompat.sol";
+import "./EmulatorCompat.sol";
 
 library UArchStep {
     // START OF AUTO-GENERATED CODE
@@ -41,7 +41,7 @@ library UArchStep {
         returns (uint64)
     {
         require((paddr & 7) == 0, "misaligned readUint64 address");
-        return UArchCompat.readWord(a, paddr);
+        return EmulatorCompat.readWord(a, paddr);
     }
 
     function readUint32(AccessLogs.Context memory a, uint64 paddr)
@@ -52,9 +52,9 @@ library UArchStep {
         require((paddr & 3) == 0, "misaligned readUint32 address");
         uint64 palign = paddr & ~uint64(7);
         uint32 bitoffset =
-            UArchCompat.uint32ShiftLeft(uint32(paddr) & uint32(7), 3);
+            EmulatorCompat.uint32ShiftLeft(uint32(paddr) & uint32(7), 3);
         uint64 val64 = readUint64(a, palign);
-        return uint32(UArchCompat.uint64ShiftRight(val64, bitoffset));
+        return uint32(EmulatorCompat.uint64ShiftRight(val64, bitoffset));
     }
 
     function readUint16(AccessLogs.Context memory a, uint64 paddr)
@@ -65,9 +65,9 @@ library UArchStep {
         require((paddr & 1) == 0, "misaligned readUint16 address");
         uint64 palign = paddr & ~uint64(7);
         uint32 bitoffset =
-            UArchCompat.uint32ShiftLeft(uint32(paddr) & uint32(7), 3);
+            EmulatorCompat.uint32ShiftLeft(uint32(paddr) & uint32(7), 3);
         uint64 val64 = readUint64(a, palign);
-        return uint16(UArchCompat.uint64ShiftRight(val64, bitoffset));
+        return uint16(EmulatorCompat.uint64ShiftRight(val64, bitoffset));
     }
 
     function readUint8(AccessLogs.Context memory a, uint64 paddr)
@@ -77,9 +77,9 @@ library UArchStep {
     {
         uint64 palign = paddr & ~uint64(7);
         uint32 bitoffset =
-            UArchCompat.uint32ShiftLeft(uint32(paddr) & uint32(7), 3);
+            EmulatorCompat.uint32ShiftLeft(uint32(paddr) & uint32(7), 3);
         uint64 val64 = readUint64(a, palign);
-        return uint8(UArchCompat.uint64ShiftRight(val64, bitoffset));
+        return uint8(EmulatorCompat.uint64ShiftRight(val64, bitoffset));
     }
 
     function writeUint64(AccessLogs.Context memory a, uint64 paddr, uint64 val)
@@ -87,7 +87,7 @@ library UArchStep {
         pure
     {
         require((paddr & 7) == 0, "misaligned writeUint64 address");
-        UArchCompat.writeWord(a, paddr, val);
+        EmulatorCompat.writeWord(a, paddr, val);
     }
 
     /// \brief Copies bits from a uint64 word, starting at bit 0, to another uint64 word at the specified bit offset.
@@ -102,9 +102,9 @@ library UArchStep {
         returns (uint64)
     {
         require(offset + count <= 64, "copyBits count exceeds limit of 64");
-        uint64 eraseMask = UArchCompat.uint64ShiftLeft(1, count) - 1;
-        eraseMask = ~UArchCompat.uint64ShiftLeft(eraseMask, offset);
-        return UArchCompat.uint64ShiftLeft(from, offset) | (to & eraseMask);
+        uint64 eraseMask = EmulatorCompat.uint64ShiftLeft(1, count) - 1;
+        eraseMask = ~EmulatorCompat.uint64ShiftLeft(eraseMask, offset);
+        return EmulatorCompat.uint64ShiftLeft(from, offset) | (to & eraseMask);
     }
 
     function writeUint32(AccessLogs.Context memory a, uint64 paddr, uint32 val)
@@ -115,7 +115,7 @@ library UArchStep {
         uint64 palign = paddr & ~uint64(7);
 
         uint32 bitoffset =
-            UArchCompat.uint32ShiftLeft(uint32(paddr) & uint32(7), 3);
+            EmulatorCompat.uint32ShiftLeft(uint32(paddr) & uint32(7), 3);
         uint64 oldval64 = readUint64(a, palign);
         uint64 newval64 = copyBits(val, 32, oldval64, bitoffset);
         writeUint64(a, palign, newval64);
@@ -128,7 +128,7 @@ library UArchStep {
         require((paddr & 1) == 0, "misaligned writeUint16 address");
         uint64 palign = paddr & ~uint64(7);
         uint32 bitoffset =
-            UArchCompat.uint32ShiftLeft(uint32(paddr) & uint32(7), 3);
+            EmulatorCompat.uint32ShiftLeft(uint32(paddr) & uint32(7), 3);
         uint64 oldval64 = readUint64(a, palign);
         uint64 newval64 = copyBits(val, 16, oldval64, bitoffset);
         writeUint64(a, palign, newval64);
@@ -140,7 +140,7 @@ library UArchStep {
     {
         uint64 palign = paddr & ~uint64(7);
         uint32 bitoffset =
-            UArchCompat.uint32ShiftLeft(uint32(paddr) & uint32(7), 3);
+            EmulatorCompat.uint32ShiftLeft(uint32(paddr) & uint32(7), 3);
         uint64 oldval64 = readUint64(a, palign);
         uint64 newval64 = copyBits(val, 8, oldval64, bitoffset);
         writeUint64(a, palign, newval64);
@@ -150,61 +150,61 @@ library UArchStep {
 
     function operandRd(uint32 insn) private pure returns (uint8) {
         return uint8(
-            UArchCompat.uint32ShiftRight(
-                UArchCompat.uint32ShiftLeft(insn, 20), 27
+            EmulatorCompat.uint32ShiftRight(
+                EmulatorCompat.uint32ShiftLeft(insn, 20), 27
             )
         );
     }
 
     function operandRs1(uint32 insn) private pure returns (uint8) {
         return uint8(
-            UArchCompat.uint32ShiftRight(
-                UArchCompat.uint32ShiftLeft(insn, 12), 27
+            EmulatorCompat.uint32ShiftRight(
+                EmulatorCompat.uint32ShiftLeft(insn, 12), 27
             )
         );
     }
 
     function operandRs2(uint32 insn) private pure returns (uint8) {
         return uint8(
-            UArchCompat.uint32ShiftRight(
-                UArchCompat.uint32ShiftLeft(insn, 7), 27
+            EmulatorCompat.uint32ShiftRight(
+                EmulatorCompat.uint32ShiftLeft(insn, 7), 27
             )
         );
     }
 
     function operandImm12(uint32 insn) private pure returns (int32) {
-        return UArchCompat.int32ShiftRight(int32(insn), 20);
+        return EmulatorCompat.int32ShiftRight(int32(insn), 20);
     }
 
     function operandImm20(uint32 insn) private pure returns (int32) {
         return int32(
-            UArchCompat.uint32ShiftLeft(
-                UArchCompat.uint32ShiftRight(insn, 12), 12
+            EmulatorCompat.uint32ShiftLeft(
+                EmulatorCompat.uint32ShiftRight(insn, 12), 12
             )
         );
     }
 
     function operandJimm20(uint32 insn) private pure returns (int32) {
         int32 a = int32(
-            UArchCompat.uint32ShiftLeft(
-                uint32(UArchCompat.int32ShiftRight(int32(insn), 31)), 20
+            EmulatorCompat.uint32ShiftLeft(
+                uint32(EmulatorCompat.int32ShiftRight(int32(insn), 31)), 20
             )
         );
-        uint32 b = UArchCompat.uint32ShiftLeft(
-            UArchCompat.uint32ShiftRight(
-                UArchCompat.uint32ShiftLeft(insn, 1), 22
+        uint32 b = EmulatorCompat.uint32ShiftLeft(
+            EmulatorCompat.uint32ShiftRight(
+                EmulatorCompat.uint32ShiftLeft(insn, 1), 22
             ),
             1
         );
-        uint32 c = UArchCompat.uint32ShiftLeft(
-            UArchCompat.uint32ShiftRight(
-                UArchCompat.uint32ShiftLeft(insn, 11), 31
+        uint32 c = EmulatorCompat.uint32ShiftLeft(
+            EmulatorCompat.uint32ShiftRight(
+                EmulatorCompat.uint32ShiftLeft(insn, 11), 31
             ),
             11
         );
-        uint32 d = UArchCompat.uint32ShiftLeft(
-            UArchCompat.uint32ShiftRight(
-                UArchCompat.uint32ShiftLeft(insn, 12), 24
+        uint32 d = EmulatorCompat.uint32ShiftLeft(
+            EmulatorCompat.uint32ShiftRight(
+                EmulatorCompat.uint32ShiftLeft(insn, 12), 24
             ),
             12
         );
@@ -213,41 +213,41 @@ library UArchStep {
 
     function operandShamt5(uint32 insn) private pure returns (int32) {
         return int32(
-            UArchCompat.uint32ShiftRight(
-                UArchCompat.uint32ShiftLeft(insn, 7), 27
+            EmulatorCompat.uint32ShiftRight(
+                EmulatorCompat.uint32ShiftLeft(insn, 7), 27
             )
         );
     }
 
     function operandShamt6(uint32 insn) private pure returns (int32) {
         return int32(
-            UArchCompat.uint32ShiftRight(
-                UArchCompat.uint32ShiftLeft(insn, 6), 26
+            EmulatorCompat.uint32ShiftRight(
+                EmulatorCompat.uint32ShiftLeft(insn, 6), 26
             )
         );
     }
 
     function operandSbimm12(uint32 insn) private pure returns (int32) {
         int32 a = int32(
-            UArchCompat.uint32ShiftLeft(
-                uint32(UArchCompat.int32ShiftRight(int32(insn), 31)), 12
+            EmulatorCompat.uint32ShiftLeft(
+                uint32(EmulatorCompat.int32ShiftRight(int32(insn), 31)), 12
             )
         );
-        uint32 b = UArchCompat.uint32ShiftLeft(
-            UArchCompat.uint32ShiftRight(
-                UArchCompat.uint32ShiftLeft(insn, 1), 26
+        uint32 b = EmulatorCompat.uint32ShiftLeft(
+            EmulatorCompat.uint32ShiftRight(
+                EmulatorCompat.uint32ShiftLeft(insn, 1), 26
             ),
             5
         );
-        uint32 c = UArchCompat.uint32ShiftLeft(
-            UArchCompat.uint32ShiftRight(
-                UArchCompat.uint32ShiftLeft(insn, 20), 28
+        uint32 c = EmulatorCompat.uint32ShiftLeft(
+            EmulatorCompat.uint32ShiftRight(
+                EmulatorCompat.uint32ShiftLeft(insn, 20), 28
             ),
             1
         );
-        uint32 d = UArchCompat.uint32ShiftLeft(
-            UArchCompat.uint32ShiftRight(
-                UArchCompat.uint32ShiftLeft(insn, 24), 31
+        uint32 d = EmulatorCompat.uint32ShiftLeft(
+            EmulatorCompat.uint32ShiftRight(
+                EmulatorCompat.uint32ShiftLeft(insn, 24), 31
             ),
             11
         );
@@ -256,11 +256,11 @@ library UArchStep {
 
     function operandSimm12(uint32 insn) private pure returns (int32) {
         return int32(
-            UArchCompat.uint32ShiftLeft(
-                uint32(UArchCompat.int32ShiftRight(int32(insn), 25)), 5
+            EmulatorCompat.uint32ShiftLeft(
+                uint32(EmulatorCompat.int32ShiftRight(int32(insn), 25)), 5
             )
-                | UArchCompat.uint32ShiftRight(
-                    UArchCompat.uint32ShiftLeft(insn, 20), 27
+                | EmulatorCompat.uint32ShiftRight(
+                    EmulatorCompat.uint32ShiftLeft(insn, 20), 27
                 )
         );
     }
@@ -268,12 +268,12 @@ library UArchStep {
     // Execute instruction
 
     function advancePc(AccessLogs.Context memory a, uint64 pc) private pure {
-        uint64 newPc = UArchCompat.uint64AddUint64(pc, 4);
-        return UArchCompat.writePc(a, newPc);
+        uint64 newPc = EmulatorCompat.uint64AddUint64(pc, 4);
+        return EmulatorCompat.writePc(a, newPc);
     }
 
     function branch(AccessLogs.Context memory a, uint64 pc) private pure {
-        return UArchCompat.writePc(a, pc);
+        return EmulatorCompat.writePc(a, pc);
     }
 
     function executeLUI(AccessLogs.Context memory a, uint32 insn, uint64 pc)
@@ -283,7 +283,7 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         int32 imm = operandImm20(insn);
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, UArchCompat.int32ToUint64(imm));
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.int32ToUint64(imm));
         }
         return advancePc(a, pc);
     }
@@ -295,7 +295,7 @@ library UArchStep {
         int32 imm = operandImm20(insn);
         uint8 rd = operandRd(insn);
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, UArchCompat.uint64AddInt32(pc, imm));
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.uint64AddInt32(pc, imm));
         }
         return advancePc(a, pc);
     }
@@ -307,9 +307,9 @@ library UArchStep {
         int32 imm = operandJimm20(insn);
         uint8 rd = operandRd(insn);
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, UArchCompat.uint64AddUint64(pc, 4));
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.uint64AddUint64(pc, 4));
         }
-        return branch(a, UArchCompat.uint64AddInt32(pc, imm));
+        return branch(a, EmulatorCompat.uint64AddInt32(pc, imm));
     }
 
     function executeJALR(AccessLogs.Context memory a, uint32 insn, uint64 pc)
@@ -319,11 +319,12 @@ library UArchStep {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, UArchCompat.uint64AddUint64(pc, 4));
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.uint64AddUint64(pc, 4));
         }
-        return branch(a, UArchCompat.uint64AddInt32(rs1val, imm) & (~uint64(1)));
+        return
+            branch(a, EmulatorCompat.uint64AddInt32(rs1val, imm) & (~uint64(1)));
     }
 
     function executeBEQ(AccessLogs.Context memory a, uint32 insn, uint64 pc)
@@ -333,10 +334,10 @@ library UArchStep {
         int32 imm = operandSbimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
-        uint64 rs2val = UArchCompat.readX(a, rs2);
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
+        uint64 rs2val = EmulatorCompat.readX(a, rs2);
         if (rs1val == rs2val) {
-            return branch(a, UArchCompat.uint64AddInt32(pc, imm));
+            return branch(a, EmulatorCompat.uint64AddInt32(pc, imm));
         }
         return advancePc(a, pc);
     }
@@ -348,10 +349,10 @@ library UArchStep {
         int32 imm = operandSbimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
-        uint64 rs2val = UArchCompat.readX(a, rs2);
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
+        uint64 rs2val = EmulatorCompat.readX(a, rs2);
         if (rs1val != rs2val) {
-            return branch(a, UArchCompat.uint64AddInt32(pc, imm));
+            return branch(a, EmulatorCompat.uint64AddInt32(pc, imm));
         }
         return advancePc(a, pc);
     }
@@ -363,10 +364,10 @@ library UArchStep {
         int32 imm = operandSbimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        int64 rs1val = int64(UArchCompat.readX(a, rs1));
-        int64 rs2val = int64(UArchCompat.readX(a, rs2));
+        int64 rs1val = int64(EmulatorCompat.readX(a, rs1));
+        int64 rs2val = int64(EmulatorCompat.readX(a, rs2));
         if (rs1val < rs2val) {
-            return branch(a, UArchCompat.uint64AddInt32(pc, imm));
+            return branch(a, EmulatorCompat.uint64AddInt32(pc, imm));
         }
         return advancePc(a, pc);
     }
@@ -378,10 +379,10 @@ library UArchStep {
         int32 imm = operandSbimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        int64 rs1val = int64(UArchCompat.readX(a, rs1));
-        int64 rs2val = int64(UArchCompat.readX(a, rs2));
+        int64 rs1val = int64(EmulatorCompat.readX(a, rs1));
+        int64 rs2val = int64(EmulatorCompat.readX(a, rs2));
         if (rs1val >= rs2val) {
-            return branch(a, UArchCompat.uint64AddInt32(pc, imm));
+            return branch(a, EmulatorCompat.uint64AddInt32(pc, imm));
         }
         return advancePc(a, pc);
     }
@@ -393,10 +394,10 @@ library UArchStep {
         int32 imm = operandSbimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
-        uint64 rs2val = UArchCompat.readX(a, rs2);
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
+        uint64 rs2val = EmulatorCompat.readX(a, rs2);
         if (rs1val < rs2val) {
-            return branch(a, UArchCompat.uint64AddInt32(pc, imm));
+            return branch(a, EmulatorCompat.uint64AddInt32(pc, imm));
         }
         return advancePc(a, pc);
     }
@@ -408,10 +409,10 @@ library UArchStep {
         int32 imm = operandSbimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
-        uint64 rs2val = UArchCompat.readX(a, rs2);
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
+        uint64 rs2val = EmulatorCompat.readX(a, rs2);
         if (rs1val >= rs2val) {
-            return branch(a, UArchCompat.uint64AddInt32(pc, imm));
+            return branch(a, EmulatorCompat.uint64AddInt32(pc, imm));
         }
         return advancePc(a, pc);
     }
@@ -423,10 +424,10 @@ library UArchStep {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
-        int8 i8 = int8(readUint8(a, UArchCompat.uint64AddInt32(rs1val, imm)));
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
+        int8 i8 = int8(readUint8(a, EmulatorCompat.uint64AddInt32(rs1val, imm)));
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, UArchCompat.int8ToUint64(i8));
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.int8ToUint64(i8));
         }
         return advancePc(a, pc);
     }
@@ -438,10 +439,10 @@ library UArchStep {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
-        uint16 u16 = readUint16(a, UArchCompat.uint64AddInt32(rs1val, imm));
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
+        uint16 u16 = readUint16(a, EmulatorCompat.uint64AddInt32(rs1val, imm));
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, u16);
+            EmulatorCompat.writeX(a, rd, u16);
         }
         return advancePc(a, pc);
     }
@@ -453,11 +454,11 @@ library UArchStep {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
         int16 i16 =
-            int16(readUint16(a, UArchCompat.uint64AddInt32(rs1val, imm)));
+            int16(readUint16(a, EmulatorCompat.uint64AddInt32(rs1val, imm)));
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, UArchCompat.int16ToUint64(i16));
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.int16ToUint64(i16));
         }
         return advancePc(a, pc);
     }
@@ -469,11 +470,11 @@ library UArchStep {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
         int32 i32 =
-            int32(readUint32(a, UArchCompat.uint64AddInt32(rs1val, imm)));
+            int32(readUint32(a, EmulatorCompat.uint64AddInt32(rs1val, imm)));
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, UArchCompat.int32ToUint64(i32));
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.int32ToUint64(i32));
         }
         return advancePc(a, pc);
     }
@@ -485,10 +486,10 @@ library UArchStep {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
-        uint8 u8 = readUint8(a, UArchCompat.uint64AddInt32(rs1val, imm));
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
+        uint8 u8 = readUint8(a, EmulatorCompat.uint64AddInt32(rs1val, imm));
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, u8);
+            EmulatorCompat.writeX(a, rd, u8);
         }
         return advancePc(a, pc);
     }
@@ -500,9 +501,9 @@ library UArchStep {
         int32 imm = operandSimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
-        uint64 rs2val = UArchCompat.readX(a, rs2);
-        writeUint8(a, UArchCompat.uint64AddInt32(rs1val, imm), uint8(rs2val));
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
+        uint64 rs2val = EmulatorCompat.readX(a, rs2);
+        writeUint8(a, EmulatorCompat.uint64AddInt32(rs1val, imm), uint8(rs2val));
         return advancePc(a, pc);
     }
 
@@ -513,9 +514,11 @@ library UArchStep {
         int32 imm = operandSimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
-        uint64 rs2val = UArchCompat.readX(a, rs2);
-        writeUint16(a, UArchCompat.uint64AddInt32(rs1val, imm), uint16(rs2val));
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
+        uint64 rs2val = EmulatorCompat.readX(a, rs2);
+        writeUint16(
+            a, EmulatorCompat.uint64AddInt32(rs1val, imm), uint16(rs2val)
+        );
         return advancePc(a, pc);
     }
 
@@ -526,9 +529,9 @@ library UArchStep {
         int32 imm = operandSimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
-        uint32 rs2val = uint32(UArchCompat.readX(a, rs2));
-        writeUint32(a, UArchCompat.uint64AddInt32(rs1val, imm), rs2val);
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
+        uint32 rs2val = uint32(EmulatorCompat.readX(a, rs2));
+        writeUint32(a, EmulatorCompat.uint64AddInt32(rs1val, imm), rs2val);
         return advancePc(a, pc);
     }
 
@@ -540,9 +543,9 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            int64 val = UArchCompat.int64AddInt64(int64(rs1val), int64(imm));
-            UArchCompat.writeX(a, rd, uint64(val));
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            int64 val = EmulatorCompat.int64AddInt64(int64(rs1val), int64(imm));
+            EmulatorCompat.writeX(a, rd, uint64(val));
         }
         return advancePc(a, pc);
     }
@@ -554,10 +557,11 @@ library UArchStep {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
-        int32 rs1val = UArchCompat.uint64ToInt32(UArchCompat.readX(a, rs1));
+        int32 rs1val =
+            EmulatorCompat.uint64ToInt32(EmulatorCompat.readX(a, rs1));
         if (rd != 0) {
-            int32 val = UArchCompat.int32AddInt32(rs1val, imm);
-            UArchCompat.writeX(a, rd, UArchCompat.int32ToUint64(val));
+            int32 val = EmulatorCompat.int32AddInt32(rs1val, imm);
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.int32ToUint64(val));
         }
         return advancePc(a, pc);
     }
@@ -570,11 +574,11 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
             if (int64(rs1val) < imm) {
-                UArchCompat.writeX(a, rd, 1);
+                EmulatorCompat.writeX(a, rd, 1);
             } else {
-                UArchCompat.writeX(a, rd, 0);
+                EmulatorCompat.writeX(a, rd, 0);
             }
         }
         return advancePc(a, pc);
@@ -588,11 +592,11 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            if (rs1val < UArchCompat.int32ToUint64(imm)) {
-                UArchCompat.writeX(a, rd, 1);
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            if (rs1val < EmulatorCompat.int32ToUint64(imm)) {
+                EmulatorCompat.writeX(a, rd, 1);
             } else {
-                UArchCompat.writeX(a, rd, 0);
+                EmulatorCompat.writeX(a, rd, 0);
             }
         }
         return advancePc(a, pc);
@@ -606,8 +610,10 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            UArchCompat.writeX(a, rd, rs1val ^ UArchCompat.int32ToUint64(imm));
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            EmulatorCompat.writeX(
+                a, rd, rs1val ^ EmulatorCompat.int32ToUint64(imm)
+            );
         }
         return advancePc(a, pc);
     }
@@ -620,8 +626,10 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            UArchCompat.writeX(a, rd, rs1val | UArchCompat.int32ToUint64(imm));
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            EmulatorCompat.writeX(
+                a, rd, rs1val | EmulatorCompat.int32ToUint64(imm)
+            );
         }
         return advancePc(a, pc);
     }
@@ -634,8 +642,10 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            UArchCompat.writeX(a, rd, rs1val & UArchCompat.int32ToUint64(imm));
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            EmulatorCompat.writeX(
+                a, rd, rs1val & EmulatorCompat.int32ToUint64(imm)
+            );
         }
         return advancePc(a, pc);
     }
@@ -648,9 +658,9 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            UArchCompat.writeX(
-                a, rd, UArchCompat.uint64ShiftLeft(rs1val, uint32(imm))
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            EmulatorCompat.writeX(
+                a, rd, EmulatorCompat.uint64ShiftLeft(rs1val, uint32(imm))
             );
         }
         return advancePc(a, pc);
@@ -663,13 +673,13 @@ library UArchStep {
         int32 imm = operandShamt5(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
-        uint32 rs1val = uint32(UArchCompat.readX(a, rs1));
+        uint32 rs1val = uint32(EmulatorCompat.readX(a, rs1));
         if (rd != 0) {
-            UArchCompat.writeX(
+            EmulatorCompat.writeX(
                 a,
                 rd,
-                UArchCompat.int32ToUint64(
-                    int32(UArchCompat.uint32ShiftLeft(rs1val, uint32(imm)))
+                EmulatorCompat.int32ToUint64(
+                    int32(EmulatorCompat.uint32ShiftLeft(rs1val, uint32(imm)))
                 )
             );
         }
@@ -684,9 +694,9 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            UArchCompat.writeX(
-                a, rd, UArchCompat.uint64ShiftRight(rs1val, uint32(imm))
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            EmulatorCompat.writeX(
+                a, rd, EmulatorCompat.uint64ShiftRight(rs1val, uint32(imm))
             );
         }
         return advancePc(a, pc);
@@ -699,11 +709,11 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        uint32 rs1val = uint32(UArchCompat.readX(a, rs1));
-        uint32 rs2val = uint32(UArchCompat.readX(a, rs2));
-        int32 rdval = int32(UArchCompat.uint32ShiftRight(rs1val, rs2val));
+        uint32 rs1val = uint32(EmulatorCompat.readX(a, rs1));
+        uint32 rs2val = uint32(EmulatorCompat.readX(a, rs2));
+        int32 rdval = int32(EmulatorCompat.uint32ShiftRight(rs1val, rs2val));
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, UArchCompat.int32ToUint64(rdval));
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.int32ToUint64(rdval));
         }
         return advancePc(a, pc);
     }
@@ -715,10 +725,11 @@ library UArchStep {
         int32 imm = operandShamt5(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
-        uint32 rs1val = uint32(UArchCompat.readX(a, rs1));
-        int32 rdval = int32(UArchCompat.uint32ShiftRight(rs1val, uint32(imm)));
+        uint32 rs1val = uint32(EmulatorCompat.readX(a, rs1));
+        int32 rdval =
+            int32(EmulatorCompat.uint32ShiftRight(rs1val, uint32(imm)));
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, UArchCompat.int32ToUint64(rdval));
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.int32ToUint64(rdval));
         }
         return advancePc(a, pc);
     }
@@ -731,11 +742,13 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            UArchCompat.writeX(
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            EmulatorCompat.writeX(
                 a,
                 rd,
-                uint64(UArchCompat.int64ShiftRight(int64(rs1val), uint32(imm)))
+                uint64(
+                    EmulatorCompat.int64ShiftRight(int64(rs1val), uint32(imm))
+                )
             );
         }
         return advancePc(a, pc);
@@ -748,13 +761,14 @@ library UArchStep {
         int32 imm = operandShamt5(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
-        int32 rs1val = UArchCompat.uint64ToInt32(UArchCompat.readX(a, rs1));
+        int32 rs1val =
+            EmulatorCompat.uint64ToInt32(EmulatorCompat.readX(a, rs1));
         if (rd != 0) {
-            UArchCompat.writeX(
+            EmulatorCompat.writeX(
                 a,
                 rd,
-                UArchCompat.int32ToUint64(
-                    UArchCompat.int32ShiftRight(rs1val, uint32(imm))
+                EmulatorCompat.int32ToUint64(
+                    EmulatorCompat.int32ShiftRight(rs1val, uint32(imm))
                 )
             );
         }
@@ -769,10 +783,10 @@ library UArchStep {
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            uint64 rs2val = UArchCompat.readX(a, rs2);
-            UArchCompat.writeX(
-                a, rd, UArchCompat.uint64AddUint64(rs1val, rs2val)
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            uint64 rs2val = EmulatorCompat.readX(a, rs2);
+            EmulatorCompat.writeX(
+                a, rd, EmulatorCompat.uint64AddUint64(rs1val, rs2val)
             );
         }
         return advancePc(a, pc);
@@ -785,11 +799,13 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        int32 rs1val = UArchCompat.uint64ToInt32(UArchCompat.readX(a, rs1));
-        int32 rs2val = UArchCompat.uint64ToInt32(UArchCompat.readX(a, rs2));
+        int32 rs1val =
+            EmulatorCompat.uint64ToInt32(EmulatorCompat.readX(a, rs1));
+        int32 rs2val =
+            EmulatorCompat.uint64ToInt32(EmulatorCompat.readX(a, rs2));
         if (rd != 0) {
-            int32 val = UArchCompat.int32AddInt32(rs1val, rs2val);
-            UArchCompat.writeX(a, rd, UArchCompat.int32ToUint64(val));
+            int32 val = EmulatorCompat.int32AddInt32(rs1val, rs2val);
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.int32ToUint64(val));
         }
         return advancePc(a, pc);
     }
@@ -802,10 +818,10 @@ library UArchStep {
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            uint64 rs2val = UArchCompat.readX(a, rs2);
-            UArchCompat.writeX(
-                a, rd, UArchCompat.uint64SubUint64(rs1val, rs2val)
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            uint64 rs2val = EmulatorCompat.readX(a, rs2);
+            EmulatorCompat.writeX(
+                a, rd, EmulatorCompat.uint64SubUint64(rs1val, rs2val)
             );
         }
         return advancePc(a, pc);
@@ -818,11 +834,13 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        int32 rs1val = UArchCompat.uint64ToInt32(UArchCompat.readX(a, rs1));
-        int32 rs2val = UArchCompat.uint64ToInt32(UArchCompat.readX(a, rs2));
+        int32 rs1val =
+            EmulatorCompat.uint64ToInt32(EmulatorCompat.readX(a, rs1));
+        int32 rs2val =
+            EmulatorCompat.uint64ToInt32(EmulatorCompat.readX(a, rs2));
         if (rd != 0) {
-            int32 val = UArchCompat.int32SubInt32(rs1val, rs2val);
-            UArchCompat.writeX(a, rd, UArchCompat.int32ToUint64(val));
+            int32 val = EmulatorCompat.int32SubInt32(rs1val, rs2val);
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.int32ToUint64(val));
         }
         return advancePc(a, pc);
     }
@@ -835,10 +853,10 @@ library UArchStep {
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            uint32 rs2val = uint32(UArchCompat.readX(a, rs2));
-            UArchCompat.writeX(
-                a, rd, UArchCompat.uint64ShiftLeft(rs1val, rs2val)
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            uint32 rs2val = uint32(EmulatorCompat.readX(a, rs2));
+            EmulatorCompat.writeX(
+                a, rd, EmulatorCompat.uint64ShiftLeft(rs1val, rs2val)
             );
         }
         return advancePc(a, pc);
@@ -851,11 +869,12 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        uint32 rs1val = uint32(UArchCompat.readX(a, rs1));
-        uint32 rs2val = uint32(UArchCompat.readX(a, rs2));
-        int32 rdval = int32(UArchCompat.uint32ShiftLeft(uint32(rs1val), rs2val));
+        uint32 rs1val = uint32(EmulatorCompat.readX(a, rs1));
+        uint32 rs2val = uint32(EmulatorCompat.readX(a, rs2));
+        int32 rdval =
+            int32(EmulatorCompat.uint32ShiftLeft(uint32(rs1val), rs2val));
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, UArchCompat.int32ToUint64(rdval));
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.int32ToUint64(rdval));
         }
         return advancePc(a, pc);
     }
@@ -868,13 +887,13 @@ library UArchStep {
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
         if (rd != 0) {
-            int64 rs1val = int64(UArchCompat.readX(a, rs1));
-            int64 rs2val = int64(UArchCompat.readX(a, rs2));
+            int64 rs1val = int64(EmulatorCompat.readX(a, rs1));
+            int64 rs2val = int64(EmulatorCompat.readX(a, rs2));
             uint64 rdval = 0;
             if (rs1val < rs2val) {
                 rdval = 1;
             }
-            UArchCompat.writeX(a, rd, rdval);
+            EmulatorCompat.writeX(a, rd, rdval);
         }
         return advancePc(a, pc);
     }
@@ -887,13 +906,13 @@ library UArchStep {
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            uint64 rs2val = UArchCompat.readX(a, rs2);
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            uint64 rs2val = EmulatorCompat.readX(a, rs2);
             uint64 rdval = 0;
             if (rs1val < rs2val) {
                 rdval = 1;
             }
-            UArchCompat.writeX(a, rd, rdval);
+            EmulatorCompat.writeX(a, rd, rdval);
         }
         return advancePc(a, pc);
     }
@@ -906,9 +925,9 @@ library UArchStep {
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            uint64 rs2val = UArchCompat.readX(a, rs2);
-            UArchCompat.writeX(a, rd, rs1val ^ rs2val);
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            uint64 rs2val = EmulatorCompat.readX(a, rs2);
+            EmulatorCompat.writeX(a, rd, rs1val ^ rs2val);
         }
         return advancePc(a, pc);
     }
@@ -921,10 +940,10 @@ library UArchStep {
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            uint64 rs2val = UArchCompat.readX(a, rs2);
-            UArchCompat.writeX(
-                a, rd, UArchCompat.uint64ShiftRight(rs1val, uint32(rs2val))
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            uint64 rs2val = EmulatorCompat.readX(a, rs2);
+            EmulatorCompat.writeX(
+                a, rd, EmulatorCompat.uint64ShiftRight(rs1val, uint32(rs2val))
             );
         }
         return advancePc(a, pc);
@@ -938,10 +957,10 @@ library UArchStep {
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
         if (rd != 0) {
-            int64 rs1val = int64(UArchCompat.readX(a, rs1));
-            uint32 rs2val = uint32(UArchCompat.readX(a, rs2));
-            UArchCompat.writeX(
-                a, rd, uint64(UArchCompat.int64ShiftRight(rs1val, rs2val))
+            int64 rs1val = int64(EmulatorCompat.readX(a, rs1));
+            uint32 rs2val = uint32(EmulatorCompat.readX(a, rs2));
+            EmulatorCompat.writeX(
+                a, rd, uint64(EmulatorCompat.int64ShiftRight(rs1val, rs2val))
             );
         }
         return advancePc(a, pc);
@@ -954,11 +973,12 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        int32 rs1val = UArchCompat.uint64ToInt32(UArchCompat.readX(a, rs1));
-        uint32 rs2val = uint32(UArchCompat.readX(a, rs2));
-        int32 rdval = UArchCompat.int32ShiftRight(rs1val, rs2val);
+        int32 rs1val =
+            EmulatorCompat.uint64ToInt32(EmulatorCompat.readX(a, rs1));
+        uint32 rs2val = uint32(EmulatorCompat.readX(a, rs2));
+        int32 rdval = EmulatorCompat.int32ShiftRight(rs1val, rs2val);
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, UArchCompat.int32ToUint64(rdval));
+            EmulatorCompat.writeX(a, rd, EmulatorCompat.int32ToUint64(rdval));
         }
         return advancePc(a, pc);
     }
@@ -971,9 +991,9 @@ library UArchStep {
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            uint64 rs2val = UArchCompat.readX(a, rs2);
-            UArchCompat.writeX(a, rd, rs1val | rs2val);
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            uint64 rs2val = EmulatorCompat.readX(a, rs2);
+            EmulatorCompat.writeX(a, rd, rs1val | rs2val);
         }
         return advancePc(a, pc);
     }
@@ -986,9 +1006,9 @@ library UArchStep {
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
         if (rd != 0) {
-            uint64 rs1val = UArchCompat.readX(a, rs1);
-            uint64 rs2val = UArchCompat.readX(a, rs2);
-            UArchCompat.writeX(a, rd, rs1val & rs2val);
+            uint64 rs1val = EmulatorCompat.readX(a, rs1);
+            uint64 rs2val = EmulatorCompat.readX(a, rs2);
+            EmulatorCompat.writeX(a, rd, rs1val & rs2val);
         }
         return advancePc(a, pc);
     }
@@ -1007,10 +1027,10 @@ library UArchStep {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
-        uint32 u32 = readUint32(a, UArchCompat.uint64AddInt32(rs1val, imm));
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
+        uint32 u32 = readUint32(a, EmulatorCompat.uint64AddInt32(rs1val, imm));
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, u32);
+            EmulatorCompat.writeX(a, rd, u32);
         }
         return advancePc(a, pc);
     }
@@ -1022,10 +1042,10 @@ library UArchStep {
         int32 imm = operandImm12(insn);
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
-        uint64 u64 = readUint64(a, UArchCompat.uint64AddInt32(rs1val, imm));
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
+        uint64 u64 = readUint64(a, EmulatorCompat.uint64AddInt32(rs1val, imm));
         if (rd != 0) {
-            UArchCompat.writeX(a, rd, u64);
+            EmulatorCompat.writeX(a, rd, u64);
         }
         return advancePc(a, pc);
     }
@@ -1037,9 +1057,9 @@ library UArchStep {
         int32 imm = operandSimm12(insn);
         uint8 rs1 = operandRs1(insn);
         uint8 rs2 = operandRs2(insn);
-        uint64 rs1val = UArchCompat.readX(a, rs1);
-        uint64 rs2val = UArchCompat.readX(a, rs2);
-        writeUint64(a, UArchCompat.uint64AddInt32(rs1val, imm), rs2val);
+        uint64 rs1val = EmulatorCompat.readX(a, rs1);
+        uint64 rs2val = EmulatorCompat.readX(a, rs2);
+        writeUint64(a, EmulatorCompat.uint64AddInt32(rs1val, imm), rs2val);
         return advancePc(a, pc);
     }
 
@@ -1047,20 +1067,20 @@ library UArchStep {
         private
         pure
     {
-        uint64 fn = UArchCompat.readX(a, 17); // a7 contains the function number
-        if (fn == UArchConstants.UARCH_ECALL_FN_HALT) {
-            return UArchCompat.setHaltFlag(a);
-        } else if (fn == UArchConstants.UARCH_ECALL_FN_PUTCHAR) {
-            uint64 character = UArchCompat.readX(a, 16); // a6 contains the character to print
-            UArchCompat.putChar(a, uint8(character));
+        uint64 fn = EmulatorCompat.readX(a, 17); // a7 contains the function number
+        if (fn == EmulatorConstants.UARCH_ECALL_FN_HALT) {
+            return EmulatorCompat.setHaltFlag(a);
+        } else if (fn == EmulatorConstants.UARCH_ECALL_FN_PUTCHAR) {
+            uint64 character = EmulatorCompat.readX(a, 16); // a6 contains the character to print
+            EmulatorCompat.putChar(a, uint8(character));
         } else {
-            UArchCompat.throwRuntimeError(a, "unsupported ecall function");
+            EmulatorCompat.throwRuntimeError(a, "unsupported ecall function");
         }
         return advancePc(a, pc);
     }
 
     function executeEBREAK(AccessLogs.Context memory a) private pure {
-        UArchCompat.throwRuntimeError(a, "uarch aborted");
+        EmulatorCompat.throwRuntimeError(a, "uarch aborted");
     }
 
     /// \brief Returns true if the opcode field of an instruction matches the provided argument
@@ -1079,8 +1099,8 @@ library UArchStep {
         returns (bool)
     {
         uint32 mask = (7 << 12) | 0x7f;
-        return
-            (insn & mask) == (UArchCompat.uint32ShiftLeft(funct3, 12) | opcode);
+        return (insn & mask)
+            == (EmulatorCompat.uint32ShiftLeft(funct3, 12) | opcode);
     }
 
     /// \brief Returns true if the opcode, funct3 and funct7 fields of an instruction match the provided arguments
@@ -1093,8 +1113,8 @@ library UArchStep {
         uint32 mask = (0x7f << 25) | (7 << 12) | 0x7f;
         return ((insn & mask))
             == (
-                UArchCompat.uint32ShiftLeft(funct7, 25)
-                    | UArchCompat.uint32ShiftLeft(funct3, 12) | opcode
+                EmulatorCompat.uint32ShiftLeft(funct7, 25)
+                    | EmulatorCompat.uint32ShiftLeft(funct3, 12) | opcode
             );
     }
 
@@ -1109,8 +1129,8 @@ library UArchStep {
         uint32 mask = (0x3f << 26) | (7 << 12) | 0x7f;
         return ((insn & mask))
             == (
-                UArchCompat.uint32ShiftLeft(funct7Sr1, 26)
-                    | UArchCompat.uint32ShiftLeft(funct3, 12) | opcode
+                EmulatorCompat.uint32ShiftLeft(funct7Sr1, 26)
+                    | EmulatorCompat.uint32ShiftLeft(funct3, 12) | opcode
             );
     }
 
@@ -1224,7 +1244,7 @@ library UArchStep {
         } else if (insn == uint32(0x100073)) {
             return executeEBREAK(a);
         }
-        UArchCompat.throwRuntimeError(a, "illegal instruction");
+        EmulatorCompat.throwRuntimeError(a, "illegal instruction");
     }
 
     function step(AccessLogs.Context memory a)
@@ -1233,21 +1253,21 @@ library UArchStep {
         returns (UArchStepStatus)
     {
         // This must be the first read in order to match the first log access in machine.verify_uarch_step_state_transition
-        uint64 cycle = UArchCompat.readCycle(a);
+        uint64 cycle = EmulatorCompat.readCycle(a);
         // do not advance if cycle will overflow
         if (cycle == type(uint64).max) {
             return UArchStepStatus.CycleOverflow;
         }
         // do not advance if machine is halted
-        if (UArchCompat.readHaltFlag(a)) {
+        if (EmulatorCompat.readHaltFlag(a)) {
             return UArchStepStatus.UArchHalted;
         }
         // execute next instruction
-        uint64 pc = UArchCompat.readPc(a);
+        uint64 pc = EmulatorCompat.readPc(a);
         uint32 insn = readUint32(a, pc);
         executeInsn(a, insn, pc);
         cycle = cycle + 1;
-        UArchCompat.writeCycle(a, cycle);
+        EmulatorCompat.writeCycle(a, cycle);
         return UArchStepStatus.Success;
     }
 

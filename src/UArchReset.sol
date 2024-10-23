@@ -21,13 +21,13 @@
 
 pragma solidity ^0.8.0;
 
-import "./UArchCompat.sol";
+import "./EmulatorCompat.sol";
 
 library UArchReset {
     // START OF AUTO-GENERATED CODE
 
     function reset(AccessLogs.Context memory a) internal pure {
-        UArchCompat.resetState(a);
+        EmulatorCompat.resetState(a);
     }
 
     // END OF AUTO-GENERATED CODE

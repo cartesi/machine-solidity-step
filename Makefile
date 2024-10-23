@@ -21,26 +21,27 @@ DEPDIRS = $(TESTS_DATA_DIR) $(LOG_TEST_DIR)
 
 help:
 	@echo 'Cleaning targets:'
-	@echo '  clean                      - clean the cache artifacts and generated files'
+	@echo '  clean                       - clean the cache artifacts and generated files'
 	@echo 'Generic targets:'
-	@echo '* all                        - build solidity code. To build from a clean clone, run: make submodules all'
-	@echo '  build                      - build solidity code'
-	@echo '  generate-step              - generate solidity-step code from cpp'
-	@echo '  generate-reset             - generate solidity-reset code from cpp'
-	@echo '  generate-constants         - generate solidity-constants code by querying the cartesi machine'
-	@echo '  generate-mock              - generate mock library code'
-	@echo '  generate-prod              - generate production library code'
-	@echo '  generate-replay            - generate replay tests'
-	@echo '  pretest                    - download necessary files for tests'
-	@echo '  test-all                   - test all'
-	@echo '  test-mock                  - test binary files with mock library'
-	@echo '  test-prod                  - test production code'
-	@echo '  test-replay                - test log files'
+	@echo '* all                         - build solidity code. To build from a clean clone, run: make submodules all'
+	@echo '  build                       - build solidity code'
+	@echo '  generate-step               - generate solidity-step code from cpp'
+	@echo '  generate-reset              - generate solidity-reset code from cpp'
+	@echo '  generate-send-cmio-response - generate solidity-send-cmio-response code from cpp'
+	@echo '  generate-constants          - generate solidity-constants code by querying the cartesi machine'
+	@echo '  generate-mock               - generate mock library code'
+	@echo '  generate-prod               - generate production library code'
+	@echo '  generate-replay             - generate replay tests'
+	@echo '  pretest                     - download necessary files for tests'
+	@echo '  test-all                    - test all'
+	@echo '  test-mock                   - test binary files with mock library'
+	@echo '  test-prod                   - test production code'
+	@echo '  test-replay                 - test log files'
 
 
 all: build test-all
 
-build: generate-step generate-reset generate-constants generate-prod
+build: generate-step generate-reset generate-send-cmio-response generate-constants generate-prod
 	forge build  --use 0.8.21
 
 clean:
@@ -64,7 +65,7 @@ test-prod: dep
 test-replay: dep
 	$(MAKE) generate-prod
 	$(MAKE) generate-replay
-	forge test --use 0.8.21 -vv --match-contract "UArchReplay|UArchReset"
+	forge test --use 0.8.21 -vv --match-contract "UArchReset|SendCmioResponse|UArchReplay"
 
 generate-mock:
 	./helper_scripts/generate_AccessLogs.sh mock
@@ -79,13 +80,16 @@ generate-replay:
 	$(MAKE) fmt
 
 generate-constants: $(EMULATOR_DIR)
-	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchConstants.sh
+	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_EmulatorConstants.sh
 
 generate-step: $(EMULATOR_DIR)/src/uarch-step.h $(EMULATOR_DIR)/src/uarch-step.cpp
 	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchStep.sh
 
 generate-reset: $(EMULATOR_DIR)/src/uarch-reset-state.cpp
 	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchReset.sh
+
+generate-send-cmio-response: $(EMULATOR_DIR)/src/uarch-reset-state.cpp
+	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_SendCmioResponse.sh
 
 fmt:
 	forge fmt src test
@@ -119,4 +123,4 @@ $(LOG_TEST_DIR): | download
 submodules:
 	git submodule update --init --recursive
 
-.PHONY: help all build clean checksum-download shasum-download fmt generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay generate-constants generate-reset
+.PHONY: help all build clean checksum-download shasum-download fmt generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay generate-constants generate-reset gemerate=semd-cmio-response

@@ -21,7 +21,7 @@
 
 pragma solidity ^0.8.0;
 
-import "./UArchCompat.sol";
+import "./EmulatorCompat.sol";
 
 library UArchStep {
     // START OF AUTO-GENERATED CODE
