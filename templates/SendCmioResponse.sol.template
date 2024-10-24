@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-/// @title UArchReset
+/// @title SendCmioResponse
 /// @notice Reset microarchitecture to pristine state
 //:#include macro.pp
 /// DEV_COMMENT(templates/UArchReset.sol.template)
@@ -23,7 +23,10 @@ pragma solidity ^0.8.0;
 
 import "./EmulatorCompat.sol";
 
-library UArchReset {
+library SendCmioResponse {
+    using Memory for uint64;
+    using AccessLogs for AccessLogs.Context;
+    
     // START OF AUTO-GENERATED CODE
     // END OF AUTO-GENERATED CODE
 }

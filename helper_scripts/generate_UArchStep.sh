@@ -9,8 +9,8 @@ CPP_STEP_H_PATH=${EMULATOR_DIR}"/src/uarch-step.h"
 
 TEMPLATE_FILE="./templates/UArchStep.sol.template"
 TARGET_FILE="src/UArchStep.sol"
-COMPAT_FILE="src/UArchCompat.sol"
-CONSTANTS_FILE="src/UArchConstants.sol"
+COMPAT_FILE="src/EmulatorCompat.sol"
+CONSTANTS_FILE="src/EmulatorConstants.sol"
 KEYWORD_START="START OF AUTO-GENERATED CODE"
 KEYWORD_END="END OF AUTO-GENERATED CODE"
 
@@ -32,11 +32,11 @@ pattern="enum class (.*) : int \{(.*)\};"
 # retrieve enum type from cpp header
 h_src=`echo "enum ${BASH_REMATCH[1]} {${BASH_REMATCH[2]}}"`
 
-# get function names from UArchCompat.sol
+# get function names from EmulatorCompat.sol
 COMPAT_FNS=`cat $COMPAT_FILE | grep -o "function [^(]*(" | $SED "s/function//g" | $SED "s/(//g"`
 COMPAT_FNS=`echo $COMPAT_FNS | $SED -E "s/( |\n)/|/g"`
 
-# get constant names from UArchConstants.sol
+# get constant names from EmulatorConstants.sol
 CONSTANTS=`cat $CONSTANTS_FILE | grep  -E -o 'constant\s+[^ ]*' | $SED -E "s/constant//g; s/ //g" | tr '\n' '|' | sed "s/.$//"`
 
 cpp_src=`cat "$CPP_STEP_PATH"`
@@ -54,8 +54,8 @@ cpp_src=`echo "${BASH_REMATCH[1]}" \
         | $SED -E "s/UArchStepStatus uarch_step/static inline UArchStepStatus step/g" \
         | $SED -E "s/static inline (\w+) ($INTERNAL_FN)\(([^\n]*)\) \{/function \2\(\3\) internal pure returns \(\1\)\{/g" \
         | $SED -E "s/static inline (\w+) (\w+)\(([^\n]*)\) \{/function \2\(\3\) private pure returns \(\1\)\{/g" \
-        | $SED -E "s/($COMPAT_FNS)/UArchCompat.\1/g" \
-        | $SED -E "s/([^a-zA-Z])($CONSTANTS)([^a-zA-Z])/UArchConstants.\1\2\3/g" \
+        | $SED -E "s/($COMPAT_FNS)/EmulatorCompat.\1/g" \
+        | $SED -E "s/([^a-zA-Z])($CONSTANTS)([^a-zA-Z])/EmulatorConstants.\1\2\3/g" \
         | $SED "s/ returns (void)//g"`
 
 # compose the solidity file from all components

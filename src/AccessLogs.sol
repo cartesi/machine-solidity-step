@@ -19,7 +19,7 @@
 pragma solidity ^0.8.0;
 
 import "./Buffer.sol";
-import "./UArchConstants.sol";
+import "./EmulatorConstants.sol";
 
 library AccessLogs {
     using Buffer for Buffer.Context;

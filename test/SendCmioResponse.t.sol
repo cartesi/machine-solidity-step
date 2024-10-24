@@ -22,10 +22,10 @@ import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
 import "src/EmulatorConstants.sol";
-import "src/UArchReset.sol";
+import "src/SendCmioResponse.sol";
 import "./BufferAux.sol";
 
-contract UArchReset_Test is Test {
+contract SendCmioResponse_Test is Test {
     using Buffer for Buffer.Context;
     using BufferAux for Buffer.Context;
     using stdJson for string;
@@ -33,9 +33,9 @@ contract UArchReset_Test is Test {
     // configure the tests
     string constant JSON_PATH = "./test/uarch-log/";
     string constant CATALOG_PATH = "catalog.json";
-    string constant RESET_PATH = "uarch-reset-steps.json";
+    string constant SEND_CMIO_RESPONSE_PATH = "send-cmio-response-steps.json";
 
-    uint256 constant siblingsLength = 42;
+    uint256 constant siblingsLength = 59;
 
     struct Entry {
         string binaryFilename;
@@ -56,12 +56,12 @@ contract UArchReset_Test is Test {
         string typeAccess;
         string written_hash;
     }
-    // string val; omit val because it's not used in reset
 
-    function testReset() public {
+    function testSendCmioResponse() public {
         Entry[] memory catalog =
             loadCatalog(string.concat(JSON_PATH, CATALOG_PATH));
-        string memory resetLog = string.concat(JSON_PATH, RESET_PATH);
+        string memory resetLog =
+            string.concat(JSON_PATH, SEND_CMIO_RESPONSE_PATH);
 
         // all tests combined can easily run out of gas, stop metering
         // also raise memory_limit in foundry.toml per https://github.com/foundry-rs/foundry/issues/3971
@@ -72,7 +72,7 @@ contract UArchReset_Test is Test {
         for (uint256 i = 0; i < catalog.length; i++) {
             if (
                 keccak256(abi.encodePacked(catalog[i].logFilename))
-                    != keccak256(abi.encodePacked("uarch-reset-steps.json"))
+                    != keccak256(abi.encodePacked("send-cmio-response-steps.json"))
             ) {
                 continue;
             }
@@ -93,17 +93,30 @@ contract UArchReset_Test is Test {
             AccessLogs.Context memory accessLogs =
                 AccessLogs.Context(initialRootHash, Buffer.Context(buffer, 0));
 
-            // initialRootHash is passed and will be updated through out the step
-            UArchReset.reset(accessLogs);
-
+            // Prepare arguments for sendCmioResponse
+            // These values are hard-coded in order to match the values used when generating the test log file
+            uint16 reason = 1;
+            bytes memory response = bytes("This is a test cmio response");
+            require(
+                response.length == 28,
+                "The response data must match the hard-coded value in the test log file"
+            );
+            bytes memory paddedResponse = new bytes(32);
+            for (uint256 j = 0; j < response.length; j++) {
+                paddedResponse[j] = response[j];
+            }
+            bytes32 paddedResponseHash = keccak256(paddedResponse);
+            // call sendCmioResponse
+            SendCmioResponse.sendCmioResponse(
+                accessLogs, reason, paddedResponseHash, uint32(response.length)
+            );
+            // ensure that the final root hash matches the expected value
             assertEq(
                 accessLogs.currentRootHash,
                 finalRootHash,
                 "final root hash must match"
             );
         }
-
-        // load json log
     }
 
     function loadCatalog(string memory path)
@@ -128,42 +141,37 @@ contract UArchReset_Test is Test {
 
     function loadBufferFromRawJson(bytes memory data, string memory rawJson)
         private
+        pure
     {
         string memory key = ".accesses";
         bytes memory raw = rawJson.parseRaw(key);
         RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
         uint256 arrayLength = rawAccesses.length;
-        assertEq(arrayLength, 1, "should be only 1 access in reset");
 
         Buffer.Context memory buffer = Buffer.Context(data, 0);
 
-        if (
-            keccak256(abi.encodePacked(rawAccesses[0].typeAccess))
-                == keccak256(abi.encodePacked("read"))
-        ) {
-            revert("should'nt have read access in reset");
-        }
-        assertEq(
-            rawAccesses[0].addressAccess,
-            EmulatorConstants.UARCH_STATE_START_ADDRESS,
-            "position should be (0x400000)"
-        );
-        assertEq(
-            rawAccesses[0].log2_size,
-            EmulatorConstants.UARCH_STATE_LOG2_SIZE,
-            "log2Size should be 22"
-        );
+        for (uint256 i = 0; i < arrayLength; i++) {
+            if (rawAccesses[i].log2_size == 3) {
+                buffer.writeBytes32(
+                    vm.parseBytes32(
+                        string.concat("0x", rawAccesses[i].read_value)
+                    )
+                );
+            } else {
+                buffer.writeBytes32(
+                    vm.parseBytes32(
+                        string.concat("0x", rawAccesses[i].read_hash)
+                    )
+                );
+            }
 
-        buffer.writeBytes32(
-            vm.parseBytes32(string.concat("0x", rawAccesses[0].read_hash))
-        );
-
-        for (uint256 i = 0; i < siblingsLength; i++) {
-            buffer.writeBytes32(
-                vm.parseBytes32(
-                    string.concat("0x", rawAccesses[0].sibling_hashes[i])
-                )
-            );
+            for (uint256 j = 0; j < rawAccesses[i].sibling_hashes.length; j++) {
+                buffer.writeBytes32(
+                    vm.parseBytes32(
+                        string.concat("0x", rawAccesses[i].sibling_hashes[j])
+                    )
+                );
+            }
         }
     }
 }

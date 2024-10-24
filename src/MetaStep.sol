@@ -36,10 +36,10 @@ library MetaStep {
 
         if (
             counter
-                == (counter >> UArchConstants.LOG2_CYCLES_TO_RESET)
-                    << UArchConstants.LOG2_CYCLES_TO_RESET
+                == (counter >> EmulatorConstants.LOG2_CYCLES_TO_RESET)
+                    << EmulatorConstants.LOG2_CYCLES_TO_RESET
         ) {
-            // if counter is a multiple of (1 << UArchConstants.LOG2_CYCLES_TO_RESET), run uarch reset
+            // if counter is a multiple of (1 << EmulatorConstants.LOG2_CYCLES_TO_RESET), run uarch reset
             UArchReset.reset(accessLogs);
             machineState = accessLogs.currentRootHash;
         }
