@@ -40,6 +40,7 @@ library EmulatorConstants {
     uint64 constant UARCH_ECALL_FN_PUTCHAR = 2;
     uint64 constant IFLAGS_ADDRESS = 0x2e8;
     uint64 constant HTIF_FROMHOST_ADDRESS = 0x318;
+    uint8 constant HTIF_YIELD_REASON_ADVANCE_STATE = 0x0;
     uint32 constant TREE_LOG2_WORD_SIZE = 0x5;
     uint32 constant TREE_WORD_SIZE = uint32(1) << TREE_LOG2_WORD_SIZE;
     uint64 constant PMA_CMIO_RX_BUFFER_START = 0x60000000;
