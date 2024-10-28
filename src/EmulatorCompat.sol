@@ -154,6 +154,8 @@ library EmulatorCompat {
         );
     }
 
+    // Conversions and arithmetic functions
+
     function int8ToUint64(int8 val) internal pure returns (uint64) {
         return uint64(int64(val));
     }
@@ -285,11 +287,31 @@ library EmulatorCompat {
 
     function uint32Log2(uint32 value) external pure returns (uint32) {
         require(value > 0, "EmulatorCompat: log2(0) is undefined");
-        uint32 result = 0;
-        while (value > 1) {
-            value >>= 1;
-            result++;
+        return 31 - clz(value);
+    }
+
+    function clz(uint32 x) internal pure returns (uint32) {
+        uint32 n = 0;
+        if (x & 0xFFFF0000 == 0) {
+            n = n + 16;
+            x = x << 16;
         }
-        return result;
+        if (x & 0xFF000000 == 0) {
+            n = n + 8;
+            x = x << 8;
+        }
+        if (x & 0xF0000000 == 0) {
+            n = n + 4;
+            x = x << 4;
+        }
+        if (x & 0xC0000000 == 0) {
+            n = n + 2;
+            x = x << 2;
+        }
+        if (x & 0x80000000 == 0) {
+            n = n + 1;
+        }
+
+        return n;
     }
 }

@@ -17,7 +17,7 @@
 /// @title SendCmioResponse
 /// @notice Sends a CMIO response
 //:#include macro.pp
-/// DEV_COMMENT(templates/UArchReset.sol.template)
+/// DEV_COMMENT(templates/SendCmioResponse.sol.template)
 
 pragma solidity ^0.8.0;
 

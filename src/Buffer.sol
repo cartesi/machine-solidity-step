@@ -90,8 +90,9 @@ library Buffer {
         uint8 nodesCount = Memory.LOG2_MAX_SIZE - logOfSize;
 
         for (uint64 i = 0; i < nodesCount; i++) {
-            Buffer.Context memory siblings =
-                Buffer.Context(buffer.data, buffer.offset + (i << 5));
+            Buffer.Context memory siblings = Buffer.Context(
+                buffer.data, buffer.offset + (i << Memory.LOG2_LEAF)
+            );
 
             if (isEven(stride >> i)) {
                 drive =
@@ -111,7 +112,7 @@ library Buffer {
         bytes32 drive
     ) internal pure returns (bytes32) {
         (bytes32 root, uint8 nodesCount) = buffer.peekRoot(region, drive);
-        buffer.offset += uint128(nodesCount) << 5;
+        buffer.offset += uint128(nodesCount) << Memory.LOG2_LEAF;
 
         return root;
     }
