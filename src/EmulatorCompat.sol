@@ -285,7 +285,7 @@ library EmulatorCompat {
 
     function putChar(AccessLogs.Context memory a, uint8 c) internal pure {}
 
-    function uint32Log2(uint32 value) external pure returns (uint32) {
+    function uint32Log2(uint32 value) internal pure returns (uint32) {
         require(value > 0, "EmulatorCompat: log2(0) is undefined");
         return 31 - clz(value);
     }
