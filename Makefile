@@ -123,4 +123,4 @@ $(LOG_TEST_DIR): | download
 submodules:
 	git submodule update --init --recursive
 
-.PHONY: help all build clean checksum-download shasum-download fmt generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay generate-constants generate-reset gemerate=semd-cmio-response
+.PHONY: help all build clean checksum-download shasum-download fmt generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay generate-constants generate-reset generate-send-cmio-response
