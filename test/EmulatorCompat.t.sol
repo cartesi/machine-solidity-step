@@ -19,6 +19,12 @@ import "src/EmulatorCompat.sol";
 
 pragma solidity ^0.8.0;
 
+library ExternalEmulatorCompat {
+    function uint32Log2(uint32 value) external pure returns (uint32) {
+        return EmulatorCompat.uint32Log2(value);
+    }
+}
+
 contract EmulatorCompatTest is Test {
     int16 constant INT16_MAX = type(int16).max;
     int32 constant INT32_MAX = type(int32).max;
@@ -156,6 +162,6 @@ contract EmulatorCompatTest is Test {
 
     function testUint32Log2Of0() public {
         vm.expectRevert("EmulatorCompat: log2(0) is undefined");
-        EmulatorCompat.uint32Log2(0);
+        ExternalEmulatorCompat.uint32Log2(0);
     }
 }
