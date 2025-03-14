@@ -22,6 +22,16 @@ import "src/EmulatorConstants.sol";
 
 pragma solidity ^0.8.0;
 
+library ExternalUArchInterpret {
+    function interpret(AccessLogs.Context memory accessLogs)
+        external
+        pure
+        returns (UArchStep.UArchStepStatus)
+    {
+        return UArchInterpret.interpret(accessLogs);
+    }
+}
+
 contract UArchInterpretTest is Test {
     using stdJson for string;
     using Memory for uint64;
@@ -131,7 +141,7 @@ contract UArchInterpretTest is Test {
         EmulatorCompat.writeCycle(a, 0);
 
         vm.expectRevert("illegal instruction");
-        UArchInterpret.interpret(a);
+        ExternalUArchInterpret.interpret(a);
     }
 
     function loadBin(Buffer.Context memory buffer, string memory path)

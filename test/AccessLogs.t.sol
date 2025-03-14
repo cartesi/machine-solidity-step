@@ -21,6 +21,23 @@ import "./BufferAux.sol";
 
 pragma solidity ^0.8.0;
 
+library ExternalAccessLogs {
+    function readWord(
+        AccessLogs.Context memory a,
+        Memory.PhysicalAddress readAddress
+    ) external pure returns (uint64) {
+        return AccessLogs.readWord(a, readAddress);
+    }
+
+    function writeWord(
+        AccessLogs.Context memory a,
+        Memory.PhysicalAddress writeAddress,
+        uint64 newValue
+    ) external pure {
+        AccessLogs.writeWord(a, writeAddress, newValue);
+    }
+}
+
 contract AccessLogsTest is Test {
     using AccessLogs for AccessLogs.Context;
     using AccessLogs for bytes8;
@@ -70,7 +87,9 @@ contract AccessLogsTest is Test {
         AccessLogs.Context memory accessLogs =
             AccessLogs.Context(rootHash, buffer);
         vm.expectRevert("Read word root doesn't match");
-        accessLogs.readWord((position + 32).toPhysicalAddress());
+        ExternalAccessLogs.readWord(
+            accessLogs, (position + 32).toPhysicalAddress()
+        );
     }
 
     function testReadWordWrongValue() public {
@@ -81,9 +100,8 @@ contract AccessLogsTest is Test {
         );
         AccessLogs.Context memory accessLogs =
             AccessLogs.Context(rootHash, buffer);
-
         vm.expectRevert("Read word root doesn't match");
-        accessLogs.readWord(position.toPhysicalAddress());
+        ExternalAccessLogs.readWord(accessLogs, position.toPhysicalAddress());
     }
 
     function testWriteWordHappyPath() public {
@@ -110,8 +128,9 @@ contract AccessLogsTest is Test {
         AccessLogs.Context memory accessLogs =
             AccessLogs.Context(rootHash, buffer);
         vm.expectRevert("Write word root doesn't match");
-        accessLogs.writeWord((position + 32).toPhysicalAddress(), wordWritten);
-        verifyWord(accessLogs.currentRootHash, position, wordWritten);
+        ExternalAccessLogs.writeWord(
+            accessLogs, (position + 32).toPhysicalAddress(), wordWritten
+        );
     }
 
     function testWriteWordReadMismatch() public {
@@ -125,8 +144,9 @@ contract AccessLogsTest is Test {
         AccessLogs.Context memory accessLogs =
             AccessLogs.Context(rootHash, buffer);
         vm.expectRevert("Write word root doesn't match");
-        accessLogs.writeWord(position.toPhysicalAddress(), wordWritten);
-        verifyWord(accessLogs.currentRootHash, position, wordWritten);
+        ExternalAccessLogs.writeWord(
+            accessLogs, position.toPhysicalAddress(), wordWritten
+        );
     }
 
     function testEndianSwap() public {
