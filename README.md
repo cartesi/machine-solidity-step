@@ -57,7 +57,7 @@ Generic targets:
 
 ### Requirements
 
--   Foundry 0.2.0
+-   Foundry 1.0.0
 -   GNU Make >= 3.81
 -   GNU sed >= 4.9
 -   GPP >= 2.27

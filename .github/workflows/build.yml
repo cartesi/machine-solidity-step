@@ -9,7 +9,7 @@ jobs:
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: nightly-fe2acca4e379793539db80e032d76ffe0110298b
+          version: v1.0.0
 
       - run: forge build
       - run: forge fmt --check src test
