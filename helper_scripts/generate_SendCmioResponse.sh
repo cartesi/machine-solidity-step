@@ -37,11 +37,12 @@ pattern="namespace cartesi \{(.*)\}"
 cpp_src=`echo "${BASH_REMATCH[1]}" \
         | $SED "/Explicit instantiatio/d" \
         | $SED "/template/d" \
+        | $SED "/    uint32 length);/d" \
         | $SED "s/machine_merkle_tree::get_log2_word_size()/TREE_LOG2_WORD_SIZE/g" \
         | $SED -E "s/($COMPAT_FNS)/EmulatorCompat.\1/g" \
         | $SED "s/writeMemoryWithPadding(a, PMA_CMIO_RX_BUFFER_START, data, dataLength, writeLengthLog2Size);/a.writeRegion(Memory.regionFromPhysicalAddress(PMA_CMIO_RX_BUFFER_START.toPhysicalAddress(),Memory.alignedSizeFromLog2(uint8(writeLengthLog2Size - TREE_LOG2_WORD_SIZE))),dataHash);"/g \
         | $SED -E "s/($CONSTANTS)([^a-zA-Z])/EmulatorConstants.\1\2/g" \
-        | $SED "s/void send_cmio_response(STATE_ACCESS &a, uint16 reason, bytes data, uint32 dataLength) {/function sendCmioResponse(AccessLogs.Context memory a, uint16 reason, bytes32 dataHash, uint32 dataLength) internal pure {/" \
+        | $SED "s/void send_cmio_response(STATE_ACCESS a, uint16 reason, bytes data, uint32 dataLength) {/function sendCmioResponse(AccessLogs.Context memory a, uint16 reason, bytes32 dataHash, uint32 dataLength) internal pure {/" \
         | $SED "s/const uint64/uint64/g" \
         | $SED "s/const uint32/uint32/g" \
         | $SED "/^$/N;/^\n$/D"

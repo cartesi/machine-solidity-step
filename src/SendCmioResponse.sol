@@ -81,7 +81,7 @@ library SendCmioResponse {
         ) | (uint64(dataLength) & mask32);
         EmulatorCompat.writeHtifFromhost(a, yieldData);
         // Reset iflags.Y
-        EmulatorCompat.resetIflagsY(a);
+        EmulatorCompat.writeIflagsY(a, 0);
     }
 
     // END OF AUTO-GENERATED CODE

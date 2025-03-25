@@ -42,8 +42,6 @@ contract UArchInterpretTest is Test {
         string finalRootHash;
         string initialRootHash;
         string logFilename;
-        bool proof;
-        uint256 proofsFrequency;
         uint256 steps;
     }
 
