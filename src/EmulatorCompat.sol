@@ -127,22 +127,19 @@ library EmulatorCompat {
         pure
         returns (bool)
     {
-        uint64 iflags =
-            a.readWord(EmulatorConstants.IFLAGS_ADDRESS.toPhysicalAddress());
-        if (uint64ShiftRight(iflags, EmulatorConstants.IFLAGS_Y_SHIFT) & 1 == 0)
-        {
+        uint64 iflags_y =
+            a.readWord(EmulatorConstants.IFLAGS_Y_ADDRESS.toPhysicalAddress());
+        if (iflags_y == 0) {
             return false;
         }
         return true;
     }
 
-    function resetIflagsY(AccessLogs.Context memory a) internal pure {
-        uint64 iflags =
-            a.readWord(EmulatorConstants.IFLAGS_ADDRESS.toPhysicalAddress());
-        iflags = iflags & ~uint64ShiftLeft(1, EmulatorConstants.IFLAGS_Y_SHIFT);
-        a.writeWord(
-            EmulatorConstants.IFLAGS_ADDRESS.toPhysicalAddress(), iflags
-        );
+    function writeIflagsY(AccessLogs.Context memory a, uint64 val)
+        internal
+        pure
+    {
+        a.writeWord(EmulatorConstants.IFLAGS_Y_ADDRESS.toPhysicalAddress(), val);
     }
 
     function writeHtifFromhost(AccessLogs.Context memory a, uint64 val)

@@ -40,8 +40,6 @@ contract UArchReplay_@X@_Test is Test {
         string finalRootHash;
         string initialRootHash;
         string logFilename;
-        bool proof;
-        uint256 proofsFrequency;
         uint256 steps;
     }
 
@@ -73,9 +71,6 @@ contract UArchReplay_@X@_Test is Test {
                 continue;
             }
             console.log("Replaying log file %s ...", catalog[i].logFilename);
-            require(
-                catalog[i].proofsFrequency == 1, "require proof in every step"
-            );
 
             string memory rj =
                 loadJsonLog(string.concat(JSON_PATH, catalog[i].logFilename));

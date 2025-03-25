@@ -3,15 +3,16 @@ TEST_DIR := test
 DOWNLOADDIR := downloads
 SRC_DIR := src
 
-EMULATOR_VERSION ?= v0.18.1
+EMULATOR_VERSION ?= v0.19.0
+EMULATOR_TAG ?=
 
-TESTS_DATA_FILE ?= cartesi-machine-tests-data-$(EMULATOR_VERSION).deb
-TESTS_DATA_DOWNLOAD_URL := https://github.com/cartesi/machine-emulator/releases/download/$(EMULATOR_VERSION)/$(TESTS_DATA_FILE)
+TESTS_DATA_FILE ?= machine-emulator-tests-data.deb
+TESTS_DATA_DOWNLOAD_URL := https://github.com/cartesi/machine-emulator/releases/download/$(EMULATOR_VERSION)$(EMULATOR_TAG)/$(TESTS_DATA_FILE)
 TESTS_DATA_DOWNLOAD_FILEPATH ?= $(DOWNLOADDIR)/$(TESTS_DATA_FILE)
 TESTS_DATA_DIR ?= $(TEST_DIR)/uarch-bin
 
-LOG_TEST_FILE ?= uarch-riscv-tests-json-logs-$(EMULATOR_VERSION).tar.gz
-LOG_DOWNLOAD_URL := https://github.com/cartesi/machine-emulator/releases/download/$(EMULATOR_VERSION)/$(LOG_TEST_FILE)
+LOG_TEST_FILE ?= uarch-riscv-tests-json-logs.tar.gz
+LOG_DOWNLOAD_URL := https://github.com/cartesi/machine-emulator/releases/download/$(EMULATOR_VERSION)$(EMULATOR_TAG)/$(LOG_TEST_FILE)
 LOG_DOWNLOAD_FILEPATH := $(DOWNLOADDIR)/$(LOG_TEST_FILE)
 LOG_TEST_DIR := $(TEST_DIR)/uarch-log
 

@@ -42,8 +42,6 @@ contract UArchReset_Test is Test {
         string finalRootHash;
         string initialRootHash;
         string logFilename;
-        bool proof;
-        uint256 proofsFrequency;
         uint256 steps;
     }
 
@@ -77,9 +75,6 @@ contract UArchReset_Test is Test {
                 continue;
             }
             console.log("Replaying log file %s ...", catalog[i].logFilename);
-            require(
-                catalog[i].proofsFrequency == 1, "require proof in every step"
-            );
 
             string memory rj = loadJsonLog(resetLog);
 
