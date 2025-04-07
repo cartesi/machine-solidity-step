@@ -22,7 +22,7 @@
 pragma solidity ^0.8.0;
 
 library EmulatorConstants {
-    // START OF AUTO-GENERATED CODE
+    // START OF AUTO-GENERATED CODE 
 
     uint64 constant UARCH_CYCLE_ADDRESS = 0x400008;
     uint64 constant UARCH_HALT_FLAG_ADDRESS = 0x400000;
@@ -34,8 +34,7 @@ library EmulatorConstants {
     uint64 constant UARCH_RAM_LENGTH = 0x200000;
     uint64 constant UARCH_STATE_START_ADDRESS = 0x400000;
     uint8 constant UARCH_STATE_LOG2_SIZE = 22;
-    bytes32 constant UARCH_PRISTINE_STATE_HASH =
-        0x1bbf39b2c4324c9c8862b8e5550fe35b06ebccb0dcd2c3f114cc1411813ca5fc;
+    bytes32 constant UARCH_PRISTINE_STATE_HASH = 0x1bbf39b2c4324c9c8862b8e5550fe35b06ebccb0dcd2c3f114cc1411813ca5fc;
     uint64 constant UARCH_ECALL_FN_HALT = 1;
     uint64 constant UARCH_ECALL_FN_PUTCHAR = 2;
     uint64 constant HTIF_YIELD = 0x348;
@@ -46,6 +45,8 @@ library EmulatorConstants {
     uint32 constant TREE_WORD_SIZE = uint32(1) << TREE_LOG2_WORD_SIZE;
     uint64 constant PMA_CMIO_RX_BUFFER_START = 0x60000000;
     uint8 constant PMA_CMIO_RX_BUFFER_LOG2_SIZE = 0x15;
+    uint64 constant PMA_CMIO_TX_BUFFER_START = 0x60800000;
+    uint8 constant PMA_CMIO_TX_BUFFER_LOG2_SIZE = 0x15;
     // END OF AUTO-GENERATED CODE
 
     uint32 constant IFLAGS_Y_SHIFT = 1;
