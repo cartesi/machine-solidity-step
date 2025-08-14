@@ -27,4 +27,5 @@ library EmulatorConstants {
 
     uint32 constant IFLAGS_Y_SHIFT = 1;
     uint64 constant LOG2_CYCLES_TO_RESET = 10;
+    uint64 constant checkpointAddress = 0x7ffff000;
 }

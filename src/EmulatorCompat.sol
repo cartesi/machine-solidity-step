@@ -22,6 +22,18 @@ library EmulatorCompat {
     using AccessLogs for AccessLogs.Context;
     using Memory for uint64;
 
+    function getCheckpointHash(AccessLogs.Context memory a)
+        internal
+        pure
+        returns (bytes32)
+    {
+        return a.readLeaf(
+            Memory.strideFromLeafAddress(
+                EmulatorConstants.checkpointAddress.toPhysicalAddress()
+            )
+        );
+    }
+
     function readCycle(AccessLogs.Context memory a)
         internal
         pure
@@ -85,6 +97,18 @@ library EmulatorCompat {
     function setHaltFlag(AccessLogs.Context memory a) internal pure {
         a.writeWord(
             EmulatorConstants.UARCH_HALT_FLAG_ADDRESS.toPhysicalAddress(), 1
+        );
+    }
+
+    function setCheckpointHash(
+        AccessLogs.Context memory a,
+        bytes32 checkPointHash
+    ) internal pure {
+        a.writeLeaf(
+            Memory.strideFromLeafAddress(
+                EmulatorConstants.checkpointAddress.toPhysicalAddress()
+            ),
+            checkPointHash
         );
     }
 
