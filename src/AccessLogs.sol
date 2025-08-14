@@ -62,12 +62,6 @@ library AccessLogs {
         return end2;
     }
 
-    /// @dev bytes buffer layout is the same for `readWord` and `writeWord`,
-    /// [32 bytes as read data], [59 * 32 bytes as sibling hashes]
-
-    //
-    // Read methods
-    //
     function readRegion(
         AccessLogs.Context memory a,
         Memory.Region memory region
@@ -90,30 +84,6 @@ library AccessLogs {
         return readRegion(a, r);
     }
 
-    function readWord(
-        AccessLogs.Context memory a,
-        Memory.PhysicalAddress readAddress
-    ) internal pure returns (uint64) {
-        (Memory.PhysicalAddress leafAddress, uint64 wordOffset) =
-            readAddress.truncateToLeaf();
-
-        Memory.Region memory region = Memory.regionFromStride(
-            Memory.strideFromLeafAddress(leafAddress),
-            Memory.alignedSizeFromLog2(0)
-        );
-
-        bytes32 leaf = a.buffer.consumeBytes32();
-        bytes32 rootHash =
-            a.buffer.getRoot(region, keccak256(abi.encodePacked(leaf)));
-        require(a.currentRootHash == rootHash, "Read word root doesn't match");
-
-        bytes8 word = getBytes8FromBytes32AtOffset(leaf, wordOffset);
-        return machineWordToSolidityUint64(word);
-    }
-
-    //
-    // Write methods
-    //
     function writeRegion(
         AccessLogs.Context memory a,
         Memory.Region memory region,
@@ -141,6 +111,36 @@ library AccessLogs {
         writeRegion(a, r, newHash);
     }
 
+    /// @dev bytes buffer layout is the same for `readWord` and `writeWord`,
+    /// [32 bytes as read data], [59 * 32 bytes as sibling hashes]
+
+    //
+    // Read methods
+    //
+    function readWord(
+        AccessLogs.Context memory a,
+        Memory.PhysicalAddress readAddress
+    ) internal pure returns (uint64) {
+        (Memory.PhysicalAddress leafAddress, uint64 wordOffset) =
+            readAddress.truncateToLeaf();
+
+        Memory.Region memory region = Memory.regionFromStride(
+            Memory.strideFromLeafAddress(leafAddress),
+            Memory.alignedSizeFromLog2(0)
+        );
+
+        bytes32 leaf = a.buffer.consumeBytes32();
+        bytes32 rootHash =
+            a.buffer.getRoot(region, keccak256(abi.encodePacked(leaf)));
+        require(a.currentRootHash == rootHash, "Read word root doesn't match");
+
+        bytes8 word = getBytes8FromBytes32AtOffset(leaf, wordOffset);
+        return machineWordToSolidityUint64(word);
+    }
+
+    //
+    // Write methods
+    //
     function writeWord(
         AccessLogs.Context memory a,
         Memory.PhysicalAddress writeAddress,
