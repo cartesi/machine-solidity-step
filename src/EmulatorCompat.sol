@@ -34,7 +34,9 @@ library EmulatorCompat {
                 EmulatorConstants.CHECKPOINT_ADDRESS.toPhysicalAddress()
             )
         );
-        assert(keccak256(abi.encodePacked(checkpointHash)) == hashOfCheckpointHash);
+        require(
+            keccak256(abi.encodePacked(checkpointHash)) == hashOfCheckpointHash
+        );
 
         return checkpointHash;
     }

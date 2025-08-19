@@ -22,15 +22,22 @@ pragma solidity ^0.8.0;
 import "./EmulatorCompat.sol";
 import "./EmulatorConstants.sol";
 
-enum Status {
-    NOT_YIELDED,
-    ACCEPTED,
-    REJECTED,
-    EXCEPTION
-}
-
 library AdvanceStatus {
-    // START OF AUTO-GENERATED CODE
+    enum Status {
+        NOT_YIELDED,
+        ACCEPTED,
+        REJECTED,
+        EXCEPTION
+    }
+
+    /*
+    typedef struct cmt_io_yield {
+    uint8_t dev;
+    uint8_t cmd;
+    uint16_t reason;
+    uint32_t data;
+    } cmt_io_yield_t;
+    */
 
     function advanceStatus(AccessLogs.Context memory a)
         internal
@@ -40,6 +47,11 @@ library AdvanceStatus {
         if (!EmulatorCompat.readIflagsY(a)) {
             return Status.NOT_YIELDED;
         }
+
+        // the following two approaches are equivalent:
+        // 1. swap the whole struct and then extract the reason
+        // 2. extract the reason from the struct and then swap the value
+        // EmulatorCompat.readWord already swaps the struct, so we can extract the reason directly
 
         uint64 tohost =
             EmulatorCompat.readWord(a, EmulatorConstants.HTIF_TOHOST_ADDRESS);
@@ -59,6 +71,4 @@ library AdvanceStatus {
             revert("Invalid reason");
         }
     }
-
-    // END OF AUTO-GENERATED CODE
 }
