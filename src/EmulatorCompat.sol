@@ -20,6 +20,7 @@ import "./AccessLogs.sol";
 
 library EmulatorCompat {
     using AccessLogs for AccessLogs.Context;
+    using Buffer for Buffer.Context;
     using Memory for uint64;
 
     function getCheckpointHash(AccessLogs.Context memory a)
@@ -27,11 +28,15 @@ library EmulatorCompat {
         pure
         returns (bytes32)
     {
-        return a.readLeaf(
+        bytes32 checkpointHash = a.buffer.consumeBytes32();
+        bytes32 hashOfCheckpointHash = a.readLeaf(
             Memory.strideFromLeafAddress(
-                EmulatorConstants.checkpointAddress.toPhysicalAddress()
+                EmulatorConstants.CHECKPOINT_ADDRESS.toPhysicalAddress()
             )
         );
+        assert(keccak256(abi.encodePacked(checkpointHash)) == hashOfCheckpointHash);
+
+        return checkpointHash;
     }
 
     function readCycle(AccessLogs.Context memory a)
@@ -102,13 +107,13 @@ library EmulatorCompat {
 
     function setCheckpointHash(
         AccessLogs.Context memory a,
-        bytes32 checkPointHash
+        bytes32 checkpointHash
     ) internal pure {
         a.writeLeaf(
             Memory.strideFromLeafAddress(
-                EmulatorConstants.checkpointAddress.toPhysicalAddress()
+                EmulatorConstants.CHECKPOINT_ADDRESS.toPhysicalAddress()
             ),
-            checkPointHash
+            keccak256(abi.encodePacked(checkpointHash))
         );
     }
 
