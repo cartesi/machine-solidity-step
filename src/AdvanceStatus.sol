@@ -39,6 +39,8 @@ library AdvanceStatus {
     } cmt_io_yield_t;
     */
 
+    error InvalidReason(uint16 reason);
+
     function advanceStatus(AccessLogs.Context memory a)
         internal
         pure
@@ -55,7 +57,7 @@ library AdvanceStatus {
 
         uint64 tohost =
             EmulatorCompat.readWord(a, EmulatorConstants.HTIF_TOHOST_ADDRESS);
-        uint16 reason = uint16((tohost >> 16) & ((1 << 16) - 1));
+        uint16 reason = uint16(tohost >> 32);
 
         if (reason == EmulatorConstants.CMIO_YIELD_MANUAL_REASON_RX_ACCEPTED) {
             return Status.ACCEPTED;
@@ -68,7 +70,7 @@ library AdvanceStatus {
         ) {
             return Status.EXCEPTION;
         } else {
-            revert("Invalid reason");
+            revert InvalidReason(reason);
         }
     }
 }

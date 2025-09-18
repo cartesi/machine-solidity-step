@@ -169,20 +169,20 @@ library AccessLogs {
         a.currentRootHash = newRootHash;
     }
 
-    function getBytes8FromBytes32AtOffset(bytes32 source, uint64 offset)
+    function getBytes8FromBytes32AtOffset(bytes32 source, uint64 offsetInBytes)
         internal
         pure
         returns (bytes8)
     {
-        return bytes8(source << (offset << Memory.LOG2_WORD));
+        return bytes8(source << (offsetInBytes << Memory.LOG2_WORD));
     }
 
     function setBytes8ToBytes32AtOffset(
         bytes8 word,
         bytes32 leaf,
-        uint64 offset
+        uint64 offsetInBytes
     ) internal pure returns (bytes32) {
-        uint256 wordOffset = offset << Memory.LOG2_WORD;
+        uint256 wordOffset = offsetInBytes << Memory.LOG2_WORD;
         bytes32 toWrite = bytes32(word) >> wordOffset;
 
         bytes32 wordMask = bytes32(~bytes8(0));
