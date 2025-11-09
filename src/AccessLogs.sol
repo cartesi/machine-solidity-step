@@ -68,28 +68,6 @@ library AccessLogs {
     //
     // Read methods
     //
-    function readRegion(
-        AccessLogs.Context memory a,
-        Memory.Region memory region
-    ) internal pure returns (bytes32) {
-        bytes32 drive = a.buffer.consumeBytes32();
-        bytes32 rootHash = a.buffer.getRoot(region, drive);
-
-        require(a.currentRootHash == rootHash, "Read region root doesn't match");
-
-        return drive;
-    }
-
-    function readLeaf(AccessLogs.Context memory a, Memory.Stride readStride)
-        internal
-        pure
-        returns (bytes32)
-    {
-        Memory.Region memory r =
-            Memory.regionFromStride(readStride, Memory.alignedSizeFromLog2(0));
-        return readRegion(a, r);
-    }
-
     function readWord(
         AccessLogs.Context memory a,
         Memory.PhysicalAddress readAddress
@@ -189,5 +167,30 @@ library AccessLogs {
         bytes32 mask = ~(wordMask >> wordOffset);
 
         return (leaf & mask) | toWrite;
+    }
+
+    /// @notice Writes 4 64-bit words (32 bytes total) to a single leaf in memory
+    /// @dev This function is specifically designed for writing TLB entries and similar structures
+    function write4Words(
+        AccessLogs.Context memory a,
+        Memory.Stride writeStride,
+        uint64 word0,
+        uint64 word1,
+        uint64 word2,
+        uint64 word3
+    ) internal pure {
+        // Flip endianess and pack data
+        bytes8 w0 = solidityUint64ToMachineWord(word0);
+        bytes8 w1 = solidityUint64ToMachineWord(word1);
+        bytes8 w2 = solidityUint64ToMachineWord(word2);
+        bytes8 w3 = solidityUint64ToMachineWord(word3);
+        bytes32 packed = bytes32(abi.encodePacked(w0, w1, w2, w3));
+        // compute hash and write region
+        bytes32 newHash = keccak256(abi.encodePacked(packed));
+        writeRegion(
+            a,
+            Memory.regionFromStride(writeStride, Memory.alignedSizeFromLog2(0)),
+            newHash
+        );
     }
 }

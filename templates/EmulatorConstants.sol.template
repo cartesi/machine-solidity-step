@@ -27,4 +27,8 @@ library EmulatorConstants {
 
     uint32 constant IFLAGS_Y_SHIFT = 1;
     uint64 constant LOG2_CYCLES_TO_RESET = 10;
+
+    uint64 constant TLB_SLOT_LENGTH = 32;
+    uint64 constant TLB_SET_SIZE = 256;
+    uint64 constant TLB_SET_LENGTH = TLB_SET_SIZE * TLB_SLOT_LENGTH;
 }

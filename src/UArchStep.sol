@@ -574,8 +574,8 @@ library UArchStep {
         uint8 rd = operandRd(insn);
         uint8 rs1 = operandRs1(insn);
         if (rd != 0) {
-            uint64 rs1val = EmulatorCompat.readX(a, rs1);
-            if (int64(rs1val) < imm) {
+            int64 rs1val = int64(EmulatorCompat.readX(a, rs1));
+            if (rs1val < imm) {
                 EmulatorCompat.writeX(a, rd, 1);
             } else {
                 EmulatorCompat.writeX(a, rd, 0);
@@ -1012,7 +1012,7 @@ library UArchStep {
         return advancePc(a, pc);
     }
 
-    function executeFENCE(AccessLogs.Context memory a, uint64 pc)
+    function executeFENCE(AccessLogs.Context memory a, uint32 insn, uint64 pc)
         private
         pure
     {
@@ -1062,24 +1062,48 @@ library UArchStep {
         return advancePc(a, pc);
     }
 
-    function executeECALL(AccessLogs.Context memory a, uint64 pc)
+    function executeECALL(AccessLogs.Context memory a, uint32 insn, uint64 pc)
         private
         pure
     {
+        // ECALL conventions
+        // a0--a7 are the same as x10--x17
+        // syscall is passed in a7
+        // arguments are passed in a0--a5
+        // return value is in a0 (and maybe also in a1)
         uint64 fn = EmulatorCompat.readX(a, 17); // a7 contains the function number
         if (fn == EmulatorConstants.UARCH_ECALL_FN_HALT) {
-            return EmulatorCompat.setHaltFlag(a);
+            return EmulatorCompat.writeHaltFlag(a, 1);
         }
         if (fn == EmulatorConstants.UARCH_ECALL_FN_PUTCHAR) {
-            uint64 character = EmulatorCompat.readX(a, 16); // a6 contains the character to print
-            EmulatorCompat.putChar(a, uint8(character));
-        } else {
-            EmulatorCompat.throwRuntimeError(a, "unsupported ecall function");
+            uint64 c = EmulatorCompat.readX(a, 10); // a0 contains the character to print
+            EmulatorCompat.putCharECALL(a, uint8(c)); // Can be a NOOP in Solidity
+            return advancePc(a, pc);
         }
-        return advancePc(a, pc);
+        if (fn == EmulatorConstants.UARCH_ECALL_FN_MARK_DIRTY_PAGE) {
+            uint64 paddr = EmulatorCompat.readX(a, 10); // a0 contains physical address in page to be marked dirty
+            uint64 pma_index = EmulatorCompat.readX(a, 11); // a1 contains a index of PMA where page falls
+            EmulatorCompat.markDirtyPageECALL(a, paddr, pma_index); // This MUST be be a NOOP in Solidity
+            return advancePc(a, pc);
+        }
+        if (fn == EmulatorConstants.UARCH_ECALL_FN_WRITE_TLB) {
+            uint64 set_index = EmulatorCompat.readX(a, 10); // a0 contains TLB set (code, read, write)
+            uint64 slot_index = EmulatorCompat.readX(a, 11); // a1 contains slot_index to modify
+            uint64 vaddr_page = EmulatorCompat.readX(a, 12); // a2 contains vaddr_page to write
+            uint64 vp_offset = EmulatorCompat.readX(a, 13); // a3 contains vp_offset to write
+            uint64 pma_index = EmulatorCompat.readX(a, 14); // a4 contains index of PMA where page falls
+            EmulatorCompat.writeTlbECALL(
+                a, set_index, slot_index, vaddr_page, vp_offset, pma_index
+            ); // WARNING: This CANNOT be a NOOP in Solidity
+            return advancePc(a, pc);
+        }
+        EmulatorCompat.throwRuntimeError(a, "unsupported ecall function");
     }
 
-    function executeEBREAK(AccessLogs.Context memory a) private pure {
+    function executeEBREAK(AccessLogs.Context memory a, uint32 insn, uint64 pc)
+        private
+        pure
+    {
         EmulatorCompat.throwRuntimeError(a, "uarch aborted");
     }
 
@@ -1287,13 +1311,13 @@ library UArchStep {
             return executeSLTI(a, insn, pc);
         }
         if (insnMatchOpcodeFunct3(insn, 0xf, 0x0)) {
-            return executeFENCE(a, pc);
+            return executeFENCE(a, insn, pc);
         }
         if (insn == uint32(0x73)) {
-            return executeECALL(a, pc);
+            return executeECALL(a, insn, pc);
         }
         if (insn == uint32(0x100073)) {
-            return executeEBREAK(a);
+            return executeEBREAK(a, insn, pc);
         }
         EmulatorCompat.throwRuntimeError(a, "illegal instruction");
     }
@@ -1306,11 +1330,11 @@ library UArchStep {
         // This must be the first read in order to match the first log access in machine.verify_step_uarch
         uint64 cycle = EmulatorCompat.readCycle(a);
         // do not advance if cycle will overflow
-        if (cycle == type(uint64).max) {
+        if (cycle >= EmulatorConstants.UARCH_CYCLE_MAX) {
             return UArchStepStatus.CycleOverflow;
         }
         // do not advance if machine is halted
-        if (EmulatorCompat.readHaltFlag(a)) {
+        if (EmulatorCompat.readHaltFlag(a) != 0) {
             return UArchStepStatus.UArchHalted;
         }
         // execute next instruction
@@ -1327,6 +1351,8 @@ library UArchStep {
     // Explicit instantiation for uarch_record_state_access
 
     // Explicit instantiation for uarch_replay_state_access
+
+    // Explicit instantiation for collect_uarch_cycle_hashes_state_access
 
     // END OF AUTO-GENERATED CODE
 }
