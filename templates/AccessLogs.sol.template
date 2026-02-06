@@ -73,6 +73,76 @@ library AccessLogs {
         return end2;
     }
     
+    function writeRegion(
+        AccessLogs.Context memory a,
+        Memory.Region memory region,
+        bytes32 newHash
+    ) internal pure {
+        bytes32 oldDrive = a.buffer.consumeBytes32();
+        (bytes32 rootHash,) = a.buffer.peekRoot(region, oldDrive);
+        
+        require(
+            a.currentRootHash == rootHash, "Write region root doesn't match"
+        );
+
+        bytes32 newRootHash = a.buffer.getRoot(region, newHash);
+
+        a.currentRootHash = newRootHash;
+    }
+
+    /// @notice Writes 4 64-bit words (32 bytes total) to a single leaf in memory
+    /// @dev This function is specifically designed for writing TLB entries and similar structures
+    function write4Words(
+        AccessLogs.Context memory a,
+        Memory.Stride writeStride,
+        uint64 word0,
+        uint64 word1,
+        uint64 word2,
+        uint64 word3
+    ) internal pure {
+        // Flip endianess and pack data
+        bytes8 w0 = solidityUint64ToMachineWord(word0);
+        bytes8 w1 = solidityUint64ToMachineWord(word1);
+        bytes8 w2 = solidityUint64ToMachineWord(word2);
+        bytes8 w3 = solidityUint64ToMachineWord(word3);
+        bytes32 packed = bytes32(abi.encodePacked(w0, w1, w2, w3));
+
+        // Compute the physical address from stride
+        // For a single leaf, alignedSize = 0, so address = stride << LOG2_LEAF
+        uint64 physicalAddress = Memory.Stride.unwrap(writeStride) << Memory.LOG2_LEAF;
+        Memory.PhysicalAddress paddr = Memory.toPhysicalAddress(physicalAddress);
+
+        // Find the offset in the access log buffer that corresponds to the physical address
+        accessWord(a, paddr);
+        bytes memory data = a.buffer.data;
+        uint256 offset = a.buffer.offset;
+
+        // Update the access log buffer
+        // The 32 is added to offset because we are accessing a byte array.
+        // And an array in solidity always starts with its length which is a 32 byte-long variable.
+        assembly {
+            mstore(add(data, add(offset, 32)), packed)
+        }
+    }
+
+    function writeLeaf(
+        AccessLogs.Context memory a,
+        Memory.Stride writeStride,
+        bytes32 newHash
+    ) internal pure {
+        Memory.Region memory r =
+            Memory.regionFromStride(writeStride, Memory.alignedSizeFromLog2(0));
+        writeRegion(a, r, newHash);
+    }
+
+    //:#ifndef test
+
+    /// @dev bytes buffer layout is the same for `readWord` and `writeWord`,
+    /// [32 bytes as read data], [59 * 32 bytes as sibling hashes]
+
+    //
+    // Read methods
+    //
     function readRegion(
         AccessLogs.Context memory a,
         Memory.Region memory region
@@ -94,42 +164,6 @@ library AccessLogs {
             Memory.regionFromStride(readStride, Memory.alignedSizeFromLog2(0));
         return readRegion(a, r);
     }
-    
-    function writeRegion(
-        AccessLogs.Context memory a,
-        Memory.Region memory region,
-        bytes32 newHash
-    ) internal pure {
-        bytes32 oldDrive = a.buffer.consumeBytes32();
-        (bytes32 rootHash,) = a.buffer.peekRoot(region, oldDrive);
-        
-        require(
-            a.currentRootHash == rootHash, "Write region root doesn't match"
-        );
-
-        bytes32 newRootHash = a.buffer.getRoot(region, newHash);
-
-        a.currentRootHash = newRootHash;
-    }
-
-    function writeLeaf(
-        AccessLogs.Context memory a,
-        Memory.Stride writeStride,
-        bytes32 newHash
-    ) internal pure {
-        Memory.Region memory r =
-            Memory.regionFromStride(writeStride, Memory.alignedSizeFromLog2(0));
-        writeRegion(a, r, newHash);
-    }
-
-    //:#ifndef test
-
-    /// @dev bytes buffer layout is the same for `readWord` and `writeWord`,
-    /// [32 bytes as read data], [59 * 32 bytes as sibling hashes]
-
-    //
-    // Read methods
-    //
 
     function readWord(
         AccessLogs.Context memory a,
@@ -207,7 +241,6 @@ library AccessLogs {
         return (leaf & mask) | toWrite;
     }
 
-
     //:#else
 
     /// @dev This library mocks the `templates/AccessLogs.sol` yet with a very different implementation.
@@ -215,6 +248,10 @@ library AccessLogs {
     /// The first 280 bytes are reserved for register space: 0x320 - 0x438 (35 registers * 8 bytes)
     /// Following next will be continuous memory space: 0x70000000 -
 
+    /// `bytes buffer` simulates the memory space with three separate regions.
+    // 1. shadow TLB   (AR_SHADOW_TLB_LENGTH bytes)
+    // 2. shadow UArch (UARCH_SHADOW_LENGTH bytes)
+    // 3. uarch RAM   (rest of the bytes - test binary loaded here)
     function readWord(
         AccessLogs.Context memory a,
         Memory.PhysicalAddress readAddress
@@ -244,6 +281,8 @@ library AccessLogs {
         }
     }
 
+    //:#endif
+
     function accessWord(
         AccessLogs.Context memory a,
         Memory.PhysicalAddress paddr
@@ -251,12 +290,17 @@ library AccessLogs {
         uint64 index;
         uint64 position = Memory.PhysicalAddress.unwrap(paddr);
         if (
+            position >= EmulatorConstants.AR_SHADOW_TLB_START
+                && position <= EmulatorConstants.AR_SHADOW_TLB_START + EmulatorConstants.AR_SHADOW_TLB_LENGTH
+        ) {
+            index = position - EmulatorConstants.AR_SHADOW_TLB_START;
+        } else if (
             position >= EmulatorConstants.UARCH_SHADOW_START_ADDRESS
                 && position <= EmulatorConstants.UARCH_SHADOW_START_ADDRESS + EmulatorConstants.UARCH_SHADOW_LENGTH
         ) {
-            index = (position - EmulatorConstants.UARCH_SHADOW_START_ADDRESS);
+            index = (position - EmulatorConstants.UARCH_SHADOW_START_ADDRESS) + EmulatorConstants.AR_SHADOW_TLB_LENGTH;
         } else if (position >= EmulatorConstants.UARCH_RAM_START_ADDRESS) {
-            index = (position - EmulatorConstants.UARCH_RAM_START_ADDRESS) + (35 << 3);
+            index = (position - EmulatorConstants.UARCH_RAM_START_ADDRESS) + EmulatorConstants.AR_SHADOW_TLB_LENGTH + EmulatorConstants.UARCH_SHADOW_LENGTH;
         } else {
             revert("invalid memory access");
         }
@@ -264,6 +308,4 @@ library AccessLogs {
         a.buffer.offset = index;
         val = a.buffer.peekBytes32();
     }
-
-    //:#endif
 }

@@ -42,8 +42,10 @@ library SendCmioResponse {
         if (dataLength > 0) {
             // Find the write length: the smallest power of 2 that is >= dataLength and >= tree leaf size
             uint32 writeLengthLog2Size = EmulatorCompat.uint32Log2(dataLength);
-            if (writeLengthLog2Size < EmulatorConstants.TREE_LOG2_WORD_SIZE) {
-                writeLengthLog2Size = EmulatorConstants.TREE_LOG2_WORD_SIZE; // minimum write size is the tree leaf size
+            if (
+                writeLengthLog2Size < EmulatorConstants.HASH_TREE_LOG2_WORD_SIZE
+            ) {
+                writeLengthLog2Size = EmulatorConstants.HASH_TREE_LOG2_WORD_SIZE; // minimum write size is the tree leaf size
             }
             if (
                 EmulatorCompat.uint32ShiftLeft(1, writeLengthLog2Size)
@@ -53,7 +55,7 @@ library SendCmioResponse {
             }
             if (
                 writeLengthLog2Size
-                    > EmulatorConstants.PMA_CMIO_RX_BUFFER_LOG2_SIZE
+                    > EmulatorConstants.AR_CMIO_RX_BUFFER_LOG2_SIZE
             ) {
                 EmulatorCompat.throwRuntimeError(
                     a, "CMIO response data is too large"
@@ -61,12 +63,12 @@ library SendCmioResponse {
             }
             a.writeRegion(
                 Memory.regionFromPhysicalAddress(
-                    EmulatorConstants.PMA_CMIO_RX_BUFFER_START.toPhysicalAddress(
-                    ),
+                    EmulatorConstants.AR_CMIO_RX_BUFFER_START
+                    .toPhysicalAddress(),
                     Memory.alignedSizeFromLog2(
                         uint8(
                             writeLengthLog2Size
-                                - EmulatorConstants.TREE_LOG2_WORD_SIZE
+                                - EmulatorConstants.HASH_TREE_LOG2_WORD_SIZE
                         )
                     )
                 ),

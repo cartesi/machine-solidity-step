@@ -45,10 +45,10 @@ pattern="namespace cartesi \{(.*)\}"
 # replace cpp specific syntaxes with solidity ones
 cpp_src=`echo "${BASH_REMATCH[1]}" \
         | $SED "/template/d" \
-        | $SED "/note = a.make_scoped_note/d" \
+        | $SED "/[[maybe_unused]]/d" \
         | $SED "/(void) note/d" \
         | $SED "s/constexpr//g" \
-        | $SED "s/UarchState &a/AccessLogs.Context memory a/g" \
+        | $SED "s/const UarchState a/AccessLogs.Context memory a/g" \
         | $SED "s/::/./g" \
         | $SED "s/UINT64_MAX/type(uint64).max/g" \
         | $SED -E "s/UArchStepStatus uarch_step/static inline UArchStepStatus step/g" \

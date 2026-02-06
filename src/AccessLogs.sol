@@ -62,6 +62,75 @@ library AccessLogs {
         return end2;
     }
 
+    function writeRegion(
+        AccessLogs.Context memory a,
+        Memory.Region memory region,
+        bytes32 newHash
+    ) internal pure {
+        bytes32 oldDrive = a.buffer.consumeBytes32();
+        (bytes32 rootHash,) = a.buffer.peekRoot(region, oldDrive);
+
+        require(
+            a.currentRootHash == rootHash, "Write region root doesn't match"
+        );
+
+        bytes32 newRootHash = a.buffer.getRoot(region, newHash);
+
+        a.currentRootHash = newRootHash;
+    }
+
+    /// @notice Writes 4 64-bit words (32 bytes total) to a single leaf in memory
+    /// @dev This function is specifically designed for writing TLB entries and similar structures
+    function write4Words(
+        AccessLogs.Context memory a,
+        Memory.Stride writeStride,
+        uint64 word0,
+        uint64 word1,
+        uint64 word2,
+        uint64 word3
+    ) internal pure {
+        // Flip endianess and pack data
+        bytes8 w0 = solidityUint64ToMachineWord(word0);
+        bytes8 w1 = solidityUint64ToMachineWord(word1);
+        bytes8 w2 = solidityUint64ToMachineWord(word2);
+        bytes8 w3 = solidityUint64ToMachineWord(word3);
+        bytes32 packed = bytes32(abi.encodePacked(w0, w1, w2, w3));
+
+        // Compute the physical address from stride
+        // For a single leaf, alignedSize = 0, so address = stride << LOG2_LEAF
+        uint64 physicalAddress =
+            Memory.Stride.unwrap(writeStride) << Memory.LOG2_LEAF;
+        Memory.PhysicalAddress paddr = Memory.toPhysicalAddress(physicalAddress);
+
+        // Find the offset in the access log buffer that corresponds to the physical address
+        accessWord(a, paddr);
+        bytes memory data = a.buffer.data;
+        uint256 offset = a.buffer.offset;
+
+        // Update the access log buffer
+        // The 32 is added to offset because we are accessing a byte array.
+        // And an array in solidity always starts with its length which is a 32 byte-long variable.
+        assembly {
+            mstore(add(data, add(offset, 32)), packed)
+        }
+    }
+
+    function writeLeaf(
+        AccessLogs.Context memory a,
+        Memory.Stride writeStride,
+        bytes32 newHash
+    ) internal pure {
+        Memory.Region memory r =
+            Memory.regionFromStride(writeStride, Memory.alignedSizeFromLog2(0));
+        writeRegion(a, r, newHash);
+    }
+
+    /// @dev bytes buffer layout is the same for `readWord` and `writeWord`,
+    /// [32 bytes as read data], [59 * 32 bytes as sibling hashes]
+
+    //
+    // Read methods
+    //
     function readRegion(
         AccessLogs.Context memory a,
         Memory.Region memory region
@@ -84,39 +153,6 @@ library AccessLogs {
         return readRegion(a, r);
     }
 
-    function writeRegion(
-        AccessLogs.Context memory a,
-        Memory.Region memory region,
-        bytes32 newHash
-    ) internal pure {
-        bytes32 oldDrive = a.buffer.consumeBytes32();
-        (bytes32 rootHash,) = a.buffer.peekRoot(region, oldDrive);
-
-        require(
-            a.currentRootHash == rootHash, "Write region root doesn't match"
-        );
-
-        bytes32 newRootHash = a.buffer.getRoot(region, newHash);
-
-        a.currentRootHash = newRootHash;
-    }
-
-    function writeLeaf(
-        AccessLogs.Context memory a,
-        Memory.Stride writeStride,
-        bytes32 newHash
-    ) internal pure {
-        Memory.Region memory r =
-            Memory.regionFromStride(writeStride, Memory.alignedSizeFromLog2(0));
-        writeRegion(a, r, newHash);
-    }
-
-    /// @dev bytes buffer layout is the same for `readWord` and `writeWord`,
-    /// [32 bytes as read data], [59 * 32 bytes as sibling hashes]
-
-    //
-    // Read methods
-    //
     function readWord(
         AccessLogs.Context memory a,
         Memory.PhysicalAddress readAddress
@@ -141,6 +177,7 @@ library AccessLogs {
     //
     // Write methods
     //
+
     function writeWord(
         AccessLogs.Context memory a,
         Memory.PhysicalAddress writeAddress,
@@ -169,25 +206,60 @@ library AccessLogs {
         a.currentRootHash = newRootHash;
     }
 
-    function getBytes8FromBytes32AtOffset(bytes32 source, uint64 offsetInBytes)
+    function getBytes8FromBytes32AtOffset(bytes32 source, uint64 offset)
         internal
         pure
         returns (bytes8)
     {
-        return bytes8(source << (offsetInBytes << Memory.LOG2_WORD));
+        return bytes8(source << (offset << Memory.LOG2_WORD));
     }
 
     function setBytes8ToBytes32AtOffset(
         bytes8 word,
         bytes32 leaf,
-        uint64 offsetInBytes
+        uint64 offset
     ) internal pure returns (bytes32) {
-        uint256 wordOffset = offsetInBytes << Memory.LOG2_WORD;
+        uint256 wordOffset = offset << Memory.LOG2_WORD;
         bytes32 toWrite = bytes32(word) >> wordOffset;
 
         bytes32 wordMask = bytes32(~bytes8(0));
         bytes32 mask = ~(wordMask >> wordOffset);
 
         return (leaf & mask) | toWrite;
+    }
+
+    function accessWord(
+        AccessLogs.Context memory a,
+        Memory.PhysicalAddress paddr
+    ) private pure returns (bytes32 val) {
+        uint64 index;
+        uint64 position = Memory.PhysicalAddress.unwrap(paddr);
+        if (
+            position >= EmulatorConstants.AR_SHADOW_TLB_START
+                && position
+                    <= EmulatorConstants.AR_SHADOW_TLB_START
+                        + EmulatorConstants.AR_SHADOW_TLB_LENGTH
+        ) {
+            index =
+                position - EmulatorConstants.AR_SHADOW_TLB_START;
+        } else if (
+            position >= EmulatorConstants.UARCH_SHADOW_START_ADDRESS
+                && position
+                    <= EmulatorConstants.UARCH_SHADOW_START_ADDRESS
+                        + EmulatorConstants.UARCH_SHADOW_LENGTH
+        ) {
+            index =
+                (position - EmulatorConstants.UARCH_SHADOW_START_ADDRESS)
+                    + EmulatorConstants.AR_SHADOW_TLB_LENGTH;
+        } else if (position >= EmulatorConstants.UARCH_RAM_START_ADDRESS) {
+            index = (position - EmulatorConstants.UARCH_RAM_START_ADDRESS)
+                + EmulatorConstants.AR_SHADOW_TLB_LENGTH
+                + EmulatorConstants.UARCH_SHADOW_LENGTH;
+        } else {
+            revert("invalid memory access");
+        }
+
+        a.buffer.offset = index;
+        val = a.buffer.peekBytes32();
     }
 }

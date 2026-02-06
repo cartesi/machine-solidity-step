@@ -54,12 +54,19 @@ library EmulatorCompat {
     function readHaltFlag(AccessLogs.Context memory a)
         internal
         pure
-        returns (bool)
+        returns (uint64)
     {
-        return (
-            a.readWord(
-                EmulatorConstants.UARCH_HALT_FLAG_ADDRESS.toPhysicalAddress()
-            ) != 0
+        return a.readWord(
+            EmulatorConstants.UARCH_HALT_FLAG_ADDRESS.toPhysicalAddress()
+        );
+    }
+
+    function writeHaltFlag(AccessLogs.Context memory a, uint64 val)
+        internal
+        pure
+    {
+        a.writeWord(
+            EmulatorConstants.UARCH_HALT_FLAG_ADDRESS.toPhysicalAddress(), val
         );
     }
 
@@ -68,8 +75,9 @@ library EmulatorCompat {
         pure
         returns (uint64)
     {
-        return
-            a.readWord(EmulatorConstants.UARCH_PC_ADDRESS.toPhysicalAddress());
+        return a.readWord(
+            EmulatorConstants.UARCH_PC_ADDRESS.toPhysicalAddress()
+        );
     }
 
     function readWord(AccessLogs.Context memory a, uint64 paddr)
@@ -92,18 +100,9 @@ library EmulatorCompat {
         return a.readWord(paddr.toPhysicalAddress());
     }
 
-    function writeCycle(AccessLogs.Context memory a, uint64 val)
-        internal
-        pure
-    {
+    function writeCycle(AccessLogs.Context memory a, uint64 val) internal pure {
         a.writeWord(
             EmulatorConstants.UARCH_CYCLE_ADDRESS.toPhysicalAddress(), val
-        );
-    }
-
-    function setHaltFlag(AccessLogs.Context memory a) internal pure {
-        a.writeWord(
-            EmulatorConstants.UARCH_HALT_FLAG_ADDRESS.toPhysicalAddress(), 1
         );
     }
 
@@ -158,8 +157,9 @@ library EmulatorCompat {
         pure
         returns (bool)
     {
-        uint64 iflags_y =
-            a.readWord(EmulatorConstants.IFLAGS_Y_ADDRESS.toPhysicalAddress());
+        uint64 iflags_y = a.readWord(
+            EmulatorConstants.IFLAGS_Y_ADDRESS.toPhysicalAddress()
+        );
         if (iflags_y == 0) {
             return false;
         }
@@ -311,7 +311,40 @@ library EmulatorCompat {
         revert(text);
     }
 
-    function putChar(AccessLogs.Context memory a, uint8 c) internal pure {}
+    function putCharECALL(AccessLogs.Context memory a, uint8 c) internal pure {}
+
+    function markDirtyPageECALL(
+        AccessLogs.Context memory a,
+        uint64 paddr,
+        uint64 pma_index
+    ) internal pure {}
+
+    function writeTlbECALL(
+        AccessLogs.Context memory a,
+        uint64 setIndex,
+        uint64 slotIndex,
+        uint64 vaddrPage,
+        uint64 vpOffset,
+        uint64 pmaIindex
+    ) internal pure {
+        // compute physical address of the TLB slot
+        uint64 paddress = EmulatorConstants.AR_SHADOW_TLB_START
+            + (setIndex * EmulatorConstants.TLB_SET_LENGTH)
+            + (slotIndex * EmulatorConstants.TLB_SLOT_LENGTH);
+
+        // compute stride from physical address (stride = address / leaf_size)
+        Memory.Stride writeStride =
+            Memory.strideFromLeafAddress(paddress.toPhysicalAddress());
+
+        // write the 4 words
+        a.write4Words(
+            writeStride,
+            vaddrPage,
+            vpOffset,
+            pmaIindex,
+            0 // zero_padding_
+        );
+    }
 
     function uint32Log2(uint32 value) internal pure returns (uint32) {
         require(value > 0, "EmulatorCompat: log2(0) is undefined");

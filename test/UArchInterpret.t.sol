@@ -87,11 +87,11 @@ contract UArchInterpretTest is Test {
                 uint64(TEST_SUCEEDED)
             );
 
-            bool halt = EmulatorCompat.readHaltFlag(a);
+            bool halt = EmulatorCompat.readHaltFlag(a) != 0;
             assertTrue(halt, "machine should halt");
 
             uint64 cycle = EmulatorCompat.readCycle(a);
-            assertEq(cycle, catalog[i].steps, "cycle values should match");
+            assertEq(catalog[i].steps, cycle, "cycle values should match");
         }
     }
 
@@ -120,7 +120,7 @@ contract UArchInterpretTest is Test {
         // reset cycle to 0
         EmulatorCompat.writeCycle(a, 0);
         // set machine to halt
-        EmulatorCompat.setHaltFlag(a);
+        EmulatorCompat.writeHaltFlag(a, 1);
 
         status = UArchInterpret.interpret(a);
 
@@ -167,9 +167,21 @@ contract UArchInterpretTest is Test {
         pure
         returns (AccessLogs.Context memory)
     {
+        /*
+        Memory layout:
+            - shadow TLB   (AR_SHADOW_TLB_LENGTH bytes)
+            - shadow UArch (UARCH_SHADOW_LENGTH bytes)
+            - uarch RAM   (rest of the bytes - test binary loaded here)
+        */
         return AccessLogs.Context(
             bytes32(0),
-            Buffer.Context(new bytes(uint128(REGISTERS_LENGTH) * 8), 0)
+            Buffer.Context(
+                new bytes(
+                    EmulatorConstants.AR_SHADOW_TLB_LENGTH
+                        + EmulatorConstants.UARCH_SHADOW_LENGTH
+                ),
+                0
+            )
         );
     }
 }
