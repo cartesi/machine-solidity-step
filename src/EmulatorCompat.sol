@@ -20,7 +20,27 @@ import "./AccessLogs.sol";
 
 library EmulatorCompat {
     using AccessLogs for AccessLogs.Context;
+    using Buffer for Buffer.Context;
     using Memory for uint64;
+
+    function getCheckpointHash(AccessLogs.Context memory a)
+        internal
+        pure
+        returns (bytes32)
+    {
+        bytes32 checkpointHash = a.buffer.consumeBytes32();
+        bytes32 hashOfCheckpointHash = a.readLeaf(
+            Memory.strideFromLeafAddress(
+                EmulatorConstants.CHECKPOINT_ADDRESS.toPhysicalAddress()
+            )
+        );
+        require(
+            keccak256(abi.encodePacked(checkpointHash)) == hashOfCheckpointHash,
+            "checkpoint hash mismatch"
+        );
+
+        return checkpointHash;
+    }
 
     function readCycle(AccessLogs.Context memory a)
         internal
@@ -35,12 +55,19 @@ library EmulatorCompat {
     function readHaltFlag(AccessLogs.Context memory a)
         internal
         pure
-        returns (bool)
+        returns (uint64)
     {
-        return (
-            a.readWord(
-                EmulatorConstants.UARCH_HALT_FLAG_ADDRESS.toPhysicalAddress()
-            ) != 0
+        return a.readWord(
+            EmulatorConstants.UARCH_HALT_FLAG_ADDRESS.toPhysicalAddress()
+        );
+    }
+
+    function writeHaltFlag(AccessLogs.Context memory a, uint64 val)
+        internal
+        pure
+    {
+        a.writeWord(
+            EmulatorConstants.UARCH_HALT_FLAG_ADDRESS.toPhysicalAddress(), val
         );
     }
 
@@ -82,9 +109,15 @@ library EmulatorCompat {
         );
     }
 
-    function setHaltFlag(AccessLogs.Context memory a) internal pure {
-        a.writeWord(
-            EmulatorConstants.UARCH_HALT_FLAG_ADDRESS.toPhysicalAddress(), 1
+    function setCheckpointHash(
+        AccessLogs.Context memory a,
+        bytes32 checkpointHash
+    ) internal pure {
+        a.writeLeaf(
+            Memory.strideFromLeafAddress(
+                EmulatorConstants.CHECKPOINT_ADDRESS.toPhysicalAddress()
+            ),
+            keccak256(abi.encodePacked(checkpointHash))
         );
     }
 
@@ -280,7 +313,40 @@ library EmulatorCompat {
         revert(text);
     }
 
-    function putChar(AccessLogs.Context memory a, uint8 c) internal pure {}
+    function putCharECALL(AccessLogs.Context memory a, uint8 c) internal pure {}
+
+    function markDirtyPageECALL(
+        AccessLogs.Context memory a,
+        uint64 paddr,
+        uint64 pma_index
+    ) internal pure {}
+
+    function writeTlbECALL(
+        AccessLogs.Context memory a,
+        uint64 setIndex,
+        uint64 slotIndex,
+        uint64 vaddrPage,
+        uint64 vpOffset,
+        uint64 pmaIndex
+    ) internal pure {
+        // compute physical address of the TLB slot
+        uint64 paddress = EmulatorConstants.AR_SHADOW_TLB_START
+            + (setIndex * EmulatorConstants.TLB_SET_LENGTH)
+            + (slotIndex * EmulatorConstants.TLB_SLOT_LENGTH);
+
+        // compute stride from physical address (stride = address / leaf_size)
+        Memory.Stride writeStride =
+            Memory.strideFromLeafAddress(paddress.toPhysicalAddress());
+
+        // write the 4 words
+        a.write4Words(
+            writeStride,
+            vaddrPage,
+            vpOffset,
+            pmaIndex,
+            0 // zero_padding_
+        );
+    }
 
     function uint32Log2(uint32 value) internal pure returns (uint32) {
         require(value > 0, "EmulatorCompat: log2(0) is undefined");
