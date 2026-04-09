@@ -25,7 +25,7 @@ library EmulatorConstants {
     // START OF AUTO-GENERATED CODE
 
     bytes32 constant UARCH_PRISTINE_STATE_HASH =
-        0xa73214303203557aea4dd151d18244b87f90532fc40e0f25c8795456e33f2b8f;
+        0xa2f4f0018081d795e47c7feae9300055e8551eda5bd6473e54ca80ece64ea620;
     uint64 constant UARCH_CYCLE_ADDRESS = 0x400008;
     uint64 constant UARCH_CYCLE_MAX = 0x100000;
     uint64 constant UARCH_HALT_FLAG_ADDRESS = 0x400000;
@@ -38,7 +38,6 @@ library EmulatorConstants {
     uint64 constant UARCH_RAM_START_ADDRESS = 0x600000;
     uint64 constant UARCH_RAM_LENGTH = 0x200000;
     uint64 constant UARCH_STATE_START_ADDRESS = 0x400000;
-    uint8 constant UARCH_STATE_LOG2_SIZE = 22;
     uint64 constant UARCH_ECALL_FN_HALT = 1;
     uint64 constant UARCH_ECALL_FN_PUTCHAR = 2;
     uint64 constant UARCH_ECALL_FN_MARK_DIRTY_PAGE = 3;
@@ -53,6 +52,7 @@ library EmulatorConstants {
     uint16 constant CMIO_YIELD_MANUAL_REASON_RX_ACCEPTED = 0x1;
     uint16 constant CMIO_YIELD_MANUAL_REASON_RX_REJECTED = 0x2;
     uint16 constant CMIO_YIELD_MANUAL_REASON_TX_EXCEPTION = 0x4;
+    uint8 constant UARCH_STATE_LOG2_SIZE = 22;
     uint64 constant AR_CMIO_RX_BUFFER_START = 0x60000000;
     uint8 constant AR_CMIO_RX_BUFFER_LOG2_SIZE = 0x15;
     uint64 constant AR_CMIO_TX_BUFFER_START = 0x60800000;
