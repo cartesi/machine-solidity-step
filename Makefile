@@ -3,7 +3,7 @@ TEST_DIR := test
 DOWNLOADDIR := downloads
 SRC_DIR := src
 
-EMULATOR_VERSION ?= v0.20.0-test3
+EMULATOR_VERSION ?= v0.20.0
 EMULATOR_TAG ?=
 
 TESTS_DATA_FILE ?= machine-emulator-tests-data.deb
