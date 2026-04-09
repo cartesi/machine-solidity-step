@@ -21,3 +21,88 @@ jobs:
 
       - name: Run all tests
         run: make test-all
+
+  coverage-mock:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install gpp
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: gpp
+          version: 2.27
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.0.0
+
+      - name: Run mock coverage
+        run: make coverage-mock
+
+      - name: Upload mock coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: lcov-mock
+          path: lcov-mock.info
+
+  coverage-prod:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install gpp
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: gpp
+          version: 2.27
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.0.0
+
+      - name: Run prod coverage
+        run: make coverage-prod
+
+      - name: Upload prod coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: lcov-prod
+          path: lcov-prod.info
+
+  coverage-report:
+    runs-on: ubuntu-22.04
+    needs: [coverage-mock, coverage-prod]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install lcov
+        run: sudo apt-get install -y lcov
+
+      - name: Download mock coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: lcov-mock
+
+      - name: Download prod coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: lcov-prod
+
+      - name: Generate coverage report
+        run: make coverage-report
+
+      - name: Show coverage summary
+        run: cat coverage/coverage.txt
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage

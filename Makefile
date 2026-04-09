@@ -55,6 +55,27 @@ test-all:
 	$(MAKE) test-replay
 	$(MAKE) test-prod
 
+coverage-mock: dep
+	$(MAKE) generate-mock
+	forge coverage --use 0.8.21 --report lcov --match-contract UArchInterpret
+	mv lcov.info lcov-mock.info
+
+coverage-prod: dep
+	$(MAKE) generate-prod
+	$(MAKE) generate-replay
+	forge coverage --use 0.8.21 --report lcov --no-match-contract UArchInterpret
+	mv lcov.info lcov-prod.info
+
+COVERAGE_OUTPUT_DIR ?= coverage
+
+coverage-report: $(COVERAGE_OUTPUT_DIR)
+	lcov -a lcov-mock.info -a lcov-prod.info -o $(COVERAGE_OUTPUT_DIR)/lcov.info
+	lcov --summary $(COVERAGE_OUTPUT_DIR)/lcov.info | tee $(COVERAGE_OUTPUT_DIR)/coverage.txt
+	genhtml $(COVERAGE_OUTPUT_DIR)/lcov.info -o $(COVERAGE_OUTPUT_DIR)/html
+
+$(COVERAGE_OUTPUT_DIR):
+	mkdir -p $(COVERAGE_OUTPUT_DIR)
+
 test-mock: dep
 	$(MAKE) generate-mock
 	forge test --use 0.8.21 -vv --match-contract UArchInterpret
@@ -124,4 +145,4 @@ $(LOG_TEST_DIR): | download
 submodules:
 	git submodule update --init --recursive
 
-.PHONY: help all build clean checksum-download shasum-download fmt generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay generate-constants generate-reset generate-send-cmio-response
+.PHONY: help all build clean checksum-download shasum-download fmt generate-mock generate-prod generate-replay generate-step pretest submodules test-all test-mock test-prod test-replay generate-constants generate-reset generate-send-cmio-response coverage-mock coverage-prod coverage-report
