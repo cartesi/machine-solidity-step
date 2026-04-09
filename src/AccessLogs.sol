@@ -201,7 +201,7 @@ library AccessLogs {
         uint64 word2,
         uint64 word3
     ) internal pure {
-        // Flip endianess and pack data
+        // Flip endianness and pack data
         bytes8 w0 = solidityUint64ToMachineWord(word0);
         bytes8 w1 = solidityUint64ToMachineWord(word1);
         bytes8 w2 = solidityUint64ToMachineWord(word2);

@@ -59,7 +59,6 @@ library EmulatorConstants {
     uint8 constant AR_CMIO_TX_BUFFER_LOG2_SIZE = 0x15;
     // END OF AUTO-GENERATED CODE
 
-    uint32 constant IFLAGS_Y_SHIFT = 1;
     uint64 constant LOG2_CYCLES_TO_RESET = 10;
 
     uint64 constant TLB_SLOT_LENGTH = 32;

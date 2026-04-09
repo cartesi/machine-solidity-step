@@ -47,7 +47,7 @@ contract UArchInterpretTest is Test {
 
     uint8 constant TEST_STATUS_X = 1;
     // test result code
-    bytes8 constant TEST_SUCEEDED = 0x00000000be1e7aaa; // Indicates that test has passed
+    bytes8 constant TEST_SUCCEEDED = 0x00000000be1e7aaa; // Indicates that test has passed
     bytes8 constant TEST_FAILED = 0x00000000deadbeef; // Indicates that test has failed
     string constant CATALOG_PATH = "catalog.json";
     string constant JSON_PATH = "./test/uarch-log/";
@@ -83,7 +83,7 @@ contract UArchInterpretTest is Test {
             assertEq(
                 // read test result from the register
                 x,
-                uint64(TEST_SUCEEDED)
+                uint64(TEST_SUCCEEDED)
             );
 
             bool halt = EmulatorCompat.readHaltFlag(a) != 0;
