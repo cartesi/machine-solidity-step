@@ -31,7 +31,7 @@ library EmulatorCompat {
         bytes32 checkpointHash = a.buffer.consumeBytes32();
         bytes32 hashOfCheckpointHash = a.readLeaf(
             Memory.strideFromLeafAddress(
-                EmulatorConstants.CHECKPOINT_ADDRESS.toPhysicalAddress()
+                EmulatorConstants.REVERT_ROOT_HASH_ADDRESS.toPhysicalAddress()
             )
         );
         require(
@@ -115,7 +115,7 @@ library EmulatorCompat {
     ) internal pure {
         a.writeLeaf(
             Memory.strideFromLeafAddress(
-                EmulatorConstants.CHECKPOINT_ADDRESS.toPhysicalAddress()
+                EmulatorConstants.REVERT_ROOT_HASH_ADDRESS.toPhysicalAddress()
             ),
             keccak256(abi.encodePacked(checkpointHash))
         );
