@@ -23,23 +23,23 @@ library EmulatorCompat {
     using Buffer for Buffer.Context;
     using Memory for uint64;
 
-    function getCheckpointHash(AccessLogs.Context memory a)
+    function getRevertRootHash(AccessLogs.Context memory a)
         internal
         pure
         returns (bytes32)
     {
-        bytes32 checkpointHash = a.buffer.consumeBytes32();
-        bytes32 hashOfCheckpointHash = a.readLeaf(
+        bytes32 revertRootHash = a.buffer.consumeBytes32();
+        bytes32 hashOfRevertRootHash = a.readLeaf(
             Memory.strideFromLeafAddress(
                 EmulatorConstants.REVERT_ROOT_HASH_ADDRESS.toPhysicalAddress()
             )
         );
         require(
-            keccak256(abi.encodePacked(checkpointHash)) == hashOfCheckpointHash,
-            "checkpoint hash mismatch"
+            keccak256(abi.encodePacked(revertRootHash)) == hashOfRevertRootHash,
+            "revert root hash mismatch"
         );
 
-        return checkpointHash;
+        return revertRootHash;
     }
 
     function readCycle(AccessLogs.Context memory a)
@@ -109,15 +109,15 @@ library EmulatorCompat {
         );
     }
 
-    function setCheckpointHash(
+    function setRevertRootHash(
         AccessLogs.Context memory a,
-        bytes32 checkpointHash
+        bytes32 revertRootHash
     ) internal pure {
         a.writeLeaf(
             Memory.strideFromLeafAddress(
                 EmulatorConstants.REVERT_ROOT_HASH_ADDRESS.toPhysicalAddress()
             ),
-            keccak256(abi.encodePacked(checkpointHash))
+            keccak256(abi.encodePacked(revertRootHash))
         );
     }
 
