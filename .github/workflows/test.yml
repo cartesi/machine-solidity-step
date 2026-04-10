@@ -4,7 +4,7 @@ jobs:
   test:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: recursive
 
@@ -12,7 +12,7 @@ jobs:
         run: sudo apt-get install -y gpp
 
       - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
+        uses: foundry-rs/foundry-toolchain@8789b3e21e6c11b2697f5eb56eddae542f746c10 # v1.7.0
         with:
           version: v1.0.0
 
@@ -22,7 +22,7 @@ jobs:
   coverage-mock:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: recursive
 
@@ -30,7 +30,7 @@ jobs:
         run: sudo apt-get install -y gpp
 
       - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
+        uses: foundry-rs/foundry-toolchain@8789b3e21e6c11b2697f5eb56eddae542f746c10 # v1.7.0
         with:
           version: v1.0.0
 
@@ -46,7 +46,7 @@ jobs:
   coverage-prod:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           submodules: recursive
 
@@ -54,7 +54,7 @@ jobs:
         run: sudo apt-get install -y gpp
 
       - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
+        uses: foundry-rs/foundry-toolchain@8789b3e21e6c11b2697f5eb56eddae542f746c10 # v1.7.0
         with:
           version: v1.0.0
 
@@ -62,7 +62,7 @@ jobs:
         run: make coverage-prod
 
       - name: Upload prod coverage
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: lcov-prod
           path: lcov-prod.info
@@ -71,18 +71,18 @@ jobs:
     runs-on: ubuntu-24.04
     needs: [coverage-mock, coverage-prod]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
       - name: Install lcov
         run: sudo apt-get install -y lcov
 
       - name: Download mock coverage
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: lcov-mock
 
       - name: Download prod coverage
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           name: lcov-prod
 
@@ -93,7 +93,7 @@ jobs:
         run: cat coverage/coverage.txt
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: coverage-report
           path: coverage
