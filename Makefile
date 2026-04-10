@@ -71,7 +71,7 @@ COVERAGE_OUTPUT_DIR ?= coverage
 coverage-report: $(COVERAGE_OUTPUT_DIR)
 	lcov -a lcov-mock.info -a lcov-prod.info -o $(COVERAGE_OUTPUT_DIR)/lcov.info
 	lcov --summary $(COVERAGE_OUTPUT_DIR)/lcov.info | tee $(COVERAGE_OUTPUT_DIR)/coverage.txt
-	genhtml $(COVERAGE_OUTPUT_DIR)/lcov.info -o $(COVERAGE_OUTPUT_DIR)/html
+	genhtml --ignore-errors unmapped $(COVERAGE_OUTPUT_DIR)/lcov.info -o $(COVERAGE_OUTPUT_DIR)/html
 
 $(COVERAGE_OUTPUT_DIR):
 	mkdir -p $(COVERAGE_OUTPUT_DIR)

@@ -2,17 +2,14 @@ name: Test
 on: [push]
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
 
       - name: Install gpp
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: gpp
-          version: 2.27
+        run: sudo apt-get install -y gpp
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
@@ -23,17 +20,14 @@ jobs:
         run: make test-all
 
   coverage-mock:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
 
       - name: Install gpp
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: gpp
-          version: 2.27
+        run: sudo apt-get install -y gpp
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
@@ -50,17 +44,14 @@ jobs:
           path: lcov-mock.info
 
   coverage-prod:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
 
       - name: Install gpp
-        uses: awalsh128/cache-apt-pkgs-action@latest
-        with:
-          packages: gpp
-          version: 2.27
+        run: sudo apt-get install -y gpp
 
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
@@ -77,7 +68,7 @@ jobs:
           path: lcov-prod.info
 
   coverage-report:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: [coverage-mock, coverage-prod]
     steps:
       - uses: actions/checkout@v3
