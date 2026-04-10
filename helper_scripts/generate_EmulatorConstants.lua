@@ -54,5 +54,6 @@ out:write('    uint64 constant AR_CMIO_RX_BUFFER_START = 0x' .. hex(cartesi.AR_C
 out:write('    uint8 constant AR_CMIO_RX_BUFFER_LOG2_SIZE = 0x' .. hex(cartesi.AR_CMIO_RX_BUFFER_LOG2_SIZE) .. ';\n')
 out:write('    uint64 constant AR_CMIO_TX_BUFFER_START = 0x' .. hex(cartesi.AR_CMIO_TX_BUFFER_START) .. ';\n')
 out:write('    uint8 constant AR_CMIO_TX_BUFFER_LOG2_SIZE = 0x' .. hex(cartesi.AR_CMIO_TX_BUFFER_LOG2_SIZE) .. ';\n')
+out:write('    uint64 constant REVERT_ROOT_HASH_ADDRESS = 0x' .. hex(cartesi.AR_SHADOW_REVERT_ROOT_HASH_START) .. ';\n')
 
 out:close()

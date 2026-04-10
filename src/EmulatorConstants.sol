@@ -57,6 +57,7 @@ library EmulatorConstants {
     uint8 constant AR_CMIO_RX_BUFFER_LOG2_SIZE = 0x15;
     uint64 constant AR_CMIO_TX_BUFFER_START = 0x60800000;
     uint8 constant AR_CMIO_TX_BUFFER_LOG2_SIZE = 0x15;
+    uint64 constant REVERT_ROOT_HASH_ADDRESS = 0xfe0;
     // END OF AUTO-GENERATED CODE
 
     uint64 constant LOG2_CYCLES_TO_RESET = 10;
@@ -64,5 +65,4 @@ library EmulatorConstants {
     uint64 constant TLB_SLOT_LENGTH = 32;
     uint64 constant TLB_SET_SIZE = 256;
     uint64 constant TLB_SET_LENGTH = TLB_SET_SIZE * TLB_SLOT_LENGTH;
-    uint64 constant REVERT_ROOT_HASH_ADDRESS = 0xfe0;
 }

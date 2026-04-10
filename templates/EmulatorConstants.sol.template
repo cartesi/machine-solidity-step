@@ -30,5 +30,4 @@ library EmulatorConstants {
     uint64 constant TLB_SLOT_LENGTH = 32;
     uint64 constant TLB_SET_SIZE = 256;
     uint64 constant TLB_SET_LENGTH = TLB_SET_SIZE * TLB_SLOT_LENGTH;
-    uint64 constant REVERT_ROOT_HASH_ADDRESS = 0xfe0;
 }
