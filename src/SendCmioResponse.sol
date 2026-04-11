@@ -14,21 +14,13 @@
 // limitations under the License.
 //
 
-/// @title SendCmioResponse
-/// @notice Sends a CMIO response
-//:#include macro.pp
-/// DEV_COMMENT(templates/SendCmioResponse.sol.template)
+/// @dev This file is generated from C++ by generate_UArchSolidity.lua
 
 pragma solidity ^0.8.30;
 
 import "./EmulatorCompat.sol";
 
 library SendCmioResponse {
-    using Memory for uint64;
-    using AccessLogs for AccessLogs.Context;
-
-    // START OF AUTO-GENERATED CODE
-
     function sendCmioResponse(
         AccessLogs.Context memory a,
         uint16 reason,
@@ -61,30 +53,22 @@ library SendCmioResponse {
                     a, "CMIO response data is too large"
                 );
             }
-            a.writeRegion(
-                Memory.regionFromPhysicalAddress(
-                    EmulatorConstants.AR_CMIO_RX_BUFFER_START
-                    .toPhysicalAddress(),
-                    Memory.alignedSizeFromLog2(
-                        uint8(
-                            writeLengthLog2Size
-                                - EmulatorConstants.HASH_TREE_LOG2_WORD_SIZE
-                        )
-                    )
-                ),
-                dataHash
+            EmulatorCompat.writeMemoryWithPadding(
+                a,
+                EmulatorConstants.AR_CMIO_RX_BUFFER_START,
+                dataHash,
+                dataLength,
+                writeLengthLog2Size
             );
         }
         // Write data length and reason to fromhost
         uint64 mask16 = EmulatorCompat.uint64ShiftLeft(1, 16) - 1;
         uint64 mask32 = EmulatorCompat.uint64ShiftLeft(1, 32) - 1;
-        uint64 yieldData =
-            EmulatorCompat.uint64ShiftLeft((uint64(reason) & mask16), 32)
-                | (uint64(dataLength) & mask32);
+        uint64 yieldData = EmulatorCompat.uint64ShiftLeft(
+            (uint64(reason) & mask16), 32
+        ) | (uint64(dataLength) & mask32);
         EmulatorCompat.writeHtifFromhost(a, yieldData);
         // Reset iflags.Y
         EmulatorCompat.writeIflagsY(a, 0);
     }
-
-    // END OF AUTO-GENERATED CODE
 }

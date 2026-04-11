@@ -14,22 +14,18 @@
 // limitations under the License.
 //
 
-/// @title UArchStep
-/// @notice State transition function that takes the machine from micro-state s[i] to s[i + 1]
-//:#include macro.pp
-/// DEV_COMMENT(templates/UArchStep.sol.template)
+/// @dev This file is generated from C++ by generate_UArchSolidity.lua
 
 pragma solidity ^0.8.30;
 
 import "./EmulatorCompat.sol";
 
 library UArchStep {
-    // START OF AUTO-GENERATED CODE
-
     enum UArchStepStatus {
         Success, // one micro instruction was executed successfully
         CycleOverflow, // already at fixed point: uarch cycle has reached its maximum value
         UArchHalted // already at fixed point: microarchitecture is halted
+
     }
 
     // Memory read/write access
@@ -258,9 +254,9 @@ library UArchStep {
             EmulatorCompat.uint32ShiftLeft(
                 uint32(EmulatorCompat.int32ShiftRight(int32(insn), 25)), 5
             )
-            | EmulatorCompat.uint32ShiftRight(
-                EmulatorCompat.uint32ShiftLeft(insn, 20), 27
-            )
+                | EmulatorCompat.uint32ShiftRight(
+                    EmulatorCompat.uint32ShiftLeft(insn, 20), 27
+                )
         );
     }
 
@@ -1122,9 +1118,8 @@ library UArchStep {
         returns (bool)
     {
         uint32 mask = (7 << 12) | 0x7f;
-        return
-            (insn & mask)
-                == (EmulatorCompat.uint32ShiftLeft(funct3, 12) | opcode);
+        return (insn & mask)
+            == (EmulatorCompat.uint32ShiftLeft(funct3, 12) | opcode);
     }
 
     /// \brief Returns true if the opcode, funct3 and funct7 fields of an instruction match the provided arguments
@@ -1136,8 +1131,10 @@ library UArchStep {
     ) private pure returns (bool) {
         uint32 mask = (0x7f << 25) | (7 << 12) | 0x7f;
         return ((insn & mask))
-            == (EmulatorCompat.uint32ShiftLeft(funct7, 25)
-                    | EmulatorCompat.uint32ShiftLeft(funct3, 12) | opcode);
+            == (
+                EmulatorCompat.uint32ShiftLeft(funct7, 25)
+                    | EmulatorCompat.uint32ShiftLeft(funct3, 12) | opcode
+            );
     }
 
     /// \brief Returns true if the opcode, funct3 and 6 most significant bits of funct7 fields of an instruction match the
@@ -1150,11 +1147,14 @@ library UArchStep {
     ) private pure returns (bool) {
         uint32 mask = (0x3f << 26) | (7 << 12) | 0x7f;
         return ((insn & mask))
-            == (EmulatorCompat.uint32ShiftLeft(funct7Sr1, 26)
-                    | EmulatorCompat.uint32ShiftLeft(funct3, 12) | opcode);
+            == (
+                EmulatorCompat.uint32ShiftLeft(funct7Sr1, 26)
+                    | EmulatorCompat.uint32ShiftLeft(funct3, 12) | opcode
+            );
     }
 
     // Decode and execute one instruction
+
     function executeInsn(AccessLogs.Context memory a, uint32 insn, uint64 pc)
         private
         pure
@@ -1323,7 +1323,7 @@ library UArchStep {
         pure
         returns (UArchStepStatus)
     {
-        // This must be the first read in order to match the first log access in machine.verify_step_uarch
+        // This must be the first read in order to match the first log access in machine::verify_step_uarch
         uint64 cycle = EmulatorCompat.readCycle(a);
         // do not advance if cycle will overflow
         if (cycle >= EmulatorConstants.UARCH_CYCLE_MAX) {
@@ -1341,14 +1341,4 @@ library UArchStep {
         EmulatorCompat.writeCycle(a, cycle);
         return UArchStepStatus.Success;
     }
-
-    // Explicit instantiation for uarch_state_access
-
-    // Explicit instantiation for uarch_record_state_access
-
-    // Explicit instantiation for uarch_replay_state_access
-
-    // Explicit instantiation for collect_uarch_cycle_hashes_state_access
-
-    // END OF AUTO-GENERATED CODE
 }

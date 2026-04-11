@@ -1,4 +1,5 @@
 EMULATOR_DIR ?= ../emulator
+LUA ?= lua5.4
 TEST_DIR := test
 DOWNLOADDIR := downloads
 SRC_DIR := src
@@ -36,17 +37,29 @@ help:
 	@echo '  generate-prod               - generate production library code'
 	@echo '  generate-replay             - generate replay tests'
 	@echo '  pretest                     - download necessary files for tests'
+	@echo '  local-dep                   - use test data from local emulator build'
 	@echo '  submodules                  - initialize and update git submodules'
 	@echo '  fmt                         - format solidity sources with forge fmt'
 	@echo '  test-all                    - test all'
+	@echo '  test-transpiler             - test the C++ to Solidity transpiler'
 	@echo '  test-mock                   - test binary files with mock library'
 	@echo '  test-prod                   - test production code'
 	@echo '  test-replay                 - test log files'
+	@echo '  env-check                   - check that all required tools are installed'
 	@echo 'Coverage targets:'
 	@echo '  coverage-mock               - generate coverage info for mock library tests'
 	@echo '  coverage-prod               - generate coverage info for production code tests'
 	@echo '  coverage-report             - aggregate coverage info and generate html report'
 
+
+env-check:
+	@echo "Checking development environment..."
+	@$(LUA) -v 2>&1 || { echo "MISSING: lua5.4 -- see README.md"; exit 1; }
+	@$(LUA) -e 'require("lpeg")' 2>/dev/null || { echo "MISSING: lpeg -- see README.md"; exit 1; }
+	@forge --version 2>&1 || { echo "MISSING: foundry -- see README.md"; exit 1; }
+	@gpp --version >/dev/null 2>&1 || { echo "MISSING: gpp -- see README.md"; exit 1; }
+	@$(SED) --version >/dev/null 2>&1 || { echo "MISSING: GNU sed (set SED=gsed on macOS) -- see README.md"; exit 1; }
+	@echo "All tools found."
 
 all: build test-all
 
@@ -58,7 +71,10 @@ clean:
 	rm -rf $(DEPDIRS) $(DOWNLOADDIR)
 	forge clean
 
-test-all:
+test-transpiler:
+	$(LUA) helper_scripts/test_generate_UArchSolidity.lua
+
+test-all: test-transpiler
 	$(MAKE) test-mock
 	$(MAKE) test-replay
 	$(MAKE) test-prod
@@ -112,14 +128,19 @@ generate-replay:
 generate-constants: $(EMULATOR_DIR)
 	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_EmulatorConstants.sh
 
-generate-step: $(EMULATOR_DIR)/src/uarch-step.h $(EMULATOR_DIR)/src/uarch-step.cpp
-	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchStep.sh
+GEN_SOL = $(LUA) helper_scripts/generate_UArchSolidity.lua
+
+generate-step: $(EMULATOR_DIR)/src/uarch-step.hpp $(EMULATOR_DIR)/src/uarch-step.cpp
+	$(GEN_SOL) $(EMULATOR_DIR)/src/uarch-step.cpp src/UArchStep.sol UArchStep step
+	forge fmt src/UArchStep.sol
 
 generate-reset: $(EMULATOR_DIR)/src/uarch-reset-state.cpp
-	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchReset.sh
+	$(GEN_SOL) $(EMULATOR_DIR)/src/uarch-reset-state.cpp src/UArchReset.sol UArchReset reset
+	forge fmt src/UArchReset.sol
 
-generate-send-cmio-response: $(EMULATOR_DIR)/src/uarch-reset-state.cpp
-	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_SendCmioResponse.sh
+generate-send-cmio-response: $(EMULATOR_DIR)/src/send-cmio-response.cpp
+	$(GEN_SOL) $(EMULATOR_DIR)/src/send-cmio-response.cpp src/SendCmioResponse.sol SendCmioResponse sendCmioResponse
+	forge fmt src/SendCmioResponse.sol
 
 fmt:
 	forge fmt src test
@@ -129,6 +150,16 @@ download: $(DOWNLOADDIR)
 pretest: dep
 
 dep: $(DEPDIRS)
+
+EMULATOR_TESTS_DIR = $(EMULATOR_DIR)/tests
+EMULATOR_UARCH_BIN_DIR = $(EMULATOR_TESTS_DIR)/build/uarch
+EMULATOR_UARCH_LOG_DIR = $(EMULATOR_TESTS_DIR)/build/uarch-riscv-tests-json-logs
+
+local-dep: $(EMULATOR_UARCH_BIN_DIR) $(EMULATOR_UARCH_LOG_DIR)
+	rm -rf $(TESTS_DATA_DIR) $(LOG_TEST_DIR)
+	mkdir -p $(TESTS_DATA_DIR) $(LOG_TEST_DIR)
+	cp $(EMULATOR_UARCH_BIN_DIR)/*.bin $(TESTS_DATA_DIR)/
+	cp $(EMULATOR_UARCH_LOG_DIR)/*.json $(LOG_TEST_DIR)/
 
 $(DOWNLOADDIR):
 	@mkdir -p $(DOWNLOADDIR)
@@ -154,4 +185,4 @@ $(LOG_TEST_DIR): | download
 submodules:
 	git submodule update --init --recursive
 
-.PHONY: help all build clean checksum-download shasum-download fmt generate-mock generate-prod generate-replay generate-step download pretest dep submodules test-all test-mock test-prod test-replay generate-constants generate-reset generate-send-cmio-response coverage-mock coverage-prod coverage-report
+.PHONY: help all build clean checksum-download shasum-download fmt generate-mock generate-prod generate-replay generate-step download pretest dep local-dep submodules test-all test-mock test-prod test-replay test-transpiler env-check generate-constants generate-reset generate-send-cmio-response coverage-mock coverage-prod coverage-report

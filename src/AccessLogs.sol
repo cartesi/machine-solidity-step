@@ -117,7 +117,6 @@ library AccessLogs {
     //
     // Read methods
     //
-
     function readWord(
         AccessLogs.Context memory a,
         Memory.PhysicalAddress readAddress
@@ -142,7 +141,6 @@ library AccessLogs {
     //
     // Write methods
     //
-
     function writeWord(
         AccessLogs.Context memory a,
         Memory.PhysicalAddress writeAddress,

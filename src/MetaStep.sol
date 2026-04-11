@@ -25,6 +25,8 @@ import "./UArchReset.sol";
 library MetaStep {
     using AccessLogs for AccessLogs.Context;
 
+    uint64 constant LOG2_CYCLES_TO_RESET = 10;
+
     /// @notice Run meta-step
     function step(uint256 counter, AccessLogs.Context memory accessLogs)
         internal
@@ -35,11 +37,9 @@ library MetaStep {
         bytes32 machineState = accessLogs.currentRootHash;
 
         if (
-            counter
-                == (counter >> EmulatorConstants.LOG2_CYCLES_TO_RESET)
-                    << EmulatorConstants.LOG2_CYCLES_TO_RESET
+            counter == (counter >> LOG2_CYCLES_TO_RESET) << LOG2_CYCLES_TO_RESET
         ) {
-            // if counter is a multiple of (1 << EmulatorConstants.LOG2_CYCLES_TO_RESET), run uarch reset
+            // if counter is a multiple of (1 << LOG2_CYCLES_TO_RESET), run uarch reset
             UArchReset.reset(accessLogs);
             machineState = accessLogs.currentRootHash;
         }

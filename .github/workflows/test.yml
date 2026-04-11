@@ -8,13 +8,16 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install gpp
-        run: sudo apt-get install -y gpp
+      - name: Install gpp and lua
+        run: sudo apt-get install -y gpp lua5.4 liblua5.4-dev luarocks
+
+      - name: Install LPEG
+        run: sudo luarocks --lua-version=5.4 install lpeg
 
       - uses: ./.github/actions/setup
 
       - name: Run all tests
-        run: make test-all
+        run: eval "$(luarocks --lua-version=5.4 path)" && make test-all
 
   coverage-mock:
     runs-on: ubuntu-24.04

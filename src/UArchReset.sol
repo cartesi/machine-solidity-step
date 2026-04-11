@@ -14,21 +14,14 @@
 // limitations under the License.
 //
 
-/// @title UArchReset
-/// @notice Reset microarchitecture to pristine state
-//:#include macro.pp
-/// DEV_COMMENT(templates/UArchReset.sol.template)
+/// @dev This file is generated from C++ by generate_UArchSolidity.lua
 
 pragma solidity ^0.8.30;
 
 import "./EmulatorCompat.sol";
 
 library UArchReset {
-    // START OF AUTO-GENERATED CODE
-
     function reset(AccessLogs.Context memory a) internal pure {
         EmulatorCompat.resetState(a);
     }
-
-    // END OF AUTO-GENERATED CODE
 }

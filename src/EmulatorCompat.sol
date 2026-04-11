@@ -76,9 +76,8 @@ library EmulatorCompat {
         pure
         returns (uint64)
     {
-        return a.readWord(
-            EmulatorConstants.UARCH_PC_ADDRESS.toPhysicalAddress()
-        );
+        return
+            a.readWord(EmulatorConstants.UARCH_PC_ADDRESS.toPhysicalAddress());
     }
 
     function readWord(AccessLogs.Context memory a, uint64 paddr)
@@ -101,7 +100,10 @@ library EmulatorCompat {
         return a.readWord(paddr.toPhysicalAddress());
     }
 
-    function writeCycle(AccessLogs.Context memory a, uint64 val) internal pure {
+    function writeCycle(AccessLogs.Context memory a, uint64 val)
+        internal
+        pure
+    {
         a.writeWord(
             EmulatorConstants.UARCH_CYCLE_ADDRESS.toPhysicalAddress(), val
         );
@@ -158,9 +160,8 @@ library EmulatorCompat {
         pure
         returns (bool)
     {
-        uint64 iflags_y = a.readWord(
-            EmulatorConstants.IFLAGS_Y_ADDRESS.toPhysicalAddress()
-        );
+        uint64 iflags_y =
+            a.readWord(EmulatorConstants.IFLAGS_Y_ADDRESS.toPhysicalAddress());
         if (iflags_y == 0) {
             return false;
         }
@@ -344,6 +345,27 @@ library EmulatorCompat {
             vpOffset,
             pmaIndex,
             0 // zero_padding_
+        );
+    }
+
+    function writeMemoryWithPadding(
+        AccessLogs.Context memory a,
+        uint64 paddr,
+        bytes32 dataHash,
+        uint32 dataLength,
+        uint32 writeLengthLog2Size
+    ) internal pure {
+        a.writeRegion(
+            Memory.regionFromPhysicalAddress(
+                paddr.toPhysicalAddress(),
+                Memory.alignedSizeFromLog2(
+                    uint8(
+                        writeLengthLog2Size
+                            - EmulatorConstants.HASH_TREE_LOG2_WORD_SIZE
+                    )
+                )
+            ),
+            dataHash
         );
     }
 

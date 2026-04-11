@@ -63,9 +63,7 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
         for (uint256 i = 0; i < catalog.length; i++) {
             if (
                 keccak256(abi.encodePacked(catalog[i].logFilename))
-                    != keccak256(
-                        abi.encodePacked("send-cmio-response-steps.json")
-                    )
+                    != keccak256(abi.encodePacked("send-cmio-response-steps.json"))
             ) {
                 continue;
             }
@@ -73,9 +71,8 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
 
             string memory rj = loadJsonLog(resetLog);
 
-            bytes32 initialRootHash = vm.parseBytes32(
-                string.concat("0x", catalog[i].initialRootHash)
-            );
+            bytes32 initialRootHash =
+                vm.parseBytes32(string.concat("0x", catalog[i].initialRootHash));
             bytes32 finalRootHash =
                 vm.parseBytes32(string.concat("0x", catalog[i].finalRootHash));
 

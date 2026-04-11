@@ -25,7 +25,7 @@ library EmulatorConstants {
     // START OF AUTO-GENERATED CODE
 
     bytes32 constant UARCH_PRISTINE_STATE_HASH =
-        0xa2f4f0018081d795e47c7feae9300055e8551eda5bd6473e54ca80ece64ea620;
+        0x3cf87e9cab4091ffefa4ff42b149e765fbc3fd6c21fcaf32b49e7f068047ad7e;
     uint64 constant UARCH_CYCLE_ADDRESS = 0x400008;
     uint64 constant UARCH_CYCLE_MAX = 0x100000;
     uint64 constant UARCH_HALT_FLAG_ADDRESS = 0x400000;

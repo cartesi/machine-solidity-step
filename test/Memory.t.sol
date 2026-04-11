@@ -29,21 +29,21 @@ contract MemoryTest is Test {
     function testStrideAlignment() public {
         for (uint128 paddr = 8; paddr <= (1 << 63); paddr *= 2) {
             for (uint8 l = 0; ((1 << l) <= (paddr >> Memory.LOG2_LEAF)); ++l) {
-                uint64(paddr).toPhysicalAddress()
-                    .strideFromPhysicalAddress(Memory.alignedSizeFromLog2(l));
+                uint64(paddr).toPhysicalAddress().strideFromPhysicalAddress(
+                    Memory.alignedSizeFromLog2(l)
+                );
 
                 // address has to be aligned with 8-byte word
                 vm.expectRevert();
-                uint64(paddr - 1).toPhysicalAddress()
-                    .strideFromPhysicalAddress(Memory.alignedSizeFromLog2(l));
+                uint64(paddr - 1).toPhysicalAddress().strideFromPhysicalAddress(
+                    Memory.alignedSizeFromLog2(l)
+                );
 
                 if ((1 << l) == (paddr >> Memory.LOG2_LEAF)) {
                     // address has to be aligned with stride size
                     vm.expectRevert();
                     uint64(paddr + paddr / 2).toPhysicalAddress()
-                        .strideFromPhysicalAddress(
-                            Memory.alignedSizeFromLog2(l)
-                        );
+                        .strideFromPhysicalAddress(Memory.alignedSizeFromLog2(l));
                 }
             }
         }
