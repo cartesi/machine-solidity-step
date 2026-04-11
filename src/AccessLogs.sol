@@ -16,7 +16,7 @@
 
 /// @dev This file is generated from templates/AccessLogs.sol.template, one should not modify the content directly
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.30;
 
 import "./Buffer.sol";
 import "./EmulatorConstants.sol";
@@ -117,6 +117,7 @@ library AccessLogs {
     //
     // Read methods
     //
+
     function readWord(
         AccessLogs.Context memory a,
         Memory.PhysicalAddress readAddress
@@ -141,6 +142,7 @@ library AccessLogs {
     //
     // Write methods
     //
+
     function writeWord(
         AccessLogs.Context memory a,
         Memory.PhysicalAddress writeAddress,

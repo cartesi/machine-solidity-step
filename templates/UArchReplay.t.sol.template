@@ -15,16 +15,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.30;
 
 import "forge-std/StdJson.sol";
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
+import "src/Buffer.sol";
 import "src/UArchStep.sol";
+import "./AccessLogJsonParse.sol";
 import "./BufferAux.sol";
 
-contract UArchReplay_@X@_Test is Test {
+contract UArchReplay_@X@_Test is AccessLogJsonParse {
     using Buffer for Buffer.Context;
     using BufferAux for Buffer.Context;
     using stdJson for string;
@@ -41,16 +43,6 @@ contract UArchReplay_@X@_Test is Test {
         string initialRootHash;
         string logFilename;
         uint256 steps;
-    }
-
-    struct RawAccess {
-        uint256 addressAccess;
-        uint256 log2_size;
-        string read_hash;
-        string read_value;
-        string[] sibling_hashes;
-        string typeAccess;
-        string written_hash;
     }
 
     function testReplay_@X@() public {
@@ -121,34 +113,11 @@ contract UArchReplay_@X@_Test is Test {
         bytes memory data,
         string memory rawJson,
         uint256 stepIndex
-    ) private pure {
-        string memory key = string.concat(
+    ) private {
+        Buffer.Context memory buffer = Buffer.Context(data, 0);
+        string memory arrayPrefix = string.concat(
             string.concat(".steps[", vm.toString(stepIndex)), "].accesses"
         );
-        bytes memory raw = rawJson.parseRaw(key);
-        RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
-        uint256 arrayLength = rawAccesses.length;
-
-        Buffer.Context memory buffer = Buffer.Context(data, 0);
-
-        for (uint256 i = 0; i < arrayLength; i++) {
-            if (rawAccesses[i].log2_size == 3) {
-                buffer.writeBytes32(
-                    vm.parseBytes32(string.concat("0x", rawAccesses[i].read_value))
-                );
-            } else {
-                buffer.writeBytes32(
-                    vm.parseBytes32(string.concat("0x", rawAccesses[i].read_hash))
-                );
-            }
-
-            for (uint256 j = 0; j < siblingsLength; j++) {
-                buffer.writeBytes32(
-                    vm.parseBytes32(
-                        string.concat("0x", rawAccesses[i].sibling_hashes[j])
-                    )
-                );
-            }
-        }
+        _fillBufferFromAccesses(rawJson, arrayPrefix, buffer);
     }
 }

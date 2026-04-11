@@ -27,7 +27,7 @@
 //:#include macro.pp
 /// DEV_COMMENT(templates/AccessLogs.sol.template)
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.30;
 
 import "./Buffer.sol";
 import "./EmulatorConstants.sol";

@@ -1,0 +1,20 @@
+name: "Setup Foundry"
+description: "Installs Foundry (forge, cast, anvil) at a pinned version"
+
+outputs:
+  foundry-version:
+    description: "The version of Foundry that was installed"
+    value: ${{ steps.set-foundry-version.outputs.foundry-version }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set Foundry version
+      id: set-foundry-version
+      shell: bash
+      run: echo "foundry-version=v1.4.3" >> $GITHUB_OUTPUT
+
+    - name: Install Foundry
+      uses: foundry-rs/foundry-toolchain@de808b1eea699e761c404bda44ba8f21aba30b2c # v1.3.1
+      with:
+        version: ${{ steps.set-foundry-version.outputs.foundry-version }}

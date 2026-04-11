@@ -17,7 +17,7 @@ import "forge-std/console.sol";
 import "forge-std/Test.sol";
 import "src/EmulatorCompat.sol";
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.30;
 
 library ExternalEmulatorCompat {
     function uint32Log2(uint32 value) external pure returns (uint32) {

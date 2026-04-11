@@ -11,10 +11,7 @@ jobs:
       - name: Install gpp
         run: sudo apt-get install -y gpp
 
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@8789b3e21e6c11b2697f5eb56eddae542f746c10 # v1.7.0
-        with:
-          version: v1.0.0
+      - uses: ./.github/actions/setup
 
       - name: Run all tests
         run: make test-all
@@ -29,10 +26,7 @@ jobs:
       - name: Install gpp
         run: sudo apt-get install -y gpp
 
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@8789b3e21e6c11b2697f5eb56eddae542f746c10 # v1.7.0
-        with:
-          version: v1.0.0
+      - uses: ./.github/actions/setup
 
       - name: Run mock coverage
         run: make coverage-mock
@@ -53,10 +47,7 @@ jobs:
       - name: Install gpp
         run: sudo apt-get install -y gpp
 
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@8789b3e21e6c11b2697f5eb56eddae542f746c10 # v1.7.0
-        with:
-          version: v1.0.0
+      - uses: ./.github/actions/setup
 
       - name: Run prod coverage
         run: make coverage-prod

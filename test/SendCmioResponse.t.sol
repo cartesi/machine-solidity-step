@@ -15,17 +15,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.30;
 
 import "forge-std/StdJson.sol";
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
+import "src/Buffer.sol";
 import "src/EmulatorConstants.sol";
 import "src/SendCmioResponse.sol";
+import "./AccessLogJsonParse.sol";
 import "./BufferAux.sol";
 
-contract SendCmioResponse_Test is Test {
+contract SendCmioResponse_Test is AccessLogJsonParse {
     using Buffer for Buffer.Context;
     using BufferAux for Buffer.Context;
     using stdJson for string;
@@ -45,16 +47,6 @@ contract SendCmioResponse_Test is Test {
         uint256 steps;
     }
 
-    struct RawAccess {
-        uint256 addressAccess;
-        uint256 log2_size;
-        string read_hash;
-        string read_value;
-        string[] sibling_hashes;
-        string typeAccess;
-        string written_hash;
-    }
-
     function testSendCmioResponse() public {
         Entry[] memory catalog =
             loadCatalog(string.concat(JSON_PATH, CATALOG_PATH));
@@ -70,7 +62,9 @@ contract SendCmioResponse_Test is Test {
         for (uint256 i = 0; i < catalog.length; i++) {
             if (
                 keccak256(abi.encodePacked(catalog[i].logFilename))
-                    != keccak256(abi.encodePacked("send-cmio-response-steps.json"))
+                    != keccak256(
+                        abi.encodePacked("send-cmio-response-steps.json")
+                    )
             ) {
                 continue;
             }
@@ -78,8 +72,9 @@ contract SendCmioResponse_Test is Test {
 
             string memory rj = loadJsonLog(resetLog);
 
-            bytes32 initialRootHash =
-                vm.parseBytes32(string.concat("0x", catalog[i].initialRootHash));
+            bytes32 initialRootHash = vm.parseBytes32(
+                string.concat("0x", catalog[i].initialRootHash)
+            );
             bytes32 finalRootHash =
                 vm.parseBytes32(string.concat("0x", catalog[i].finalRootHash));
 
@@ -136,37 +131,8 @@ contract SendCmioResponse_Test is Test {
 
     function loadBufferFromRawJson(bytes memory data, string memory rawJson)
         private
-        pure
     {
-        string memory key = ".accesses";
-        bytes memory raw = rawJson.parseRaw(key);
-        RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
-        uint256 arrayLength = rawAccesses.length;
-
         Buffer.Context memory buffer = Buffer.Context(data, 0);
-
-        for (uint256 i = 0; i < arrayLength; i++) {
-            if (rawAccesses[i].log2_size == 3) {
-                buffer.writeBytes32(
-                    vm.parseBytes32(
-                        string.concat("0x", rawAccesses[i].read_value)
-                    )
-                );
-            } else {
-                buffer.writeBytes32(
-                    vm.parseBytes32(
-                        string.concat("0x", rawAccesses[i].read_hash)
-                    )
-                );
-            }
-
-            for (uint256 j = 0; j < rawAccesses[i].sibling_hashes.length; j++) {
-                buffer.writeBytes32(
-                    vm.parseBytes32(
-                        string.concat("0x", rawAccesses[i].sibling_hashes[j])
-                    )
-                );
-            }
-        }
+        _fillBufferFromAccesses(rawJson, ".accesses", buffer);
     }
 }

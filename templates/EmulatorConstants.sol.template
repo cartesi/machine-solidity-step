@@ -19,7 +19,7 @@
 //:#include macro.pp
 /// DEV_COMMENT(templates/EmulatorConstants.sol.template)
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.30;
 
 library EmulatorConstants {
     // START OF AUTO-GENERATED CODE

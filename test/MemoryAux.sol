@@ -15,7 +15,7 @@
 //
 import "src/Memory.sol";
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.30;
 
 library MemoryAux {
     function strideFromPhysicalAddress(

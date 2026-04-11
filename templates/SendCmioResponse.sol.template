@@ -19,7 +19,7 @@
 //:#include macro.pp
 /// DEV_COMMENT(templates/SendCmioResponse.sol.template)
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.30;
 
 import "./EmulatorCompat.sol";
 

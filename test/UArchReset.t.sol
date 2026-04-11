@@ -15,17 +15,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.30;
 
 import "forge-std/StdJson.sol";
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
+import "src/Buffer.sol";
 import "src/EmulatorConstants.sol";
 import "src/UArchReset.sol";
+import "./AccessLogJsonParse.sol";
 import "./BufferAux.sol";
 
-contract UArchReset_Test is Test {
+contract UArchReset_Test is AccessLogJsonParse {
     using Buffer for Buffer.Context;
     using BufferAux for Buffer.Context;
     using stdJson for string;
@@ -44,17 +46,6 @@ contract UArchReset_Test is Test {
         string logFilename;
         uint256 steps;
     }
-
-    struct RawAccess {
-        uint256 addressAccess;
-        uint256 log2_size;
-        string read_hash;
-        string read_value;
-        string[] sibling_hashes;
-        string typeAccess;
-        string written_hash;
-    }
-    // string val; omit val because it's not used in reset
 
     function testReset() public {
         Entry[] memory catalog =
@@ -78,8 +69,9 @@ contract UArchReset_Test is Test {
 
             string memory rj = loadJsonLog(resetLog);
 
-            bytes32 initialRootHash =
-                vm.parseBytes32(string.concat("0x", catalog[i].initialRootHash));
+            bytes32 initialRootHash = vm.parseBytes32(
+                string.concat("0x", catalog[i].initialRootHash)
+            );
             bytes32 finalRootHash =
                 vm.parseBytes32(string.concat("0x", catalog[i].finalRootHash));
 
@@ -124,41 +116,45 @@ contract UArchReset_Test is Test {
     function loadBufferFromRawJson(bytes memory data, string memory rawJson)
         private
     {
-        string memory key = ".accesses";
-        bytes memory raw = rawJson.parseRaw(key);
-        RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
-        uint256 arrayLength = rawAccesses.length;
-        assertEq(arrayLength, 1, "should be only 1 access in reset");
+        assertEq(
+            _accessesArrayLength(rawJson, ".accesses"),
+            1,
+            "should be only 1 access in reset"
+        );
 
-        Buffer.Context memory buffer = Buffer.Context(data, 0);
+        string memory p = ".accesses[0]";
+        string memory typeAccess =
+            vm.parseJsonString(rawJson, string.concat(p, ".type"));
+        uint256 addressAccess =
+            vm.parseJsonUint(rawJson, string.concat(p, ".address"));
+        uint256 log2_size =
+            vm.parseJsonUint(rawJson, string.concat(p, ".log2_size"));
+        string memory read_hash =
+            vm.parseJsonString(rawJson, string.concat(p, ".read_hash"));
+        string[] memory sib = vm.parseJsonStringArray(
+            rawJson, string.concat(p, ".sibling_hashes")
+        );
 
-        if (
-            keccak256(abi.encodePacked(rawAccesses[0].typeAccess))
-                == keccak256(abi.encodePacked("read"))
-        ) {
+        if (keccak256(bytes(typeAccess)) == keccak256(bytes("read"))) {
             revert("should'nt have read access in reset");
         }
         assertEq(
-            rawAccesses[0].addressAccess,
+            addressAccess,
             EmulatorConstants.UARCH_STATE_START_ADDRESS,
             "position should be (0x400000)"
         );
         assertEq(
-            rawAccesses[0].log2_size,
+            log2_size,
             EmulatorConstants.UARCH_STATE_LOG2_SIZE,
             "log2Size should be 22"
         );
 
-        buffer.writeBytes32(
-            vm.parseBytes32(string.concat("0x", rawAccesses[0].read_hash))
-        );
+        Buffer.Context memory buffer = Buffer.Context(data, 0);
 
-        for (uint256 i = 0; i < siblingsLength; i++) {
-            buffer.writeBytes32(
-                vm.parseBytes32(
-                    string.concat("0x", rawAccesses[0].sibling_hashes[i])
-                )
-            );
+        buffer.writeBytes32(vm.parseBytes32(string.concat("0x", read_hash)));
+
+        for (uint256 i = 0; i < sib.length; i++) {
+            buffer.writeBytes32(vm.parseBytes32(string.concat("0x", sib[i])));
         }
     }
 }

@@ -19,7 +19,7 @@
 //:#include macro.pp
 /// DEV_COMMENT(templates/SendCmioResponse.sol.template)
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.30;
 
 import "./EmulatorCompat.sol";
 
@@ -63,8 +63,8 @@ library SendCmioResponse {
             }
             a.writeRegion(
                 Memory.regionFromPhysicalAddress(
-                    EmulatorConstants.AR_CMIO_RX_BUFFER_START.toPhysicalAddress(
-                    ),
+                    EmulatorConstants.AR_CMIO_RX_BUFFER_START
+                    .toPhysicalAddress(),
                     Memory.alignedSizeFromLog2(
                         uint8(
                             writeLengthLog2Size
@@ -78,9 +78,9 @@ library SendCmioResponse {
         // Write data length and reason to fromhost
         uint64 mask16 = EmulatorCompat.uint64ShiftLeft(1, 16) - 1;
         uint64 mask32 = EmulatorCompat.uint64ShiftLeft(1, 32) - 1;
-        uint64 yieldData = EmulatorCompat.uint64ShiftLeft(
-            (uint64(reason) & mask16), 32
-        ) | (uint64(dataLength) & mask32);
+        uint64 yieldData =
+            EmulatorCompat.uint64ShiftLeft((uint64(reason) & mask16), 32)
+                | (uint64(dataLength) & mask32);
         EmulatorCompat.writeHtifFromhost(a, yieldData);
         // Reset iflags.Y
         EmulatorCompat.writeIflagsY(a, 0);

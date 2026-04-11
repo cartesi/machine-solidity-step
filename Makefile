@@ -43,7 +43,7 @@ help:
 all: build test-all
 
 build: generate-step generate-reset generate-send-cmio-response generate-constants generate-prod
-	forge build  --use 0.8.21
+	forge build  --use 0.8.30
 
 clean:
 	rm -rf test/UArchReplay_*.t.sol
@@ -57,13 +57,13 @@ test-all:
 
 coverage-mock: dep
 	$(MAKE) generate-mock
-	forge coverage --use 0.8.21 --report lcov --match-contract UArchInterpret
+	forge coverage --use 0.8.30 --report lcov --match-contract UArchInterpret
 	mv lcov.info lcov-mock.info
 
 coverage-prod: dep
 	$(MAKE) generate-prod
 	$(MAKE) generate-replay
-	forge coverage --use 0.8.21 --report lcov --no-match-contract UArchInterpret
+	forge coverage --use 0.8.30 --report lcov --no-match-contract UArchInterpret
 	mv lcov.info lcov-prod.info
 
 COVERAGE_OUTPUT_DIR ?= coverage
@@ -78,16 +78,16 @@ $(COVERAGE_OUTPUT_DIR):
 
 test-mock: dep
 	$(MAKE) generate-mock
-	forge test --use 0.8.21 -vv --match-contract UArchInterpret
+	forge test --use 0.8.30 -vv --match-contract UArchInterpret
 
 test-prod: dep
 	$(MAKE) generate-prod
-	forge test --use 0.8.21 -vv --no-match-contract "UArchInterpret|UArchReplay|UArchReset"
+	forge test --use 0.8.30 -vv --no-match-contract "UArchInterpret|UArchReplay|UArchReset"
 
 test-replay: dep
 	$(MAKE) generate-prod
 	$(MAKE) generate-replay
-	forge test --use 0.8.21 -vv --match-contract "UArchReset|SendCmioResponse|UArchReplay"
+	forge test --use 0.8.30 -vv --match-contract "UArchReset|SendCmioResponse|UArchReplay"
 
 generate-mock:
 	./helper_scripts/generate_AccessLogs.sh mock

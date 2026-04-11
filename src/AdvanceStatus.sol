@@ -17,7 +17,7 @@
 /// @title AdvanceStatus
 /// @notice Return advance status
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.30;
 
 import "./EmulatorCompat.sol";
 import "./EmulatorConstants.sol";

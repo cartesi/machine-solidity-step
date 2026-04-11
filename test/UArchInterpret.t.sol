@@ -20,7 +20,7 @@ import "forge-std/StdJson.sol";
 import "./UArchInterpret.sol";
 import "src/EmulatorConstants.sol";
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.30;
 
 library ExternalUArchInterpret {
     function interpret(AccessLogs.Context memory accessLogs)

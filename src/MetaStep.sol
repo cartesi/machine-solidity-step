@@ -17,7 +17,7 @@
 /// @title MetaStep
 /// @notice State transition function that takes the machine from micro-state s[i] to s[i + 1]
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.30;
 
 import "./UArchStep.sol";
 import "./UArchReset.sol";
