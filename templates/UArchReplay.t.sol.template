@@ -17,7 +17,6 @@
 //
 pragma solidity ^0.8.30;
 
-import "forge-std/StdJson.sol";
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
@@ -29,7 +28,6 @@ import "./BufferAux.sol";
 contract UArchReplay_@X@_Test is AccessLogJsonParse {
     using Buffer for Buffer.Context;
     using BufferAux for Buffer.Context;
-    using stdJson for string;
 
     // configure the tests
     string constant JSON_PATH = "./test/uarch-log/";
@@ -44,6 +42,8 @@ contract UArchReplay_@X@_Test is AccessLogJsonParse {
         string logFilename;
         uint256 steps;
     }
+
+    string constant ENTRY_TYPE_DESCRIPTION = "Entry(string binaryFilename,string finalRootHash,string initialRootHash,string logFilename,uint256 steps)";
 
     function testReplay_@X@() public {
         Entry[] memory catalog =
@@ -67,8 +67,9 @@ contract UArchReplay_@X@_Test is AccessLogJsonParse {
             string memory rj =
                 loadJsonLog(string.concat(JSON_PATH, catalog[i].logFilename));
 
-            bytes32 initialRootHash =
-                vm.parseBytes32(string.concat("0x", catalog[i].initialRootHash));
+            bytes32 initialRootHash = vm.parseBytes32(
+                string.concat("0x", catalog[i].initialRootHash)
+            );
             bytes32 finalRootHash =
                 vm.parseBytes32(string.concat("0x", catalog[i].finalRootHash));
             for (uint256 j = 0; j < catalog[i].steps; j++) {
@@ -95,7 +96,7 @@ contract UArchReplay_@X@_Test is AccessLogJsonParse {
         returns (Entry[] memory)
     {
         string memory json = vm.readFile(path);
-        bytes memory raw = json.parseRaw("");
+        bytes memory raw = vm.parseJsonTypeArray(json, ".", ENTRY_TYPE_DESCRIPTION);
         Entry[] memory catalog = abi.decode(raw, (Entry[]));
 
         return catalog;
@@ -113,11 +114,14 @@ contract UArchReplay_@X@_Test is AccessLogJsonParse {
         bytes memory data,
         string memory rawJson,
         uint256 stepIndex
-    ) private {
-        Buffer.Context memory buffer = Buffer.Context(data, 0);
-        string memory arrayPrefix = string.concat(
-            string.concat(".steps[", vm.toString(stepIndex)), "].accesses"
+    ) private pure {
+        bytes memory raw = vm.parseJsonTypeArray(
+            rawJson,
+            string.concat(".steps[", vm.toString(stepIndex), "].accesses"),
+            RAW_ACCESS_TYPE_DESCRIPTION
         );
-        _fillBufferFromAccesses(rawJson, arrayPrefix, buffer);
+        RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
+        Buffer.Context memory buffer = Buffer.Context(data, 0);
+        _fillBufferFromRawAccesses(rawAccesses, buffer, siblingsLength);
     }
 }

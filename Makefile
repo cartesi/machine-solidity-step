@@ -43,7 +43,7 @@ help:
 all: build test-all
 
 build: generate-step generate-reset generate-send-cmio-response generate-constants generate-prod
-	forge build  --use 0.8.30
+	forge build --use 0.8.30
 
 clean:
 	rm -rf test/UArchReplay_*.t.sol
@@ -119,6 +119,8 @@ fmt:
 
 download: $(DOWNLOADDIR)
 
+pretest: dep
+
 dep: $(DEPDIRS)
 
 $(DOWNLOADDIR):
@@ -127,7 +129,7 @@ $(DOWNLOADDIR):
 	@wget -nc $(LOG_DOWNLOAD_URL) -P $(DOWNLOADDIR)
 	$(MAKE) checksum-download
 
-shasum-download: 
+shasum-download:
 	shasum -a 256 $(DOWNLOADFILES) > shasum-download
 
 checksum-download:
@@ -140,7 +142,7 @@ $(TESTS_DATA_DIR): | download
 
 $(LOG_TEST_DIR): | download
 	@mkdir -p $(LOG_TEST_DIR)
-	@tar -xzf $(LOG_DOWNLOAD_FILEPATH) --strip-components=1 -C $(LOG_TEST_DIR)
+	@tar --no-same-owner -xzf $(LOG_DOWNLOAD_FILEPATH) --strip-components=1 -C $(LOG_TEST_DIR)
 
 submodules:
 	git submodule update --init --recursive

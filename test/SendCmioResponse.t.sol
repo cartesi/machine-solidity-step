@@ -17,7 +17,6 @@
 //
 pragma solidity ^0.8.30;
 
-import "forge-std/StdJson.sol";
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
@@ -30,7 +29,6 @@ import "./BufferAux.sol";
 contract SendCmioResponse_Test is AccessLogJsonParse {
     using Buffer for Buffer.Context;
     using BufferAux for Buffer.Context;
-    using stdJson for string;
 
     // configure the tests
     string constant JSON_PATH = "./test/uarch-log/";
@@ -46,6 +44,9 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
         string logFilename;
         uint256 steps;
     }
+
+    string constant ENTRY_TYPE_DESCRIPTION =
+        "Entry(string binaryFilename,string finalRootHash,string initialRootHash,string logFilename,uint256 steps)";
 
     function testSendCmioResponse() public {
         Entry[] memory catalog =
@@ -115,7 +116,8 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
         returns (Entry[] memory)
     {
         string memory json = vm.readFile(path);
-        bytes memory raw = json.parseRaw("");
+        bytes memory raw =
+            vm.parseJsonTypeArray(json, ".", ENTRY_TYPE_DESCRIPTION);
         Entry[] memory catalog = abi.decode(raw, (Entry[]));
 
         return catalog;
@@ -131,8 +133,13 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
 
     function loadBufferFromRawJson(bytes memory data, string memory rawJson)
         private
+        pure
     {
+        bytes memory raw = vm.parseJsonTypeArray(
+            rawJson, ".accesses", RAW_ACCESS_TYPE_DESCRIPTION
+        );
+        RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
         Buffer.Context memory buffer = Buffer.Context(data, 0);
-        _fillBufferFromAccesses(rawJson, ".accesses", buffer);
+        _fillBufferFromRawAccesses(rawAccesses, buffer, siblingsLength);
     }
 }

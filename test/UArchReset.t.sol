@@ -17,7 +17,6 @@
 //
 pragma solidity ^0.8.30;
 
-import "forge-std/StdJson.sol";
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
 
@@ -30,12 +29,11 @@ import "./BufferAux.sol";
 contract UArchReset_Test is AccessLogJsonParse {
     using Buffer for Buffer.Context;
     using BufferAux for Buffer.Context;
-    using stdJson for string;
 
     // configure the tests
     string constant JSON_PATH = "./test/uarch-log/";
     string constant CATALOG_PATH = "catalog.json";
-    string constant RESET_PATH = "uarch-reset-steps.json";
+    string constant RESET_PATH = "reset-uarch-steps.json";
 
     uint256 constant siblingsLength = 42;
 
@@ -46,6 +44,9 @@ contract UArchReset_Test is AccessLogJsonParse {
         string logFilename;
         uint256 steps;
     }
+
+    string constant ENTRY_TYPE_DESCRIPTION =
+        "Entry(string binaryFilename,string finalRootHash,string initialRootHash,string logFilename,uint256 steps)";
 
     function testReset() public {
         Entry[] memory catalog =
@@ -61,7 +62,7 @@ contract UArchReset_Test is AccessLogJsonParse {
         for (uint256 i = 0; i < catalog.length; i++) {
             if (
                 keccak256(abi.encodePacked(catalog[i].logFilename))
-                    != keccak256(abi.encodePacked("uarch-reset-steps.json"))
+                    != keccak256(abi.encodePacked("reset-uarch-steps.json"))
             ) {
                 continue;
             }
@@ -99,7 +100,8 @@ contract UArchReset_Test is AccessLogJsonParse {
         returns (Entry[] memory)
     {
         string memory json = vm.readFile(path);
-        bytes memory raw = json.parseRaw("");
+        bytes memory raw =
+            vm.parseJsonTypeArray(json, ".", ENTRY_TYPE_DESCRIPTION);
         Entry[] memory catalog = abi.decode(raw, (Entry[]));
 
         return catalog;
@@ -115,46 +117,30 @@ contract UArchReset_Test is AccessLogJsonParse {
 
     function loadBufferFromRawJson(bytes memory data, string memory rawJson)
         private
+        pure
     {
-        assertEq(
-            _accessesArrayLength(rawJson, ".accesses"),
-            1,
-            "should be only 1 access in reset"
+        bytes memory raw = vm.parseJsonTypeArray(
+            rawJson, ".accesses", RAW_ACCESS_TYPE_DESCRIPTION
         );
+        RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
+        assertEq(rawAccesses.length, 1, "should be only 1 access in reset");
 
-        string memory p = ".accesses[0]";
-        string memory typeAccess =
-            vm.parseJsonString(rawJson, string.concat(p, ".type"));
-        uint256 addressAccess =
-            vm.parseJsonUint(rawJson, string.concat(p, ".address"));
-        uint256 log2_size =
-            vm.parseJsonUint(rawJson, string.concat(p, ".log2_size"));
-        string memory read_hash =
-            vm.parseJsonString(rawJson, string.concat(p, ".read_hash"));
-        string[] memory sib = vm.parseJsonStringArray(
-            rawJson, string.concat(p, ".sibling_hashes")
-        );
-
-        if (keccak256(bytes(typeAccess)) == keccak256(bytes("read"))) {
+        RawAccess memory a = rawAccesses[0];
+        if (keccak256(bytes(a.accessType)) == keccak256(bytes("read"))) {
             revert("should'nt have read access in reset");
         }
         assertEq(
-            addressAccess,
+            a.accessAddress,
             EmulatorConstants.UARCH_STATE_START_ADDRESS,
             "position should be (0x400000)"
         );
         assertEq(
-            log2_size,
+            a.log2_size,
             EmulatorConstants.UARCH_STATE_LOG2_SIZE,
             "log2Size should be 22"
         );
 
         Buffer.Context memory buffer = Buffer.Context(data, 0);
-
-        buffer.writeBytes32(vm.parseBytes32(string.concat("0x", read_hash)));
-
-        for (uint256 i = 0; i < sib.length; i++) {
-            buffer.writeBytes32(vm.parseBytes32(string.concat("0x", sib[i])));
-        }
+        _fillBufferFromRawAccesses(rawAccesses, buffer, siblingsLength);
     }
 }
