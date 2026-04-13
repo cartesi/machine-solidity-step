@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.14.0] - 2026-04-13
+### Added
+- Added `advanceStatus` to return advance status (accepted, rejected, exception)
+- Added `getRevertRootHash`/`setRevertRootHash` to better support reverts
+
+### Changed
+- Updated machine-emulator version to v0.20.0
+- Bumped Foundry to 1.4.3
+- Bumped Solidity to 0.8.30
+- Bumped `forge-std` to 1.9.2
+
 ## [0.13.0] - 2025-05-30
 ### Changed
 - Updated machine-emulator version to v0.19.0
@@ -107,7 +119,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [0.2.0]
 - [0.1.0]
 
-[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.13.0...HEAD
+[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.14.0
 [0.13.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.13.0
 [0.12.1]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.12.1
 [0.12.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.12.0
