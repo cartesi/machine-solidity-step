@@ -77,9 +77,10 @@ coverage-prod: dep
 COVERAGE_OUTPUT_DIR ?= coverage
 
 coverage-report: $(COVERAGE_OUTPUT_DIR)
-	lcov -a lcov-mock.info -a lcov-prod.info -o $(COVERAGE_OUTPUT_DIR)/lcov.info
+	sed 's|SF:src/AccessLogs.sol|SF:src/AccessLogsMock.sol|' lcov-mock.info > lcov-mock-patched.info
+	lcov -a lcov-mock-patched.info -a lcov-prod.info -o $(COVERAGE_OUTPUT_DIR)/lcov.info
 	lcov --summary $(COVERAGE_OUTPUT_DIR)/lcov.info | tee $(COVERAGE_OUTPUT_DIR)/coverage.txt
-	genhtml --ignore-errors unmapped $(COVERAGE_OUTPUT_DIR)/lcov.info -o $(COVERAGE_OUTPUT_DIR)/html
+	genhtml --ignore-errors unmapped --substitute 's|AccessLogsMock.sol|AccessLogs.sol|' $(COVERAGE_OUTPUT_DIR)/lcov.info -o $(COVERAGE_OUTPUT_DIR)/html
 
 $(COVERAGE_OUTPUT_DIR):
 	mkdir -p $(COVERAGE_OUTPUT_DIR)
