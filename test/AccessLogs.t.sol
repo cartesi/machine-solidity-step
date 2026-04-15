@@ -120,12 +120,11 @@ contract AccessLogsTest is Test {
 
     function testWriteWordBadRegion() public {
         uint64 wordWritten = 3;
-        (Buffer.Context memory buffer, bytes32 rootHash) =
-            makeWriteBuffer(
-                initialReadLeaf,
-                /* withReadValueMismatch= */
-                false
-            );
+        (Buffer.Context memory buffer, bytes32 rootHash) = makeWriteBuffer(
+            initialReadLeaf,
+            /* withReadValueMismatch= */
+            false
+        );
         AccessLogs.Context memory accessLogs =
             AccessLogs.Context(rootHash, buffer);
         vm.expectRevert("Write word root doesn't match");
@@ -176,11 +175,11 @@ contract AccessLogsTest is Test {
         return leaf;
     }
 
-    function patchLeaf(
-        bytes32 currentLeaf,
-        bytes8 newWord,
-        uint64 wordPosition
-    ) public view returns (bytes32) {
+    function patchLeaf(bytes32 currentLeaf, bytes8 newWord, uint64 wordPosition)
+        public
+        view
+        returns (bytes32)
+    {
         uint64 leafPosition = wordPosition & ~uint64(31);
         uint64 offset = position - leafPosition;
 
@@ -198,9 +197,8 @@ contract AccessLogsTest is Test {
         view
         returns (Buffer.Context memory, bytes32)
     {
-        Buffer.Context memory buffer = Buffer.Context(
-            new bytes((59 << Memory.LOG2_LEAF) + 32 + 32), 0
-        );
+        Buffer.Context memory buffer =
+            Buffer.Context(new bytes((59 << Memory.LOG2_LEAF) + 32 + 32), 0);
         bytes32 readData = patchLeaf(initialReadLeaf, readWord, position);
 
         // write leaf data, leaf hash and sibling hashes
