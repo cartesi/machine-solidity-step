@@ -23,6 +23,10 @@ library EmulatorCompat {
     using Buffer for Buffer.Context;
     using Memory for uint64;
 
+    function revertState(AccessLogs.Context memory a) internal pure {
+        a.currentRootHash = readRevertRootHash(a);
+    }
+
     function readRevertRootHash(AccessLogs.Context memory a)
         internal
         pure

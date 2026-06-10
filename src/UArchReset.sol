@@ -28,6 +28,35 @@ library UArchReset {
 
     function reset(AccessLogs.Context memory a) internal pure {
         EmulatorCompat.resetState(a);
+        // When the machine has rejected an input, the canonical state after the operation is
+        // the one recorded in the revert root hash (which has a pristine uarch)
+        uint64 iflagsY =
+            EmulatorCompat.readWord(a, EmulatorConstants.IFLAGS_Y_ADDRESS);
+        if (iflagsY != 0) {
+            uint64 tohost = EmulatorCompat.readWord(
+                a, EmulatorConstants.HTIF_TOHOST_ADDRESS
+            );
+            uint64 dev = EmulatorCompat.uint64ShiftRight(
+                tohost & EmulatorConstants.HTIF_DEV_MASK,
+                EmulatorConstants.HTIF_DEV_SHIFT
+            );
+            uint64 cmd = EmulatorCompat.uint64ShiftRight(
+                tohost & EmulatorConstants.HTIF_CMD_MASK,
+                EmulatorConstants.HTIF_CMD_SHIFT
+            );
+            uint64 reason = EmulatorCompat.uint64ShiftRight(
+                tohost & EmulatorConstants.HTIF_REASON_MASK,
+                EmulatorConstants.HTIF_REASON_SHIFT
+            );
+            if (
+                dev == EmulatorConstants.HTIF_DEV_YIELD
+                    && cmd == EmulatorConstants.HTIF_YIELD_CMD_MANUAL
+                    && reason
+                        == EmulatorConstants.HTIF_YIELD_MANUAL_REASON_RX_REJECTED
+            ) {
+                EmulatorCompat.revertState(a);
+            }
+        }
     }
 
     // END OF AUTO-GENERATED CODE

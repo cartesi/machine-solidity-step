@@ -145,6 +145,6 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
         );
         RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
         Buffer.Context memory buffer = Buffer.Context(data, 0);
-        _fillBufferFromRawAccesses(rawAccesses, buffer, siblingsLength);
+        _fillBufferFromRawAccesses(rawAccesses, buffer);
     }
 }

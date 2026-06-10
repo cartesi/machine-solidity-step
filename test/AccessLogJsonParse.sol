@@ -33,18 +33,24 @@ abstract contract AccessLogJsonParse is Test {
 
     function _fillBufferFromRawAccesses(
         RawAccess[] memory rawAccesses,
-        Buffer.Context memory buffer,
-        uint256 fixedSiblingsLength
+        Buffer.Context memory buffer
     ) internal pure {
         uint256 n = rawAccesses.length;
         for (uint256 i = 0; i < n; i++) {
             RawAccess memory a = rawAccesses[i];
             if (a.log2_size == 3) {
                 buffer.writeBytes32(_parseHex32FromLogString(a.read_value));
+            } else if (
+                keccak256(bytes(a.accessType)) == keccak256(bytes("read"))
+            ) {
+                // a leaf read carries the read value followed by the leaf hash
+                buffer.writeBytes32(_parseHex32FromLogString(a.read_value));
+                buffer.writeBytes32(_parseHex32FromLogString(a.read_hash));
             } else {
                 buffer.writeBytes32(_parseHex32FromLogString(a.read_hash));
             }
-            for (uint256 j = 0; j < fixedSiblingsLength; j++) {
+            uint256 siblingCount = a.sibling_hashes.length;
+            for (uint256 j = 0; j < siblingCount; j++) {
                 buffer.writeBytes32(
                     _parseHex32FromLogString(a.sibling_hashes[j])
                 );

@@ -33,7 +33,6 @@ contract UArchReset_Test is AccessLogJsonParse {
     // configure the tests
     string constant JSON_PATH = "./test/uarch-log/";
     string constant CATALOG_PATH = "catalog.json";
-    string constant RESET_PATH = "reset-uarch-steps.json";
 
     uint256 constant siblingsLength = 42;
 
@@ -51,7 +50,6 @@ contract UArchReset_Test is AccessLogJsonParse {
     function testReset() public {
         Entry[] memory catalog =
             loadCatalog(string.concat(JSON_PATH, CATALOG_PATH));
-        string memory resetLog = string.concat(JSON_PATH, RESET_PATH);
 
         // all tests combined can easily run out of gas, stop metering
         // also raise memory_limit in foundry.toml per https://github.com/foundry-rs/foundry/issues/3971
@@ -60,15 +58,22 @@ contract UArchReset_Test is AccessLogJsonParse {
         bytes memory buffer = new bytes(100 * (siblingsLength + 1) * 32);
 
         for (uint256 i = 0; i < catalog.length; i++) {
+            // run the plain reset log and the rejected-input log, whose final
+            // root hash is the recorded revert root hash
             if (
                 keccak256(abi.encodePacked(catalog[i].logFilename))
-                    != keccak256(abi.encodePacked("reset-uarch-steps.json"))
+                        != keccak256(abi.encodePacked("reset-uarch-steps.json"))
+                    && keccak256(abi.encodePacked(catalog[i].logFilename))
+                        != keccak256(
+                            abi.encodePacked("reset-uarch-rejected-steps.json")
+                        )
             ) {
                 continue;
             }
             console.log("Replaying log file %s ...", catalog[i].logFilename);
 
-            string memory rj = loadJsonLog(resetLog);
+            string memory rj =
+                loadJsonLog(string.concat(JSON_PATH, catalog[i].logFilename));
 
             bytes32 initialRootHash = vm.parseBytes32(
                 string.concat("0x", catalog[i].initialRootHash)
@@ -123,24 +128,7 @@ contract UArchReset_Test is AccessLogJsonParse {
             rawJson, ".accesses", RAW_ACCESS_TYPE_DESCRIPTION
         );
         RawAccess[] memory rawAccesses = abi.decode(raw, (RawAccess[]));
-        assertEq(rawAccesses.length, 1, "should be only 1 access in reset");
-
-        RawAccess memory a = rawAccesses[0];
-        if (keccak256(bytes(a.accessType)) == keccak256(bytes("read"))) {
-            revert("should'nt have read access in reset");
-        }
-        assertEq(
-            a.accessAddress,
-            EmulatorConstants.UARCH_STATE_START_ADDRESS,
-            "position should be (0x400000)"
-        );
-        assertEq(
-            a.log2_size,
-            EmulatorConstants.UARCH_STATE_LOG2_SIZE,
-            "log2Size should be 22"
-        );
-
         Buffer.Context memory buffer = Buffer.Context(data, 0);
-        _fillBufferFromRawAccesses(rawAccesses, buffer, siblingsLength);
+        _fillBufferFromRawAccesses(rawAccesses, buffer);
     }
 }

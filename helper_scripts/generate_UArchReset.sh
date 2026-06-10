@@ -9,12 +9,16 @@ CPP_RESET_PATH=${EMULATOR_DIR}"/src/uarch-reset-state.cpp"
 TEMPLATE_FILE="./templates/UArchReset.sol.template"
 TARGET_FILE="src/UArchReset.sol"
 COMPAT_FILE="src/EmulatorCompat.sol"
+CONSTANTS_FILE="src/EmulatorConstants.sol"
 KEYWORD_START="START OF AUTO-GENERATED CODE"
 KEYWORD_END="END OF AUTO-GENERATED CODE"
 
 # get function names from EmulatorCompat.sol
 COMPAT_FNS=`cat $COMPAT_FILE | grep -o "function [^(]*(" | $SED "s/function//g" | $SED "s/(//g"`
 COMPAT_FNS=`echo $COMPAT_FNS | $SED -E "s/( |\n)/|/g"`
+
+# get constant names from EmulatorConstants.sol
+CONSTANTS=`cat $CONSTANTS_FILE | grep  -E -o 'constant\s+[^ ]*' | $SED -E "s/constant//g; s/ //g" | tr '\n' '|' | sed "s/.$//"`
 
 # grab head and tail of the template
 start=`cat "$TEMPLATE_FILE" | grep "$KEYWORD_START" -n | grep -Eo "[0-9]*"`
@@ -34,6 +38,7 @@ cpp_src=`echo "${BASH_REMATCH[1]}" \
         | $SED "/Explicit instantiatio/d" \
         | $SED "/template/d" \
         | $SED -E "s/($COMPAT_FNS)/EmulatorCompat.\1/g" \
+        | $SED -E "s/($CONSTANTS)([^a-zA-Z])/EmulatorConstants.\1\2/g" \
         | $SED "s/void uarch_reset_state(UarchState &a) {/function reset(AccessLogs.Context memory a) internal pure {/"`
 
 # compose the solidity file from all components

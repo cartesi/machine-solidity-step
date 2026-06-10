@@ -43,11 +43,19 @@ out:write('    uint8 constant CMIO_YIELD_REASON_ADVANCE_STATE = 0x' ..
     hex(cartesi.HTIF_YIELD_REASON_ADVANCE_STATE) .. ';\n')
 out:write('    uint32 constant HASH_TREE_LOG2_WORD_SIZE = 0x' .. hex(cartesi.HASH_TREE_LOG2_WORD_SIZE) .. ';\n')
 out:write('    uint32 constant HASH_TREE_WORD_SIZE = uint32(1) << HASH_TREE_LOG2_WORD_SIZE;\n')
-out:write('    uint16 constant CMIO_YIELD_MANUAL_REASON_RX_ACCEPTED = 0x' ..
+out:write('    uint32 constant HTIF_DEV_SHIFT = 0x' .. hex(cartesi.HTIF_DEV_SHIFT) .. ';\n')
+out:write('    uint32 constant HTIF_CMD_SHIFT = 0x' .. hex(cartesi.HTIF_CMD_SHIFT) .. ';\n')
+out:write('    uint32 constant HTIF_REASON_SHIFT = 0x' .. hex(cartesi.HTIF_REASON_SHIFT) .. ';\n')
+out:write('    uint64 constant HTIF_DEV_MASK = 0x' .. hex(cartesi.HTIF_DEV_MASK) .. ';\n')
+out:write('    uint64 constant HTIF_CMD_MASK = 0x' .. hex(cartesi.HTIF_CMD_MASK) .. ';\n')
+out:write('    uint64 constant HTIF_REASON_MASK = 0x' .. hex(cartesi.HTIF_REASON_MASK) .. ';\n')
+out:write('    uint64 constant HTIF_DEV_YIELD = 0x' .. hex(cartesi.HTIF_DEV_YIELD) .. ';\n')
+out:write('    uint64 constant HTIF_YIELD_CMD_MANUAL = 0x' .. hex(cartesi.HTIF_YIELD_CMD_MANUAL) .. ';\n')
+out:write('    uint16 constant HTIF_YIELD_MANUAL_REASON_RX_ACCEPTED = 0x' ..
     hex(cartesi.HTIF_YIELD_MANUAL_REASON_RX_ACCEPTED) .. ';\n')
-out:write('    uint16 constant CMIO_YIELD_MANUAL_REASON_RX_REJECTED = 0x' ..
+out:write('    uint16 constant HTIF_YIELD_MANUAL_REASON_RX_REJECTED = 0x' ..
     hex(cartesi.HTIF_YIELD_MANUAL_REASON_RX_REJECTED) .. ';\n')
-out:write('    uint16 constant CMIO_YIELD_MANUAL_REASON_TX_EXCEPTION = 0x' ..
+out:write('    uint16 constant HTIF_YIELD_MANUAL_REASON_TX_EXCEPTION = 0x' ..
     hex(cartesi.HTIF_YIELD_MANUAL_REASON_TX_EXCEPTION) .. ';\n')
 out:write('    uint8 constant UARCH_STATE_LOG2_SIZE = ' .. cartesi.UARCH_STATE_LOG2_SIZE .. ';\n')
 out:write('    uint64 constant AR_CMIO_RX_BUFFER_START = 0x' .. hex(cartesi.AR_CMIO_RX_BUFFER_START) .. ';\n')
