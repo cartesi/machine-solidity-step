@@ -31,6 +31,7 @@ library SendCmioResponse {
 
     function sendCmioResponse(
         AccessLogs.Context memory a,
+        bytes32 revertRootHash,
         uint16 reason,
         bytes32 dataHash,
         uint32 dataLength
@@ -38,6 +39,8 @@ library SendCmioResponse {
         if (!EmulatorCompat.readIflagsY(a)) {
             EmulatorCompat.throwRuntimeError(a, "iflags.Y is not set");
         }
+        // Record the machine root hash to revert to in case the response is eventually rejected
+        EmulatorCompat.writeRevertRootHash(a, revertRootHash);
         // A zero length data is a valid response. We just skip writing to the rx buffer.
         if (dataLength > 0) {
             // Find the write length: the smallest power of 2 that is >= dataLength and >= tree leaf size

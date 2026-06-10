@@ -98,8 +98,13 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
             }
             bytes32 paddedResponseHash = keccak256(paddedResponse);
             // call sendCmioResponse
+            // the test log file was generated passing the initial root hash as the revert root hash
             SendCmioResponse.sendCmioResponse(
-                accessLogs, reason, paddedResponseHash, uint32(response.length)
+                accessLogs,
+                initialRootHash,
+                reason,
+                paddedResponseHash,
+                uint32(response.length)
             );
             // ensure that the final root hash matches the expected value
             assertEq(

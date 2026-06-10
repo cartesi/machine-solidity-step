@@ -23,7 +23,7 @@ library EmulatorCompat {
     using Buffer for Buffer.Context;
     using Memory for uint64;
 
-    function getRevertRootHash(AccessLogs.Context memory a)
+    function readRevertRootHash(AccessLogs.Context memory a)
         internal
         pure
         returns (bytes32)
@@ -107,7 +107,7 @@ library EmulatorCompat {
         );
     }
 
-    function setRevertRootHash(
+    function writeRevertRootHash(
         AccessLogs.Context memory a,
         bytes32 revertRootHash
     ) internal pure {

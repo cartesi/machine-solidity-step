@@ -40,15 +40,15 @@ out:write('    uint64 constant HTIF_FROMHOST_ADDRESS = 0x' ..
 out:write('    uint64 constant HTIF_TOHOST_ADDRESS = 0x' ..
     hex(cartesi.machine:get_reg_address("htif_tohost")) .. ';\n')
 out:write('    uint8 constant CMIO_YIELD_REASON_ADVANCE_STATE = 0x' ..
-    hex(cartesi.CMIO_YIELD_REASON_ADVANCE_STATE) .. ';\n')
+    hex(cartesi.HTIF_YIELD_REASON_ADVANCE_STATE) .. ';\n')
 out:write('    uint32 constant HASH_TREE_LOG2_WORD_SIZE = 0x' .. hex(cartesi.HASH_TREE_LOG2_WORD_SIZE) .. ';\n')
 out:write('    uint32 constant HASH_TREE_WORD_SIZE = uint32(1) << HASH_TREE_LOG2_WORD_SIZE;\n')
 out:write('    uint16 constant CMIO_YIELD_MANUAL_REASON_RX_ACCEPTED = 0x' ..
-    hex(cartesi.CMIO_YIELD_MANUAL_REASON_RX_ACCEPTED) .. ';\n')
+    hex(cartesi.HTIF_YIELD_MANUAL_REASON_RX_ACCEPTED) .. ';\n')
 out:write('    uint16 constant CMIO_YIELD_MANUAL_REASON_RX_REJECTED = 0x' ..
-    hex(cartesi.CMIO_YIELD_MANUAL_REASON_RX_REJECTED) .. ';\n')
+    hex(cartesi.HTIF_YIELD_MANUAL_REASON_RX_REJECTED) .. ';\n')
 out:write('    uint16 constant CMIO_YIELD_MANUAL_REASON_TX_EXCEPTION = 0x' ..
-    hex(cartesi.CMIO_YIELD_MANUAL_REASON_TX_EXCEPTION) .. ';\n')
+    hex(cartesi.HTIF_YIELD_MANUAL_REASON_TX_EXCEPTION) .. ';\n')
 out:write('    uint8 constant UARCH_STATE_LOG2_SIZE = ' .. cartesi.UARCH_STATE_LOG2_SIZE .. ';\n')
 out:write('    uint64 constant AR_CMIO_RX_BUFFER_START = 0x' .. hex(cartesi.AR_CMIO_RX_BUFFER_START) .. ';\n')
 out:write('    uint8 constant AR_CMIO_RX_BUFFER_LOG2_SIZE = 0x' .. hex(cartesi.AR_CMIO_RX_BUFFER_LOG2_SIZE) .. ';\n')
