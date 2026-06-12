@@ -46,7 +46,7 @@ library EmulatorConstants {
     uint64 constant IFLAGS_Y_ADDRESS = 0x300;
     uint64 constant HTIF_FROMHOST_ADDRESS = 0x330;
     uint64 constant HTIF_TOHOST_ADDRESS = 0x328;
-    uint8 constant CMIO_YIELD_REASON_ADVANCE_STATE = 0x0;
+    uint8 constant HTIF_YIELD_REASON_ADVANCE_STATE = 0x0;
     uint32 constant HASH_TREE_LOG2_WORD_SIZE = 0x5;
     uint32 constant HASH_TREE_WORD_SIZE = uint32(1) << HASH_TREE_LOG2_WORD_SIZE;
     uint32 constant HTIF_DEV_SHIFT = 0x38;

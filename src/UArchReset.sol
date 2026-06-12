@@ -36,24 +36,10 @@ library UArchReset {
             uint64 tohost = EmulatorCompat.readWord(
                 a, EmulatorConstants.HTIF_TOHOST_ADDRESS
             );
-            uint64 dev = EmulatorCompat.uint64ShiftRight(
-                tohost & EmulatorConstants.HTIF_DEV_MASK,
-                EmulatorConstants.HTIF_DEV_SHIFT
-            );
-            uint64 cmd = EmulatorCompat.uint64ShiftRight(
-                tohost & EmulatorConstants.HTIF_CMD_MASK,
-                EmulatorConstants.HTIF_CMD_SHIFT
-            );
-            uint64 reason = EmulatorCompat.uint64ShiftRight(
-                tohost & EmulatorConstants.HTIF_REASON_MASK,
-                EmulatorConstants.HTIF_REASON_SHIFT
-            );
-            if (
-                dev == EmulatorConstants.HTIF_DEV_YIELD
-                    && cmd == EmulatorConstants.HTIF_YIELD_CMD_MANUAL
-                    && reason
-                        == EmulatorConstants.HTIF_YIELD_MANUAL_REASON_RX_REJECTED
-            ) {
+            if (EmulatorCompat.isYieldedManualWith(
+                    tohost,
+                    EmulatorConstants.HTIF_YIELD_MANUAL_REASON_RX_REJECTED
+                )) {
                 EmulatorCompat.revertState(a);
             }
         }

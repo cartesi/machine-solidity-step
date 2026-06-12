@@ -34,6 +34,8 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
     string constant JSON_PATH = "./test/uarch-log/";
     string constant CATALOG_PATH = "catalog.json";
     string constant SEND_CMIO_RESPONSE_PATH = "send-cmio-response-steps.json";
+    string constant SEND_CMIO_RESPONSE_NOOP_PATH =
+        "send-cmio-response-noop-steps.json";
 
     uint256 constant siblingsLength = 59;
 
@@ -113,6 +115,81 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
                 "final root hash must match"
             );
         }
+    }
+
+    function testSendCmioResponseNoop() public {
+        Entry[] memory catalog =
+            loadCatalog(string.concat(JSON_PATH, CATALOG_PATH));
+        string memory noopLog =
+            string.concat(JSON_PATH, SEND_CMIO_RESPONSE_NOOP_PATH);
+
+        // all tests combined can easily run out of gas, stop metering
+        // also raise memory_limit in foundry.toml per https://github.com/foundry-rs/foundry/issues/3971
+        vm.pauseGasMetering();
+        // create a large buffer and reuse it
+        bytes memory buffer = new bytes(100 * (siblingsLength + 1) * 32);
+        bool found = false;
+
+        for (uint256 i = 0; i < catalog.length; i++) {
+            if (
+                keccak256(abi.encodePacked(catalog[i].logFilename))
+                    != keccak256(
+                        abi.encodePacked("send-cmio-response-noop-steps.json")
+                    )
+            ) {
+                continue;
+            }
+            found = true;
+            console.log("Replaying log file %s ...", catalog[i].logFilename);
+
+            string memory rj = loadJsonLog(noopLog);
+
+            bytes32 initialRootHash = vm.parseBytes32(
+                string.concat("0x", catalog[i].initialRootHash)
+            );
+            bytes32 finalRootHash =
+                vm.parseBytes32(string.concat("0x", catalog[i].finalRootHash));
+            // the log was taken from a machine that yielded manual with reason
+            // rx-rejected, so the advance-state response must be a no-op
+            assertEq(
+                initialRootHash,
+                finalRootHash,
+                "initial and final root hashes must match"
+            );
+
+            loadBufferFromRawJson(buffer, rj);
+
+            AccessLogs.Context memory accessLogs =
+                AccessLogs.Context(initialRootHash, Buffer.Context(buffer, 0));
+
+            // Prepare arguments for sendCmioResponse
+            // These values are hard-coded in order to match the values used when generating the test log file
+            uint16 reason = EmulatorConstants.HTIF_YIELD_REASON_ADVANCE_STATE;
+            bytes memory response = bytes("This is a test cmio response");
+            bytes memory paddedResponse = new bytes(32);
+            for (uint256 j = 0; j < response.length; j++) {
+                paddedResponse[j] = response[j];
+            }
+            bytes32 paddedResponseHash = keccak256(paddedResponse);
+            // call sendCmioResponse
+            // the test log file was generated passing the initial root hash as the revert root hash
+            SendCmioResponse.sendCmioResponse(
+                accessLogs,
+                initialRootHash,
+                reason,
+                paddedResponseHash,
+                uint32(response.length)
+            );
+            // ensure that the final root hash matches the expected value
+            assertEq(
+                accessLogs.currentRootHash,
+                finalRootHash,
+                "final root hash must match"
+            );
+        }
+        assertTrue(
+            found, "catalog has no send-cmio-response-noop-steps.json entry"
+        );
     }
 
     function loadCatalog(string memory path)

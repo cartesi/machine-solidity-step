@@ -39,7 +39,7 @@ out:write('    uint64 constant HTIF_FROMHOST_ADDRESS = 0x' ..
     hex(cartesi.machine:get_reg_address("htif_fromhost")) .. ';\n')
 out:write('    uint64 constant HTIF_TOHOST_ADDRESS = 0x' ..
     hex(cartesi.machine:get_reg_address("htif_tohost")) .. ';\n')
-out:write('    uint8 constant CMIO_YIELD_REASON_ADVANCE_STATE = 0x' ..
+out:write('    uint8 constant HTIF_YIELD_REASON_ADVANCE_STATE = 0x' ..
     hex(cartesi.HTIF_YIELD_REASON_ADVANCE_STATE) .. ';\n')
 out:write('    uint32 constant HASH_TREE_LOG2_WORD_SIZE = 0x' .. hex(cartesi.HASH_TREE_LOG2_WORD_SIZE) .. ';\n')
 out:write('    uint32 constant HASH_TREE_WORD_SIZE = uint32(1) << HASH_TREE_LOG2_WORD_SIZE;\n')

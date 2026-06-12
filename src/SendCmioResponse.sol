@@ -36,15 +36,29 @@ library SendCmioResponse {
         bytes32 dataHash,
         uint32 dataLength
     ) internal pure {
+        // This function cannot fail. When a failure is detected, the operation is a no-op instead,
+        // so the honest party can always log and prove the resulting state transition.
+        // A response to a machine that is not waiting on a manual yield is a no-op.
         if (!EmulatorCompat.readIflagsY(a)) {
-            EmulatorCompat.throwRuntimeError(a, "iflags.Y is not set");
+            return;
         }
-        // Record the machine root hash to revert to in case the response is eventually rejected
-        EmulatorCompat.writeRevertRootHash(a, revertRootHash);
+        if (reason == EmulatorConstants.HTIF_YIELD_REASON_ADVANCE_STATE) {
+            // Advance-state responses are the input boundary of the rollups flow. They only apply to a
+            // machine waiting for an input on an rx-accepted manual yield. Sending one to a machine that
+            // yielded manual with any other reason (e.g., rejected an input or threw an exception) is a no-op.
+            uint64 tohost = EmulatorCompat.readHtifTohost(a);
+            if (!EmulatorCompat.isYieldedManualWith(
+                    tohost,
+                    EmulatorConstants.HTIF_YIELD_MANUAL_REASON_RX_ACCEPTED
+                )) {
+                return;
+            }
+        }
         // A zero length data is a valid response. We just skip writing to the rx buffer.
+        uint32 writeLengthLog2Size = 0;
         if (dataLength > 0) {
             // Find the write length: the smallest power of 2 that is >= dataLength and >= tree leaf size
-            uint32 writeLengthLog2Size = EmulatorCompat.uint32Log2(dataLength);
+            writeLengthLog2Size = EmulatorCompat.uint32Log2(dataLength);
             if (
                 writeLengthLog2Size < EmulatorConstants.HASH_TREE_LOG2_WORD_SIZE
             ) {
@@ -56,14 +70,17 @@ library SendCmioResponse {
             ) {
                 writeLengthLog2Size += 1;
             }
+            // A response with data that does not fit in the rx buffer is a no-op
             if (
                 writeLengthLog2Size
                     > EmulatorConstants.AR_CMIO_RX_BUFFER_LOG2_SIZE
             ) {
-                EmulatorCompat.throwRuntimeError(
-                    a, "CMIO response data is too large"
-                );
+                return;
             }
+        }
+        // Record the machine root hash to revert to in case the response is eventually rejected
+        EmulatorCompat.writeRevertRootHash(a, revertRootHash);
+        if (dataLength > 0) {
             a.writeRegion(
                 Memory.regionFromPhysicalAddress(
                     EmulatorConstants.AR_CMIO_RX_BUFFER_START

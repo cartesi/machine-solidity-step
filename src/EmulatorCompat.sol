@@ -187,6 +187,16 @@ library EmulatorCompat {
         );
     }
 
+    function readHtifTohost(AccessLogs.Context memory a)
+        internal
+        pure
+        returns (uint64)
+    {
+        return a.readWord(
+            EmulatorConstants.HTIF_TOHOST_ADDRESS.toPhysicalAddress()
+        );
+    }
+
     // Conversions and arithmetic functions
 
     function int8ToUint64(int8 val) internal pure returns (uint64) {
@@ -379,5 +389,27 @@ library EmulatorCompat {
         }
 
         return n;
+    }
+
+    function isYieldedManualWith(uint64 tohost, uint64 yieldReason)
+        internal
+        pure
+        returns (bool)
+    {
+        uint64 dev = uint64ShiftRight(
+            tohost & EmulatorConstants.HTIF_DEV_MASK,
+            EmulatorConstants.HTIF_DEV_SHIFT
+        );
+        uint64 cmd = uint64ShiftRight(
+            tohost & EmulatorConstants.HTIF_CMD_MASK,
+            EmulatorConstants.HTIF_CMD_SHIFT
+        );
+        uint64 reason = uint64ShiftRight(
+            tohost & EmulatorConstants.HTIF_REASON_MASK,
+            EmulatorConstants.HTIF_REASON_SHIFT
+        );
+        return dev == EmulatorConstants.HTIF_DEV_YIELD
+            && cmd == EmulatorConstants.HTIF_YIELD_CMD_MANUAL
+            && reason == yieldReason;
     }
 }
