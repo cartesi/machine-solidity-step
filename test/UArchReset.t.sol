@@ -56,10 +56,14 @@ contract UArchReset_Test is AccessLogJsonParse {
         vm.pauseGasMetering();
         // create a large buffer and reuse it
         bytes memory buffer = new bytes(100 * (siblingsLength + 1) * 32);
+        // count the fixtures replayed below, so a missing entry fails loudly
+        uint256 found = 0;
 
         for (uint256 i = 0; i < catalog.length; i++) {
-            // run the plain reset log and the rejected-input log, whose final
-            // root hash is the recorded revert root hash
+            // run the plain reset log, the rejected-input log (whose final
+            // root hash is the recorded revert root hash), and the
+            // accepted-input log (which reads the manual yield but does not
+            // revert, so its final root hash is the post-reset root)
             if (
                 keccak256(abi.encodePacked(catalog[i].logFilename))
                         != keccak256(abi.encodePacked("reset-uarch-steps.json"))
@@ -67,9 +71,14 @@ contract UArchReset_Test is AccessLogJsonParse {
                         != keccak256(
                             abi.encodePacked("reset-uarch-rejected-steps.json")
                         )
+                    && keccak256(abi.encodePacked(catalog[i].logFilename))
+                        != keccak256(
+                            abi.encodePacked("reset-uarch-accepted-steps.json")
+                        )
             ) {
                 continue;
             }
+            found++;
             console.log("Replaying log file %s ...", catalog[i].logFilename);
 
             string memory rj =
@@ -95,8 +104,11 @@ contract UArchReset_Test is AccessLogJsonParse {
                 "final root hash must match"
             );
         }
-
-        // load json log
+        assertEq(
+            found,
+            3,
+            "catalog is missing one of the reset-uarch-{steps,rejected-steps,accepted-steps}.json entries"
+        );
     }
 
     function loadCatalog(string memory path)
