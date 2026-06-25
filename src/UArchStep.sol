@@ -1079,12 +1079,6 @@ library UArchStep {
             EmulatorCompat.putCharECALL(a, uint8(c)); // Can be a NOOP in Solidity
             return advancePc(a, pc);
         }
-        if (fn == EmulatorConstants.UARCH_ECALL_FN_MARK_DIRTY_PAGE) {
-            uint64 paddr = EmulatorCompat.readX(a, 10); // a0 contains physical address in page to be marked dirty
-            uint64 pma_index = EmulatorCompat.readX(a, 11); // a1 contains a index of PMA where page falls
-            EmulatorCompat.markDirtyPageECALL(a, paddr, pma_index); // This MUST be be a NOOP in Solidity
-            return advancePc(a, pc);
-        }
         if (fn == EmulatorConstants.UARCH_ECALL_FN_WRITE_TLB) {
             uint64 set_index = EmulatorCompat.readX(a, 10); // a0 contains TLB set (code, read, write)
             uint64 slot_index = EmulatorCompat.readX(a, 11); // a1 contains slot_index to modify

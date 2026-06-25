@@ -25,7 +25,7 @@ library EmulatorConstants {
     // START OF AUTO-GENERATED CODE
 
     bytes32 constant UARCH_PRISTINE_STATE_HASH =
-        0x245a715ed3343e88ea5b2810584faea872991cca0200979e8f43056cd2db59c6;
+        0x42e6d54b3b07b4a1c5f2ed13aae7c8d924269c32728a5b66f54b70358b4d99e7;
     uint64 constant UARCH_CYCLE_ADDRESS = 0x400008;
     uint64 constant UARCH_CYCLE_MAX = 0x100000;
     uint64 constant UARCH_HALT_FLAG_ADDRESS = 0x400000;
@@ -40,7 +40,6 @@ library EmulatorConstants {
     uint64 constant UARCH_STATE_START_ADDRESS = 0x400000;
     uint64 constant UARCH_ECALL_FN_HALT = 1;
     uint64 constant UARCH_ECALL_FN_PUTCHAR = 2;
-    uint64 constant UARCH_ECALL_FN_MARK_DIRTY_PAGE = 3;
     uint64 constant UARCH_ECALL_FN_WRITE_TLB = 4;
     uint64 constant HTIF_YIELD = 0x348;
     uint64 constant IFLAGS_Y_ADDRESS = 0x300;

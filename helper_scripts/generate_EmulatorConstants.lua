@@ -31,7 +31,6 @@ out:write('    uint64 constant UARCH_RAM_LENGTH = 0x' .. hex(cartesi.UARCH_RAM_L
 out:write('    uint64 constant UARCH_STATE_START_ADDRESS = 0x' .. hex(cartesi.UARCH_STATE_START_ADDRESS) .. ';\n')
 out:write('    uint64 constant UARCH_ECALL_FN_HALT = ' .. cartesi.UARCH_ECALL_FN_HALT .. ';\n')
 out:write('    uint64 constant UARCH_ECALL_FN_PUTCHAR = ' .. cartesi.UARCH_ECALL_FN_PUTCHAR .. ';\n')
-out:write('    uint64 constant UARCH_ECALL_FN_MARK_DIRTY_PAGE = ' .. cartesi.UARCH_ECALL_FN_MARK_DIRTY_PAGE .. ';\n')
 out:write('    uint64 constant UARCH_ECALL_FN_WRITE_TLB = ' .. cartesi.UARCH_ECALL_FN_WRITE_TLB .. ';\n')
 out:write('    uint64 constant HTIF_YIELD = 0x' .. hex(cartesi.machine:get_reg_address("htif_iyield")) .. ';\n')
 out:write('    uint64 constant IFLAGS_Y_ADDRESS = 0x' .. hex(cartesi.machine:get_reg_address("iflags_Y")) .. ';\n')

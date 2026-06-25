@@ -4,7 +4,7 @@ DOWNLOADDIR := downloads
 SRC_DIR := src
 
 EMULATOR_VERSION ?= v0.21.0
-EMULATOR_TAG ?= -test2
+EMULATOR_TAG ?= -test3
 
 SOLIDITY_VERSION ?= 0.8.30
 
@@ -113,7 +113,7 @@ generate-replay:
 generate-constants: $(EMULATOR_DIR)
 	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_EmulatorConstants.sh
 
-generate-step: $(EMULATOR_DIR)/src/uarch-step.h $(EMULATOR_DIR)/src/uarch-step.cpp
+generate-step: $(EMULATOR_DIR)/src/uarch-step.hpp $(EMULATOR_DIR)/src/uarch-step.cpp
 	EMULATOR_DIR=$(EMULATOR_DIR) ./helper_scripts/generate_UArchStep.sh
 
 generate-reset: $(EMULATOR_DIR)/src/uarch-reset-state.cpp

@@ -328,12 +328,6 @@ library EmulatorCompat {
 
     function putCharECALL(AccessLogs.Context memory a, uint8 c) internal pure {}
 
-    function markDirtyPageECALL(
-        AccessLogs.Context memory a,
-        uint64 paddr,
-        uint64 pma_index
-    ) internal pure {}
-
     function writeTlbECALL(
         AccessLogs.Context memory a,
         uint64 setIndex,

@@ -141,6 +141,27 @@ contract UArchInterpretTest is Test {
         ExternalUArchInterpret.interpret(a);
     }
 
+    function testRemovedMarkDirtyPageEcall() public {
+        // function code 3 was the mark_dirty_page ecall and has been removed, so the
+        // binary that issues it must now revert as an unsupported ecall
+        AccessLogs.Context memory a = newAccessLogsContext();
+
+        loadBin(
+            a.buffer,
+            string.concat(
+                BINARIES_PATH, "rv64ui-uarch-ecall-removed-mark-page-dirty.bin"
+            )
+        );
+
+        // init pc to ram start
+        EmulatorCompat.writePc(a, EmulatorConstants.UARCH_RAM_START_ADDRESS);
+        // init cycle to 0
+        EmulatorCompat.writeCycle(a, 0);
+
+        vm.expectRevert("unsupported ecall function");
+        ExternalUArchInterpret.interpret(a);
+    }
+
     function loadBin(Buffer.Context memory buffer, string memory path)
         private
         view

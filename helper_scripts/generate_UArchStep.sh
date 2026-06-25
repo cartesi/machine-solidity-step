@@ -5,7 +5,7 @@ set -e
 SED=${SED:-"sed"}
 EMULATOR_DIR=${EMULATOR_DIR:-"../emulator"}
 CPP_STEP_PATH=${EMULATOR_DIR}"/src/uarch-step.cpp"
-CPP_STEP_H_PATH=${EMULATOR_DIR}"/src/uarch-step.h"
+CPP_STEP_H_PATH=${EMULATOR_DIR}"/src/uarch-step.hpp"
 
 TEMPLATE_FILE="./templates/UArchStep.sol.template"
 TARGET_FILE="src/UArchStep.sol"
