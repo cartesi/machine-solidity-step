@@ -47,10 +47,12 @@ library SendCmioResponse {
             // machine waiting for an input on an rx-accepted manual yield. Sending one to a machine that
             // yielded manual with any other reason (e.g., rejected an input or threw an exception) is a no-op.
             uint64 tohost = EmulatorCompat.readHtifTohost(a);
-            if (!EmulatorCompat.isYieldedManualWith(
+            if (
+                !EmulatorCompat.isYieldedManualWith(
                     tohost,
                     EmulatorConstants.HTIF_YIELD_MANUAL_REASON_RX_ACCEPTED
-                )) {
+                )
+            ) {
                 return;
             }
         }
@@ -78,13 +80,27 @@ library SendCmioResponse {
                 return;
             }
         }
+        if (reason == EmulatorConstants.HTIF_YIELD_REASON_ADVANCE_STATE) {
+            uint64 mcycle = EmulatorCompat.readMcycle(a);
+            uint64 maxMcycles = EmulatorCompat.uint64ShiftLeft(
+                1,
+                uint32(
+                    EmulatorConstants.ROLLUP_LOG2_MAX_MCYCLES_PER_ADVANCE_STATE
+                )
+            ) - 1;
+            uint64 maxUint64 = ~uint64(0);
+            uint64 imcyclemax = mcycle > maxUint64 - maxMcycles
+                ? maxUint64
+                : mcycle + maxMcycles;
+            EmulatorCompat.writeImcyclemax(a, imcyclemax);
+        }
         // Record the machine root hash to revert to in case the response is eventually rejected
         EmulatorCompat.writeRevertRootHash(a, revertRootHash);
         if (dataLength > 0) {
             a.writeRegion(
                 Memory.regionFromPhysicalAddress(
-                    EmulatorConstants.AR_CMIO_RX_BUFFER_START
-                    .toPhysicalAddress(),
+                    EmulatorConstants.AR_CMIO_RX_BUFFER_START.toPhysicalAddress(
+                    ),
                     Memory.alignedSizeFromLog2(
                         uint8(
                             writeLengthLog2Size
@@ -98,9 +114,9 @@ library SendCmioResponse {
         // Write data length and reason to fromhost
         uint64 mask16 = EmulatorCompat.uint64ShiftLeft(1, 16) - 1;
         uint64 mask32 = EmulatorCompat.uint64ShiftLeft(1, 32) - 1;
-        uint64 yieldData =
-            EmulatorCompat.uint64ShiftLeft((uint64(reason) & mask16), 32)
-                | (uint64(dataLength) & mask32);
+        uint64 yieldData = EmulatorCompat.uint64ShiftLeft(
+            (uint64(reason) & mask16), 32
+        ) | (uint64(dataLength) & mask32);
         EmulatorCompat.writeHtifFromhost(a, yieldData);
         // Reset iflags.Y
         EmulatorCompat.writeIflagsY(a, 0);

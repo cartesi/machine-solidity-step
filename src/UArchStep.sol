@@ -28,8 +28,18 @@ library UArchStep {
 
     enum UArchStepStatus {
         Success, // one micro instruction was executed successfully
-        CycleOverflow, // already at fixed point: uarch cycle has reached its maximum value
-        UArchHalted // already at fixed point: microarchitecture is halted
+        UArchCycleOverflow, // uarch cycle reached or was already at its maximum value
+        UArchHalted // microarchitecture reached or was already at its halted fixed point
+    }
+
+    function uarch_halt_to_step_status(uint64 halt)
+        private
+        pure
+        returns (UArchStepStatus)
+    {
+        return halt == EmulatorConstants.UARCH_HALT_CYCLE_OVERFLOW
+            ? UArchStepStatus.UArchCycleOverflow
+            : UArchStepStatus.UArchHalted;
     }
 
     // Memory read/write access
@@ -1072,7 +1082,8 @@ library UArchStep {
         // return value is in a0 (and maybe also in a1)
         uint64 fn = EmulatorCompat.readX(a, 17); // a7 contains the function number
         if (fn == EmulatorConstants.UARCH_ECALL_FN_HALT) {
-            return EmulatorCompat.writeHaltFlag(a, 1);
+            return
+                EmulatorCompat.writeHalt(a, EmulatorConstants.UARCH_HALT_HALTED);
         }
         if (fn == EmulatorConstants.UARCH_ECALL_FN_PUTCHAR) {
             uint64 c = EmulatorCompat.readX(a, 10); // a0 contains the character to print
@@ -1317,22 +1328,40 @@ library UArchStep {
         pure
         returns (UArchStepStatus)
     {
-        // This must be the first read in order to match the first log access in machine.verify_step_uarch
+        // Check and report if already at fixed point
+        uint64 halt = EmulatorCompat.readHalt(a);
+        if (halt != 0) {
+            return uarch_halt_to_step_status(halt);
+        }
+        // Materialize overflow if the cycle is already at or beyond its limit
         uint64 cycle = EmulatorCompat.readCycle(a);
-        // do not advance if cycle will overflow
         if (cycle >= EmulatorConstants.UARCH_CYCLE_MAX) {
-            return UArchStepStatus.CycleOverflow;
+            EmulatorCompat.writeHalt(
+                a, EmulatorConstants.UARCH_HALT_CYCLE_OVERFLOW
+            );
+            return UArchStepStatus.UArchCycleOverflow;
         }
-        // do not advance if machine is halted
-        if (EmulatorCompat.readHaltFlag(a) != 0) {
-            return UArchStepStatus.UArchHalted;
-        }
-        // execute next instruction
+        // Execute next instruction
         uint64 pc = EmulatorCompat.readPc(a);
         uint32 insn = readUint32(a, pc);
         executeInsn(a, insn, pc);
         cycle = cycle + 1;
         EmulatorCompat.writeCycle(a, cycle);
+        // Materialize overflow immediately when this step reaches the cycle limit
+        if (cycle >= EmulatorConstants.UARCH_CYCLE_MAX) {
+            EmulatorCompat.writeHalt(
+                a, EmulatorConstants.UARCH_HALT_CYCLE_OVERFLOW
+            );
+            return UArchStepStatus.UArchCycleOverflow;
+        }
+        // ECALL is the only instruction that can halt the uarch. Overflow was handled above,
+        // so a non-zero halt value here can only report a normal halt; keep the common mapping for consistency.
+        if (insn == uint32(0x73)) {
+            halt = EmulatorCompat.readHalt(a);
+            if (halt != 0) {
+                return uarch_halt_to_step_status(halt);
+            }
+        }
         return UArchStepStatus.Success;
     }
 

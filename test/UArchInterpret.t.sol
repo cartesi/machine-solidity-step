@@ -86,7 +86,7 @@ contract UArchInterpretTest is Test {
                 uint64(TEST_SUCCEEDED)
             );
 
-            bool halt = EmulatorCompat.readHaltFlag(a) != 0;
+            bool halt = EmulatorCompat.readHalt(a) != 0;
             assertTrue(halt, "machine should halt");
 
             uint64 cycle = EmulatorCompat.readCycle(a);
@@ -99,27 +99,32 @@ contract UArchInterpretTest is Test {
 
         // init pc to ram start
         EmulatorCompat.writePc(a, EmulatorConstants.UARCH_RAM_START_ADDRESS);
-        // init cycle to uint64.max
-        EmulatorCompat.writeCycle(a, type(uint64).max);
+        // init cycle to the final allowed uarch cycle
+        EmulatorCompat.writeCycle(a, EmulatorConstants.UARCH_CYCLE_MAX);
 
         UArchStep.UArchStepStatus status = UArchInterpret.interpret(a);
 
         assertTrue(
-            status == UArchStep.UArchStepStatus.CycleOverflow,
+            status == UArchStep.UArchStepStatus.UArchCycleOverflow,
             "machine should be cycle overflow"
         );
 
         uint64 cycle = EmulatorCompat.readCycle(a);
         assertEq(
             cycle,
-            type(uint64).max,
-            "step should not advance when cycle is uint64.max"
+            EmulatorConstants.UARCH_CYCLE_MAX,
+            "step should not advance when cycle is at its maximum"
+        );
+        assertEq(
+            EmulatorCompat.readHalt(a),
+            EmulatorConstants.UARCH_HALT_CYCLE_OVERFLOW,
+            "halt flag should record cycle overflow"
         );
 
         // reset cycle to 0
         EmulatorCompat.writeCycle(a, 0);
         // set machine to halt
-        EmulatorCompat.writeHaltFlag(a, 1);
+        EmulatorCompat.writeHalt(a, EmulatorConstants.UARCH_HALT_HALTED);
 
         status = UArchInterpret.interpret(a);
 

@@ -28,7 +28,7 @@ library UArchInterpret {
     {
         UArchStep.UArchStepStatus status;
 
-        while (status != UArchStep.UArchStepStatus.CycleOverflow) {
+        while (status != UArchStep.UArchStepStatus.UArchCycleOverflow) {
             status = UArchStep.step(accessLogs);
 
             if (status == UArchStep.UArchStepStatus.UArchHalted) {

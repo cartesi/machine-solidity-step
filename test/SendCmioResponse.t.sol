@@ -88,7 +88,7 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
 
             // Prepare arguments for sendCmioResponse
             // These values are hard-coded in order to match the values used when generating the test log file
-            uint16 reason = 1;
+            uint16 reason = EmulatorConstants.HTIF_YIELD_REASON_ADVANCE_STATE;
             bytes memory response = bytes("This is a test cmio response");
             require(
                 response.length == 28,

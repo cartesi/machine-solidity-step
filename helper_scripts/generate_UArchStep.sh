@@ -55,7 +55,7 @@ cpp_src=`echo "${BASH_REMATCH[1]}" \
         | $SED -E "s/static inline (\w+) ($INTERNAL_FN)\(([^\n]*)\) \{/function \2\(\3\) internal pure returns \(\1\)\{/g" \
         | $SED -E "s/static inline (\w+) (\w+)\(([^\n]*)\) \{/function \2\(\3\) private pure returns \(\1\)\{/g" \
         | $SED -E "s/($COMPAT_FNS)/EmulatorCompat.\1/g" \
-        | $SED -E "s/([^a-zA-Z])($CONSTANTS)([^a-zA-Z])/EmulatorConstants.\1\2\3/g" \
+        | $SED -E "s/([^a-zA-Z])($CONSTANTS)([^a-zA-Z])/\1EmulatorConstants.\2\3/g" \
         | $SED "s/ returns (void)//g"`
 
 # compose the solidity file from all components

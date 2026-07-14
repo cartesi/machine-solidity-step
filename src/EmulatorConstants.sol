@@ -25,10 +25,16 @@ library EmulatorConstants {
     // START OF AUTO-GENERATED CODE
 
     bytes32 constant UARCH_PRISTINE_STATE_HASH =
-        0x42e6d54b3b07b4a1c5f2ed13aae7c8d924269c32728a5b66f54b70358b4d99e7;
+        0x3be8e5dfc7a97d18e0e36a76a1b44a73a5b187dcbb85e581330f982c8727db97;
     uint64 constant UARCH_CYCLE_ADDRESS = 0x400008;
-    uint64 constant UARCH_CYCLE_MAX = 0x100000;
-    uint64 constant UARCH_HALT_FLAG_ADDRESS = 0x400000;
+    uint64 constant UARCH_CYCLE_MAX = 0xfffff;
+    uint64 constant ROLLUP_LOG2_MAX_MCYCLES_PER_ADVANCE_STATE = 48;
+    uint64 constant ROLLUP_LOG2_MAX_UARCH_CYCLES_PER_MCYCLE = 20;
+    uint64 constant ROLLUP_LOG2_MAX_OUTPUT_COUNT = 63;
+    uint64 constant ROLLUP_LOG2_MAX_ADVANCE_STATES_PER_EPOCH = 16;
+    uint64 constant UARCH_HALT_ADDRESS = 0x400000;
+    uint64 constant UARCH_HALT_HALTED = 1;
+    uint64 constant UARCH_HALT_CYCLE_OVERFLOW = 3;
     uint64 constant UARCH_PC_ADDRESS = 0x400010;
     uint64 constant UARCH_X0_ADDRESS = 0x400018;
     uint64 constant UARCH_SHADOW_START_ADDRESS = 0x400000;
@@ -41,10 +47,12 @@ library EmulatorConstants {
     uint64 constant UARCH_ECALL_FN_HALT = 1;
     uint64 constant UARCH_ECALL_FN_PUTCHAR = 2;
     uint64 constant UARCH_ECALL_FN_WRITE_TLB = 4;
-    uint64 constant HTIF_YIELD = 0x348;
-    uint64 constant IFLAGS_Y_ADDRESS = 0x300;
-    uint64 constant HTIF_FROMHOST_ADDRESS = 0x330;
-    uint64 constant HTIF_TOHOST_ADDRESS = 0x328;
+    uint64 constant HTIF_YIELD = 0x350;
+    uint64 constant IFLAGS_Y_ADDRESS = 0x308;
+    uint64 constant MCYCLE_ADDRESS = 0x100;
+    uint64 constant IMCYCLEMAX_ADDRESS = 0x2f8;
+    uint64 constant HTIF_FROMHOST_ADDRESS = 0x338;
+    uint64 constant HTIF_TOHOST_ADDRESS = 0x330;
     uint8 constant HTIF_YIELD_REASON_ADVANCE_STATE = 0x0;
     uint32 constant HASH_TREE_LOG2_WORD_SIZE = 0x5;
     uint32 constant HASH_TREE_WORD_SIZE = uint32(1) << HASH_TREE_LOG2_WORD_SIZE;
