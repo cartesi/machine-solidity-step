@@ -61,8 +61,9 @@ library EmulatorCompat {
         pure
         returns (uint64)
     {
-        return
-            a.readWord(EmulatorConstants.UARCH_HALT_ADDRESS.toPhysicalAddress());
+        return a.readWord(
+            EmulatorConstants.UARCH_HALT_ADDRESS.toPhysicalAddress()
+        );
     }
 
     function writeHalt(AccessLogs.Context memory a, uint64 val) internal pure {
@@ -76,8 +77,9 @@ library EmulatorCompat {
         pure
         returns (uint64)
     {
-        return
-            a.readWord(EmulatorConstants.UARCH_PC_ADDRESS.toPhysicalAddress());
+        return a.readWord(
+            EmulatorConstants.UARCH_PC_ADDRESS.toPhysicalAddress()
+        );
     }
 
     function readWord(AccessLogs.Context memory a, uint64 paddr)
@@ -100,10 +102,7 @@ library EmulatorCompat {
         return a.readWord(paddr.toPhysicalAddress());
     }
 
-    function writeCycle(AccessLogs.Context memory a, uint64 val)
-        internal
-        pure
-    {
+    function writeCycle(AccessLogs.Context memory a, uint64 val) internal pure {
         a.writeWord(
             EmulatorConstants.UARCH_CYCLE_ADDRESS.toPhysicalAddress(), val
         );
@@ -160,8 +159,9 @@ library EmulatorCompat {
         pure
         returns (bool)
     {
-        uint64 iflags_y =
-            a.readWord(EmulatorConstants.IFLAGS_Y_ADDRESS.toPhysicalAddress());
+        uint64 iflags_y = a.readWord(
+            EmulatorConstants.IFLAGS_Y_ADDRESS.toPhysicalAddress()
+        );
         if (iflags_y == 0) {
             return false;
         }

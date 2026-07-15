@@ -1117,7 +1117,7 @@ library UArchStep {
         pure
         returns (bool)
     {
-        return ((insn & 0x7f)) == opcode;
+        return (insn & 0x7f) == opcode;
     }
 
     /// \brief Returns true if the opcode and funct3 fields of an instruction match the provided arguments
@@ -1140,7 +1140,7 @@ library UArchStep {
         uint32 funct7
     ) private pure returns (bool) {
         uint32 mask = (0x7f << 25) | (7 << 12) | 0x7f;
-        return ((insn & mask))
+        return (insn & mask)
             == (EmulatorCompat.uint32ShiftLeft(funct7, 25)
                     | EmulatorCompat.uint32ShiftLeft(funct3, 12) | opcode);
     }
@@ -1154,7 +1154,7 @@ library UArchStep {
         uint32 funct7Sr1
     ) private pure returns (bool) {
         uint32 mask = (0x3f << 26) | (7 << 12) | 0x7f;
-        return ((insn & mask))
+        return (insn & mask)
             == (EmulatorCompat.uint32ShiftLeft(funct7Sr1, 26)
                     | EmulatorCompat.uint32ShiftLeft(funct3, 12) | opcode);
     }
@@ -1328,12 +1328,12 @@ library UArchStep {
         pure
         returns (UArchStepStatus)
     {
-        // Check and report if already at fixed point
+        // Report existing halt fixed point
         uint64 halt = EmulatorCompat.readHalt(a);
         if (halt != 0) {
             return uarch_halt_to_step_status(halt);
         }
-        // Materialize overflow if the cycle is already at or beyond its limit
+        // Report existing overflow fixed point if the cycle is at or beyond its limit
         uint64 cycle = EmulatorCompat.readCycle(a);
         if (cycle >= EmulatorConstants.UARCH_CYCLE_MAX) {
             EmulatorCompat.writeHalt(
@@ -1355,7 +1355,7 @@ library UArchStep {
             return UArchStepStatus.UArchCycleOverflow;
         }
         // ECALL is the only instruction that can halt the uarch. Overflow was handled above,
-        // so a non-zero halt value here can only report a normal halt; keep the common mapping for consistency.
+        // so a non-zero halt value here can only report a normal halt.
         if (insn == uint32(0x73)) {
             halt = EmulatorCompat.readHalt(a);
             if (halt != 0) {
