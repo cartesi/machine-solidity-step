@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Changed microarchitecture cycle overflow into a state-preserving fixed point derived from `uarch.cycle`
+- Changed microarchitecture cycle overflow to take precedence over halt
+
 ## [0.14.0] - 2026-04-13
 ### Added
 - Added `advanceStatus` to return advance status (accepted, rejected, exception)

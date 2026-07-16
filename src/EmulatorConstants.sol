@@ -25,7 +25,7 @@ library EmulatorConstants {
     // START OF AUTO-GENERATED CODE
 
     bytes32 constant UARCH_PRISTINE_STATE_HASH =
-        0x05dda45cb12872b018f3857a528439b1d1100bcd3fa019a9745ad436de9a4698;
+        0xfecd1447b18725c91ba909a13b3d059d3628a625f668ce991e6ab7c901a65d2c;
     uint64 constant UARCH_CYCLE_ADDRESS = 0x400008;
     uint64 constant UARCH_CYCLE_MAX = 0xfffff;
     uint64 constant ROLLUP_LOG2_MAX_MCYCLES_PER_ADVANCE_STATE = 48;
@@ -33,8 +33,6 @@ library EmulatorConstants {
     uint64 constant ROLLUP_LOG2_MAX_OUTPUT_COUNT = 63;
     uint64 constant ROLLUP_LOG2_MAX_ADVANCE_STATES_PER_EPOCH = 24;
     uint64 constant UARCH_HALT_ADDRESS = 0x400000;
-    uint64 constant UARCH_HALT_HALTED = 1;
-    uint64 constant UARCH_HALT_CYCLE_OVERFLOW = 3;
     uint64 constant UARCH_PC_ADDRESS = 0x400010;
     uint64 constant UARCH_X0_ADDRESS = 0x400018;
     uint64 constant UARCH_SHADOW_START_ADDRESS = 0x400000;

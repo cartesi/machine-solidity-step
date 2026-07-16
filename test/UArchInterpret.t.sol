@@ -115,16 +115,12 @@ contract UArchInterpretTest is Test {
             EmulatorConstants.UARCH_CYCLE_MAX,
             "step should not advance when cycle is at its maximum"
         );
-        assertEq(
-            EmulatorCompat.readHalt(a),
-            EmulatorConstants.UARCH_HALT_CYCLE_OVERFLOW,
-            "halt flag should record cycle overflow"
-        );
+        assertEq(EmulatorCompat.readHalt(a), 0, "overflow should preserve halt");
 
         // reset cycle to 0
         EmulatorCompat.writeCycle(a, 0);
         // set machine to halt
-        EmulatorCompat.writeHalt(a, EmulatorConstants.UARCH_HALT_HALTED);
+        EmulatorCompat.writeHalt(a, 1);
 
         status = UArchInterpret.interpret(a);
 
@@ -132,6 +128,17 @@ contract UArchInterpretTest is Test {
             status == UArchStep.UArchStepStatus.UArchHalted,
             "machine should halt"
         );
+
+        // overflow takes precedence over halt
+        EmulatorCompat.writeCycle(a, EmulatorConstants.UARCH_CYCLE_MAX);
+
+        status = UArchInterpret.interpret(a);
+
+        assertTrue(
+            status == UArchStep.UArchStepStatus.UArchCycleOverflow,
+            "machine should be cycle overflow"
+        );
+        assertEq(EmulatorCompat.readHalt(a), 1, "overflow should preserve halt");
     }
 
     function testIllegalInstruction() public {
@@ -144,6 +151,34 @@ contract UArchInterpretTest is Test {
 
         vm.expectRevert("illegal instruction");
         ExternalUArchInterpret.interpret(a);
+    }
+
+    function testHaltEcallReachesCycleLimit() public {
+        AccessLogs.Context memory a = newAccessLogsContext();
+        a.buffer.data = bytes.concat(a.buffer.data, new bytes(8));
+
+        EmulatorCompat.writePc(a, EmulatorConstants.UARCH_RAM_START_ADDRESS);
+        EmulatorCompat.writeWord(
+            a, EmulatorConstants.UARCH_RAM_START_ADDRESS, 0x73
+        );
+        EmulatorCompat.writeX(a, 17, EmulatorConstants.UARCH_ECALL_FN_HALT);
+        EmulatorCompat.writeCycle(a, EmulatorConstants.UARCH_CYCLE_MAX - 1);
+
+        UArchStep.UArchStepStatus status = UArchStep.step(a);
+
+        assertTrue(
+            status == UArchStep.UArchStepStatus.UArchCycleOverflow,
+            "cycle overflow should take precedence over halt"
+        );
+        assertEq(
+            EmulatorCompat.readCycle(a),
+            EmulatorConstants.UARCH_CYCLE_MAX,
+            "step should reach the cycle limit"
+        );
+        assertTrue(
+            EmulatorCompat.readHalt(a) != 0,
+            "halt ECALL should set a non-zero halt value"
+        );
     }
 
     function testRemovedMarkDirtyPageEcall() public {

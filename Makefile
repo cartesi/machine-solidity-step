@@ -4,7 +4,7 @@ DOWNLOADDIR := downloads
 SRC_DIR := src
 
 EMULATOR_VERSION ?= v0.21.0
-EMULATOR_TAG ?= -test4
+EMULATOR_TAG ?= -test5
 
 SOLIDITY_VERSION ?= 0.8.30
 

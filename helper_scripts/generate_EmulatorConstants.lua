@@ -28,8 +28,6 @@ out:write('    uint64 constant ROLLUP_LOG2_MAX_ADVANCE_STATES_PER_EPOCH = ' ..
     cartesi.ROLLUP_LOG2_MAX_ADVANCE_STATES_PER_EPOCH .. ';\n')
 out:write('    uint64 constant UARCH_HALT_ADDRESS = 0x' ..
     hex(cartesi.machine:get_reg_address("uarch_halt")) .. ';\n')
-out:write('    uint64 constant UARCH_HALT_HALTED = ' .. cartesi.UARCH_HALT_HALTED .. ';\n')
-out:write('    uint64 constant UARCH_HALT_CYCLE_OVERFLOW = ' .. cartesi.UARCH_HALT_CYCLE_OVERFLOW .. ';\n')
 out:write('    uint64 constant UARCH_PC_ADDRESS = 0x' .. hex(cartesi.machine:get_reg_address("uarch_pc")) .. ';\n')
 out:write('    uint64 constant UARCH_X0_ADDRESS = 0x' .. hex(cartesi.machine:get_reg_address("uarch_x0")) .. ';\n')
 out:write('    uint64 constant UARCH_SHADOW_START_ADDRESS = 0x' .. hex(cartesi.UARCH_SHADOW_START_ADDRESS) .. ';\n')
