@@ -84,11 +84,9 @@ contract UArchReset_Test is AccessLogJsonParse {
             string memory rj =
                 loadJsonLog(string.concat(JSON_PATH, catalog[i].logFilename));
 
-            bytes32 initialRootHash = vm.parseBytes32(
-                string.concat("0x", catalog[i].initialRootHash)
-            );
-            bytes32 finalRootHash =
-                vm.parseBytes32(string.concat("0x", catalog[i].finalRootHash));
+            bytes32 initialRootHash =
+                vm.parseBytes32(catalog[i].initialRootHash);
+            bytes32 finalRootHash = vm.parseBytes32(catalog[i].finalRootHash);
 
             loadBufferFromRawJson(buffer, rj);
 

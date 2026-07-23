@@ -26,6 +26,13 @@ library MetaStep {
     using AccessLogs for AccessLogs.Context;
 
     /// @notice Run meta-step
+    /// @param counter Number of meta-steps performed, counting this one.
+    /// It is also the index of the state this meta-step produces, since the
+    /// initial state has index zero and is not a leaf of the computation
+    /// hash. The uarch reset runs on meta-steps whose counter is a multiple
+    /// of the uarch span, which produce the last leaf of each span. Callers
+    /// that instead number transitions by their source state must pass
+    /// counter as that number plus one.
     function step(uint256 counter, AccessLogs.Context memory accessLogs)
         internal
         pure
@@ -36,10 +43,11 @@ library MetaStep {
 
         if (
             counter
-                == (counter >> EmulatorConstants.LOG2_CYCLES_TO_RESET)
-                    << EmulatorConstants.LOG2_CYCLES_TO_RESET
+                == (counter
+                        >> EmulatorConstants.ROLLUP_LOG2_MAX_UARCH_CYCLES_PER_MCYCLE)
+                    << EmulatorConstants.ROLLUP_LOG2_MAX_UARCH_CYCLES_PER_MCYCLE
         ) {
-            // if counter is a multiple of (1 << EmulatorConstants.LOG2_CYCLES_TO_RESET), run uarch reset
+            // if counter is a multiple of (1 << EmulatorConstants.ROLLUP_LOG2_MAX_UARCH_CYCLES_PER_MCYCLE), run uarch reset
             UArchReset.reset(accessLogs);
             machineState = accessLogs.currentRootHash;
         }

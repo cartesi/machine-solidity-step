@@ -15,7 +15,6 @@
 //
 import "forge-std/console.sol";
 import "forge-std/Test.sol";
-import "forge-std/StdJson.sol";
 
 import "./UArchInterpret.sol";
 import "src/EmulatorConstants.sol";
@@ -33,7 +32,6 @@ library ExternalUArchInterpret {
 }
 
 contract UArchInterpretTest is Test {
-    using stdJson for string;
     using Memory for uint64;
     using AccessLogs for AccessLogs.Context;
 
@@ -52,6 +50,8 @@ contract UArchInterpretTest is Test {
     string constant CATALOG_PATH = "catalog.json";
     string constant JSON_PATH = "./test/uarch-log/";
     string constant BINARIES_PATH = "./test/uarch-bin/";
+    string constant ENTRY_TYPE_DESCRIPTION =
+        "Entry(string binaryFilename,string finalRootHash,string initialRootHash,string logFilename,uint256 steps)";
 
     function testBinaries() public {
         Entry[] memory catalog =
@@ -216,7 +216,8 @@ contract UArchInterpretTest is Test {
         returns (Entry[] memory)
     {
         string memory json = vm.readFile(path);
-        bytes memory raw = json.parseRaw("");
+        bytes memory raw =
+            vm.parseJsonTypeArray(json, ".", ENTRY_TYPE_DESCRIPTION);
         Entry[] memory catalog = abi.decode(raw, (Entry[]));
 
         return catalog;

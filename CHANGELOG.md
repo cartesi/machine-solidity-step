@@ -6,7 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.15.0-test1] - 2026-07-23
+
 ### Changed
+- Updated machine-emulator version to v0.21.0-test7
+- Updated test artifact parsing for `0x`-prefixed hexadecimal values
 - Changed microarchitecture cycle overflow into a state-preserving fixed point derived from `uarch.cycle`
 - Changed microarchitecture cycle overflow to take precedence over halt
 
@@ -123,7 +127,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [0.2.0]
 - [0.1.0]
 
-[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.15.0-test1...HEAD
+[0.15.0-test1]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.15.0-test1
 [0.14.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.14.0
 [0.13.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.13.0
 [0.12.1]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.12.1

@@ -67,12 +67,6 @@ abstract contract AccessLogJsonParse is Test {
         if (b.length == 0) {
             return bytes32(0);
         }
-        if (
-            b.length >= 2 && b[0] == bytes1("0")
-                && (b[1] == bytes1("x") || b[1] == bytes1("X"))
-        ) {
-            return vm.parseBytes32(s);
-        }
-        return vm.parseBytes32(string.concat("0x", s));
+        return vm.parseBytes32(s);
     }
 }

@@ -75,11 +75,9 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
 
             string memory rj = loadJsonLog(resetLog);
 
-            bytes32 initialRootHash = vm.parseBytes32(
-                string.concat("0x", catalog[i].initialRootHash)
-            );
-            bytes32 finalRootHash =
-                vm.parseBytes32(string.concat("0x", catalog[i].finalRootHash));
+            bytes32 initialRootHash =
+                vm.parseBytes32(catalog[i].initialRootHash);
+            bytes32 finalRootHash = vm.parseBytes32(catalog[i].finalRootHash);
 
             loadBufferFromRawJson(buffer, rj);
 
@@ -144,11 +142,9 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
 
             string memory rj = loadJsonLog(noopLog);
 
-            bytes32 initialRootHash = vm.parseBytes32(
-                string.concat("0x", catalog[i].initialRootHash)
-            );
-            bytes32 finalRootHash =
-                vm.parseBytes32(string.concat("0x", catalog[i].finalRootHash));
+            bytes32 initialRootHash =
+                vm.parseBytes32(catalog[i].initialRootHash);
+            bytes32 finalRootHash = vm.parseBytes32(catalog[i].finalRootHash);
             // the log was taken from a machine that yielded manual with reason
             // rx-rejected, so the advance-state response must be a no-op
             assertEq(

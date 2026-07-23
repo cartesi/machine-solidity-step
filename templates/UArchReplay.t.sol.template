@@ -67,11 +67,9 @@ contract UArchReplay_@X@_Test is AccessLogJsonParse {
             string memory rj =
                 loadJsonLog(string.concat(JSON_PATH, catalog[i].logFilename));
 
-            bytes32 initialRootHash = vm.parseBytes32(
-                string.concat("0x", catalog[i].initialRootHash)
-            );
-            bytes32 finalRootHash =
-                vm.parseBytes32(string.concat("0x", catalog[i].finalRootHash));
+            bytes32 initialRootHash =
+                vm.parseBytes32(catalog[i].initialRootHash);
+            bytes32 finalRootHash = vm.parseBytes32(catalog[i].finalRootHash);
             for (uint256 j = 0; j < catalog[i].steps; j++) {
                 console.log("Replaying step %d ...", j);
                 // load json log
