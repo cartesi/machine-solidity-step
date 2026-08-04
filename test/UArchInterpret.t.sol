@@ -53,7 +53,7 @@ contract UArchInterpretTest is Test {
     string constant ENTRY_TYPE_DESCRIPTION =
         "Entry(string binaryFilename,string finalRootHash,string initialRootHash,string logFilename,uint256 steps)";
 
-    function testBinaries() public {
+    function testBinaries() public view {
         Entry[] memory catalog =
             loadCatalog(string.concat(JSON_PATH, CATALOG_PATH));
 
@@ -94,7 +94,7 @@ contract UArchInterpretTest is Test {
         }
     }
 
-    function testStepEarlyReturn() public {
+    function testStepEarlyReturn() public pure {
         AccessLogs.Context memory a = newAccessLogsContext();
 
         // init pc to ram start
@@ -153,7 +153,7 @@ contract UArchInterpretTest is Test {
         ExternalUArchInterpret.interpret(a);
     }
 
-    function testHaltEcallReachesCycleLimit() public {
+    function testHaltEcallReachesCycleLimit() public pure {
         AccessLogs.Context memory a = newAccessLogsContext();
         a.buffer.data = bytes.concat(a.buffer.data, new bytes(8));
 

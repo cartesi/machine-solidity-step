@@ -54,6 +54,8 @@ cpp_src=`echo "${BASH_REMATCH[1]}" \
         | $SED -E "s/UArchStepStatus uarch_step/static inline UArchStepStatus step/g" \
         | $SED -E "s/static inline (\w+) ($INTERNAL_FN)\(([^\n]*)\) \{/function \2\(\3\) internal pure returns \(\1\)\{/g" \
         | $SED -E "s/static inline (\w+) (\w+)\(([^\n]*)\) \{/function \2\(\3\) private pure returns \(\1\)\{/g" \
+        | $SED -E "s/function (executeFENCE|executeECALL)\(AccessLogs.Context memory a, uint32 insn,/function \1(AccessLogs.Context memory a, uint32,/g" \
+        | $SED -E "s/function executeEBREAK\(AccessLogs.Context memory a, uint32 insn, uint64 pc\)/function executeEBREAK(AccessLogs.Context memory a, uint32, uint64)/g" \
         | $SED -E "s/($COMPAT_FNS)/EmulatorCompat.\1/g" \
         | $SED -E "s/([^a-zA-Z])($CONSTANTS)([^a-zA-Z])/\1EmulatorConstants.\2\3/g" \
         | $SED "s/ returns (void)//g"`

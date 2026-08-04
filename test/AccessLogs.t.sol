@@ -55,19 +55,19 @@ contract AccessLogsTest is Test {
         initialReadLeaf = patchLeaf(
             bytes32(type(uint256).max), initialWordAtPosition, position
         );
-        for (uint256 i = 0; i < 59; i++) {
-            siblingHashes.push(keccak256(abi.encodePacked(bytes8(uint64(i)))));
+        for (uint64 i = 0; i < 59; i++) {
+            siblingHashes.push(keccak256(abi.encodePacked(bytes8(i))));
         }
     }
 
-    function verifyWord(bytes32 h, uint64 p, uint64 w) internal {
+    function verifyWord(bytes32 h, uint64 p, uint64 w) internal view {
         (Buffer.Context memory buffer,) =
             makeReadBuffer(bytes8(w).swapEndian(), false);
         AccessLogs.Context memory accessLogs = AccessLogs.Context(h, buffer);
         assertEq(accessLogs.readWord(p.toPhysicalAddress()), w);
     }
 
-    function testReadWordHappyPath() public {
+    function testReadWordHappyPath() public view {
         (Buffer.Context memory buffer, bytes32 rootHash) = makeReadBuffer(
             bytes8(0x0000000000000001).swapEndian(),
             /*withReadValueMismatch=*/
@@ -104,7 +104,7 @@ contract AccessLogsTest is Test {
         ExternalAccessLogs.readWord(accessLogs, position.toPhysicalAddress());
     }
 
-    function testWriteWordHappyPath() public {
+    function testWriteWordHappyPath() public view {
         uint64 wordWritten = 3;
         (Buffer.Context memory buffer, bytes32 rootHash) = makeWriteBuffer(
             initialReadLeaf,
@@ -150,7 +150,7 @@ contract AccessLogsTest is Test {
         );
     }
 
-    function testEndianSwap() public {
+    function testEndianSwap() public pure {
         assertEq(
             bytes8(0x0000000000008000).swapEndian(), bytes8(0x0080000000000000)
         );
@@ -199,7 +199,7 @@ contract AccessLogsTest is Test {
         returns (Buffer.Context memory, bytes32)
     {
         Buffer.Context memory buffer = Buffer.Context(
-            new bytes((59 << Memory.LOG2_LEAF) + 32 + 32), 0
+            new bytes((uint64(59) << Memory.LOG2_LEAF) + 32 + 32), 0
         );
         bytes32 readData = patchLeaf(initialReadLeaf, readWord, position);
 
@@ -207,7 +207,8 @@ contract AccessLogsTest is Test {
         buffer.writeBytes32(readData);
         bytes32 readHash = keccak256(abi.encodePacked(readData));
         if (withReadValueMismatch) {
-            readHash = keccak256(abi.encodePacked(bytes8(readHash)));
+            // re-hash to get a value that will not match the expected one
+            readHash = keccak256(abi.encodePacked(readHash));
         }
 
         for (uint256 i = 0; i < 59; i++) {
@@ -225,14 +226,15 @@ contract AccessLogsTest is Test {
         returns (Buffer.Context memory, bytes32)
     {
         Buffer.Context memory buffer = Buffer.Context(
-            new bytes((59 << Memory.LOG2_LEAF) + 32 + 32 + 32), 0
+            new bytes((uint64(59) << Memory.LOG2_LEAF) + 32 + 32 + 32), 0
         );
 
         // write leaf data, leaf hash and sibling hashes
         buffer.writeBytes32(readLeaf);
         bytes32 readHash = keccak256(abi.encodePacked(readLeaf));
         if (withReadValueMismatch) {
-            readHash = keccak256(abi.encodePacked(bytes8(readHash)));
+            // re-hash to get a value that will not match the expected one
+            readHash = keccak256(abi.encodePacked(readHash));
         }
 
         for (uint256 i = 0; i < 59; i++) {

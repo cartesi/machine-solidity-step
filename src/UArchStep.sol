@@ -1011,7 +1011,7 @@ library UArchStep {
         return advancePc(a, pc);
     }
 
-    function executeFENCE(AccessLogs.Context memory a, uint32 insn, uint64 pc)
+    function executeFENCE(AccessLogs.Context memory a, uint32, uint64 pc)
         private
         pure
     {
@@ -1061,7 +1061,7 @@ library UArchStep {
         return advancePc(a, pc);
     }
 
-    function executeECALL(AccessLogs.Context memory a, uint32 insn, uint64 pc)
+    function executeECALL(AccessLogs.Context memory a, uint32, uint64 pc)
         private
         pure
     {
@@ -1093,7 +1093,7 @@ library UArchStep {
         EmulatorCompat.throwRuntimeError(a, "unsupported ecall function");
     }
 
-    function executeEBREAK(AccessLogs.Context memory a, uint32 insn, uint64 pc)
+    function executeEBREAK(AccessLogs.Context memory a, uint32, uint64)
         private
         pure
     {

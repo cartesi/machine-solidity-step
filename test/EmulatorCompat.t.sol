@@ -36,7 +36,7 @@ contract EmulatorCompatTest is Test {
     uint32 constant UINT32_MAX = type(uint32).max;
     uint64 constant UINT64_MAX = type(uint64).max;
 
-    function testSanity() public {
+    function testSanity() public pure {
         assertEq(UINT16_MAX, 65535);
         assertEq(UINT32_MAX, 4294967295);
         assertEq(UINT64_MAX, 18446744073709551615);
@@ -48,7 +48,7 @@ contract EmulatorCompatTest is Test {
         assertEq(INT64_MIN, -INT64_MAX - 1);
     }
 
-    function testCompat() public {
+    function testCompat() public pure {
         assertEq(EmulatorCompat.uint64ToInt32(1), 1);
         assertEq(EmulatorCompat.uint64ToInt32(0xffffffff), -1);
         assertEq(EmulatorCompat.uint64ToInt32(0xffffffff << 31), INT32_MIN);
@@ -149,7 +149,7 @@ contract EmulatorCompatTest is Test {
         assertEq(EmulatorCompat.int8ToUint64(int8(-128)), 0xffffffffffffff80);
     }
 
-    function testUint32Log2() public {
+    function testUint32Log2() public pure {
         assertEq(EmulatorCompat.uint32Log2(1), 0);
         assertEq(EmulatorCompat.uint32Log2(2), 1);
         assertEq(EmulatorCompat.uint32Log2(3), 1);

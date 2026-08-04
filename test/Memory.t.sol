@@ -27,8 +27,13 @@ contract MemoryTest is Test {
     using MemoryAux for Memory.PhysicalAddress;
 
     function testStrideAlignment() public {
-        for (uint128 paddr = 8; paddr <= (1 << 63); paddr *= 2) {
-            for (uint8 l = 0; ((1 << l) <= (paddr >> Memory.LOG2_LEAF)); ++l) {
+        for (uint64 e = 3; e <= 63; e += 1) {
+            uint64 paddr = uint64(1) << e;
+            for (
+                uint8 l = 0;
+                ((uint64(1) << l) <= (paddr >> Memory.LOG2_LEAF));
+                ++l
+            ) {
                 uint64(paddr).toPhysicalAddress()
                     .strideFromPhysicalAddress(Memory.alignedSizeFromLog2(l));
 
@@ -37,7 +42,7 @@ contract MemoryTest is Test {
                 uint64(paddr - 1).toPhysicalAddress()
                     .strideFromPhysicalAddress(Memory.alignedSizeFromLog2(l));
 
-                if ((1 << l) == (paddr >> Memory.LOG2_LEAF)) {
+                if ((uint64(1) << l) == (paddr >> Memory.LOG2_LEAF)) {
                     // address has to be aligned with stride size
                     vm.expectRevert();
                     uint64(paddr + paddr / 2).toPhysicalAddress()
