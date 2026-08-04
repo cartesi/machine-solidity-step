@@ -6,14 +6,37 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.15.0-test1] - 2026-07-23
+## [0.15.0] - 2026-08-04
+### Added
+- Added `revertRootHash` argument to `sendCmioResponse`
+- Added `imcyclemax` deadline set by `sendCmioResponse` on advance-state responses
+- Added revert on rejected input to `UArchReset.reset()`
+- Added `ROLLUP_LOG2_MAX_*` limits and HTIF device/command/reason constants
+- Added `revertState`, `readMcycle`, `writeImcyclemax`, `readHtifTohost` and `isYieldedManualWith` to `EmulatorCompat`
+- Added tests for uarch reset, no-op response and step fixed points
 
 ### Changed
-- Updated machine-emulator version to v0.21.0-test7
+- Changed `UArchStep.step` to report overflow and halt on the step that reaches them
+- Changed `UARCH_CYCLE_MAX` from `0x100000` to `0xfffff`
+- Changed `UArchReset.reset` to also read `iflags.Y` and `htif.tohost`
+- Changed `sendCmioResponse` failures into no-ops
+- Changed `MetaStep` uarch reset period from `2^10` to `2^20` meta-steps
+- Renamed `UArchStepStatus.CycleOverflow` to `UArchCycleOverflow`
+- Renamed `getRevertRootHash`/`setRevertRootHash` to `readRevertRootHash`/`writeRevertRootHash`
+- Renamed `readHaltFlag`/`writeHaltFlag` to `readHalt`/`writeHalt`
+- Renamed `CMIO_YIELD_*` constants to `HTIF_YIELD_*`, and `UARCH_HALT_FLAG_ADDRESS` to `UARCH_HALT_ADDRESS`
+- Updated `UARCH_PRISTINE_STATE_HASH` and shadow register addresses
 - Updated test artifact parsing for `0x`-prefixed hexadecimal values
-- Changed microarchitecture cycle overflow into a state-preserving fixed point derived from `uarch.cycle`
-- Changed microarchitecture cycle overflow to take precedence over halt
+- Updated machine-emulator version to v0.21.0
 - Bumped Foundry to 1.5.1
+
+### Removed
+- Removed `AdvanceStatus` library
+- Removed `mark_dirty_page` ECALL and `markDirtyPageECALL`
+- Removed `LOG2_CYCLES_TO_RESET`
+
+### Fixed
+- Fixed various Solidity and forge lint warnings
 
 ## [0.14.0] - 2026-04-13
 ### Added
@@ -128,8 +151,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [0.2.0]
 - [0.1.0]
 
-[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.15.0-test1...HEAD
-[0.15.0-test1]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.15.0-test1
+[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.15.0
 [0.14.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.14.0
 [0.13.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.13.0
 [0.12.1]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.12.1
