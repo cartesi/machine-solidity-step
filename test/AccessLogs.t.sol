@@ -176,11 +176,11 @@ contract AccessLogsTest is Test {
         return leaf;
     }
 
-    function patchLeaf(
-        bytes32 currentLeaf,
-        bytes8 newWord,
-        uint64 wordPosition
-    ) public view returns (bytes32) {
+    function patchLeaf(bytes32 currentLeaf, bytes8 newWord, uint64 wordPosition)
+        public
+        view
+        returns (bytes32)
+    {
         uint64 leafPosition = wordPosition & ~uint64(31);
         uint64 offset = position - leafPosition;
 

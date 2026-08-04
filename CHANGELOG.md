@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated test artifact parsing for `0x`-prefixed hexadecimal values
 - Changed microarchitecture cycle overflow into a state-preserving fixed point derived from `uarch.cycle`
 - Changed microarchitecture cycle overflow to take precedence over halt
+- Bumped Foundry to 1.5.1
 
 ## [0.14.0] - 2026-04-13
 ### Added

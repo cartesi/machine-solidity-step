@@ -80,13 +80,12 @@ library SendCmioResponse {
         }
         if (reason == EmulatorConstants.HTIF_YIELD_REASON_ADVANCE_STATE) {
             uint64 mcycle = EmulatorCompat.readMcycle(a);
-            uint64 maxMcycles =
-                EmulatorCompat.uint64ShiftLeft(
-                        1,
-                        uint32(
-                            EmulatorConstants.ROLLUP_LOG2_MAX_MCYCLES_PER_ADVANCE_STATE
-                        )
-                    ) - 1;
+            uint64 maxMcycles = EmulatorCompat.uint64ShiftLeft(
+                1,
+                uint32(
+                    EmulatorConstants.ROLLUP_LOG2_MAX_MCYCLES_PER_ADVANCE_STATE
+                )
+            ) - 1;
             uint64 maxUint64 = ~uint64(0);
             uint64 imcyclemax = mcycle > maxUint64 - maxMcycles
                 ? maxUint64
@@ -113,9 +112,9 @@ library SendCmioResponse {
         // Write data length and reason to fromhost
         uint64 mask16 = EmulatorCompat.uint64ShiftLeft(1, 16) - 1;
         uint64 mask32 = EmulatorCompat.uint64ShiftLeft(1, 32) - 1;
-        uint64 yieldData =
-            EmulatorCompat.uint64ShiftLeft((uint64(reason) & mask16), 32)
-                | (uint64(dataLength) & mask32);
+        uint64 yieldData = EmulatorCompat.uint64ShiftLeft(
+            (uint64(reason) & mask16), 32
+        ) | (uint64(dataLength) & mask32);
         EmulatorCompat.writeHtifFromhost(a, yieldData);
         // Reset iflags.Y
         EmulatorCompat.writeIflagsY(a, 0);

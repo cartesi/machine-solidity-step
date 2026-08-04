@@ -12,9 +12,9 @@ runs:
     - name: Set Foundry version
       id: set-foundry-version
       shell: bash
-      run: echo "foundry-version=v1.4.3" >> $GITHUB_OUTPUT
+      run: echo "foundry-version=v1.5.1" >> $GITHUB_OUTPUT
 
     - name: Install Foundry
-      uses: foundry-rs/foundry-toolchain@de808b1eea699e761c404bda44ba8f21aba30b2c # v1.3.1
+      uses: foundry-rs/foundry-toolchain@50d5a8956f2e319df19e6b57539d7e2acb9f8c1e # v1.5.0
       with:
         version: ${{ steps.set-foundry-version.outputs.foundry-version }}

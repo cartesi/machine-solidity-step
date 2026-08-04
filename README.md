@@ -66,7 +66,7 @@ Coverage targets:
 
 ### Requirements
 
--   Foundry 1.4.3
+-   Foundry >= 1.5.1
 -   GNU Make >= 3.81
 -   GNU sed >= 4.9
 -   GPP >= 2.27
