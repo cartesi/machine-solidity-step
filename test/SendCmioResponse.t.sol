@@ -17,14 +17,14 @@
 //
 pragma solidity ^0.8.30;
 
-import "forge-std/console.sol";
-import "forge-std/Test.sol";
+import {console} from "forge-std/console.sol";
 
-import "src/Buffer.sol";
-import "src/EmulatorConstants.sol";
-import "src/SendCmioResponse.sol";
-import "./AccessLogJsonParse.sol";
-import "./BufferAux.sol";
+import {AccessLogs} from "src/AccessLogs.sol";
+import {Buffer} from "src/Buffer.sol";
+import {EmulatorConstants} from "src/EmulatorConstants.sol";
+import {SendCmioResponse} from "src/SendCmioResponse.sol";
+import {AccessLogJsonParse} from "./AccessLogJsonParse.sol";
+import {BufferAux} from "./BufferAux.sol";
 
 contract SendCmioResponse_Test is AccessLogJsonParse {
     using Buffer for Buffer.Context;
@@ -37,7 +37,7 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
     string constant SEND_CMIO_RESPONSE_NOOP_PATH =
         "send-cmio-response-noop-steps.json";
 
-    uint256 constant siblingsLength = 59;
+    uint256 constant SIBLINGS_LENGTH = 59;
 
     struct Entry {
         string binaryFilename;
@@ -60,7 +60,7 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
         // also raise memory_limit in foundry.toml per https://github.com/foundry-rs/foundry/issues/3971
         vm.pauseGasMetering();
         // create a large buffer and reuse it
-        bytes memory buffer = new bytes(100 * (siblingsLength + 1) * 32);
+        bytes memory buffer = new bytes(100 * (SIBLINGS_LENGTH + 1) * 32);
 
         for (uint256 i = 0; i < catalog.length; i++) {
             if (
@@ -125,7 +125,7 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
         // also raise memory_limit in foundry.toml per https://github.com/foundry-rs/foundry/issues/3971
         vm.pauseGasMetering();
         // create a large buffer and reuse it
-        bytes memory buffer = new bytes(100 * (siblingsLength + 1) * 32);
+        bytes memory buffer = new bytes(100 * (SIBLINGS_LENGTH + 1) * 32);
         bool found = false;
 
         for (uint256 i = 0; i < catalog.length; i++) {
@@ -193,6 +193,7 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
         view
         returns (Entry[] memory)
     {
+        // forge-lint: disable-next-line(unsafe-cheatcode)
         string memory json = vm.readFile(path);
         bytes memory raw =
             vm.parseJsonTypeArray(json, ".", ENTRY_TYPE_DESCRIPTION);
@@ -206,6 +207,7 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
         view
         returns (string memory)
     {
+        // forge-lint: disable-next-line(unsafe-cheatcode)
         return vm.readFile(path);
     }
 

@@ -15,7 +15,8 @@
 //
 pragma solidity ^0.8.30;
 
-import "src/UArchStep.sol";
+import {AccessLogs} from "src/AccessLogs.sol";
+import {UArchStep} from "src/UArchStep.sol";
 
 library UArchInterpret {
     /// @notice Run interpret until machine halts.

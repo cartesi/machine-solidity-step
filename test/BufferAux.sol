@@ -15,7 +15,7 @@
 //
 pragma solidity ^0.8.30;
 
-import "src/Buffer.sol";
+import {Buffer} from "src/Buffer.sol";
 
 library BufferAux {
     using BufferAux for Buffer.Context;

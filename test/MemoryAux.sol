@@ -13,7 +13,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-import "src/Memory.sol";
+import {Memory} from "src/Memory.sol";
 
 pragma solidity ^0.8.30;
 

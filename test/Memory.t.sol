@@ -13,11 +13,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-import "forge-std/console.sol";
-import "forge-std/Test.sol";
+import {Test} from "forge-std/Test.sol";
 
-import "./BufferAux.sol";
-import "./MemoryAux.sol";
+import {Memory} from "src/Memory.sol";
+import {MemoryAux} from "./MemoryAux.sol";
 
 pragma solidity ^0.8.30;
 

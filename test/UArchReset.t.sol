@@ -17,14 +17,13 @@
 //
 pragma solidity ^0.8.30;
 
-import "forge-std/console.sol";
-import "forge-std/Test.sol";
+import {console} from "forge-std/console.sol";
 
-import "src/Buffer.sol";
-import "src/EmulatorConstants.sol";
-import "src/UArchReset.sol";
-import "./AccessLogJsonParse.sol";
-import "./BufferAux.sol";
+import {AccessLogs} from "src/AccessLogs.sol";
+import {Buffer} from "src/Buffer.sol";
+import {UArchReset} from "src/UArchReset.sol";
+import {AccessLogJsonParse} from "./AccessLogJsonParse.sol";
+import {BufferAux} from "./BufferAux.sol";
 
 contract UArchReset_Test is AccessLogJsonParse {
     using Buffer for Buffer.Context;
@@ -34,7 +33,7 @@ contract UArchReset_Test is AccessLogJsonParse {
     string constant JSON_PATH = "./test/uarch-log/";
     string constant CATALOG_PATH = "catalog.json";
 
-    uint256 constant siblingsLength = 42;
+    uint256 constant SIBLINGS_LENGTH = 42;
 
     struct Entry {
         string binaryFilename;
@@ -55,7 +54,7 @@ contract UArchReset_Test is AccessLogJsonParse {
         // also raise memory_limit in foundry.toml per https://github.com/foundry-rs/foundry/issues/3971
         vm.pauseGasMetering();
         // create a large buffer and reuse it
-        bytes memory buffer = new bytes(100 * (siblingsLength + 1) * 32);
+        bytes memory buffer = new bytes(100 * (SIBLINGS_LENGTH + 1) * 32);
         // count the fixtures replayed below, so a missing entry fails loudly
         uint256 found = 0;
 
@@ -114,6 +113,7 @@ contract UArchReset_Test is AccessLogJsonParse {
         view
         returns (Entry[] memory)
     {
+        // forge-lint: disable-next-line(unsafe-cheatcode)
         string memory json = vm.readFile(path);
         bytes memory raw =
             vm.parseJsonTypeArray(json, ".", ENTRY_TYPE_DESCRIPTION);
@@ -127,6 +127,7 @@ contract UArchReset_Test is AccessLogJsonParse {
         view
         returns (string memory)
     {
+        // forge-lint: disable-next-line(unsafe-cheatcode)
         return vm.readFile(path);
     }
 

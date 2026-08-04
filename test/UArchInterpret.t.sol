@@ -13,11 +13,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-import "forge-std/console.sol";
-import "forge-std/Test.sol";
+import {console} from "forge-std/console.sol";
+import {Test} from "forge-std/Test.sol";
 
-import "./UArchInterpret.sol";
-import "src/EmulatorConstants.sol";
+import {AccessLogs} from "src/AccessLogs.sol";
+import {Buffer} from "src/Buffer.sol";
+import {EmulatorCompat} from "src/EmulatorCompat.sol";
+import {EmulatorConstants} from "src/EmulatorConstants.sol";
+import {Memory} from "src/Memory.sol";
+import {UArchStep} from "src/UArchStep.sol";
+import {UArchInterpret} from "./UArchInterpret.sol";
 
 pragma solidity ^0.8.30;
 
@@ -215,6 +220,7 @@ contract UArchInterpretTest is Test {
         view
         returns (Entry[] memory)
     {
+        // forge-lint: disable-next-line(unsafe-cheatcode)
         string memory json = vm.readFile(path);
         bytes memory raw =
             vm.parseJsonTypeArray(json, ".", ENTRY_TYPE_DESCRIPTION);

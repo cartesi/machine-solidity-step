@@ -13,9 +13,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-import "forge-std/console.sol";
-import "forge-std/Test.sol";
-import "src/EmulatorCompat.sol";
+import {Test} from "forge-std/Test.sol";
+
+import {EmulatorCompat} from "src/EmulatorCompat.sol";
 
 pragma solidity ^0.8.30;
 

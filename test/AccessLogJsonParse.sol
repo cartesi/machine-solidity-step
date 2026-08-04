@@ -5,27 +5,28 @@
 // Requires forge-std >= v1.9.2 (`vm.parseJsonTypeArray`).
 pragma solidity ^0.8.30;
 
-import "forge-std/Test.sol";
+import {Test} from "forge-std/Test.sol";
 
-import "src/Buffer.sol";
+import {Buffer} from "src/Buffer.sol";
 
-import "./BufferAux.sol";
+import {BufferAux} from "./BufferAux.sol";
 
 /// @dev Shared helpers for replay tests that load `accesses` arrays from JSON logs.
 abstract contract AccessLogJsonParse is Test {
     using BufferAux for Buffer.Context;
 
-    /// @dev JSON keys: address, log2_size, read_hash, read_value, sibling_hashes, type,
-    /// written_hash, written_value.
+    /// @dev Field order must match RAW_ACCESS_TYPE_DESCRIPTION below, which carries the
+    /// JSON key names: address, log2_size, read_hash, read_value, sibling_hashes, type,
+    /// written_hash, written_value. The decoding is positional, so the names may differ.
     struct RawAccess {
         uint256 accessAddress;
-        uint256 log2_size;
-        string read_hash;
-        string read_value;
-        string[] sibling_hashes;
+        uint256 log2Size;
+        string readHash;
+        string readValue;
+        string[] siblingHashes;
         string accessType;
-        string written_hash;
-        string written_value;
+        string writtenHash;
+        string writtenValue;
     }
 
     string internal constant RAW_ACCESS_TYPE_DESCRIPTION =
@@ -38,21 +39,21 @@ abstract contract AccessLogJsonParse is Test {
         uint256 n = rawAccesses.length;
         for (uint256 i = 0; i < n; i++) {
             RawAccess memory a = rawAccesses[i];
-            if (a.log2_size == 3) {
-                buffer.writeBytes32(_parseHex32FromLogString(a.read_value));
+            if (a.log2Size == 3) {
+                buffer.writeBytes32(_parseHex32FromLogString(a.readValue));
             } else if (
                 keccak256(bytes(a.accessType)) == keccak256(bytes("read"))
             ) {
                 // a leaf read carries the read value followed by the leaf hash
-                buffer.writeBytes32(_parseHex32FromLogString(a.read_value));
-                buffer.writeBytes32(_parseHex32FromLogString(a.read_hash));
+                buffer.writeBytes32(_parseHex32FromLogString(a.readValue));
+                buffer.writeBytes32(_parseHex32FromLogString(a.readHash));
             } else {
-                buffer.writeBytes32(_parseHex32FromLogString(a.read_hash));
+                buffer.writeBytes32(_parseHex32FromLogString(a.readHash));
             }
-            uint256 siblingCount = a.sibling_hashes.length;
+            uint256 siblingCount = a.siblingHashes.length;
             for (uint256 j = 0; j < siblingCount; j++) {
                 buffer.writeBytes32(
-                    _parseHex32FromLogString(a.sibling_hashes[j])
+                    _parseHex32FromLogString(a.siblingHashes[j])
                 );
             }
         }

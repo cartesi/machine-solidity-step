@@ -13,11 +13,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 //
-import "forge-std/console.sol";
-import "forge-std/Test.sol";
+import {Test} from "forge-std/Test.sol";
 
-import "src/AccessLogs.sol";
-import "./BufferAux.sol";
+import {AccessLogs} from "src/AccessLogs.sol";
+import {Buffer} from "src/Buffer.sol";
+import {Memory} from "src/Memory.sol";
+import {BufferAux} from "./BufferAux.sol";
 
 pragma solidity ^0.8.30;
 
@@ -184,11 +185,11 @@ contract AccessLogsTest is Test {
         uint64 leafPosition = wordPosition & ~uint64(31);
         uint64 offset = position - leafPosition;
 
-        bytes32 erase_mask = bytes32(bytes8(type(uint64).max));
-        erase_mask = erase_mask >> (offset << Memory.LOG2_WORD);
-        erase_mask = ~erase_mask;
+        bytes32 eraseMask = bytes32(bytes8(type(uint64).max));
+        eraseMask = eraseMask >> (offset << Memory.LOG2_WORD);
+        eraseMask = ~eraseMask;
 
-        bytes32 result = currentLeaf & erase_mask;
+        bytes32 result = currentLeaf & eraseMask;
         result = result | (bytes32(newWord) >> (offset << Memory.LOG2_WORD));
         return result;
     }
