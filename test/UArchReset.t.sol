@@ -45,7 +45,7 @@ contract UArchReset_Test is AccessLogJsonParse {
     }
 
     string constant ENTRY_TYPE_DESCRIPTION =
-        "Entry(string binaryFilename,string finalRootHash,string initialRootHash,string logFilename,uint256 steps)";
+        "CatalogEntryJson(string binaryFilename,string finalRootHash,string initialRootHash,string logFilename,uint256 steps)";
 
     function testReset() public {
         Entry[] memory catalog =

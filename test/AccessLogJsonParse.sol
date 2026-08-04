@@ -29,7 +29,7 @@ abstract contract AccessLogJsonParse is Test {
     }
 
     string internal constant RAW_ACCESS_TYPE_DESCRIPTION =
-        "RawAccess(uint256 address,uint256 log2_size,string read_hash,string read_value,string[] sibling_hashes,string type,string written_hash,string written_value)";
+        "RawAccessJson(uint256 address,uint256 log2_size,string read_hash,string read_value,string[] sibling_hashes,string type,string written_hash,string written_value)";
 
     function _fillBufferFromRawAccesses(
         RawAccess[] memory rawAccesses,

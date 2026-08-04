@@ -51,7 +51,7 @@ contract UArchInterpretTest is Test {
     string constant JSON_PATH = "./test/uarch-log/";
     string constant BINARIES_PATH = "./test/uarch-bin/";
     string constant ENTRY_TYPE_DESCRIPTION =
-        "Entry(string binaryFilename,string finalRootHash,string initialRootHash,string logFilename,uint256 steps)";
+        "CatalogEntryJson(string binaryFilename,string finalRootHash,string initialRootHash,string logFilename,uint256 steps)";
 
     function testBinaries() public view {
         Entry[] memory catalog =

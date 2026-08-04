@@ -43,7 +43,7 @@ contract UArchReplay_@X@_Test is AccessLogJsonParse {
         uint256 steps;
     }
 
-    string constant ENTRY_TYPE_DESCRIPTION = "Entry(string binaryFilename,string finalRootHash,string initialRootHash,string logFilename,uint256 steps)";
+    string constant ENTRY_TYPE_DESCRIPTION = "CatalogEntryJson(string binaryFilename,string finalRootHash,string initialRootHash,string logFilename,uint256 steps)";
 
     function testReplay_@X@() public {
         Entry[] memory catalog =
