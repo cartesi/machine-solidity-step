@@ -101,10 +101,10 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
             // the test log file was generated passing the initial root hash as the revert root hash
             SendCmioResponse.sendCmioResponse(
                 accessLogs,
-                initialRootHash,
                 reason,
                 paddedResponseHash,
-                uint32(response.length)
+                uint32(response.length),
+                initialRootHash
             );
             // ensure that the final root hash matches the expected value
             assertEq(
@@ -171,10 +171,10 @@ contract SendCmioResponse_Test is AccessLogJsonParse {
             // the test log file was generated passing the initial root hash as the revert root hash
             SendCmioResponse.sendCmioResponse(
                 accessLogs,
-                initialRootHash,
                 reason,
                 paddedResponseHash,
-                uint32(response.length)
+                uint32(response.length),
+                initialRootHash
             );
             // ensure that the final root hash matches the expected value
             assertEq(

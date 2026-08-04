@@ -31,10 +31,10 @@ library SendCmioResponse {
 
     function sendCmioResponse(
         AccessLogs.Context memory a,
-        bytes32 revertRootHash,
         uint16 reason,
         bytes32 dataHash,
-        uint32 dataLength
+        uint32 dataLength,
+        bytes32 revertRootHash
     ) internal pure {
         // This function cannot fail. When a failure is detected, the operation is a no-op instead,
         // so the honest party can always log and prove the resulting state transition.
@@ -92,9 +92,9 @@ library SendCmioResponse {
                 ? maxUint64
                 : mcycle + maxMcycles;
             EmulatorCompat.writeImcyclemax(a, imcyclemax);
+            // Record the machine root hash to revert to in case the response is eventually rejected
+            EmulatorCompat.writeRevertRootHash(a, revertRootHash);
         }
-        // Record the machine root hash to revert to in case the response is eventually rejected
-        EmulatorCompat.writeRevertRootHash(a, revertRootHash);
         if (dataLength > 0) {
             a.writeRegion(
                 Memory.regionFromPhysicalAddress(
