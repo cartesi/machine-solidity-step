@@ -24,6 +24,7 @@ pragma solidity ^0.8.30;
 library EmulatorConstants {
     // START OF AUTO-GENERATED CODE
 
+    uint64 constant CM_MARCHID = 21;
     bytes32 constant UARCH_PRISTINE_STATE_HASH =
         0x1187b59e3fe94897c23582998adb33d3df9e8c962f6d1696dfd91adcfabb3a23;
     uint64 constant UARCH_CYCLE_ADDRESS = 0x400008;

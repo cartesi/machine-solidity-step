@@ -15,6 +15,7 @@ end
 
 local out = io.stdout
 
+out:write('    uint64 constant CM_MARCHID = ' .. cartesi.MARCHID .. ';\n')
 out:write('    bytes32 constant UARCH_PRISTINE_STATE_HASH = 0x' .. hexstring(cartesi.UARCH_PRISTINE_STATE_HASH) .. ';\n')
 out:write('    uint64 constant UARCH_CYCLE_ADDRESS = 0x' .. hex(cartesi.machine:get_reg_address("uarch_cycle")) .. ';\n')
 out:write('    uint64 constant UARCH_CYCLE_MAX = 0x' .. hex(cartesi.UARCH_CYCLE_MAX) .. ';\n')
