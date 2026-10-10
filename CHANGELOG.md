@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.0-test1] - 2026-10-10
+### Added
+- Added `CM_MARCHID` to `EmulatorConstants`
+
+### Changed
+- Updated machine-emulator version to v0.22.0-test1
+- Updated `UARCH_PRISTINE_STATE_HASH`
+
 ## [0.15.0] - 2026-08-04
 ### Added
 - Added `revertRootHash` argument to `sendCmioResponse`
