@@ -21,6 +21,6 @@ pragma solidity ^0.8.30;
 
 contract EmulatorConstantsTest is Test {
     function testCmMarchId() public pure {
-        assertEq(EmulatorConstants.CM_MARCHID, 21);
+        assertEq(EmulatorConstants.CM_MARCHID, 22);
     }
 }
