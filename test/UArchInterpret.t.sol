@@ -214,6 +214,27 @@ contract UArchInterpretTest is Test {
         ExternalUArchInterpret.interpret(a);
     }
 
+    function testInvalidTlbIndexEcall() public {
+        // the binary issues a write_tlb ecall with a slot index past the end of its set,
+        // which every implementation refuses before computing the slot address
+        AccessLogs.Context memory a = newAccessLogsContext();
+
+        loadBin(
+            a.buffer,
+            string.concat(
+                BINARIES_PATH, "rv64ui-uarch-ecall-write-tlb-invalid.bin"
+            )
+        );
+
+        // init pc to ram start
+        EmulatorCompat.writePc(a, EmulatorConstants.UARCH_RAM_START_ADDRESS);
+        // init cycle to 0
+        EmulatorCompat.writeCycle(a, 0);
+
+        vm.expectRevert("invalid TLB index");
+        ExternalUArchInterpret.interpret(a);
+    }
+
     function loadBin(Buffer.Context memory buffer, string memory path)
         private
         view
