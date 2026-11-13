@@ -25,6 +25,13 @@ library MemoryAux {
         return Memory.strideFromPhysicalAddress(startAddress, alignedSize);
     }
 
+    function regionFromStride(
+        Memory.Stride stride,
+        Memory.AlignedSize alignedSize
+    ) external pure returns (Memory.Region memory) {
+        return Memory.regionFromStride(stride, alignedSize);
+    }
+
     function regionFromPhysicalAddress(
         Memory.PhysicalAddress startAddress,
         Memory.AlignedSize alignedSize

@@ -52,4 +52,26 @@ contract MemoryTest is Test {
             }
         }
     }
+
+    function testRegionAtEndOfMemory() public {
+        // The last region of each size ends at the last leaf of the address space
+        for (uint8 l = 0; l <= Memory.LOG2_MAX_SIZE; ++l) {
+            uint64 lastStride = (Memory.MAX_SIZE >> l) - 1;
+            uint64 paddr = (lastStride << l) << Memory.LOG2_LEAF;
+            Memory.Region memory region = uint64(paddr).toPhysicalAddress()
+                .regionFromPhysicalAddress(Memory.alignedSizeFromLog2(l));
+            assertEq(Memory.Stride.unwrap(region.stride), lastStride);
+        }
+    }
+
+    function testRegionPastEndOfMemory() public {
+        // A region one stride past the last one would end past the address space
+        for (uint8 l = 0; l <= Memory.LOG2_MAX_SIZE; ++l) {
+            vm.expectRevert();
+            MemoryAux.regionFromStride(
+                Memory.Stride.wrap(Memory.MAX_SIZE >> l),
+                Memory.alignedSizeFromLog2(l)
+            );
+        }
+    }
 }
