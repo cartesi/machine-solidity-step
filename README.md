@@ -83,8 +83,15 @@ Different version of tools maybe working but is not guaranteed.
 
 ### Install
 
+This pre-release pairs machine-solidity-step v0.17.0-test3 with
+[machine-emulator v0.23.0-test4](https://github.com/cartesi/machine-emulator/releases/tag/v0.23.0-test4).
+The Makefile downloads test artifacts from that emulator release.
+Code generation uses the checkout at `EMULATOR_DIR`, which defaults to `../emulator`.
+Use the same emulator tag for that checkout.
+
 Install dependencies and build:
 
+    git clone --branch v0.23.0-test4 --recursive https://github.com/cartesi/machine-emulator.git ../emulator
     make submodules all
 
 ### Run tests

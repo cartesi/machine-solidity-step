@@ -63,8 +63,6 @@ library Memory {
 
     type Stride is uint64;
 
-    uint64 constant MAX_STRIDE = MAX_SIZE - 1;
-
     using Memory for Stride;
 
     function strideFromPhysicalAddress(
@@ -99,8 +97,8 @@ library Memory {
         internal
         pure
     {
-        uint64 s = alignedSize.size();
-        assert(Stride.unwrap(stride) * s < MAX_STRIDE);
+        // The region covers leaves stride * size to (stride + 1) * size - 1, so it fits when stride < MAX_SIZE / size
+        assert(Stride.unwrap(stride) < (MAX_SIZE >> alignedSize.log2()));
     }
 
     // AlignedSize

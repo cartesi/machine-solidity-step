@@ -1085,6 +1085,13 @@ library UArchStep {
             uint64 vaddr_page = EmulatorCompat.readX(a, 12); // a2 contains vaddr_page to write
             uint64 vp_offset = EmulatorCompat.readX(a, 13); // a3 contains vp_offset to write
             uint64 pma_index = EmulatorCompat.readX(a, 14); // a4 contains index of PMA where page falls
+            // Every implementation refuses an index outside the shadow TLB before computing the slot address
+            if (
+                set_index >= EmulatorConstants.TLB_NUM_SETS
+                    || slot_index >= EmulatorConstants.TLB_SET_SIZE
+            ) {
+                EmulatorCompat.throwRuntimeError(a, "invalid TLB index");
+            }
             EmulatorCompat.writeTlbECALL(
                 a, set_index, slot_index, vaddr_page, vp_offset, pma_index
             ); // WARNING: This CANNOT be a NOOP in Solidity
@@ -1317,14 +1324,13 @@ library UArchStep {
         pure
         returns (UArchStepStatus)
     {
-        // Report the derived overflow fixed point before all other break reasons.
+        // Report an existing halt fixed point, even at the cycle limit, then the derived overflow fixed point.
         uint64 cycle = EmulatorCompat.readCycle(a);
-        if (cycle >= EmulatorConstants.UARCH_CYCLE_MAX) {
-            return UArchStepStatus.UArchCycleOverflow;
-        }
-        // Report an existing ordinary halt fixed point.
         if (EmulatorCompat.readHalt(a) != 0) {
             return UArchStepStatus.UArchHalted;
+        }
+        if (cycle >= EmulatorConstants.UARCH_CYCLE_MAX) {
+            return UArchStepStatus.UArchCycleOverflow;
         }
         // Execute next instruction
         uint64 pc = EmulatorCompat.readPc(a);
@@ -1332,15 +1338,14 @@ library UArchStep {
         executeInsn(a, insn, pc);
         cycle = cycle + 1;
         EmulatorCompat.writeCycle(a, cycle);
-        // Overflow has precedence when this step reaches the cycle limit.
-        if (cycle >= EmulatorConstants.UARCH_CYCLE_MAX) {
-            return UArchStepStatus.UArchCycleOverflow;
-        }
-        // ECALL is the only instruction that can halt the uarch.
+        // ECALL is the only instruction that can halt the uarch, even on the step that reaches the cycle limit.
         if (insn == uint32(0x73)) {
             if (EmulatorCompat.readHalt(a) != 0) {
                 return UArchStepStatus.UArchHalted;
             }
+        }
+        if (cycle >= EmulatorConstants.UARCH_CYCLE_MAX) {
+            return UArchStepStatus.UArchCycleOverflow;
         }
         return UArchStepStatus.Success;
     }

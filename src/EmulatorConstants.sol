@@ -24,9 +24,9 @@ pragma solidity ^0.8.30;
 library EmulatorConstants {
     // START OF AUTO-GENERATED CODE
 
-    uint64 constant CM_MARCHID = 22;
+    uint64 constant CM_MARCHID = 23;
     bytes32 constant UARCH_PRISTINE_STATE_HASH =
-        0x558f38f2350970a0a566b2450afa64250059c1cff66c9a55560e5b93fa783926;
+        0x89ae34ba1dc65a8a3668b484bcedf897665c803c41dc9ef9f1faf147b9d443d7;
     uint64 constant UARCH_CYCLE_ADDRESS = 0x400008;
     uint64 constant UARCH_CYCLE_MAX = 0xfffff;
     uint64 constant ROLLUP_LOG2_MAX_MCYCLES_PER_ADVANCE_STATE = 48;
@@ -40,6 +40,9 @@ library EmulatorConstants {
     uint64 constant UARCH_SHADOW_LENGTH = 0x1000;
     uint64 constant AR_SHADOW_TLB_START = 0x1000;
     uint64 constant AR_SHADOW_TLB_LENGTH = 0x6000;
+    uint64 constant TLB_NUM_SETS = 3;
+    uint64 constant TLB_SET_SIZE = 256;
+    uint64 constant TLB_SLOT_LENGTH = 32;
     uint64 constant UARCH_RAM_START_ADDRESS = 0x600000;
     uint64 constant UARCH_RAM_LENGTH = 0x200000;
     uint64 constant UARCH_STATE_START_ADDRESS = 0x400000;
@@ -74,7 +77,5 @@ library EmulatorConstants {
     uint64 constant REVERT_ROOT_HASH_ADDRESS = 0xfe0;
     // END OF AUTO-GENERATED CODE
 
-    uint64 constant TLB_SLOT_LENGTH = 32;
-    uint64 constant TLB_SET_SIZE = 256;
     uint64 constant TLB_SET_LENGTH = TLB_SET_SIZE * TLB_SLOT_LENGTH;
 }

@@ -134,16 +134,23 @@ contract UArchInterpretTest is Test {
             "machine should halt"
         );
 
-        // overflow takes precedence over halt
+        // halt takes precedence over overflow
         EmulatorCompat.writeCycle(a, EmulatorConstants.UARCH_CYCLE_MAX);
 
         status = UArchInterpret.interpret(a);
 
         assertTrue(
-            status == UArchStep.UArchStepStatus.UArchCycleOverflow,
-            "machine should be cycle overflow"
+            status == UArchStep.UArchStepStatus.UArchHalted,
+            "machine should halt at the cycle limit"
         );
-        assertEq(EmulatorCompat.readHalt(a), 1, "overflow should preserve halt");
+        assertEq(
+            EmulatorCompat.readCycle(a),
+            EmulatorConstants.UARCH_CYCLE_MAX,
+            "halted step should not advance the cycle"
+        );
+        assertEq(
+            EmulatorCompat.readHalt(a), 1, "halted step should preserve halt"
+        );
     }
 
     function testIllegalInstruction() public {
@@ -172,8 +179,8 @@ contract UArchInterpretTest is Test {
         UArchStep.UArchStepStatus status = UArchStep.step(a);
 
         assertTrue(
-            status == UArchStep.UArchStepStatus.UArchCycleOverflow,
-            "cycle overflow should take precedence over halt"
+            status == UArchStep.UArchStepStatus.UArchHalted,
+            "halt should take precedence over cycle overflow"
         );
         assertEq(
             EmulatorCompat.readCycle(a),
@@ -204,6 +211,27 @@ contract UArchInterpretTest is Test {
         EmulatorCompat.writeCycle(a, 0);
 
         vm.expectRevert("unsupported ecall function");
+        ExternalUArchInterpret.interpret(a);
+    }
+
+    function testInvalidTlbIndexEcall() public {
+        // the binary issues a write_tlb ecall with a slot index past the end of its set,
+        // which every implementation refuses before computing the slot address
+        AccessLogs.Context memory a = newAccessLogsContext();
+
+        loadBin(
+            a.buffer,
+            string.concat(
+                BINARIES_PATH, "rv64ui-uarch-ecall-write-tlb-invalid.bin"
+            )
+        );
+
+        // init pc to ram start
+        EmulatorCompat.writePc(a, EmulatorConstants.UARCH_RAM_START_ADDRESS);
+        // init cycle to 0
+        EmulatorCompat.writeCycle(a, 0);
+
+        vm.expectRevert("invalid TLB index");
         ExternalUArchInterpret.interpret(a);
     }
 
