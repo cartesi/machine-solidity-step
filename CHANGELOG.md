@@ -6,25 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.17.0-test3] - 2026-11-20
+## [0.17.0] - 2026-11-24
 
-This pre-release pairs with [machine-emulator v0.23.0-test4](https://github.com/cartesi/machine-emulator/releases/tag/v0.23.0-test4).
-The generated contracts and emulator constants are unchanged from v0.17.0-test2.
-
-### Changed
-- Updated machine-emulator version and test artifacts to v0.23.0-test4
-
-## [0.17.0-test2] - 2026-11-16
-
-This pre-release pairs with [machine-emulator v0.23.0-test3](https://github.com/cartesi/machine-emulator/releases/tag/v0.23.0-test3).
+This release pairs with [machine-emulator v0.23.0](https://github.com/cartesi/machine-emulator/releases/tag/v0.23.0).
 The machine architecture ID, pristine uarch hash, and state-transition behavior
-have changed. Update the emulator and Solidity verifier together.
+have changed since v0.16.0. Update the emulator and Solidity verifier together.
 
 ### Added
 - Added `TLB_NUM_SETS` to `EmulatorConstants`
 
 ### Changed
-- Updated machine-emulator version and test artifacts to v0.23.0-test3
+- Updated machine-emulator version and test artifacts to v0.23.0
 - Bumped `CM_MARCHID` from 22 to 23 and updated `UARCH_PRISTINE_STATE_HASH`
 - Changed `UArchStep.step` to give halt precedence over overflow at the uarch cycle limit
 - Changed TLB set and slot constants to be generated from the emulator
@@ -32,13 +24,6 @@ have changed. Update the emulator and Solidity verifier together.
 ### Fixed
 - Fixed `WRITE_TLB` accepting set and slot indices outside the shadow TLB
 - Fixed `Memory.validateStrideLength` rejecting the last leaf of the address space
-
-## [0.17.0-test1] - 2026-11-06
-
-The generated contracts and emulator constants are unchanged from v0.16.0.
-
-### Changed
-- Updated machine-emulator version and test artifacts to v0.23.0-test2
 
 ## [0.16.0] - 2026-10-15
 ### Added
@@ -193,10 +178,8 @@ The generated contracts and emulator constants are unchanged from v0.16.0.
 - [0.2.0]
 - [0.1.0]
 
-[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.17.0-test3...HEAD
-[0.17.0-test3]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.17.0-test3
-[0.17.0-test2]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.17.0-test2
-[0.17.0-test1]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.17.0-test1
+[Unreleased]: https://github.com/cartesi/machine-solidity-step/compare/v0.17.0...HEAD
+[0.17.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.17.0
 [0.16.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.16.0
 [0.15.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.15.0
 [0.14.0]: https://github.com/cartesi/machine-solidity-step/releases/tag/v0.14.0
